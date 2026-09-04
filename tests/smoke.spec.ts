@@ -39,6 +39,14 @@ test("boots, renders, and each act reaches its state", async ({ page }) => {
   await page.locator("#deputy-form button").click();
   await expect(page.locator("#deputy-readout")).toContainText("6,809");
 
+  // Acts 5 to 7 are articles: the scene fades out and the claims list is complete
+  await scrollToAct(page, 5, 0.5);
+  await expect(page.locator("#act-5 .article .claim")).toHaveCount(21);
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById("stage")!).opacity)).toBe("0");
+  await scrollToAct(page, 6, 0.3);
+  await expect(page.locator("#act-6 .econ-block table").first()).toBeVisible();
+  await expect(page.locator("#act-6 .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+
   // Sources render and every citation chip resolves to a bibliography row
   const missing = await page.evaluate(() => {
     const ids = new Set([...document.querySelectorAll(".source")].map((r) => r.id));
@@ -76,6 +84,17 @@ test("phones get the stills stepper and never load the 3D engine", async ({ brow
   await page.goto("/?s=inside/13");
   await expect(page.locator("#stepper h2")).toContainText("System on module");
   await page.screenshot({ path: "test-results/mobile-som.png" });
+  // Claims, Economics and Sources are single scrolling articles
+  await page.goto("/?s=myths/0");
+  await expect(page.locator("#stepper .claim")).toHaveCount(21);
+  await expect(page.locator(".st-dots i")).toHaveCount(0);
+  await page.locator("#st-next").click();
+  await expect(page.locator("#stepper h2")).toContainText("Pricing and cost structure");
+  await expect(page.locator("#stepper .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+  await expect(page.locator("#stepper h3", { hasText: "Installation workforce" })).toBeVisible();
+  await page.goto("/?s=sources/0");
+  await expect(page.locator("#stepper .src-group")).toHaveCount(4);
+  await expect(page.locator("#stepper .source").first()).toBeVisible();
   expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
 });

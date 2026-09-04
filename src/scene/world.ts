@@ -155,7 +155,7 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
     grid.gridRatio = 0.5;
     grid.majorUnitFrequency = 4;
     grid.minorUnitVisibility = 0.6;
-    grid.opacity = 0.3;
+    grid.opacity = 0.22;
     grid.backFaceCulling = false;
     for (const gp of [near, far]) { gp.isPickable = false; gp.material = grid; }
     const gpbr = new PBRMaterial("groundPaper", scene);

@@ -13,13 +13,15 @@ It is written for a technical audience: installers who need dimensions, mount he
 | 2 · Inside | The Falcon V2 enclosure separates and fourteen components explode in order, each with a spec card, part number and vendor |
 | 3 · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used, with cutaways |
 | 4 · Data | One detection traced through twelve stages from capture to deletion, a retention slider, and a network search example reproducing the counts from one documented query |
-| 5 · Claims | Twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
-| 6 · Economics | Items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, and fee annotations on the pole |
-| 7 · Sources | All sources, tagged by origin, with the date each was last checked |
+| 5 · Claims | A single-column article: twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
+| 6 · Economics | An article: items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
+| 7 · Sources | An article: all sources grouped by origin, with the date each was last checked |
+
+Acts 5 to 7 are plain articles on a paper sheet; the 3D scene fades out behind them and stops rendering.
 
 ## Phones
 
-Screens under 800 px wide (or any screen with `?mode=stills`) get a stepper instead of the 3D scene: one screen per state, with a pre-rendered still on top, the same copy, specs and citations, Back and Next, chapter chips, swipe and arrow keys, and deep links of the form `?s=inside/13`. Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen.
+Screens under 800 px wide (or any screen with `?mode=stills`) get a stepper instead of the 3D scene: one screen per state, with a pre-rendered still on top, the same copy, specs and citations, Back and Next, chapter chips, swipe and arrow keys, and deep links of the form `?s=inside/13`. Claims, Economics and Sources are single scrolling article pages rather than slides (`?s=myths/0`, `?s=economics/0`, `?s=sources/0`), rendered by the same code as the desktop acts (`src/ui/article.ts`). Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen.
 
 The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart.
 

@@ -47,7 +47,7 @@ export async function startDesktop() {
   const viz = createDataViz(world);
   initAct4(world, viz, pins);
   initAct5();
-  initAct6(world, pins);
+  initAct6();
   initAct7();
   const wingView = { pos: new Vector3(...(anim.wing.pos as [number, number, number])), target: new Vector3(...(anim.wing.target as [number, number, number])), fov: anim.wing.fov };
   let wingBlend = 0;
@@ -128,7 +128,9 @@ export async function startDesktop() {
     (window as unknown as { __orbit: unknown }).__orbit = orbit;
   }
 
-  engine.runRenderLoop(() => scene.render());
+  // Acts 5 to 7 are articles: fade the scene out and stop rendering it.
+  subscribe((s, changed) => { if (changed.has("act")) document.body.classList.toggle("is-article", s.act >= 5); });
+  engine.runRenderLoop(() => { if (!document.body.classList.contains("is-article")) scene.render(); });
   addEventListener("resize", () => engine.resize());
   wireScroll();
   // Debug presets for screenshots: ?pole=existing&path=wing&focus=som&aim=20,-12

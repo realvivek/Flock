@@ -1,6 +1,7 @@
 import "./stepper.css";
-import { components, install, dataflow, myths, economics, products, sources, stillById } from "../content";
+import { components, install, dataflow, economics, products, stillById, partById } from "../content";
 import { cite, escape, tag } from "../ui/cite";
+import { renderClaims, renderEconomics, renderSources } from "../ui/article";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
@@ -18,15 +19,6 @@ interface Chapter { id: string; label: string; screens: Screen[] }
 const p = (host: HTMLElement, text: string, muted = false) => { const el = document.createElement("p"); if (muted) el.className = "muted"; el.textContent = text; host.appendChild(el); return el; };
 const kv = (host: HTMLElement, rows: [string, string][]) => { const dl = document.createElement("dl"); dl.className = "st-kv"; for (const [k, v] of rows) dl.insertAdjacentHTML("beforeend", `<dt>${escape(k)}</dt><dd>${escape(v)}</dd>`); host.appendChild(dl); return dl; };
 const facts = (host: HTMLElement, rows: { k: string; v: string; sources: string[] }[]) => { for (const r of rows) { const d = document.createElement("div"); d.innerHTML = `<dl class="st-kv"><dt>${escape(r.k)}</dt><dd>${escape(r.v)}</dd></dl>`; d.querySelector("dd")!.appendChild(cite(r.sources, 1)); host.appendChild(d); } };
-const table = (host: HTMLElement, head: string[], rows: { cells: string[]; sources: string[] }[]) => {
-  const wrap = document.createElement("div"); wrap.className = "st-tablewrap";
-  const t = document.createElement("table"); t.className = "st-table";
-  t.innerHTML = `<thead><tr>${head.map((h) => `<th>${escape(h)}</th>`).join("")}</tr></thead>`;
-  const tb = document.createElement("tbody");
-  for (const r of rows) { const tr = document.createElement("tr"); r.cells.forEach((c, i) => { const td = document.createElement("td"); td.textContent = c; if (i === r.cells.length - 1) td.appendChild(cite(r.sources, 1)); tr.appendChild(td); }); tb.appendChild(tr); }
-  t.appendChild(tb); wrap.appendChild(t); host.appendChild(wrap);
-};
-
 /** Small inline diagram for the data act: camera, cloud, phone and network, with the active stage lit. */
 function hopSvg(n: number): string {
   const stage = n <= 3 ? 0 : n === 4 ? 1 : n <= 8 ? 2 : n === 9 ? 3 : n <= 11 ? 4 : 5;
@@ -75,26 +67,13 @@ function buildChapters(): Chapter[] {
   data.push({ eyebrow: "04 · Data path · network search", title: "Network search example", cls: "cyan", figure: { svg: hopSvg(10) }, body: (h) => { const d = dataflow.deputy; p(h, "Enter a reason and run the search. The counts shown are those recorded in the audit log of one documented April 2025 query. The log records no warrant; a case number became a mandatory field in August 2026.", true); const f = document.createElement("form"); f.className = "st-form"; f.innerHTML = `<input type="text" maxlength="60" placeholder="e.g. &quot;${escape(d.reasonAsLogged)}&quot;" aria-label="Reason for search" /><button type="submit">Search</button>`; const out = document.createElement("p"); out.className = "st-readout"; f.addEventListener("submit", (e) => { e.preventDefault(); const r = (f.querySelector("input") as HTMLInputElement).value.trim() || d.reasonAsLogged; out.textContent = `Reason as logged: “${r}” · ${d.networks.toLocaleString()} networks · ${d.cameras.toLocaleString()} cameras · ${d.lookbackDays}-day lookback · ${d.date}`; }); h.appendChild(f); h.appendChild(out); h.appendChild(cite(d.sources)); } });
   chapters.push({ id: "data", label: "Data", screens: data });
 
-  chapters.push({ id: "myths", label: "Claims", screens: myths.map((m) => ({ eyebrow: "05 · Common claims", title: `“${m.claim}”`, cls: "st-myth", body: (h) => { const v = document.createElement("div"); v.className = `verdict ${m.verdict}`; v.textContent = m.verdict === "false" ? "Not supported by the record" : m.verdict === "true" ? "Supported by the record" : "Depends on the product or setting"; h.appendChild(v); p(h, m.nuance); h.appendChild(cite(m.sources)); } })) });
-
-  const e = economics;
-  const econ: Screen[] = [
-    { eyebrow: "06 · Economics", title: e.intro.headline, figure: { still: "pole-flock", alt: "Flock pole with fee annotations" }, body: (h) => { p(h, e.intro.summary); kv(h, e.pricedPole.map((pp) => [pp.k, pp.v] as [string, string])); h.appendChild(cite(e.intro.sources)); } },
-    { eyebrow: "06 · Economics · list prices", title: "List prices per year", body: (h) => table(h, ["Item", "Price", "Term"], e.priceList.map((r) => ({ cells: [r.item, r.price, r.term], sources: r.sources }))) },
-    { eyebrow: "06 · Economics", title: "Included in the annual fee", body: (h) => facts(h, e.included) },
-    { eyebrow: "06 · Economics", title: "Billed separately", body: (h) => facts(h, e.extra) },
-    { eyebrow: "06 · Economics · fees", title: "Installation and service fees, 2021 guide and 2026 schedule", body: (h) => table(h, ["Fee", "2019 to 2023", "2026"], e.fees.map((r) => ({ cells: [r.item, r.then, r.now], sources: r.sources }))) },
-    { eyebrow: "06 · Economics · price history", title: "Price history, 2019 to 2026", body: (h) => table(h, ["When", "Price", "Note"], e.history.map((r) => ({ cells: [r.date, r.price, r.note], sources: r.sources }))) },
-    { eyebrow: "06 · Economics · installation", title: "Installation workflow and responsibilities", body: (h) => table(h, ["Step", "Flock", "Customer", "Others"], e.workflow.map((r) => ({ cells: [r.step, r.flock, r.customer, r.other || "—"], sources: r.sources }))) },
-    { eyebrow: "06 · Economics · workforce", title: "Installation workforce", body: (h) => facts(h, e.workforce) },
-    { eyebrow: "06 · Economics · permits", title: "Permitting by location type", body: (h) => table(h, ["Location", "Permit", "Responsibility", "Documented cases"], e.permitting.map((r) => ({ cells: [r.scenario, r.permit, r.who, r.note || "—"], sources: r.sources }))) },
-    { eyebrow: "06 · Economics · contract", title: "Ownership and contract terms", body: (h) => facts(h, e.contract) },
-    { eyebrow: "06 · Economics · scale", title: "Scale and finances", body: (h) => facts(h, e.scale) },
-    { eyebrow: "06 · Economics", title: "Not publicly documented", body: (h) => { const ul = document.createElement("ul"); ul.className = "st-list"; for (const u of e.unknowns) { const li = document.createElement("li"); li.textContent = u.v; li.appendChild(cite(u.sources, 1)); ul.appendChild(li); } h.appendChild(ul); } },
-  ];
-  chapters.push({ id: "economics", label: "Economics", screens: econ });
-
-  chapters.push({ id: "sources", label: "Sources", screens: [{ eyebrow: "07 · Sources", title: "Sources", cls: "st-sources", body: (h) => { p(h, "Sources are tagged by origin. Flock is a document or page published by the company; Independent is a teardown, court filing, government audit or news report. Each entry carries the date it was last checked.", true); const list = document.createElement("div"); list.className = "sources"; for (const s of sources.slice().sort((a, b) => a.kind.localeCompare(b.kind) || a.date.localeCompare(b.date))) { const row = document.createElement("div"); row.className = "source"; row.id = `src-${s.id}`; row.innerHTML = `<span><a href="${escape(s.url)}" rel="noopener noreferrer" target="_blank">${escape(s.title)}</a><br /><span class="pub">${escape(s.publisher)}</span></span><span class="date">${escape(s.date)} · checked ${escape(s.lastVerified)}</span>`; list.appendChild(row); } h.appendChild(list); } }] });
+  // Claims, Economics and Sources are single scrolling articles, shared with the desktop acts.
+  chapters.push({ id: "myths", label: "Claims", screens: [{ eyebrow: "05 · Common claims", title: "Common claims and the public record", cls: "st-article cyan", body: (h) => renderClaims(h, {
+    onPart: (id) => { const pt = partById.get(id); if (pt) go("inside", 6 + parts.findIndex((x) => x.id === pt.id)); },
+    onHop: (n) => go("data", n - 1),
+  }) }] });
+  chapters.push({ id: "economics", label: "Economics", screens: [{ eyebrow: "06 · Economics", title: economics.intro.headline, cls: "st-article", body: (h) => renderEconomics(h) }] });
+  chapters.push({ id: "sources", label: "Sources", screens: [{ eyebrow: "07 · Sources", title: "Sources", cls: "st-article", body: (h) => renderSources(h) }] });
   return chapters;
 }
 
@@ -127,6 +106,9 @@ function render(): void {
   const screen = root.querySelector<HTMLElement>(".st-screen")!;
   screen.innerHTML = "";
   screen.className = `st-screen ${sc.cls ?? ""}`;
+  const article = (sc.cls ?? "").includes("st-article");
+  const host: HTMLElement = article ? document.createElement("div") : screen;
+  if (article) { host.className = "article sheet"; screen.appendChild(host); }
   if (sc.figure) {
     const fig = document.createElement("div");
     fig.className = "st-figure";
@@ -135,14 +117,16 @@ function render(): void {
     fig.insertAdjacentHTML("beforeend", `<span class="st-count">${cur.i + 1} / ${ch.screens.length}</span>`);
     screen.appendChild(fig);
   }
-  const eb = document.createElement("div"); eb.className = `st-eyebrow ${sc.cls === "cyan" ? "cyan" : ""}`; eb.textContent = sc.eyebrow; screen.appendChild(eb);
-  const h2 = document.createElement("h2"); h2.textContent = sc.title; screen.appendChild(h2);
-  sc.body(screen);
+  const eb = document.createElement("div"); eb.className = `st-eyebrow ${(sc.cls ?? "").includes("cyan") ? "cyan" : ""}`; eb.textContent = sc.eyebrow; host.appendChild(eb);
+  const h2 = document.createElement("h2"); h2.textContent = sc.title; host.appendChild(h2);
+  if (article) { const body = document.createElement("div"); body.className = "article-body"; host.appendChild(body); sc.body(body); }
+  else sc.body(host);
   // preload the next still
   const nx = ch.screens[cur.i + 1] ?? chapters[cur.c + 1]?.screens[0];
   if (nx?.figure?.still) { const pre = new Image(); pre.src = still(nx.figure.still); }
   const dots = root.querySelector<HTMLElement>(".st-dots")!;
-  dots.innerHTML = ch.screens.map((_, i) => `<i class="${i === cur.i ? "on" : ""}"></i>`).join("");
+  dots.hidden = ch.screens.length === 1;
+  dots.innerHTML = ch.screens.length === 1 ? "" : ch.screens.map((_, i) => `<i class="${i === cur.i ? "on" : ""}"></i>`).join("");
   (root.querySelector("#st-back") as HTMLButtonElement).disabled = cur.c === 0 && cur.i === 0;
   (root.querySelector("#st-next") as HTMLButtonElement).disabled = cur.c === chapters.length - 1 && cur.i === ch.screens.length - 1;
   (root.querySelector("#st-next") as HTMLButtonElement).textContent = cur.i === ch.screens.length - 1 && cur.c < chapters.length - 1 ? `Next: ${chapters[cur.c + 1]!.label}` : "Next";
@@ -169,9 +153,9 @@ export function initStepper(): void {
   root.querySelector("#st-back")!.addEventListener("click", () => next(-1));
   root.querySelector("#st-next")!.addEventListener("click", () => next(1));
   addEventListener("keydown", (e) => { if (e.key === "ArrowRight") next(1); if (e.key === "ArrowLeft") next(-1); });
-  let tx = 0, ty = 0;
-  root.addEventListener("touchstart", (e) => { tx = e.touches[0]!.clientX; ty = e.touches[0]!.clientY; }, { passive: true });
-  root.addEventListener("touchend", (e) => { const dx = e.changedTouches[0]!.clientX - tx, dy = e.changedTouches[0]!.clientY - ty; if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) next(dx < 0 ? 1 : -1); }, { passive: true });
+  let tx = 0, ty = 0, inTable = false;
+  root.addEventListener("touchstart", (e) => { tx = e.touches[0]!.clientX; ty = e.touches[0]!.clientY; inTable = !!(e.target as Element).closest(".tablewrap"); }, { passive: true });
+  root.addEventListener("touchend", (e) => { if (inTable) return; const dx = e.changedTouches[0]!.clientX - tx, dy = e.changedTouches[0]!.clientY - ty; if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) next(dx < 0 ? 1 : -1); }, { passive: true });
   // deep link: #s=chapter/index
   const m = /#s=([a-z]+)\/(\d+)/.exec(location.hash);
   const q = new URLSearchParams(location.search).get("s");
