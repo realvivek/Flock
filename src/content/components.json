@@ -1,0 +1,118 @@
+{
+  "$comment": "Falcon V2 parts, front to back. dims are inches used by tools/blender to build geometry; explode is metres in the Falcon's local frame (x right, y up, z forward toward the lens). confidence: measured = from a spec sheet or a teardown with part numbers; estimated = sized from the published envelope and photos; disputed = sources disagree.",
+  "envelope": { "heightIn": 8.75, "widthIn": 2.875, "depthIn": 5.0, "weightLb": 3, "sources": ["flock-techspecs", "flock-flex-datasheet"] },
+  "parts": [
+    {
+      "id": "bezel", "node": "falcon.bezel", "order": 1, "group": "shell",
+      "name": "Front bezel and lens window",
+      "function": "Weather seal and optical window. The hood over the top keeps rain and low sun off the glass.",
+      "spec": { "Material": "Black UV-stable polymer", "Rating": "Flex variant IP65; base Falcon rating unpublished", "Fasteners": "Security-bit screws (only documented anti-tamper)" },
+      "dims": { "w": 2.875, "h": 8.75, "d": 0.6 }, "explode": [0, 0, 0.34],
+      "confidence": "measured", "sources": ["flock-techspecs", "flock-flex-datasheet", "flockcamre"]
+    },
+    {
+      "id": "ledboard", "node": "falcon.ledboard", "order": 2, "group": "optics",
+      "name": "Infrared illuminator board", "partNumber": "401-00028_B",
+      "function": "Six high-power emitters in a ring around the lens light the plate at night. Independent optical measurement puts them at 850 nm, pulsed at 10 Hz. An orange dome sensor next to the ring meters ambient light to decide when to fire.",
+      "spec": { "Emitters": "6, ring, central lens cutout", "Wavelength": "850 nm (measured); teardown photos read as warm-white", "Pulse": "20 ms on / 80 ms off, up to ~40 strobes per capture", "Connector": "12-pin header J400, 12 V rail" },
+      "dims": { "diameter": 2.3, "d": 0.12 }, "explode": [0, 0, 0.25], "hop": "hop-1",
+      "confidence": "disputed", "sources": ["flockcamre", "noflock-ir", "flock-flex-datasheet"]
+    },
+    {
+      "id": "lens", "node": "falcon.lens", "order": 3, "group": "optics",
+      "name": "M12 fixed-focus lens, ~16 mm",
+      "function": "A long, narrow lens. The field of view is about 15 ft wide at 65 ft, which is why one camera covers two lanes and nothing else.",
+      "spec": { "Mount": "M12 thread", "Focal length": "~16 mm (older unit); current lens unpublished", "Field of view": "15 ft wide at 65 ft (Flock sheet)" },
+      "dims": { "diameter": 0.6, "d": 0.8 }, "explode": [0, 0, 0.19], "hop": "hop-1",
+      "confidence": "measured", "sources": ["cehrp-dissection", "flock-techspecs"]
+    },
+    {
+      "id": "ircut", "node": "falcon.ircut", "order": 4, "group": "optics",
+      "name": "Mechanical IR-cut filter",
+      "function": "A solenoid swings an infrared-blocking filter out of the optical path at night so the sensor can see the illuminator, and back in by day so colours read true.",
+      "spec": { "Actuator": "Solenoid on its own 2-wire lead", "Modes": "Day (filter in) / Night (filter out)" },
+      "dims": { "w": 0.9, "h": 0.9, "d": 0.15 }, "explode": [0, 0, 0.14], "hop": "hop-1",
+      "confidence": "measured", "sources": ["flockcamre"]
+    },
+    {
+      "id": "sensor", "node": "falcon.sensor", "order": 5, "group": "optics",
+      "name": "Camera module", "partNumber": "ISB-IMX477C-C02",
+      "function": "About five megapixels, half-inch format, tuned for infrared. It takes six to twelve stills per passing vehicle; it does not record continuous video.",
+      "spec": { "Resolution": "~5 MP", "Format": "1/2 in", "Interface": "Fine-pitch flex cable to the mainboard, CAM_3V3 rail", "Note": "The IMX477 marking may not be a genuine Sony part; resolution does not match a real IMX477" },
+      "dims": { "w": 1.0, "h": 1.0, "d": 0.2 }, "explode": [0, 0, 0.09], "hop": "hop-1",
+      "confidence": "disputed", "sources": ["flockcamre", "cehrp-dissection", "jalopnik-speed"]
+    },
+    {
+      "id": "pir", "node": "falcon.pir", "order": 6, "group": "optics",
+      "name": "Passive infrared motion sensor",
+      "function": "The trigger. It fires on warm moving objects: cars, but also people, cyclists and animals. Everything downstream starts here.",
+      "spec": { "Type": "PIR", "Position": "Below the lens ring behind a small window" },
+      "dims": { "diameter": 0.5, "d": 0.3 }, "explode": [0, -0.06, 0.24], "hop": "hop-1",
+      "confidence": "measured", "sources": ["flock-flex-datasheet", "cehrp-dissection"]
+    },
+    {
+      "id": "mainboard", "node": "falcon.mainboard", "order": 7, "group": "compute",
+      "name": "Mainboard", "partNumber": "401-00027-3 \"Cassowary CCB\"",
+      "function": "The carrier board: power stage, SIM socket, micro-USB debug port, and the headers everything else stacks onto. Silkscreened Flock Safety Inc. 2022.",
+      "spec": { "Rails": "3.3 V, 1.8 V, 1.2 V; 12 V to the LED board", "Debug": "Micro-USB, test points; shipped as a debug build with an unlocked bootloader", "SIM": "Carrier SIM socket" },
+      "dims": { "w": 2.3, "h": 6.8, "d": 0.08 }, "explode": [0, 0, 0.0], "hop": "hop-2",
+      "confidence": "measured", "sources": ["flockcamre", "privacyguides-2025"]
+    },
+    {
+      "id": "som", "node": "falcon.som", "order": 8, "group": "compute",
+      "name": "System on module", "partNumber": "Lantronix Open-Q 624A", "vendor": "Lantronix / Qualcomm",
+      "function": "A phone-class Qualcomm APQ8053 (Snapdragon 624/625 family) running Android 8.1. This is the edge computer: plate recognition and the Vehicle Fingerprint attributes are computed here before anything is transmitted.",
+      "spec": { "CPU": "8x ARM cores, 1.4 GHz class", "GPU": "Adreno 506", "RAM": "~2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "YOLO and OpenCV pipelines on device", "Support": "Chipset vendor security support ended 2021" },
+      "dims": { "w": 1.2, "h": 2.0, "d": 0.15 }, "explode": [0, 0.11, -0.05], "hop": "hop-2",
+      "confidence": "measured", "sources": ["flockcamre", "ryanohoro-2024", "flock-flex-datasheet", "footnote4a-trust"]
+    },
+    {
+      "id": "emmc", "node": "falcon.emmc", "order": 9, "group": "compute",
+      "name": "Storage", "partNumber": "Kingston eMMC32G", "vendor": "Kingston",
+      "function": "32 GB of flash for the operating system and the short-lived image queue. Flock says images are removed from the device once the cloud acknowledges the upload; the Flex sheet describes about two weeks of local buffer.",
+      "spec": { "Capacity": "32 GB (29.1 GiB usable)", "Mode": "HS400ES", "Buffer": "~2 weeks offline (Flex sheet); standard Falcon unspecified" },
+      "dims": { "w": 0.5, "h": 0.45, "d": 0.06 }, "explode": [0, 0.18, -0.05], "hop": "hop-2",
+      "confidence": "measured", "sources": ["flockcamre", "flock-flex-datasheet", "flock-privacy-access"]
+    },
+    {
+      "id": "lte", "node": "falcon.lte", "order": 10, "group": "radio",
+      "name": "LTE modem", "partNumber": "Sierra Wireless RC76xx (FCC N7NRC76B)", "vendor": "Sierra Wireless; older units NimbeLink Skywire NL-SW-LTE-S7648",
+      "function": "The only way data leaves the pole. Crops and metadata go out over a carrier SIM Flock pays for; there is no Ethernet. Because Flock uses pre-certified modules, the Falcon itself has no FCC filing and no public internal photos.",
+      "spec": { "Bearer": "LTE; carrier depends on area (Verizon Business and AT&T SIMs documented)", "Category": "Cat-1 vs Cat-4 reported for the same FCC ID; unresolved", "Placement": "Daughter module stacked above the SOM" },
+      "dims": { "w": 1.0, "h": 1.2, "d": 0.12 }, "explode": [0, 0.24, -0.09], "hop": "hop-4",
+      "confidence": "disputed", "sources": ["ryanohoro-2024", "cehrp-dissection", "flockcamre", "fccid-2bmek", "gainsec-2026"]
+    },
+    {
+      "id": "wifi", "node": "falcon.wifi", "order": 11, "group": "radio",
+      "name": "Wi-Fi and Bluetooth module", "partNumber": "Lite-On WCBN3510A", "vendor": "Lite-On",
+      "function": "Off in normal operation. During install or a fault the camera raises a Wi-Fi access point named flock-XXXXXX so a technician can aim it from a phone; the external battery box reports its health over Bluetooth.",
+      "spec": { "Wi-Fi": "802.11 a/b/g/n/ac, 2x2", "Bluetooth": "4.2 LE", "Install AP": "flock-XXXXXX, WPA2 (documented default password)", "Battery telemetry": "BLE names Penguin-… or numeric" },
+      "dims": { "w": 0.6, "h": 0.55, "d": 0.08 }, "explode": [0, -0.12, -0.10],
+      "confidence": "measured", "sources": ["ryanohoro-2024", "cehrp-dissection", "flock-you"]
+    },
+    {
+      "id": "gps", "node": "falcon.gps", "order": 12, "group": "radio",
+      "name": "GPS patch antenna", "partNumber": "Taoglas AP.17E", "vendor": "Taoglas",
+      "function": "Stamps every photo with a location. A 17 mm active patch, sky-facing, on a U.FL pigtail.",
+      "spec": { "Size": "17 mm square", "Connector": "U.FL", "Receiver": "Discrete or in the modem; not confirmed" },
+      "dims": { "w": 0.67, "h": 0.67, "d": 0.25 }, "explode": [0, 0.34, 0.02], "hop": "hop-3",
+      "confidence": "measured", "sources": ["cehrp-dissection", "flockcamre"]
+    },
+    {
+      "id": "rear", "node": "falcon.rear", "order": 13, "group": "shell",
+      "name": "Rear shell, connector and label",
+      "function": "The back half of the enclosure carries the weatherproof DC input from the solar and battery leads, the antenna stubs, and the QR label that encodes the part number, IMEI, MAC, SIM and Flock serial number.",
+      "spec": { "Power in": "Circular weatherproof DC connector", "Label": "QR: pn, imei, mac, sim, fsn", "Known part numbers": "701-00161, 701-00203" },
+      "dims": { "w": 2.875, "h": 8.75, "d": 2.2 }, "explode": [0, 0, -0.32],
+      "confidence": "measured", "sources": ["ryanohoro-2024", "flock-techspecs"]
+    },
+    {
+      "id": "clamps", "node": "falcon.clamps", "order": 14, "group": "mount",
+      "name": "Band clamps and mounting boss",
+      "function": "Two adjustable stainless bands wrap the pole. Flock's own pole is 2.875 in outside diameter, the same as the camera's width.",
+      "spec": { "Bands": "2x adjustable stainless", "Pole OD": "2.875 in (Flock pole) or existing pole", "Height": "8 to 12 ft on existing poles; ~10 ft on the 12 ft Flock pole" },
+      "dims": { "w": 3.2, "h": 1.0, "d": 3.2 }, "explode": [0, 0, -0.46],
+      "confidence": "measured", "sources": ["flock-techspecs", "flock-impl-guide"]
+    }
+  ]
+}

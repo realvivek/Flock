@@ -1,0 +1,475 @@
+{
+  "$comment": "Installer-facing facts for Act 1 and Act 3. anchors are world metres: pole base at origin, Y up, road toward +Z, traffic toward +X.",
+  "pole": {
+    "heightFt": 12,
+    "odIn": 2.875,
+    "idIn": 2.125,
+    "alloy": "6061 aluminum, black coat",
+    "weightLb": 32,
+    "cameraHeightFt": 10,
+    "sources": [
+      "flock-techspecs",
+      "flock-impl-guide"
+    ]
+  },
+  "solar": {
+    "voltage": "18-20 V",
+    "lengthIn": 21.25,
+    "widthIn": 28,
+    "weightLb": 25.73,
+    "mount": "Pole top or side of an existing pole",
+    "sources": [
+      "flock-techspecs"
+    ]
+  },
+  "battery": {
+    "chemistry": "Lithium-ion",
+    "voltage": "10.8 V",
+    "capacity": "19 Ah, 205 Wh",
+    "vendor": "PHD Energy",
+    "placement": "External box on the pole; reports health over Bluetooth",
+    "sources": [
+      "cehrp-dissection",
+      "ryanohoro-2024"
+    ]
+  },
+  "coverage": {
+    "$comment": "Two published numbers disagree. widthFt at distFt is Flock's sheet; maxFt and mph are Flock marketing.",
+    "widthFt": 15,
+    "distFt": 65,
+    "maxFt": 100,
+    "lanes": 2,
+    "mph": 100,
+    "framesPerVehicle": "6 to 12",
+    "aims": "Rear plates of departing vehicles",
+    "sources": [
+      "flock-techspecs",
+      "flock-flex-datasheet",
+      "jalopnik-speed"
+    ]
+  },
+  "modes": {
+    "flock": {
+      "label": "Flock breakaway pole, solar",
+      "facts": [
+        {
+          "k": "Pole",
+          "v": "12 ft installed, 2.875 in OD, 6061 aluminum, 32 lb, DOT breakaway base",
+          "sources": [
+            "flock-techspecs"
+          ]
+        },
+        {
+          "k": "Set in",
+          "v": "Dirt, grass or loose gravel only; Flock crews do not bore concrete or asphalt",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Before digging",
+          "v": "811 utility locate; MUTCD traffic control by the Flock technician",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Devices per pole",
+          "v": "One, when solar: a second panel shades the first",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Panel",
+          "v": "Dual array 21.25 x 28 in, 18-20 V, 25.7 lb with hardware, pole-top mount",
+          "sources": [
+            "flock-techspecs"
+          ]
+        },
+        {
+          "k": "Install fee",
+          "v": "$1,000 standard; relocation $750 on a Flock pole",
+          "sources": [
+            "flock-fee-schedule"
+          ]
+        }
+      ]
+    },
+    "existing": {
+      "label": "Existing utility or light pole, solar",
+      "facts": [
+        {
+          "k": "Mount height",
+          "v": "8 to 12 ft; access is a 14 ft A-frame ladder at most",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Attachment",
+          "v": "Adjustable band clamps around the pole; side-of-pole solar bracket",
+          "sources": [
+            "flock-techspecs"
+          ]
+        },
+        {
+          "k": "Permits",
+          "v": "Occasionally required; customer pays filing fees; public works may weigh in on right-of-way",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "DOT right-of-way",
+          "v": "NCHRP 350 or MASH-approved breakaway pole required",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Install fee",
+          "v": "$1,000; relocation $350 on an existing pole",
+          "sources": [
+            "flock-fee-schedule"
+          ]
+        }
+      ]
+    },
+    "ac": {
+      "label": "Existing pole, 120 V AC",
+      "facts": [
+        {
+          "k": "Who wires it",
+          "v": "A licensed electrician the customer hires lands 120 V after Flock mounts the device",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Flock supplies",
+          "v": "AC power kit and junction box with diagnostic indicator lights; replacement kit $150",
+          "sources": [
+            "flock-impl-guide",
+            "flock-fee-schedule"
+          ]
+        },
+        {
+          "k": "Devices per pole",
+          "v": "Two allowed on AC power",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Customer keeps",
+          "v": "Breaker and GFCI troubleshooting; Flock keeps everything on the device side",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Bundles",
+          "v": "Intersection bundle: 4 Falcon AC + 2 Condor fixed AC, $15,000 per year",
+          "sources": [
+            "flock-catalog-2024"
+          ]
+        }
+      ]
+    }
+  },
+  "pins": [
+    {
+      "id": "pin-height",
+      "anchor": [
+        0,
+        3.05,
+        0.18
+      ],
+      "k": "camera height",
+      "v": "≈10 ft",
+      "modes": [
+        "flock"
+      ],
+      "sources": [
+        "flock-impl-guide"
+      ],
+      "dx": -150,
+      "dy": -40
+    },
+    {
+      "id": "pin-height-existing",
+      "anchor": [
+        0,
+        3.05,
+        0.18
+      ],
+      "k": "mount height",
+      "v": "8–12 ft",
+      "modes": [
+        "existing",
+        "ac"
+      ],
+      "sources": [
+        "flock-impl-guide"
+      ],
+      "dx": -150,
+      "dy": -40
+    },
+    {
+      "id": "pin-pole",
+      "anchor": [
+        0,
+        1.7,
+        0.04
+      ],
+      "k": "pole",
+      "v": "12 ft · 2.875 in OD · 6061 Al",
+      "modes": [
+        "flock"
+      ],
+      "sources": [
+        "flock-techspecs"
+      ],
+      "dx": 150,
+      "dy": -20
+    },
+    {
+      "id": "pin-base",
+      "anchor": [
+        0,
+        0.15,
+        0.05
+      ],
+      "k": "base",
+      "v": "DOT breakaway · 811 locate",
+      "modes": [
+        "flock"
+      ],
+      "sources": [
+        "flock-techspecs",
+        "flock-impl-guide"
+      ],
+      "dx": 140,
+      "dy": -40
+    },
+    {
+      "id": "pin-panel",
+      "anchor": [
+        0,
+        3.85,
+        -0.1
+      ],
+      "k": "solar",
+      "v": "21.25 × 28 in · 18–20 V",
+      "modes": [
+        "flock",
+        "existing"
+      ],
+      "sources": [
+        "flock-techspecs"
+      ],
+      "dx": 160,
+      "dy": 30
+    },
+    {
+      "id": "pin-battery",
+      "anchor": [
+        0,
+        2.45,
+        -0.12
+      ],
+      "k": "battery box",
+      "v": "10.8 V · 19 Ah · 205 Wh",
+      "modes": [
+        "flock",
+        "existing"
+      ],
+      "sources": [
+        "cehrp-dissection"
+      ],
+      "dx": 170,
+      "dy": -10
+    },
+    {
+      "id": "pin-clamps",
+      "anchor": [
+        0,
+        3.05,
+        -0.06
+      ],
+      "k": "mount",
+      "v": "2× band clamps",
+      "modes": [
+        "flock",
+        "existing",
+        "ac"
+      ],
+      "sources": [
+        "flock-techspecs"
+      ],
+      "dx": 150,
+      "dy": -70
+    },
+    {
+      "id": "pin-ac",
+      "anchor": [
+        0,
+        2.45,
+        -0.12
+      ],
+      "k": "AC kit",
+      "v": "120 V · junction box · electrician",
+      "modes": [
+        "ac"
+      ],
+      "sources": [
+        "flock-impl-guide"
+      ],
+      "dx": 170,
+      "dy": -10
+    },
+    {
+      "id": "pin-ladder",
+      "anchor": [
+        0,
+        4.27,
+        0.3
+      ],
+      "k": "access limit",
+      "v": "14 ft A-frame ladder",
+      "modes": [
+        "existing",
+        "ac"
+      ],
+      "sources": [
+        "flock-impl-guide"
+      ],
+      "dx": 150,
+      "dy": 20
+    }
+  ],
+  "paths": {
+    "solar": {
+      "label": "Solar + battery",
+      "summary": "DC only. Panel to battery box, battery box to the camera's rear connector. No conductor reaches the ground.",
+      "facts": [
+        {
+          "k": "Panel",
+          "v": "18-20 V dual array on the pole top",
+          "sources": [
+            "flock-techspecs"
+          ]
+        },
+        {
+          "k": "Battery",
+          "v": "10.8 V / 19 Ah lithium-ion in an external box; Bluetooth health telemetry",
+          "sources": [
+            "cehrp-dissection",
+            "ryanohoro-2024"
+          ]
+        },
+        {
+          "k": "Cables",
+          "v": "Panel-to-battery and battery-to-camera DC leads; billed as replacement cables at $50",
+          "sources": [
+            "flock-fee-schedule"
+          ]
+        },
+        {
+          "k": "Data",
+          "v": "None on the wire. Every byte leaves over LTE.",
+          "sources": [
+            "flock-techspecs",
+            "cehrp-dissection"
+          ]
+        },
+        {
+          "k": "Unknown",
+          "v": "Panel wattage, camera draw in watts, and battery runtime in days are not published",
+          "sources": [
+            "flock-techspecs"
+          ]
+        }
+      ]
+    },
+    "ac": {
+      "label": "120 V AC kit",
+      "summary": "Mains from the customer's supply into a Flock junction box, stepped down to DC for the same rear connector.",
+      "facts": [
+        {
+          "k": "Supply",
+          "v": "120 V AC, landed by the customer's licensed electrician",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Junction box",
+          "v": "Flock-supplied, with indicator lights for diagnostics",
+          "sources": [
+            "flock-impl-guide"
+          ]
+        },
+        {
+          "k": "Kit",
+          "v": "AC power kit $150 replacement; DC power kit also listed",
+          "sources": [
+            "flock-fee-schedule"
+          ]
+        },
+        {
+          "k": "Still no data cable",
+          "v": "AC changes the power source only; uplink remains LTE",
+          "sources": [
+            "flock-techspecs"
+          ]
+        }
+      ]
+    },
+    "wing": {
+      "label": "Wing gateway · PoE · SFP",
+      "summary": "The one place Ethernet, PoE and fiber appear. A city's existing cameras stream RTSP to a Wing Gateway in the network closet, which runs the same Vehicle Fingerprint models and forwards to Flock's cloud.",
+      "facts": [
+        {
+          "k": "Gateway",
+          "v": "Wing Gateway 2.0: 8, 16 or 32 streams; $300 to $1,000 per year plus per-stream software",
+          "sources": [
+            "flock-catalog-2024",
+            "flock-video-webinar"
+          ]
+        },
+        {
+          "k": "Camera side",
+          "v": "Any RTSP camera on PoE; CAT6 to a PoE switch",
+          "sources": [
+            "flock-video-webinar",
+            "flock-wing-2020"
+          ]
+        },
+        {
+          "k": "Uplink",
+          "v": "Switch SFP port with a fiber or copper module to the closet; then the city's internet to Flock",
+          "sources": [
+            "flock-video-webinar"
+          ]
+        },
+        {
+          "k": "What Wing extracts",
+          "v": "Plate, state, make, type, color, roof racks, bumper stickers, aftermarket wheels, trailer hitch, window decals, body damage",
+          "sources": [
+            "flock-wing-2020"
+          ]
+        },
+        {
+          "k": "Also on the pole",
+          "v": "Condor video cameras use a Flock SIM or AC; solar Condor and Falcon can share one pole",
+          "sources": [
+            "flock-catalog-2024",
+            "police1-condor"
+          ]
+        }
+      ]
+    }
+  }
+}
