@@ -1,0 +1,32 @@
+# Render Blueprint — deploy by connecting this repo at
+# https://dashboard.render.com/blueprints
+#
+# Unlike the no-build static sites in the other repos, this one is a Vite
+# build: Render runs the build and publishes dist/. Once connected, pushes to
+# the watched branch deploy automatically.
+services:
+  - type: web
+    runtime: static
+    name: flock-anatomy
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      # Vite hashes everything under /assets, so it can be cached hard.
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Models and the sky are not hashed and change when rebuilt; let the CDN
+      # revalidate rather than serve stale geometry against a fresh bundle.
+      - path: /models/*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /env/*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate

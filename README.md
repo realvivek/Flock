@@ -51,6 +51,25 @@ Part naming follows the content file (`falcon.ledboard`, `falcon.som`, and so on
 
 Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback), GSAP ScrollTrigger for scroll scrubbing, Zod for content validation, Playwright for the smoke test. Text lives in the DOM for accessibility and search; the canvas only carries the scene. `prefers-reduced-motion` switches the scroll scrub to stepped states.
 
+## Deploy
+
+Two targets, both from `main`.
+
+**Render** (the way the other repos deploy): a static site that runs
+`npm ci && npm run build` and publishes `dist/`. `render.yaml` is the blueprint
+for connecting the repo through the Render dashboard (New Blueprint Instance,
+pick the repo and `main`). `.github/workflows/deploy-render.yml` does the same
+through the Render REST API and needs a `RENDER_API_KEY` repository secret; its
+first run creates the service, every run after triggers a deploy and waits for
+the live URL to answer cleanly five times in a row. A service created through
+the API never reads `render.yaml`, so both carry the same settings. Once the
+service exists, autoDeploy means every push to `main` deploys.
+
+**GitHub Pages**: `.github/workflows/pages.yml` builds and deploys on every push
+to `main` at https://realvivek.github.io/Flock/. This one is a build, not a
+branch-served folder, so the repository's Pages source has to be set to
+"GitHub Actions" once under Settings, Pages.
+
 ## Scope
 
 This is an explainer. It is not a map of camera locations (see [DeFlock](https://deflock.org)), it does not look up plates, and it does not tell anyone how to defeat a camera.
