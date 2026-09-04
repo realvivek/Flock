@@ -1,21 +1,21 @@
 # Anatomy of a Flock camera
 
-An interactive, scroll-driven 3D explainer of a Flock Safety license plate reader: the pole and how it is installed, the enclosure taken apart board by board, what plugs into it, and where every byte goes after the photograph is taken.
+A scroll-driven 3D reference for a Flock Safety license plate reader: the pole and mount, the enclosure and each component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms. All copy states facts from cited public documents.
 
-It is built for three readers at once: an installer who needs dimensions, mount heights and power options; a resident who wants to know what is collected and who can see it; and a council member who needs the myth-versus-fact answer with a citation.
+It is written for a technical audience: installers who need dimensions, mount heights and power options; residents and officials who need to know what is collected, who can access it, and what it costs; and anyone checking a claim against the record.
 
 ## What is in it
 
-| Act | What you see |
+| Act | Content |
 |---|---|
 | 0 · Street | A Flock pole at real scale on a dusk roadside |
 | 1 · Pole | Installer callouts: pole, clamps, panel, battery, base, ladder limit; a draggable aim with the published field of view drawn on the road; Flock pole / existing pole / 120 V AC toggle |
-| 2 · Inside | The Falcon V2 shell splits and thirteen parts separate in order, each with a spec card, part number and vendor |
-| 3 · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path where PoE, fiber and SFP modules actually appear, with cutaways |
-| 4 · Data | One detection followed through twelve hops from photons to an officer's phone, a retention slider, and a "be the deputy" nationwide search reproducing one documented query |
-| 5 · Myths | Twenty-one common claims with a verdict, the nuance, and a link back to the part or hop that settles each |
-| 6 · Economics | What the annual fee buys and what it does not, list prices, the fee ladder then and now, the price history, who does what on an install, permits by scenario, ownership and contract terms, scale and public money, and a priced pole in the scene |
-| 7 · Sources | Every source, tagged by origin, with the date it was last checked |
+| 2 · Inside | The Falcon V2 enclosure separates and fourteen components explode in order, each with a spec card, part number and vendor |
+| 3 · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used, with cutaways |
+| 4 · Data | One detection traced through twelve stages from capture to deletion, a retention slider, and a network search example reproducing the counts from one documented query |
+| 5 · Claims | Twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
+| 6 · Economics | Items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, and fee annotations on the pole |
+| 7 · Sources | All sources, tagged by origin, with the date each was last checked |
 
 ## Phones
 
@@ -25,7 +25,7 @@ The stills come from the same models as the scene. `src/content/stills.json` lis
 
 ## Sourcing policy
 
-Every number and claim on the page comes from `src/content/*.json`, and every entry there carries a `sources` array pointing into `src/content/sources.json`. Sources are tagged `flock` (the company's own documents), `independent` (teardowns, research, journalism), `government` or `court`. The UI shows the tag next to each citation so a reader can tell a marketing claim from a documented fact. Where nobody outside Flock has verified something, the page says "unknown" rather than guessing.
+Every number and claim on the page comes from `src/content/*.json`, and every entry there carries a `sources` array pointing into `src/content/sources.json`. Sources are tagged `flock` (the company's own documents), `independent` (teardowns, research, journalism), `government` or `court`. The UI shows the tag next to each citation so a reader can distinguish a Flock statement from an independently documented one. Statements not published by Flock and not verified independently are marked "not verified".
 
 `npm run check:sources` fails the build if any claim lacks a source, references an unknown source id, or if any source is missing a URL, date or `lastVerified` stamp. `npm run check:links` fetches every source URL and reports dead links.
 

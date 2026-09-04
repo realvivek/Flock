@@ -57,7 +57,7 @@ export function initAct1(world: World, pins: PinLayer): void {
     const dist = feetToM(cov.distFt);
     const drop = world.mount.position.y;
     const ground = Math.max(0, Math.sqrt(Math.max(0, (drop / Math.tan(Math.max(0.5, -state.aimPitch) * Math.PI / 180)) ** 2)));
-    readout.textContent = `yaw ${state.aimYaw >= 0 ? "+" : ""}${state.aimYaw}° · pitch ${state.aimPitch}° · centre of view hits the road ≈ ${(ground).toFixed(0)} m out · published: ${cov.widthFt} ft wide at ${cov.distFt} ft (${dist.toFixed(0)} m), up to ${cov.maxFt} ft, ${cov.lanes} lanes, ${cov.mph} mph`;
+    readout.textContent = `yaw ${state.aimYaw >= 0 ? "+" : ""}${state.aimYaw}° · pitch ${state.aimPitch}° · centre of view meets the road at ≈ ${(ground).toFixed(0)} m · published: ${cov.widthFt} ft wide at ${cov.distFt} ft (${dist.toFixed(0)} m), up to ${cov.maxFt} ft, ${cov.lanes} lanes, ${cov.mph} mph`;
   };
 
   // Drag on the canvas to aim while in act 1.

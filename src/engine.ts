@@ -32,7 +32,7 @@ export async function bootEngine(canvas: HTMLCanvasElement): Promise<Boot> {
       const adapter = gpu ? await gpu.requestAdapter().catch(() => null) : null;
       const software = !adapter || adapter.isFallbackAdapter === true || /swiftshader|llvmpipe|software/i.test(`${adapter.info?.vendor ?? ""} ${adapter.info?.architecture ?? ""}`);
       if (ok && !software) {
-        const engine = new WebGPUEngine(canvas, { antialias: true, adaptToDeviceRatio: false, powerPreference: "high-performance" });
+        const engine = new WebGPUEngine(canvas, { antialias: true, adaptToDeviceRatio: false, powerPreference: "high-performance", premultipliedAlpha: false });
         await engine.initAsync();
         engine.setHardwareScalingLevel(1 / dpr);
         return { engine, backend: "webgpu", tier };
@@ -41,7 +41,7 @@ export async function bootEngine(canvas: HTMLCanvasElement): Promise<Boot> {
       console.warn("WebGPU init failed, falling back to WebGL2", e);
     }
   }
-  const engine = new Engine(canvas, true, { adaptToDeviceRatio: false, powerPreference: "high-performance", preserveDrawingBuffer: false, stencil: true }, false);
+  const engine = new Engine(canvas, true, { adaptToDeviceRatio: false, powerPreference: "high-performance", preserveDrawingBuffer: false, stencil: true, alpha: false }, false);
   engine.setHardwareScalingLevel(1 / dpr);
   return { engine, backend: "webgl2", tier };
 }

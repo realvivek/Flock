@@ -2,14 +2,14 @@ import { myths, partById, hopById } from "../content";
 import { cite, escape } from "../ui/cite";
 import { set } from "../store";
 
-/** Act 5: myth cards. Each links back to the part or hop that settles it. */
+/** Act 5: claim cards. Each links to the related component or data stage. */
 export function initAct5(): void {
   const host = document.getElementById("myths")!;
   for (const m of myths) {
     const el = document.createElement("article");
     el.className = "myth";
     el.id = `myth-${m.id}`;
-    const verdict = m.verdict === "false" ? "Not true" : m.verdict === "true" ? "True" : "It depends";
+    const verdict = m.verdict === "false" ? "Not supported by the record" : m.verdict === "true" ? "Supported by the record" : "Depends on the product or setting";
     el.innerHTML = `
       <div class="claim">“${escape(m.claim)}”</div>
       <div class="verdict ${m.verdict}">${verdict}</div>

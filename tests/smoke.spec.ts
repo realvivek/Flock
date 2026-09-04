@@ -68,7 +68,7 @@ test("phones get the stills stepper and never load the 3D engine", async ({ brow
   await page.waitForSelector("#stepper .st-screen h2");
   await expect(page.locator("#stepper h2")).toContainText("Anatomy of a Flock camera");
   await page.locator("#st-next").click();
-  await expect(page.locator("#stepper h2")).toContainText("One name, several machines");
+  await expect(page.locator("#stepper h2")).toContainText("Flock Safety products");
   await page.locator(".st-chapters button", { hasText: "Inside" }).click();
   await expect(page.locator(".st-count")).toContainText("1 / 20");
   await expect(page.locator(".st-figure img")).toHaveAttribute("src", /stills\/explode-0\.webp$/);

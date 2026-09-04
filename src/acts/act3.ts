@@ -25,7 +25,7 @@ export function initAct3(world: World, pins: PinLayer): void {
       { id: "p3-panel", anchor: world3(0, 3.85, -0.05), k: "solar", v: "18–20 V DC down the pole", dx: 170, dy: 20 },
       { id: "p3-battery", anchor: world3(0, 2.45, -0.12), k: "battery box", v: "10.8 V · 19 Ah · BLE health", dx: 180, dy: 0 },
       { id: "p3-lead", anchor: world3(0, 2.98, -0.04), k: "DC lead", v: "into the rear connector", dx: 170, dy: -50 },
-      { id: "p3-nodata", anchor: world3(0, 0.6, 0.0), k: "to the ground", v: "nothing · data is LTE only", dx: 170, dy: -20 },
+      { id: "p3-nodata", anchor: world3(0, 0.6, 0.0), k: "to grade", v: "no conductor · data over LTE", dx: 170, dy: -20 },
     ],
     ac: [
       { id: "p3-acbox", anchor: world3(0, 2.45, -0.12), k: "junction box", v: "120 V in · indicator lights", dx: 180, dy: 0 },
@@ -38,7 +38,7 @@ export function initAct3(world: World, pins: PinLayer): void {
       { id: "p3-sfp", anchor: anchorOf("sfp_cutaway"), k: "SFP module ×6", v: "laser + photodiode on a card edge", dx: -60, dy: -120 },
       { id: "p3-fiber", anchor: anchorOf("fiber_cutaway"), k: "fiber ×40", v: "jacket · aramid · buffer · cladding · 9 µm core", dx: 160, dy: 140 },
       { id: "p3-cat6", anchor: anchorOf("cat6_cutaway"), k: "CAT6 ×12", v: "spline · 4 twisted pairs · 23 AWG", dx: 230, dy: 90 },
-      { id: "p3-cam", anchor: anchorOf("existing_camera"), k: "existing camera", v: "RTSP stream in, plates out", dx: 120, dy: -140 },
+      { id: "p3-cam", anchor: anchorOf("existing_camera"), k: "existing camera", v: "RTSP in · plate reads out", dx: 120, dy: -140 },
     ],
   };
   for (const list of Object.values(pinDefs)) for (const p of list) pins.add({ ...p, cls: "amber" });

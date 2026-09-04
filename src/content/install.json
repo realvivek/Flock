@@ -61,7 +61,7 @@
         },
         {
           "k": "Set in",
-          "v": "Dirt, grass or loose gravel only; Flock crews do not bore concrete or asphalt",
+          "v": "Dirt, grass or loose gravel; Flock crews do not bore concrete or asphalt",
           "sources": [
             "flock-impl-guide"
           ]
@@ -162,8 +162,8 @@
           ]
         },
         {
-          "k": "Customer keeps",
-          "v": "Breaker and GFCI troubleshooting; Flock keeps everything on the device side",
+          "k": "Customer responsibility",
+          "v": "Breaker and GFCI troubleshooting; Flock maintains the device side",
           "sources": [
             "flock-impl-guide"
           ]
@@ -378,7 +378,7 @@
         },
         {
           "k": "Data",
-          "v": "None on the wire. Every byte leaves over LTE.",
+          "v": "No data conductor; all data is transmitted over LTE",
           "sources": [
             "flock-techspecs",
             "cehrp-dissection"
@@ -419,8 +419,8 @@
           ]
         },
         {
-          "k": "Still no data cable",
-          "v": "AC changes the power source only; uplink remains LTE",
+          "k": "Data path",
+          "v": "AC changes the power source; the uplink remains LTE",
           "sources": [
             "flock-techspecs"
           ]
@@ -429,7 +429,7 @@
     },
     "wing": {
       "label": "Wing gateway · PoE · SFP",
-      "summary": "The one place Ethernet, PoE and fiber appear. A city's existing cameras stream RTSP to a Wing Gateway in the network closet, which runs the same Vehicle Fingerprint models and forwards to Flock's cloud.",
+      "summary": "The configuration in which Ethernet, PoE and fiber are used. An agency's existing cameras stream RTSP to a Wing Gateway in the network closet, which runs the Vehicle Fingerprint models and forwards results to Flock's cloud.",
       "facts": [
         {
           "k": "Gateway",

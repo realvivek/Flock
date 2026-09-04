@@ -9,8 +9,8 @@
   --cyan: #1b4fd8;
   --red: #c8321e;
   --panel: rgba(255, 255, 255, 0.86);
-  --grid-line: rgba(27, 79, 216, 0.055);
-  --grid-dot: rgba(17, 19, 24, 0.18);
+  --grid-line: rgba(27, 79, 216, 0.13);
+  --grid-dot: rgba(17, 19, 24, 0.3);
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --sans: "IBM Plex Sans", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;

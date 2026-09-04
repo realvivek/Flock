@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Anatomy of a Flock Camera</title>
-    <meta name="description" content="A scroll-driven 3D dissection of a Flock Safety license plate reader: the pole, the enclosure, every board inside, the cable and power paths, and where each byte goes after the photo is taken. Sourced from Flock's own spec sheets and independent teardowns." />
+    <meta name="description" content="Hardware, installation, power and network paths, data path, pricing and contract terms of a Flock Safety license plate reader, compiled from public documents." />
     <meta name="theme-color" content="#f7f8f6" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23f2b441' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23f2b441'/%3E%3C/svg%3E" />
     <meta property="og:title" content="Anatomy of a Flock Camera" />
-    <meta property="og:description" content="Pole to cloud: how a Flock license plate reader is built, installed, and what it sends where." />
+    <meta property="og:description" content="Pole, enclosure, components, power and data paths, pricing and sources for a Flock Safety license plate reader." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="/src/styles.css" />
@@ -28,7 +28,7 @@
         <a href="#act-2" data-nav="2">Inside</a>
         <a href="#act-3" data-nav="3">Power &amp; cable</a>
         <a href="#act-4" data-nav="4">Data</a>
-        <a href="#act-5" data-nav="5">Myths</a>
+        <a href="#act-5" data-nav="5">Claims</a>
         <a href="#act-6" data-nav="6">Economics</a>
         <a href="#act-7" data-nav="7">Sources</a>
       </nav>
@@ -39,16 +39,18 @@
       <!-- ACT 0: STREET -->
       <section class="act act-hero" id="act-0" data-act="0">
         <div class="panel hero">
-          <p class="eyebrow">Interactive explainer</p>
+          <p class="eyebrow">Reference</p>
           <h1>Anatomy of a<br />Flock camera</h1>
           <p class="lede">
-            There are more than a hundred thousand of these on poles across the United States. This is one of them,
-            at real scale, taken apart one board at a time, with every byte it produces followed to where it ends up.
+            Flock Safety reports more than 120,000 license plate reader cameras in 49 states. This page documents one
+            Falcon unit at scale: the pole and mount, each internal component, the power and network connections,
+            the data path from capture to deletion, common claims against the public record, and pricing and contract terms.
           </p>
           <p class="lede small">
-            Built from Flock Safety's own specification sheets and price lists, three independent teardowns,
-            Flock's data-architecture document, FOIA'd audit logs, and court and congressional records.
-            Every figure carries a citation. Where Flock and independent evidence disagree, both are shown.
+            Sources are Flock Safety's specification sheets, price lists and data-architecture document, three
+            independent teardowns, audit logs released under public records requests, and court and congressional
+            records. Each figure carries a citation. Statements from Flock and from independent sources are labelled
+            separately; where they differ, both are cited.
           </p>
           <p class="scroll-hint" aria-hidden="true">Scroll</p>
         </div>
@@ -57,13 +59,13 @@
       <!-- ACT 1: POLE -->
       <section class="act" id="act-1" data-act="1">
         <div class="panel">
-          <p class="eyebrow amber">01 · The pole · installer view</p>
-          <h2>Twelve feet of aluminum, two band clamps, and a cone on the road</h2>
+          <p class="eyebrow amber">01 · Pole and mount</p>
+          <h2>Pole, mount and field of view</h2>
           <p>
-            A standard Flock install is a dedicated breakaway pole set in dirt or grass by a Flock crew. The camera is
-            banded on at roughly ten feet, aimed diagonally down the lane so the <em>rear</em> plates of departing
-            vehicles pass through a narrow field of view. Nothing runs to the ground: power comes from the panel on
-            top, data leaves over LTE.
+            Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is
+            band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing
+            vehicles pass through the field of view. No conductor runs to grade: power is supplied by the pole-top
+            solar array and data is transmitted over LTE. Two other mount configurations are documented below.
           </p>
           <div class="toggle-row" role="group" aria-label="Mount type">
             <button class="chip is-active" data-pole="flock">Flock pole · solar</button>
@@ -72,8 +74,8 @@
           </div>
           <div id="install-facts" class="facts"></div>
           <div class="aim-box">
-            <p class="aim-title">Aim the camera</p>
-            <p class="aim-help">Drag the camera on the pole, or use the sliders. The footprint on the road is the published field of view.</p>
+            <p class="aim-title">Field of view</p>
+            <p class="aim-help">Drag the camera or use the sliders. The footprint drawn on the road uses the field of view from Flock's specification sheet.</p>
             <label>Yaw <input id="aim-yaw" type="range" min="-60" max="60" value="0" step="1" /></label>
             <label>Pitch <input id="aim-pitch" type="range" min="-25" max="5" value="-8" step="1" /></label>
             <p class="aim-readout" id="aim-readout"></p>
@@ -85,11 +87,12 @@
       <section class="act act-long" id="act-2" data-act="2">
         <div class="panel">
           <p class="eyebrow amber">02 · Inside the enclosure</p>
-          <h2>Thirteen parts, front to back</h2>
+          <h2>Components, front to back</h2>
           <p>
-            The shell splits on its seam. What comes out is a small Android computer with a phone-class processor,
-            a five-megapixel infrared-optimized sensor, a ring of six 850 nm emitters, a cellular modem, and the
-            radios and sensors that stamp each photo with time and place. Tap any part to isolate it.
+            The enclosure separates at its seam. Inside are a Qualcomm APQ8053 system on module running Android 8.1,
+            a five-megapixel infrared-optimised image sensor, a ring of six 850 nm emitters, an LTE module, Wi-Fi
+            and Bluetooth, GPS, and a passive infrared trigger. Fourteen components are listed. Select a component to
+            isolate it.
           </p>
           <div id="part-list" class="part-list" role="list"></div>
         </div>
@@ -100,16 +103,17 @@
       <section class="act" id="act-3" data-act="3">
         <div class="panel">
           <p class="eyebrow amber">03 · Power and cable</p>
-          <h2>What actually plugs in</h2>
+          <h2>Power and network connections</h2>
           <p>
-            A stock Falcon has no network cable and is not a PoE device. The only conductors on the pole carry DC
-            from the solar array and the external battery box into the camera's rear connector. Where a city chooses
-            120 V, a licensed electrician lands mains in a junction box and Flock's AC kit steps it down.
+            The Falcon has no wired network interface and is not a Power over Ethernet device. In the solar
+            configuration the conductors on the pole carry DC from the solar array and the external battery box to
+            the camera's rear connector. In the AC configuration a licensed electrician terminates 120 V mains in a
+            junction box and Flock's AC kit converts it to DC.
           </p>
           <p>
-            Fiber, SFP modules and PoE enter the picture in one place: <strong>Flock Wing</strong>, the gateway that
-            ingests a city's existing cameras from the network closet. That path is modeled here too, because it is
-            how a traffic camera you already own becomes a plate reader.
+            Fiber, SFP modules and PoE are used in one configuration: <strong>Flock Wing</strong>, a gateway
+            appliance installed in a network closet that ingests video from an agency's existing cameras and runs
+            plate recognition on it. That configuration is modelled as the third path.
           </p>
           <div class="toggle-row" role="group" aria-label="Path">
             <button class="chip is-active" data-path="solar">Solar + battery</button>
@@ -123,23 +127,24 @@
       <!-- ACT 4: DATA -->
       <section class="act act-long" id="act-4" data-act="4">
         <div class="panel">
-          <p class="eyebrow cyan">04 · The data · one photograph's journey</p>
-          <h2>From photons to an officer's phone in twelve hops</h2>
+          <p class="eyebrow cyan">04 · Data path · capture to deletion</p>
+          <h2>Data path in twelve stages</h2>
           <p>
-            A car passes. The motion sensor fires, the sensor takes six to twelve stills, the on-board model reads the
-            plate and describes the vehicle, and a few kilobytes leave over LTE. Follow one detection through Flock's
-            cloud, its hot lists, its search network, its audit log, and its deletion timer.
+            A vehicle triggers the motion sensor, the image sensor captures six to twelve frames, the on-device model
+            reads the plate and classifies the vehicle, and the result is transmitted over LTE. The twelve stages
+            below trace one detection through Flock's cloud, hot-list matching, network search, audit logging and
+            scheduled deletion, with the processing location stated at each stage.
           </p>
           <ol id="hops" class="hops"></ol>
           <div class="retention">
             <p class="aim-title">Retention</p>
-            <p class="aim-help">How long one vehicle's trail stays searchable. Drag.</p>
+            <p class="aim-help">Retention presets from Flock's default and from state statutes. The markers show one vehicle's reads over the selected period.</p>
             <input id="retention" type="range" min="0" max="4" value="0" step="1" aria-label="Retention preset" />
             <p class="aim-readout" id="retention-readout"></p>
           </div>
           <div class="deputy">
-            <p class="aim-title">Be the deputy</p>
-            <p class="aim-help">Type a reason and run a nationwide search. This reproduces one documented query from April 2025.</p>
+            <p class="aim-title">Network search example</p>
+            <p class="aim-help">Enter a reason and run the search. The camera and network counts shown are those recorded in the audit log of one documented April 2025 query.</p>
             <form id="deputy-form">
               <input id="deputy-reason" type="text" maxlength="60" placeholder="Reason for search" aria-label="Reason for search" />
               <button type="submit" class="chip">Search network</button>
@@ -149,12 +154,12 @@
         </div>
       </section>
 
-      <!-- ACT 5: MYTHS -->
+      <!-- ACT 5: CLAIMS -->
       <section class="act act-long" id="act-5" data-act="5">
         <div class="panel wide">
-          <p class="eyebrow cyan">05 · Myths and facts</p>
-          <h2>What people say, what the record shows</h2>
-          <p>Each card links back to the part or the hop that settles it.</p>
+          <p class="eyebrow cyan">05 · Common claims</p>
+          <h2>Common claims and the public record</h2>
+          <p>Each card states a claim, the documented position, the product or setting it applies to, and the sources. Cards link to the related component or data stage.</p>
           <div id="myths" class="myths"></div>
         </div>
       </section>
@@ -166,44 +171,44 @@
           <h2 id="econ-headline"></h2>
           <p id="econ-summary"></p>
           <div class="econ-grid">
-            <div class="econ-block" id="econ-included"><h3>What the annual fee covers</h3></div>
-            <div class="econ-block" id="econ-extra"><h3>What the customer pays on top</h3></div>
+            <div class="econ-block" id="econ-included"><h3>Included in the annual fee</h3></div>
+            <div class="econ-block" id="econ-extra"><h3>Billed separately</h3></div>
           </div>
-          <div class="econ-block" id="econ-prices"><h3>List prices</h3><p class="fine">Virginia Sheriffs' Association catalog, May 2024, confirmed by 2025 invoices. All per unit per year.</p></div>
-          <div class="econ-block" id="econ-history"><h3>How the price moved</h3></div>
-          <div class="econ-block" id="econ-fees"><h3>Install and service fees, then and now</h3><p class="fine">Flock's 2021 implementation guide against its 2026 published schedule.</p></div>
-          <div class="econ-block" id="econ-workflow"><h3>An install, and who does what</h3></div>
-          <div class="econ-block" id="econ-workforce"><h3>Who turns the wrenches</h3></div>
-          <div class="econ-block" id="econ-permitting"><h3>Permits, by where the pole goes</h3></div>
-          <div class="econ-block" id="econ-contract"><h3>Ownership and the contract</h3></div>
-          <div class="econ-block" id="econ-scale"><h3>How big it is</h3></div>
-          <div class="econ-block" id="econ-unknowns"><h3>What nobody outside Flock can say</h3></div>
+          <div class="econ-block" id="econ-prices"><h3>List prices</h3><p class="fine">Virginia Sheriffs' Association catalog, May 2024, matching 2025 invoices. Per unit per year.</p></div>
+          <div class="econ-block" id="econ-history"><h3>Price history, 2019 to 2026</h3></div>
+          <div class="econ-block" id="econ-fees"><h3>Installation and service fees, 2021 guide and 2026 schedule</h3><p class="fine">Flock's 2021 implementation guide and its 2026 published fee schedule.</p></div>
+          <div class="econ-block" id="econ-workflow"><h3>Installation workflow and responsibilities</h3></div>
+          <div class="econ-block" id="econ-workforce"><h3>Installation workforce</h3></div>
+          <div class="econ-block" id="econ-permitting"><h3>Permitting by location type</h3></div>
+          <div class="econ-block" id="econ-contract"><h3>Ownership and contract terms</h3></div>
+          <div class="econ-block" id="econ-scale"><h3>Scale and finances</h3></div>
+          <div class="econ-block" id="econ-unknowns"><h3>Not publicly documented</h3></div>
         </div>
       </section>
 
       <!-- ACT 7: SOURCES -->
       <section class="act act-long" id="act-7" data-act="7">
         <div class="panel wide">
-          <p class="eyebrow">07 · Sources and method</p>
-          <h2>Every number on this page</h2>
+          <p class="eyebrow">07 · Sources</p>
+          <h2>Sources</h2>
           <p>
-            Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is the company's own document or
-            page. <span class="tag tag-indep">Independent</span> is a teardown, court filing, government audit or
-            journalism. <span class="tag tag-unknown">Unknown</span> marks what nobody outside Flock has verified.
-            Facts about this system move monthly; every source carries the date it was last checked.
+            Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is a document or page published by
+            the company. <span class="tag tag-indep">Independent</span> is a teardown, court filing, government audit
+            or news report. <span class="tag tag-unknown">Unknown</span> marks a statement not published by Flock and
+            not verified by an independent source. Each source carries the date it was last checked.
           </p>
           <div id="sources" class="sources"></div>
           <p class="fine">
-            This is an explainer, not a map and not a guide to evading anything. For locations, see
-            <a href="https://deflock.org" rel="noopener">DeFlock</a>. Corrections: open an issue on the repository.
-            Model files are published under CC BY 4.0; code under MIT.
+            This page does not map camera locations and does not describe countermeasures. Camera locations are
+            catalogued at <a href="https://deflock.org" rel="noopener">DeFlock</a>. Corrections: open an issue on the
+            repository. Model files are published under CC BY 4.0; code under MIT.
           </p>
         </div>
       </section>
     </main>
 
     <div id="webgl-fallback" class="fallback" hidden>
-      <p>This page needs WebGL 2 or WebGPU. The text and sources below still work.</p>
+      <p>The 3D view requires WebGL 2 or WebGPU. The text and sources remain readable.</p>
     </div>
 
     <script type="module" src="/src/main.ts"></script>

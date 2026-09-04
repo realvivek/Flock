@@ -53,6 +53,14 @@ export interface World {
   loadAct(name: "wing"): Promise<void>;
 }
 
+function ghostMaterial(m: Mesh, a: number): void {
+  const mat = m.material;
+  if (!(mat instanceof PBRMaterial)) return;
+  const blend = a < 0.999;
+  const mode = blend ? PBRMaterial.PBRMATERIAL_ALPHABLEND : PBRMaterial.PBRMATERIAL_OPAQUE;
+  if (mat.transparencyMode !== mode) { mat.transparencyMode = mode; mat.needDepthPrePass = blend; }
+}
+
 function findNode(root: TransformNode, name: string): TransformNode | null {
   if (root.name === name) return root;
   for (const c of root.getChildTransformNodes(false)) if (c.name === name) return c;
@@ -136,18 +144,20 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
     shadows?.removeShadowCaster(ground as Mesh);
     // A shader grid on a plane just above the ground: 0.5 m hairlines, a stronger line every 2 m,
     // matching the page's blueprint sheet. Shadows still land on the PBR ground beneath.
-    const gridPlane = MeshBuilder.CreateGround("gridPlane", { width: 400, height: 400 }, scene);
-    gridPlane.position.y = 0.006;
-    gridPlane.isPickable = false;
+    // Two strips, leaving the road band (runtime z 3.0 to 10.2, plus the curbs) ungridded so asphalt stays asphalt.
+    const near = MeshBuilder.CreateGround("gridPlaneNear", { width: 400, height: 400 }, scene);
+    near.position.set(0, 0.006, 2.75 - 200);
+    const far = MeshBuilder.CreateGround("gridPlaneFar", { width: 400, height: 400 }, scene);
+    far.position.set(0, 0.006, 10.5 + 200);
     const grid = new GridMaterial("grid", scene);
     grid.mainColor = new Color3(0.969, 0.973, 0.965);
     grid.lineColor = new Color3(0.106, 0.31, 0.847);
     grid.gridRatio = 0.5;
     grid.majorUnitFrequency = 4;
-    grid.minorUnitVisibility = 0.45;
-    grid.opacity = 0.16;
+    grid.minorUnitVisibility = 0.6;
+    grid.opacity = 0.3;
     grid.backFaceCulling = false;
-    gridPlane.material = grid;
+    for (const gp of [near, far]) { gp.isPickable = false; gp.material = grid; }
     const gpbr = new PBRMaterial("groundPaper", scene);
     gpbr.albedoColor = new Color3(0.93, 0.935, 0.925);
     gpbr.metallic = 0; gpbr.roughness = 0.95;
@@ -222,16 +232,18 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
 
   const world: World = {
     scene, camera, mount, tilt, falcon, parts, sedan, poleGroups, wing: null, footprint, cone, irLight, fill, hemi,
+    // The glTF loader marks every material opaque, so visibility alone writes alpha without blending;
+    // switch the materials to alpha blend while ghosted and back to opaque at full visibility.
     setContextAlpha(a: number) {
-      for (const m of allMeshes(poleC)) m.visibility = a;
+      for (const m of allMeshes(poleC)) { m.visibility = a; ghostMaterial(m, a); }
     },
     setFalconAlpha(a: number) {
-      for (const m of allMeshes(falconC)) m.visibility = a;
+      for (const m of allMeshes(falconC)) { m.visibility = a; ghostMaterial(m, a); }
     },
     isolate(id: string | null) {
       for (const [pid, p] of parts) {
         const on = id === null || pid === id;
-        for (const m of p.node.getChildMeshes()) m.visibility = on ? 1 : 0.08;
+        for (const m of p.node.getChildMeshes()) { m.visibility = on ? 1 : 0.08; if (m instanceof Mesh) ghostMaterial(m, on ? 1 : 0.08); }
       }
     },
     async loadAct(name) {

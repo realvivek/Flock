@@ -58,7 +58,7 @@ export function initAct2(world: World, pins: PinLayer): void {
       ${p.partNumber ? `<div class="pn">${escape(p.partNumber)}${p.vendor ? " · " + escape(p.vendor) : ""}</div>` : ""}
       <p>${escape(p.function)}</p>
       <dl>${spec}</dl>
-      <p class="fine">${confidenceLabel[p.confidence]}${hop ? ` · owns data hop ${hop.n}: ${escape(hop.title)}` : ""}</p>
+      <p class="fine">${confidenceLabel[p.confidence]}${hop ? ` · data stage ${hop.n}: ${escape(hop.title)}` : ""}</p>
     `;
     card.appendChild(cite(p.sources));
     const close = document.createElement("button");

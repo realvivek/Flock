@@ -68,7 +68,7 @@ export function initAct6(world: World, pins: PinLayer): void {
   table(byId("econ-fees"), ["Fee", "2019 to 2023", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.then, f.now], num: [1, 2], sources: f.sources })));
   table(byId("econ-workflow"), ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources })));
   rows(byId("econ-workforce"), e.workforce);
-  table(byId("econ-permitting"), ["Where", "What is needed", "Who handles it", "What has happened"], e.permitting.map((p) => ({ cells: [p.scenario, p.permit, p.who, p.note || "—"], sources: p.sources })));
+  table(byId("econ-permitting"), ["Location", "Permit", "Responsibility", "Documented cases"], e.permitting.map((p) => ({ cells: [p.scenario, p.permit, p.who, p.note || "—"], sources: p.sources })));
   rows(byId("econ-contract"), e.contract);
   rows(byId("econ-scale"), e.scale);
   const un = document.createElement("ul");

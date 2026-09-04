@@ -1,5 +1,5 @@
 /* Stills stepper: phones get one screen per state, no 3D engine. */
-.stepper { position: relative; min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
+.stepper { position: relative; min-height: 100vh; display: flex; flex-direction: column; background: transparent; }
 .stepper .st-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: .6rem; padding: .6rem .9rem; background: rgba(247,248,246,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .stepper .st-top .brand { font-size: 13px; }
 .stepper .st-chapters { display: flex; gap: .35rem; overflow-x: auto; padding: .5rem .9rem; scrollbar-width: none; border-bottom: 1px solid var(--line); background: #fff; }

@@ -1,8 +1,8 @@
 {
-  "$comment": "The economics of a Flock deployment: what the money buys, what it does not, how the price moved, who does the work, and how big the business is. Every row cites sources.json. Prices are per unit per year unless stated.",
+  "$comment": "Pricing, fee schedules, installation workflow, workforce, permitting, contract terms and company scale for a Flock deployment. Every row cites sources.json. Prices are per unit per year unless stated.",
   "intro": {
-    "headline": "About $3,000 a year buys the whole thing, except the parts that go wrong",
-    "summary": "A city does not buy a camera. It leases one: hardware, pole, panel, cellular data, cloud, software and installation labour in one annual fee. The customer pays separately for installation itself, for permits and electricians, and for anything lost, stolen or damaged. The list price rose from $2,500 to $3,000 in January 2024 and the one-time install fee quietly moved from a few hundred dollars to over a thousand.",
+    "headline": "Pricing and cost structure",
+    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage, software and installation labour. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on 1 January 2024. The installation fee is $1,000 to $1,250 on the 2026 schedule; contracts from 2019 to 2023 list $250 to $350.",
     "sources": [
       "flock-catalog-2024",
       "parkridge-2025",
@@ -181,7 +181,7 @@
     },
     {
       "k": "Electrician",
-      "v": "AC-powered units need a licensed electrician the customer hires; ongoing electricity too",
+      "v": "AC-powered units require a licensed electrician hired by the customer, and the electricity supply",
       "sources": [
         "flock-impl-guide",
         "richland-agreement-2023"
@@ -218,8 +218,8 @@
       ]
     },
     {
-      "k": "Leaving early",
-      "v": "Older contracts: $500 removal fee per unit for termination for convenience; 2026 terms remove the general convenience right",
+      "k": "Early termination",
+      "v": "Contracts from 2023 and earlier: $500 removal fee per unit for termination for convenience; the 2026 terms remove the general termination-for-convenience right",
       "sources": [
         "richland-agreement-2023",
         "bsquare-monroe",
@@ -315,7 +315,7 @@
     {
       "date": "Dec 2019",
       "price": "$182 per camera",
-      "note": "Greenville, SC: 11 cameras for $2,000 a year, no install fee, paid from asset forfeiture. A loss-leader, not a list price.",
+      "note": "Greenville, SC: 11 cameras for $2,000 a year in total, no install fee, paid from asset forfeiture funds",
       "sources": [
         "deflocksc-greenville"
       ]
@@ -323,7 +323,7 @@
     {
       "date": "2021 to 2023",
       "price": "$2,000 to $2,500 plus $250 to $350 install",
-      "note": "The settled market rate in council packets",
+      "note": "Range in council agreements and reporting from this period",
       "sources": [
         "richland-agreement-2023",
         "contrary-flock"
@@ -332,7 +332,7 @@
     {
       "date": "Oct 2023",
       "price": "$2,500, rising to $3,000",
-      "note": "Indio, CA told the increase was coming and offered $2,500 for a five-year term",
+      "note": "Indio, CA staff report: Flock notified the city of the increase and offered $2,500 for a five-year term",
       "sources": [
         "indio-2023"
       ]
@@ -340,7 +340,7 @@
     {
       "date": "1 Jan 2024",
       "price": "+$500 per camera per year",
-      "note": "Existing customers could hold $2,500 by signing five years: a price rise traded for term length",
+      "note": "Grafton, MA staff report: existing customers could retain $2,500 by signing a five-year term",
       "sources": [
         "grafton-2024"
       ]
@@ -364,7 +364,7 @@
     {
       "date": "Jun 2025",
       "price": "$3,000",
-      "note": "Park Ridge, IL invoice; products renamed on 1 February 2025 so 'Falcon' becomes 'Flock Safety LPR' on paper",
+      "note": "Park Ridge, IL invoice; product names changed on 1 February 2025, 'Falcon' to 'Flock Safety LPR'",
       "sources": [
         "parkridge-2025"
       ]
@@ -372,7 +372,7 @@
     {
       "date": "2026",
       "price": "$1,000 to $1,250 install",
-      "note": "Flock's own published schedule; most secondary sources still repeat the old $250 figure",
+      "note": "Flock's published fee schedule; secondary sources from 2021 to 2024 list $250",
       "sources": [
         "flock-fee-schedule"
       ]
@@ -381,7 +381,7 @@
   "workflow": [
     {
       "step": "Pick locations",
-      "flock": "Presents viable options and keeps final say on placement",
+      "flock": "Presents viable options; has final discretion on placement under the agreement",
       "customer": "Approves the deployment plan; clears it with public works",
       "other": "",
       "sources": [
@@ -412,7 +412,7 @@
     {
       "step": "Site survey",
       "flock": "Technician checks solar exposure, sight line to the road and cellular signal; flags each spot",
-      "customer": "Access",
+      "customer": "Provides site access",
       "other": "",
       "sources": [
         "flock-impl-guide"
@@ -458,7 +458,7 @@
     },
     {
       "step": "Validation",
-      "flock": "Checks capture quality for seven business days, then grants full access. The contract clock starts here.",
+      "flock": "Checks capture quality for seven business days, then grants full access; the contract term commences at validation",
       "customer": "Training",
       "other": "",
       "sources": [
@@ -487,7 +487,7 @@
     },
     {
       "k": "Contractors",
-      "v": "The contract allows third-party labour and Flock's installer app is restricted to its technicians 'and approved third party technicians'; DISH's OnTech arm has been identified as one such installer, with no public split between in-house and contract work",
+      "v": "The agreement allows third-party labour and Flock's installer app is restricted to its technicians 'and approved third party technicians'; Gadget Review reported DISH's OnTech unit as one such installer; the split between in-house and contract work is not published",
       "sources": [
         "richland-agreement-2023",
         "flock-installer-app",
@@ -496,7 +496,7 @@
     },
     {
       "k": "Self-install",
-      "v": "Falcon Flex is customer-installed with no on-site service; its contract clock starts at signature rather than validation",
+      "v": "Falcon Flex is customer-installed with no on-site service; its contract term commences at signature rather than validation",
       "sources": [
         "richland-agreement-2023"
       ]
@@ -522,7 +522,7 @@
     {
       "scenario": "City street or city pole",
       "permit": "Public works approval; sometimes an encroachment permit",
-      "who": "Customer owns the process; Flock helps package it",
+      "who": "Customer manages the application; Flock assists with packaging it",
       "note": "",
       "sources": [
         "flock-impl-guide"
@@ -531,8 +531,8 @@
     {
       "scenario": "State highway right of way",
       "permit": "State DOT permit",
-      "who": "Customer on paper; Flock works some DOTs directly",
-      "note": "Hundreds of cameras went up without approval in Florida, Illinois and South Carolina; South Carolina found 200 or more and froze new installs in 2023. Florida revoked every state right-of-way permit on 31 August 2026 with 30 days to remove.",
+      "who": "Customer under the agreement; Flock works with some DOTs directly",
+      "note": "Cameras were installed without state approval in Florida, Illinois and South Carolina; South Carolina DOT identified 200 or more and paused new installations in 2023. Florida DOT revoked all state right-of-way permits on 31 August 2026 with 30 days for removal.",
       "sources": [
         "forbes-statelaw-2024",
         "wusf-fdot-2026",
@@ -542,8 +542,8 @@
     {
       "scenario": "Utility or telecom pole",
       "permit": "Attachment agreement with the pole owner",
-      "who": "Customer or Flock; sometimes nobody",
-      "note": "One telecom company said cameras were placed on its poles without its knowledge",
+      "who": "Customer or Flock; not always documented",
+      "note": "One telecom company stated that cameras were attached to its poles without its knowledge",
       "sources": [
         "flock-impl-guide",
         "dft-poles"
@@ -553,7 +553,7 @@
       "scenario": "Roadside clear zone",
       "permit": "Breakaway or MASH-rated pole where required",
       "who": "Customer pays for DOT-approved poles",
-      "note": "Reporting in 2026 found poles set inside clear zones without breakaway bases",
+      "note": "Jalopnik reported in 2026 on poles set inside clear zones without breakaway bases",
       "sources": [
         "jalopnik-mash-2026",
         "richland-agreement-2023"
@@ -569,10 +569,10 @@
       ]
     },
     {
-      "scenario": "Wrong address",
+      "scenario": "Approved location list",
       "permit": "Council-approved location list",
       "who": "Customer supplies it",
-      "note": "Roanoke installed 30 of 41 Raven audio sensors at unapproved spots after a city data-entry error, then scrapped the program",
+      "note": "Roanoke, VA: 30 of 41 Raven audio sensors were installed at locations not on the approved list after a city data-entry error; the city later cancelled the program",
       "sources": [
         "cardinal-roanoke-2026"
       ]
@@ -588,7 +588,7 @@
     },
     {
       "k": "At the end",
-      "v": "Older contracts promise removal within six months; the 2026 terms say 'a commercially reasonable time'. Verona, Evanston and Cambridge all found cameras up or reinstalled after cancelling",
+      "v": "Contracts from 2023 and earlier specify removal within six months of termination; the 2026 terms specify 'a commercially reasonable time'. In Verona, Evanston and Cambridge, cameras were reported still in place or reinstalled after termination",
       "sources": [
         "richland-agreement-2023",
         "flock-tc-2026",
@@ -631,7 +631,7 @@
     },
     {
       "k": "Cooperative purchasing",
-      "v": "OMNIA, Sourcewell, Texas DIR and similar contracts let cities skip competitive bidding; sole-source memos cite the network effect: 'all of our neighboring communities are in the Flock system'",
+      "v": "OMNIA, Sourcewell, Texas DIR and similar cooperative contracts provide an exemption from competitive bidding under state procurement rules; a Park Ridge sole-source memo states 'all of our neighboring communities are in the Flock system'",
       "sources": [
         "johnsoncity-2025",
         "flock-dir",
@@ -642,7 +642,7 @@
   "scale": [
     {
       "k": "Cameras",
-      "v": "120,000+ claimed in 49 states; about 96,000 independently mapped",
+      "v": "More than 120,000 in 49 states per Flock; about 96,000 mapped by DeFlock contributors",
       "sources": [
         "wikipedia-flock",
         "deflock"
@@ -650,7 +650,7 @@
     },
     {
       "k": "Customers",
-      "v": "5,000+ law-enforcement agencies and 6,000+ communities, plus retailers such as Home Depot and Lowe's whose lot cameras feed police searches",
+      "v": "More than 5,000 law-enforcement agencies and 6,000 communities per Flock; retail customers including Home Depot and Lowe's share parking-lot camera data with police searches per The American Prospect",
       "sources": [
         "wikipedia-flock",
         "prospect-retail-2026"
@@ -665,7 +665,7 @@
     },
     {
       "k": "Valuation",
-      "v": "$7.5 billion in 2025, $8.4 billion in April 2026; roughly $1 billion raised",
+      "v": "$7.5 billion in 2025, $8.4 billion in April 2026; about $1 billion raised in total",
       "sources": [
         "sacra-flock",
         "wikipedia-flock"
@@ -680,7 +680,7 @@
     },
     {
       "k": "Public money",
-      "v": "Texas directed at least $30 million in insurance-fee grants to local Flock networks before the governor halted it in August 2026; Florida approved grant funding for about 440 readers days before its DOT banned them from state roads",
+      "v": "Texas directed at least $30 million in insurance-fee grants to local Flock networks before the governor halted the program in August 2026; Florida approved grant funding for about 440 readers shortly before its DOT revoked state right-of-way permits",
       "sources": [
         "texastribune-2026",
         "elpasomatters-2026",
@@ -688,8 +688,8 @@
       ]
     },
     {
-      "k": "How it sells",
-      "v": "Direct, city by city, with police as advocates: a leaked guide coaches officers on presenting to councils; free pilots and grant-writing help lower the first-year cost",
+      "k": "Sales channel",
+      "v": "Direct sales to individual agencies and communities; 404 Media published a Flock guide for police on presenting the product to councils; Flock offers pilot programs and grant-writing assistance",
       "sources": [
         "404-narrative-2025",
         "flock-funding-blog"
@@ -698,7 +698,7 @@
   ],
   "unknowns": [
     {
-      "v": "Gross margin and bill-of-materials cost: Flock is private and no teardown has priced the parts",
+      "v": "Gross margin and bill-of-materials cost: not published; no teardown has estimated the bill of materials",
       "sources": [
         "ipvm-dissecting"
       ]
@@ -722,7 +722,7 @@
       ]
     },
     {
-      "v": "How many Florida right-of-way cameras came down by the 30 September 2026 deadline",
+      "v": "Number of Florida right-of-way cameras removed by the 30 September 2026 deadline",
       "sources": [
         "wusf-fdot-2026"
       ]
@@ -751,9 +751,9 @@
         0.3,
         0.1
       ],
-      "k": "install, once",
+      "k": "installation fee, one-time",
       "v": "$1,000 standard · $1,250 advanced",
-      "dx": 190,
+      "dx": 235,
       "dy": -44,
       "sources": [
         "flock-fee-schedule"
@@ -767,7 +767,7 @@
         -0.05
       ],
       "k": "panel replacement",
-      "v": "$350 if damaged",
+      "v": "$350 after damage",
       "dx": 170,
       "dy": 22,
       "sources": [
@@ -826,8 +826,8 @@
         0.15,
         -0.3
       ],
-      "k": "leaving early",
-      "v": "$500 removal per unit (older terms)",
+      "k": "early termination",
+      "v": "$500 removal per unit (2023 terms)",
       "dx": 180,
       "dy": 18,
       "sources": [

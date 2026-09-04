@@ -88,6 +88,9 @@ def camera_for(objs, direction, fov_deg=32, pad=1.25, up_bias=0.0):
     cam_data.lens_unit = "FOV"
     cam_data.angle = math.radians(fov_deg)
     dist = (size * pad) / (2 * math.tan(math.radians(fov_deg) / 2))
+    # Small parts (a 1 cm chip) put the camera inside Blender's default 0.1 m near clip; scale the clip range to the fit.
+    cam_data.clip_start = max(0.0005, dist * 0.05)
+    cam_data.clip_end = max(100.0, dist * 50)
     cam = bpy.data.objects.new("cam", cam_data)
     bpy.context.collection.objects.link(cam)
     cam.location = center + d * dist + Vector((0, 0, up_bias * size))

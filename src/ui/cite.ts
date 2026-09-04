@@ -28,7 +28,7 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
 }
 
 export function tag(kind: "flock" | "independent" | "both" | "unknown"): string {
-  const map = { flock: ["tag-flock", "Flock says"], independent: ["tag-indep", "Documented"], both: ["tag-both", "Claimed + documented"], unknown: ["tag-unknown", "Unknown"] } as const;
+  const map = { flock: ["tag-flock", "Flock source"], independent: ["tag-indep", "Independent source"], both: ["tag-both", "Flock and independent"], unknown: ["tag-unknown", "Not verified"] } as const;
   const [cls, label] = map[kind];
   return `<span class="tag ${cls}">${label}</span>`;
 }

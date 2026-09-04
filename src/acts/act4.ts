@@ -68,7 +68,7 @@ export function initAct4(world: World, viz: DataViz, pins: PinLayer): void {
     const r = reason.value.trim() || d.reasonAsLogged;
     set({ deputyReason: r });
     fanStart = performance.now();
-    dReadout.innerHTML = `Reason logged: “${escape(r)}” · no warrant · no case number required until Aug 2026 · <strong>${d.networks.toLocaleString()} networks</strong> · <strong>${d.cameras.toLocaleString()} cameras</strong> · ${d.lookbackDays}-day lookback · ${escape(d.date)}`;
+    dReadout.innerHTML = `Reason as logged: “${escape(r)}” · no warrant recorded · case number optional before Aug 2026 · <strong>${d.networks.toLocaleString()} networks</strong> · <strong>${d.cameras.toLocaleString()} cameras</strong> · ${d.lookbackDays}-day lookback · ${escape(d.date)}`;
     dReadout.appendChild(cite(d.sources));
   });
 
