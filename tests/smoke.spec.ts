@@ -19,7 +19,7 @@ test("boots, renders, and each act reaches its state", async ({ page }) => {
   await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
   await expect(page.locator("#status")).toContainText(/webgl2|webgpu/);
 
-  for (let act = 0; act < 7; act++) {
+  for (let act = 0; act < 8; act++) {
     await scrollToAct(page, act, 0.5);
     const st = await page.evaluate(() => ({ act: window.__flock!.state.act, p: window.__flock!.state.acts[window.__flock!.state.act] }));
     expect(st.act).toBe(act);
@@ -56,5 +56,26 @@ test("reduced motion snaps progress to steps", async ({ browser }) => {
   await scrollToAct(page, 1, 0.37);
   const p = await page.evaluate(() => window.__flock!.state.acts[1]);
   expect([0, 0.25, 0.5, 0.75, 1]).toContain(p);
+  await ctx.close();
+});
+
+test("phones get the stills stepper and never load the 3D engine", async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const page = await ctx.newPage();
+  const requests: string[] = [];
+  page.on("request", (r) => requests.push(r.url()));
+  await page.goto("/");
+  await page.waitForSelector("#stepper .st-screen h2");
+  await expect(page.locator("#stepper h2")).toContainText("Anatomy of a Flock camera");
+  await page.locator("#st-next").click();
+  await expect(page.locator("#stepper h2")).toContainText("One name, several machines");
+  await page.locator(".st-chapters button", { hasText: "Inside" }).click();
+  await expect(page.locator(".st-count")).toContainText("1 / 20");
+  await expect(page.locator(".st-figure img")).toHaveAttribute("src", /stills\/explode-0\.webp$/);
+  // deep link into a part
+  await page.goto("/?s=inside/13");
+  await expect(page.locator("#stepper h2")).toContainText("System on module");
+  await page.screenshot({ path: "test-results/mobile-som.png" });
+  expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
 });

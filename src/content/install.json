@@ -194,8 +194,8 @@
       "sources": [
         "flock-impl-guide"
       ],
-      "dx": -150,
-      "dy": -40
+      "dx": 175,
+      "dy": 42
     },
     {
       "id": "pin-height-existing",
@@ -213,8 +213,8 @@
       "sources": [
         "flock-impl-guide"
       ],
-      "dx": -150,
-      "dy": -40
+      "dx": 175,
+      "dy": 42
     },
     {
       "id": "pin-pole",

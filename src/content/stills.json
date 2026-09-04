@@ -1,0 +1,32 @@
+{
+  "$comment": "Pre-rendered stills for the phone stepper and social cards. Rendered by tools/blender/render_stills.py from the same models. job/args drive the renderer; id is what the stepper references.",
+  "dir": "stills",
+  "stills": [
+    { "id": "pole-flock", "file": "pole-flock.webp", "job": "pole", "args": { "mode": "flock" } },
+    { "id": "pole-existing", "file": "pole-existing.webp", "job": "pole", "args": { "mode": "existing" } },
+    { "id": "pole-ac", "file": "pole-ac.webp", "job": "pole", "args": { "mode": "ac" } },
+    { "id": "falcon-front", "file": "falcon-front.webp", "job": "falcon", "args": { "view": "front" } },
+    { "id": "falcon-side", "file": "falcon-side.webp", "job": "falcon", "args": { "view": "side" } },
+    { "id": "explode-0", "file": "explode-0.webp", "job": "explode", "args": { "amount": 0.0 } },
+    { "id": "explode-1", "file": "explode-1.webp", "job": "explode", "args": { "amount": 0.2 } },
+    { "id": "explode-2", "file": "explode-2.webp", "job": "explode", "args": { "amount": 0.4 } },
+    { "id": "explode-3", "file": "explode-3.webp", "job": "explode", "args": { "amount": 0.6 } },
+    { "id": "explode-4", "file": "explode-4.webp", "job": "explode", "args": { "amount": 0.8 } },
+    { "id": "explode-5", "file": "explode-5.webp", "job": "explode", "args": { "amount": 1.0 } },
+    { "id": "part-bezel", "file": "part-bezel.webp", "job": "part", "args": { "part": "bezel" } },
+    { "id": "part-ledboard", "file": "part-ledboard.webp", "job": "part", "args": { "part": "ledboard" } },
+    { "id": "part-lens", "file": "part-lens.webp", "job": "part", "args": { "part": "lens" } },
+    { "id": "part-ircut", "file": "part-ircut.webp", "job": "part", "args": { "part": "ircut" } },
+    { "id": "part-sensor", "file": "part-sensor.webp", "job": "part", "args": { "part": "sensor" } },
+    { "id": "part-pir", "file": "part-pir.webp", "job": "part", "args": { "part": "pir" } },
+    { "id": "part-mainboard", "file": "part-mainboard.webp", "job": "part", "args": { "part": "mainboard" } },
+    { "id": "part-som", "file": "part-som.webp", "job": "part", "args": { "part": "som" } },
+    { "id": "part-emmc", "file": "part-emmc.webp", "job": "part", "args": { "part": "emmc" } },
+    { "id": "part-lte", "file": "part-lte.webp", "job": "part", "args": { "part": "lte" } },
+    { "id": "part-wifi", "file": "part-wifi.webp", "job": "part", "args": { "part": "wifi" } },
+    { "id": "part-gps", "file": "part-gps.webp", "job": "part", "args": { "part": "gps" } },
+    { "id": "part-rear", "file": "part-rear.webp", "job": "part", "args": { "part": "rear" } },
+    { "id": "part-clamps", "file": "part-clamps.webp", "job": "part", "args": { "part": "clamps" } },
+    { "id": "wing-closet", "file": "wing-closet.webp", "job": "wing", "args": {} }
+  ]
+}

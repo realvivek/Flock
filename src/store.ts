@@ -27,7 +27,7 @@ export interface State {
 
 type Listener = (s: State, changed: Set<keyof State>) => void;
 
-const ACT_COUNT = 7;
+const ACT_COUNT = 8;
 
 export const state: State = {
   progress: 0,

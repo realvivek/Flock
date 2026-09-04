@@ -36,8 +36,8 @@ function glow(scene: World["scene"], name: string, color: Color3, alpha = 1): St
  *  a 6,809-node network field that lights up on a search, and the retention trail along the road. */
 export function createDataViz(world: World): DataViz {
   const { scene } = world;
-  const cyan = new Color3(0.31, 0.82, 0.9);
-  const amber = new Color3(0.95, 0.7, 0.25);
+  const cyan = new Color3(0.11, 0.31, 0.85);
+  const amber = new Color3(0.85, 0.57, 0.12);
 
   const packet = MeshBuilder.CreateSphere("packet", { diameter: 0.12, segments: 12 }, scene);
   packet.material = glow(scene, "packetMat", cyan);
@@ -63,7 +63,7 @@ export function createDataViz(world: World): DataViz {
   const phoneMesh = MeshBuilder.CreateBox("phone", { width: 0.08, height: 0.16, depth: 0.012 }, scene);
   phoneMesh.position = phone;
   phoneMesh.rotation.y = -0.6;
-  phoneMesh.material = glow(scene, "phoneMat", new Color3(0.9, 0.93, 1.0), 0.9);
+  phoneMesh.material = glow(scene, "phoneMat", new Color3(0.07, 0.08, 0.1), 0.95);
   phoneMesh.isPickable = false;
 
   // Packet path: falcon -> arc up to the cloud -> arc down to the phone.
@@ -105,7 +105,7 @@ export function createDataViz(world: World): DataViz {
     Matrix.TranslationToRef(x, y, z, Matrix.IdentityReadOnly.clone()).copyToArray(matrices, i * 16);
     // Distance from the "home" agency (near the middle-right), used to light nodes outward.
     dist[i] = Math.hypot(x - (cx + 8), y - (cy - 2));
-    colors[i * 4] = 0.12; colors[i * 4 + 1] = 0.16; colors[i * 4 + 2] = 0.2; colors[i * 4 + 3] = 1;
+    colors[i * 4] = 0.82; colors[i * 4 + 1] = 0.84; colors[i * 4 + 2] = 0.88; colors[i * 4 + 3] = 1;
   }
   disc.thinInstanceSetBuffer("matrix", matrices, 16, false);
   disc.thinInstanceSetBuffer("color", colors, 4, false);
@@ -168,7 +168,7 @@ export function createDataViz(world: World): DataViz {
       const reach = amount * (maxDist + 2);
       for (let i = 0; i < NETWORKS; i++) {
         const lit = clamp01((reach - dist[i]!) / 2.5);
-        colors[i * 4] = lerp(0.12, 0.35, lit); colors[i * 4 + 1] = lerp(0.16, 0.85, lit); colors[i * 4 + 2] = lerp(0.2, 0.95, lit);
+        colors[i * 4] = lerp(0.82, 0.11, lit); colors[i * 4 + 1] = lerp(0.84, 0.31, lit); colors[i * 4 + 2] = lerp(0.88, 0.85, lit);
       }
       disc.thinInstanceSetBuffer("color", colors, 4, false);
     },

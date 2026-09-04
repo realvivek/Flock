@@ -79,7 +79,10 @@ export function initAct1(world: World, pins: PinLayer): void {
   subscribe((s, changed) => {
     if (changed.has("poleMode")) applyMode(s.poleMode);
     if (changed.has("aimYaw") || changed.has("aimPitch")) updateReadout();
-    if (changed.has("act")) { if (s.act === 1) pins.showOnly(install.pins.filter((p) => p.modes.includes(s.poleMode)).map((p) => p.id)); else for (const p of install.pins) pins.show(p.id, false); }
+    if (changed.has("act")) {
+      if (s.act === 1) { applyMode(s.poleMode); }
+      else for (const p of install.pins) pins.show(p.id, false);
+    }
   });
   applyMode(state.poleMode);
   updateReadout();

@@ -18,6 +18,7 @@ import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { PBRMaterial } from "@babylonjs/core/Materials/PBR/pbrMaterial";
+import { GridMaterial } from "@babylonjs/materials/grid/gridMaterial";
 import { LoadAssetContainerAsync } from "@babylonjs/core/Loading/sceneLoader";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 import type { AbstractEngine } from "@babylonjs/core/Engines/abstractEngine";
@@ -61,10 +62,10 @@ function findNode(root: TransformNode, name: string): TransformNode | null {
 export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<World> {
   const scene = new Scene(engine);
   scene.useRightHandedSystem = true;
-  scene.clearColor = new Color4(0.043, 0.059, 0.078, 1);
+  scene.clearColor = new Color4(0.969, 0.973, 0.965, 1);
   scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.012;
-  scene.fogColor = new Color3(0.05, 0.06, 0.08);
+  scene.fogDensity = 0.0055;
+  scene.fogColor = new Color3(0.969, 0.973, 0.965);
 
   const camera = new UniversalCamera("cam", new Vector3(-9, 1.6, -7), scene);
   camera.minZ = 0.03;
@@ -72,22 +73,20 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
   camera.fov = 0.7;
 
   // Image-based lighting from a small procedural dusk sky.
-  const env = new HDRCubeTexture(`${BASE}env/dusk.hdr`, scene, 128, false, true, false, true);
+  const env = new HDRCubeTexture(`${BASE}env/studio.hdr`, scene, 128, false, true, false, true);
   scene.environmentTexture = env;
-  scene.environmentIntensity = 1.1;
-  const sky = scene.createDefaultSkybox(env, true, 600, 0.35, false);
-  if (sky) sky.isPickable = false;
+  scene.environmentIntensity = 0.55;
 
   const hemi = new HemisphericLight("hemi", new Vector3(0, 1, 0), scene);
-  hemi.intensity = 0.25;
-  hemi.groundColor = new Color3(0.02, 0.02, 0.03);
+  hemi.intensity = 0.35;
+  hemi.groundColor = new Color3(0.55, 0.56, 0.56);
   const key = new DirectionalLight("key", new Vector3(-0.55, -0.8, 0.35), scene);
-  key.intensity = 1.6;
-  key.diffuse = new Color3(1.0, 0.82, 0.62);
+  key.intensity = 1.5;
+  key.diffuse = new Color3(1.0, 0.97, 0.92);
   key.position = new Vector3(8, 12, -6);
   const rim = new DirectionalLight("rim", new Vector3(0.5, -0.4, -0.75), scene);
-  rim.intensity = 0.7;
-  rim.diffuse = new Color3(0.55, 0.75, 1.0);
+  rim.intensity = 0.35;
+  rim.diffuse = new Color3(0.85, 0.9, 1.0);
   const irLight = new PointLight("ir", new Vector3(0, 3.05, 0.3), scene);
   irLight.diffuse = new Color3(1.0, 0.12, 0.08);
   irLight.intensity = 0;
@@ -114,17 +113,12 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
   if (tier !== "low") {
     const pipe = new DefaultRenderingPipeline("pipe", true, scene, [camera]);
     pipe.fxaaEnabled = true;
-    pipe.bloomEnabled = true;
-    pipe.bloomThreshold = 0.85;
-    pipe.bloomWeight = 0.35;
-    pipe.bloomKernel = 48;
+    pipe.bloomEnabled = false;
     pipe.imageProcessing.toneMappingEnabled = true;
     pipe.imageProcessing.toneMappingType = 1; // ACES
-    pipe.imageProcessing.exposure = 1.05;
-    pipe.imageProcessing.contrast = 1.08;
-    pipe.imageProcessing.vignetteEnabled = true;
-    pipe.imageProcessing.vignetteWeight = 1.6;
-    pipe.imageProcessing.vignetteColor = new Color4(0, 0, 0, 0);
+    pipe.imageProcessing.exposure = 1.0;
+    pipe.imageProcessing.contrast = 1.05;
+    pipe.imageProcessing.vignetteEnabled = false;
     if (tier === "high") { pipe.samples = 4; }
   }
 
@@ -135,9 +129,30 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
   const allMeshes = (c: AssetContainer) => c.meshes.filter((m): m is Mesh => m instanceof Mesh && m.getTotalVertices() > 0);
   for (const c of [poleC, streetC]) for (const m of allMeshes(c)) { m.receiveShadows = true; shadows?.addShadowCaster(m, false); m.isPickable = false; }
   for (const m of allMeshes(falconC)) { m.receiveShadows = true; shadows?.addShadowCaster(m, false); m.isPickable = true; }
-  // Soften the sky-facing ground so shadows read
+  // The floor carries the page's grid so page and scene read as one sheet: 0.5 m hairlines, 2 m dots.
   const ground = scene.getMeshByName("ground");
-  if (ground) { ground.receiveShadows = true; shadows?.removeShadowCaster(ground as Mesh); }
+  if (ground) {
+    ground.receiveShadows = true;
+    shadows?.removeShadowCaster(ground as Mesh);
+    // A shader grid on a plane just above the ground: 0.5 m hairlines, a stronger line every 2 m,
+    // matching the page's blueprint sheet. Shadows still land on the PBR ground beneath.
+    const gridPlane = MeshBuilder.CreateGround("gridPlane", { width: 400, height: 400 }, scene);
+    gridPlane.position.y = 0.006;
+    gridPlane.isPickable = false;
+    const grid = new GridMaterial("grid", scene);
+    grid.mainColor = new Color3(0.969, 0.973, 0.965);
+    grid.lineColor = new Color3(0.106, 0.31, 0.847);
+    grid.gridRatio = 0.5;
+    grid.majorUnitFrequency = 4;
+    grid.minorUnitVisibility = 0.45;
+    grid.opacity = 0.16;
+    grid.backFaceCulling = false;
+    gridPlane.material = grid;
+    const gpbr = new PBRMaterial("groundPaper", scene);
+    gpbr.albedoColor = new Color3(0.93, 0.935, 0.925);
+    gpbr.metallic = 0; gpbr.roughness = 0.95;
+    ground.material = gpbr;
+  }
   const road = scene.getMeshByName("road");
   if (road) { road.receiveShadows = true; shadows?.removeShadowCaster(road as Mesh); }
 
@@ -182,9 +197,9 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
 
   // Detection footprint on the road (updated by the aim controller) and a faint view cone.
   const fpMat = new StandardMaterial("fp", scene);
-  fpMat.emissiveColor = new Color3(0.95, 0.7, 0.25);
+  fpMat.emissiveColor = new Color3(0.85, 0.57, 0.12);
   fpMat.diffuseColor = Color3.Black();
-  fpMat.alpha = 0.28;
+  fpMat.alpha = 0.35;
   fpMat.disableLighting = true;
   fpMat.backFaceCulling = false;
   const footprint = MeshBuilder.CreateGround("footprint", { width: 1, height: 1, updatable: true }, scene);
@@ -192,9 +207,9 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
   footprint.isPickable = false;
   footprint.visibility = 0;
   const coneMat = new StandardMaterial("cone", scene);
-  coneMat.emissiveColor = new Color3(0.95, 0.7, 0.25);
+  coneMat.emissiveColor = new Color3(0.85, 0.57, 0.12);
   coneMat.diffuseColor = Color3.Black();
-  coneMat.alpha = 0.06;
+  coneMat.alpha = 0.08;
   coneMat.disableLighting = true;
   coneMat.backFaceCulling = false;
   const cone = new Mesh("cone", scene);

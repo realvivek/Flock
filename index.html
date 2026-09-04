@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Anatomy of a Flock Camera</title>
     <meta name="description" content="A scroll-driven 3D dissection of a Flock Safety license plate reader: the pole, the enclosure, every board inside, the cable and power paths, and where each byte goes after the photo is taken. Sourced from Flock's own spec sheets and independent teardowns." />
-    <meta name="theme-color" content="#0b0f14" />
+    <meta name="theme-color" content="#f7f8f6" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23f2b441' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23f2b441'/%3E%3C/svg%3E" />
     <meta property="og:title" content="Anatomy of a Flock Camera" />
     <meta property="og:description" content="Pole to cloud: how a Flock license plate reader is built, installed, and what it sends where." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
@@ -27,7 +29,8 @@
         <a href="#act-3" data-nav="3">Power &amp; cable</a>
         <a href="#act-4" data-nav="4">Data</a>
         <a href="#act-5" data-nav="5">Myths</a>
-        <a href="#act-6" data-nav="6">Sources</a>
+        <a href="#act-6" data-nav="6">Economics</a>
+        <a href="#act-7" data-nav="7">Sources</a>
       </nav>
       <div class="status" id="status" aria-live="polite"></div>
     </header>
@@ -156,10 +159,32 @@
         </div>
       </section>
 
-      <!-- ACT 6: SOURCES -->
+      <!-- ACT 6: ECONOMICS -->
       <section class="act act-long" id="act-6" data-act="6">
+        <div class="panel wide econ">
+          <p class="eyebrow amber">06 · Economics</p>
+          <h2 id="econ-headline"></h2>
+          <p id="econ-summary"></p>
+          <div class="econ-grid">
+            <div class="econ-block" id="econ-included"><h3>What the annual fee covers</h3></div>
+            <div class="econ-block" id="econ-extra"><h3>What the customer pays on top</h3></div>
+          </div>
+          <div class="econ-block" id="econ-prices"><h3>List prices</h3><p class="fine">Virginia Sheriffs' Association catalog, May 2024, confirmed by 2025 invoices. All per unit per year.</p></div>
+          <div class="econ-block" id="econ-history"><h3>How the price moved</h3></div>
+          <div class="econ-block" id="econ-fees"><h3>Install and service fees, then and now</h3><p class="fine">Flock's 2021 implementation guide against its 2026 published schedule.</p></div>
+          <div class="econ-block" id="econ-workflow"><h3>An install, and who does what</h3></div>
+          <div class="econ-block" id="econ-workforce"><h3>Who turns the wrenches</h3></div>
+          <div class="econ-block" id="econ-permitting"><h3>Permits, by where the pole goes</h3></div>
+          <div class="econ-block" id="econ-contract"><h3>Ownership and the contract</h3></div>
+          <div class="econ-block" id="econ-scale"><h3>How big it is</h3></div>
+          <div class="econ-block" id="econ-unknowns"><h3>What nobody outside Flock can say</h3></div>
+        </div>
+      </section>
+
+      <!-- ACT 7: SOURCES -->
+      <section class="act act-long" id="act-7" data-act="7">
         <div class="panel wide">
-          <p class="eyebrow">06 · Sources and method</p>
+          <p class="eyebrow">07 · Sources and method</p>
           <h2>Every number on this page</h2>
           <p>
             Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is the company's own document or

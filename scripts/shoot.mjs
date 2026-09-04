@@ -29,7 +29,7 @@ for (const s of stops) {
   await page.waitForFunction(y => Math.abs(scrollY - y) < 2, y, { timeout: 5000 }).catch(() => {});
   if (process.env.SHOT_EVAL) await page.evaluate(process.env.SHOT_EVAL);
   await waitFrames(Number(process.env.SHOT_FRAMES || 12));
-  const st = await page.evaluate(() => ({ act: window.__flock.state.act, p: window.__flock.state.progress.toFixed(3), fp: window.__flock.state.focusedPart }));
+  const st = await page.evaluate(() => ({ act: window.__flock.state.act, p: (window.__flock.state.progress ?? 0).toFixed(3), fp: window.__flock.state.focusedPart }));
   await page.screenshot({ path: `${out}/shot-${String(s).replace(/[.:]/g, "_")}.png` });
   console.log("stop", s, JSON.stringify(st));
 }

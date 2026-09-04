@@ -28,9 +28,8 @@ export function initAct2(world: World, pins: PinLayer): void {
         id: `part-${p.id}`,
         anchor: () => { rec.node.getWorldMatrix().getTranslationToRef(tmp); return tmp; },
         k: String(p.order).padStart(2, "0"),
-        v: p.name.length > 26 ? p.name.slice(0, 24) + "…" : p.name,
-        dx: 0,
-        dy: (p.order % 2 ? -1 : 1) * (70 + (Math.floor(p.order / 2) % 3) * 30),
+        v: p.name.length > 30 ? p.name.slice(0, 28) + "…" : p.name,
+        group: "parts",
       });
     }
   }

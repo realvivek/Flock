@@ -13,7 +13,8 @@
     "models": "python3 tools/blender/build_all.py && npm run models:optimize",
     "models:optimize": "tsx scripts/optimize-models.ts",
     "test": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "stills": "python3 tools/blender/render_stills.py public/stills manifest"
   },
   "dependencies": {
     "@babylonjs/core": "^9.25.0",

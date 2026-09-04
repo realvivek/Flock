@@ -56,6 +56,27 @@ export const ProductsFile = z.object({
   products: z.array(z.object({ id: z.string(), name: z.string(), type: z.string(), captures: z.string(), not: z.string(), note: z.string().optional(), sources: ids })),
 }).passthrough();
 
+const Row = z.object({ k: z.string(), v: z.string(), sources: ids });
+export const EconomicsFile = z.object({
+  intro: z.object({ headline: z.string(), summary: z.string(), sources: ids }),
+  priceList: z.array(z.object({ item: z.string(), sku: z.string(), price: z.string(), term: z.string(), sources: ids })),
+  included: z.array(Row),
+  extra: z.array(Row),
+  fees: z.array(z.object({ item: z.string(), then: z.string(), now: z.string(), sources: ids })),
+  history: z.array(z.object({ date: z.string(), price: z.string(), note: z.string(), sources: ids })),
+  workflow: z.array(z.object({ step: z.string(), flock: z.string(), customer: z.string(), other: z.string(), sources: ids })),
+  workforce: z.array(Row),
+  permitting: z.array(z.object({ scenario: z.string(), permit: z.string(), who: z.string(), note: z.string(), sources: ids })),
+  contract: z.array(Row),
+  scale: z.array(Row),
+  unknowns: z.array(z.object({ v: z.string(), sources: ids })),
+  pricedPole: z.array(z.object({ id: z.string(), anchor: z.tuple([z.number(), z.number(), z.number()]), k: z.string(), v: z.string(), dx: z.number(), dy: z.number(), sources: ids })),
+}).passthrough();
+export const StillsFile = z.object({
+  dir: z.string(),
+  stills: z.array(z.object({ id: z.string(), file: z.string(), job: z.string(), args: z.record(z.string(), z.union([z.string(), z.number()])).optional() })),
+}).passthrough();
+
 export type Source = z.infer<typeof SourceSchema>;
 export type Part = z.infer<typeof PartSchema>;
 export type Hop = z.infer<typeof HopSchema>;

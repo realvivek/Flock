@@ -3,7 +3,8 @@
  * or if any source is missing a URL, date or lastVerified stamp. Also reports unused sources.
  */
 import { readFileSync } from "node:fs";
-import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile } from "../src/content/schema";
+import { existsSync } from "node:fs";
+import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile } from "../src/content/schema";
 
 const read = (f: string) => JSON.parse(readFileSync(new URL(`../src/content/${f}`, import.meta.url), "utf8"));
 
@@ -45,6 +46,16 @@ for (const p of components.parts) if (p.hop && !hopIds.has(p.hop)) problems.push
 const products = ProductsFile.parse(read("products.json")).products;
 for (const p of products) need(`product ${p.id}`, p.sources);
 
+const econ = EconomicsFile.parse(read("economics.json"));
+need("economics.intro", econ.intro.sources);
+for (const key of ["priceList", "included", "extra", "fees", "history", "workflow", "workforce", "permitting", "contract", "scale", "unknowns", "pricedPole"] as const) {
+  (econ[key] as { sources: string[] }[]).forEach((row, i) => need(`economics.${key}[${i}]`, row.sources));
+}
+
+const stills = StillsFile.parse(read("stills.json"));
+const missingStills = stills.stills.filter((st) => !existsSync(new URL(`../public/${stills.dir}/${st.file}`, import.meta.url)));
+if (missingStills.length && !process.env.ALLOW_MISSING_STILLS) problems.push(`stills not rendered: ${missingStills.map((s) => s.id).join(", ")} (run npm run stills, or set ALLOW_MISSING_STILLS=1)`);
+
 const unused = sources.filter((s) => !used.has(s.id)).map((s) => s.id);
 const dupUrls = new Map<string, string[]>();
 for (const s of sources) dupUrls.set(s.url, [...(dupUrls.get(s.url) ?? []), s.id]);
@@ -54,5 +65,5 @@ if (problems.length) {
   console.error(`check:sources FAILED (${problems.length})\n` + problems.map((p) => `  - ${p}`).join("\n"));
   process.exit(1);
 }
-console.log(`check:sources OK: ${sources.length} sources, ${components.parts.length} parts, ${dataflow.hops.length} hops, ${myths.length} myths, ${products.length} products`);
+console.log(`check:sources OK: ${sources.length} sources, ${components.parts.length} parts, ${dataflow.hops.length} hops, ${myths.length} myths, ${products.length} products, ${econ.priceList.length + econ.fees.length + econ.workflow.length + econ.permitting.length} economics rows, ${stills.stills.length} stills`);
 if (unused.length) console.log(`  note: ${unused.length} sources not referenced yet: ${unused.join(", ")}`);

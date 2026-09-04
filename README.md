@@ -14,7 +14,14 @@ It is built for three readers at once: an installer who needs dimensions, mount 
 | 3 · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path where PoE, fiber and SFP modules actually appear, with cutaways |
 | 4 · Data | One detection followed through twelve hops from photons to an officer's phone, a retention slider, and a "be the deputy" nationwide search reproducing one documented query |
 | 5 · Myths | Twenty-one common claims with a verdict, the nuance, and a link back to the part or hop that settles each |
-| 6 · Sources | Every source, tagged by origin, with the date it was last checked |
+| 6 · Economics | What the annual fee buys and what it does not, list prices, the fee ladder then and now, the price history, who does what on an install, permits by scenario, ownership and contract terms, scale and public money, and a priced pole in the scene |
+| 7 · Sources | Every source, tagged by origin, with the date it was last checked |
+
+## Phones
+
+Screens under 800 px wide (or any screen with `?mode=stills`) get a stepper instead of the 3D scene: one screen per state, with a pre-rendered still on top, the same copy, specs and citations, Back and Next, chapter chips, swipe and arrow keys, and deep links of the form `?s=inside/13`. Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen.
+
+The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart.
 
 ## Sourcing policy
 
@@ -34,7 +41,7 @@ npm run preview    # serves dist/ at http://127.0.0.1:4173
 npm test           # Playwright smoke test against the preview server
 ```
 
-Debug views for checking the models: `?view=falcon`, `?view=pole`, `?view=wing` (orbit with `a`, `b`, `r` for alpha, beta, radius). Presets for screenshots: `?pole=existing|ac`, `?path=solar|ac|wing`, `?focus=<part id>`, `?aim=<yaw>,<pitch>`, `?gl` forces WebGL2.
+Debug views for checking the models: `?view=falcon`, `?view=pole`, `?view=wing` (orbit with `a`, `b`, `r` for alpha, beta, radius). Presets for screenshots: `?pole=existing|ac`, `?path=solar|ac|wing`, `?focus=<part id>`, `?aim=<yaw>,<pitch>`, `?gl` forces WebGL2, `?mode=stills|3d` forces the phone or desktop path. `scripts/shoot.mjs` captures screenshots headlessly; stops are page fractions or `act:progress`.
 
 ## Models
 
@@ -49,7 +56,7 @@ Part naming follows the content file (`falcon.ledboard`, `falcon.som`, and so on
 
 ## Stack
 
-Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback), GSAP ScrollTrigger for scroll scrubbing, Zod for content validation, Playwright for the smoke test. Text lives in the DOM for accessibility and search; the canvas only carries the scene. `prefers-reduced-motion` switches the scroll scrub to stepped states.
+Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback), GSAP ScrollTrigger for scroll scrubbing, Zod for content validation, Playwright for the smoke tests. Text lives in the DOM for accessibility and search; the canvas only carries the scene. `prefers-reduced-motion` switches the scroll scrub to stepped states. The ground is a white blueprint sheet: a faint blue hairline grid with dotted majors on the page, and the same grid on the scene floor so the two read as one surface. Type is Archivo for headings, IBM Plex Sans for body and IBM Plex Mono for labels.
 
 ## Deploy
 

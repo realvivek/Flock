@@ -1,5 +1,5 @@
 {
-  "$comment": "Camera rail. World keys are metres: pole base at the origin, Y up, road toward +Z (near edge z=3), traffic toward +X. frame:'falcon' keys are in the Falcon body's local frame (x right, y up, z toward the lens, origin at the body centre). t is global progress; act i spans [i/7, (i+1)/7].",
+  "$comment": "Camera rail. World keys are metres: pole base at the origin, Y up, road toward +Z (near edge z=3), traffic toward +X. frame:'falcon' keys are in the Falcon body's local frame (x right, y up, z toward the lens, origin at the body centre). t is global progress; act i spans [i/8, (i+1)/8].",
   "camera": [
     {
       "t": 0.0,
@@ -16,7 +16,7 @@
       "fov": 42
     },
     {
-      "t": 0.07,
+      "t": 0.0613,
       "pos": [
         5.2,
         2.3,
@@ -30,39 +30,39 @@
       "fov": 41
     },
     {
-      "t": 0.143,
+      "t": 0.1251,
       "pos": [
+        4.9,
         3.4,
-        3.5,
-        -2.4
+        -4.0
       ],
       "target": [
-        0.5,
+        0.3,
+        2.15,
+        0.4
+      ],
+      "fov": 46
+    },
+    {
+      "t": 0.1663,
+      "pos": [
+        4.2,
+        3.2,
+        -3.4
+      ],
+      "target": [
+        0.3,
+        2.2,
+        0.4
+      ],
+      "fov": 46
+    },
+    {
+      "t": 0.2013,
+      "pos": [
         2.5,
-        0.5
-      ],
-      "fov": 40
-    },
-    {
-      "t": 0.19,
-      "pos": [
-        2.7,
-        3.4,
-        -1.8
-      ],
-      "target": [
-        0.4,
-        2.9,
-        0.5
-      ],
-      "fov": 38
-    },
-    {
-      "t": 0.23,
-      "pos": [
-        1.5,
-        8.5,
-        -6.0
+        9.0,
+        -6.5
       ],
       "target": [
         6.0,
@@ -72,21 +72,21 @@
       "fov": 55
     },
     {
-      "t": 0.27,
+      "t": 0.2363,
       "pos": [
-        3.0,
-        4.2,
-        -2.0
+        3.6,
+        4.0,
+        -2.9
       ],
       "target": [
         0.3,
-        3.0,
+        2.5,
         0.4
       ],
-      "fov": 40
+      "fov": 44
     },
     {
-      "t": 0.286,
+      "t": 0.2502,
       "pos": [
         -0.95,
         0.18,
@@ -101,7 +101,7 @@
       "frame": "falcon"
     },
     {
-      "t": 0.32,
+      "t": 0.28,
       "pos": [
         -1.75,
         0.34,
@@ -116,7 +116,7 @@
       "frame": "falcon"
     },
     {
-      "t": 0.4,
+      "t": 0.35,
       "pos": [
         -1.9,
         0.36,
@@ -131,7 +131,7 @@
       "frame": "falcon"
     },
     {
-      "t": 0.429,
+      "t": 0.3754,
       "pos": [
         -1.5,
         0.5,
@@ -146,7 +146,7 @@
       "frame": "falcon"
     },
     {
-      "t": 0.47,
+      "t": 0.4113,
       "pos": [
         1.9,
         3.1,
@@ -160,7 +160,7 @@
       "fov": 42
     },
     {
-      "t": 0.52,
+      "t": 0.455,
       "pos": [
         2.3,
         2.5,
@@ -174,7 +174,7 @@
       "fov": 40
     },
     {
-      "t": 0.571,
+      "t": 0.4996,
       "pos": [
         6.5,
         4.8,
@@ -188,7 +188,7 @@
       "fov": 46
     },
     {
-      "t": 0.62,
+      "t": 0.5425,
       "pos": [
         8.0,
         5.5,
@@ -202,7 +202,7 @@
       "fov": 48
     },
     {
-      "t": 0.7,
+      "t": 0.6125,
       "pos": [
         9.0,
         5.0,
@@ -216,7 +216,7 @@
       "fov": 48
     },
     {
-      "t": 0.714,
+      "t": 0.6247,
       "pos": [
         9.0,
         5.0,
@@ -230,7 +230,7 @@
       "fov": 48
     },
     {
-      "t": 0.857,
+      "t": 0.7499,
       "pos": [
         9.5,
         3.2,
@@ -240,6 +240,48 @@
         -0.5,
         2.2,
         3.5
+      ],
+      "fov": 46
+    },
+    {
+      "t": 0.75,
+      "pos": [
+        4.6,
+        3.3,
+        -3.8
+      ],
+      "target": [
+        0.3,
+        2.1,
+        0.4
+      ],
+      "fov": 46
+    },
+    {
+      "t": 0.8,
+      "pos": [
+        4.2,
+        3.0,
+        -3.2
+      ],
+      "target": [
+        0.3,
+        2.1,
+        0.4
+      ],
+      "fov": 46
+    },
+    {
+      "t": 0.875,
+      "pos": [
+        5.0,
+        3.6,
+        -4.4
+      ],
+      "target": [
+        0.3,
+        2.2,
+        0.6
       ],
       "fov": 46
     },

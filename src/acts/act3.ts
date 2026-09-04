@@ -78,7 +78,7 @@ export function initAct3(world: World, pins: PinLayer): void {
     if (changed.has("pathMode")) void applyPath(s.pathMode);
     if (changed.has("act")) {
       if (s.act === 3) void applyPath(s.pathMode);
-      else {
+      else if (s.act !== 6) {
         // restore the pole-mode configuration when leaving
         const g = world.poleGroups;
         g.battery?.setEnabled(s.poleMode !== "ac");

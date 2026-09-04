@@ -2,8 +2,10 @@
 Deterministic and dependency-free; ~256x128 is plenty for a prefiltered environment."""
 import math, os, struct
 
+import sys
 W, H = 256, 128
-OUT = os.path.join(os.path.dirname(__file__), "..", "..", "public", "env", "dusk.hdr")
+MODE = sys.argv[1] if len(sys.argv) > 1 else "dusk"
+OUT = os.path.join(os.path.dirname(__file__), "..", "..", "public", "env", f"{MODE}.hdr")
 
 def mix(a, b, t):
     return tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
@@ -29,6 +31,16 @@ def sky(u, v):
     t = min(1.0, -el * 6.0)
     return mix(horizon, ground, t)
 
+def studio(u, v):
+    # Bright neutral studio: white ceiling, soft warm key window near u=0.15, pale floor.
+    el = 1.0 - 2.0 * v
+    if el >= 0:
+        base = mix((0.95, 0.96, 0.98), (0.80, 0.81, 0.82), math.pow(1.0 - el, 2.0))
+        d = min(abs(u - 0.15), 1.0 - abs(u - 0.15)) / 0.5
+        key = math.exp(-(d * d) * 10.0) * math.exp(-abs(el - 0.35) * 5.0)
+        return (base[0] + 1.4 * key, base[1] + 1.25 * key, base[2] + 1.0 * key)
+    return mix((0.80, 0.81, 0.82), (0.55, 0.56, 0.56), min(1.0, -el * 2.0))
+
 def rgbe(r, g, b):
     m = max(r, g, b)
     if m < 1e-32:
@@ -45,5 +57,5 @@ with open(OUT, "wb") as f:
         v = (j + 0.5) / H
         for i in range(W):
             u = (i + 0.5) / W
-            f.write(rgbe(*sky(u, v)))
+            f.write(rgbe(*(studio(u, v) if MODE == "studio" else sky(u, v))))
 print("wrote", OUT, os.path.getsize(OUT) // 1024, "KB")
