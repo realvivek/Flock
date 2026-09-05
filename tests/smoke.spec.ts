@@ -47,6 +47,15 @@ test("boots, renders, and each act reaches its state", async ({ page }) => {
   await expect(page.locator("#act-6 .econ-block table").first()).toBeVisible();
   await expect(page.locator("#act-6 .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
 
+  // A citation chip scrolls to its bibliography row and flashes it
+  await scrollToAct(page, 1, 0.5);
+  const chip = page.locator("#install-facts .cite a").first();
+  const href = (await chip.getAttribute("href"))!;
+  await chip.click();
+  await expect(page.locator(href)).toHaveClass(/is-target/);
+  await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, href)).toBe(true);
+  expect(await page.evaluate(() => location.hash)).toBe(href);
+
   // Sources render and every citation chip resolves to a bibliography row
   const missing = await page.evaluate(() => {
     const ids = new Set([...document.querySelectorAll(".source")].map((r) => r.id));
@@ -92,9 +101,22 @@ test("phones get the stills stepper and never load the 3D engine", async ({ brow
   await expect(page.locator("#stepper h2")).toContainText("Pricing and cost structure");
   await expect(page.locator("#stepper .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
   await expect(page.locator("#stepper h3", { hasText: "Installation workforce" })).toBeVisible();
+  // a citation chip opens the Sources page at the cited row
+  await page.goto("/?s=myths/0");
+  const mchip = page.locator("#stepper .cite a").first();
+  const mhref = (await mchip.getAttribute("href"))!;
+  await mchip.click();
+  await expect(page.locator("#stepper h2")).toContainText("Sources");
+  await expect(page.locator(mhref)).toHaveClass(/is-target/);
+  await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, mhref)).toBe(true);
+  expect(await page.evaluate(() => location.hash)).toMatch(/^#s=sources\/0/);
   await page.goto("/?s=sources/0");
   await expect(page.locator("#stepper .src-group")).toHaveCount(4);
   await expect(page.locator("#stepper .source").first()).toBeVisible();
+  // a bibliography title opens the document in a new tab
+  const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#stepper .src-link").first().click()]);
+  expect(popup).toBeTruthy();
+  await popup.close();
   expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
 });

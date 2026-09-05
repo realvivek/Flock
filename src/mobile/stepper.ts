@@ -1,7 +1,7 @@
 import "./stepper.css";
 import { components, install, dataflow, economics, products, stillById, partById } from "../content";
-import { cite, escape, tag } from "../ui/cite";
-import { renderClaims, renderEconomics, renderSources } from "../ui/article";
+import { cite, escape, tag, setCiteHandler } from "../ui/cite";
+import { renderClaims, renderEconomics, renderSources, revealSource } from "../ui/article";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
@@ -150,6 +150,8 @@ export function initStepper(): void {
   document.body.appendChild(root);
   const nav = root.querySelector(".st-chapters")!;
   chapters.forEach((ch, i) => { const b = document.createElement("button"); b.textContent = ch.label; b.addEventListener("click", () => go(i, 0)); nav.appendChild(b); });
+  // Citation chips open the Sources page at the cited row; the page hash stays on the chapter.
+  setCiteHandler((id) => { go("sources", 0); requestAnimationFrame(() => revealSource(id, "auto")); });
   root.querySelector("#st-back")!.addEventListener("click", () => next(-1));
   root.querySelector("#st-next")!.addEventListener("click", () => next(1));
   addEventListener("keydown", (e) => { if (e.key === "ArrowRight") next(1); if (e.key === "ArrowLeft") next(-1); });

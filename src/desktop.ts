@@ -12,6 +12,8 @@ import { initAct4 } from "./acts/act4";
 import { initAct5 } from "./acts/act5";
 import { initAct6 } from "./acts/act6";
 import { initAct7 } from "./acts/act7";
+import { setCiteHandler } from "./ui/cite";
+import { revealSource } from "./ui/article";
 import { createDataViz } from "./scene/dataviz";
 import anim from "./content/animation.json";
 import { lerp } from "./lib/math";
@@ -49,6 +51,8 @@ export async function startDesktop() {
   initAct5();
   initAct6();
   initAct7();
+  // Citation chips scroll to the bibliography row and flash it; the hash still records the target.
+  setCiteHandler((id) => { history.replaceState(null, "", `#src-${id}`); revealSource(id); });
   const wingView = { pos: new Vector3(...(anim.wing.pos as [number, number, number])), target: new Vector3(...(anim.wing.target as [number, number, number])), fov: anim.wing.fov };
   let wingBlend = 0;
   let lastInside = -1;

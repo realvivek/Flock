@@ -3,6 +3,10 @@ import { sourceById } from "../content";
 const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
 const kindLabel: Record<string, string> = { flock: "Flock", independent: "Independent", government: "Government", court: "Court" };
 
+let onCite: ((id: string) => void) | null = null;
+/** Route citation chip clicks (desktop scrolls to the row; the stepper opens the Sources page at it). */
+export function setCiteHandler(fn: (id: string) => void): void { onCite = fn; }
+
 /** Citation chips linking to the bibliography, labelled by the source's origin. */
 export function cite(ids: readonly string[], max = 2): HTMLElement {
   const el = document.createElement("div");
@@ -13,6 +17,8 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
     if (!s) continue;
     const a = document.createElement("a");
     a.href = `#src-${s.id}`;
+    a.dataset.src = s.id;
+    a.addEventListener("click", (e) => { if (onCite) { e.preventDefault(); onCite(s.id); } });
     a.title = `${s.title} (${s.publisher}, ${s.date})`;
     a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span> ${escape(short(s.publisher))} · ${escape(s.date.slice(0, 4))}`;
     el.appendChild(a);

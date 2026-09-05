@@ -164,6 +164,20 @@ export function renderEconomics(host: HTMLElement): void {
   }
 }
 
+let revealTimer = 0;
+/** Scroll a bibliography row into view and flash it so the landing point is visible among the rows. */
+export function revealSource(id: string, behavior: ScrollBehavior = "smooth"): boolean {
+  const row = document.getElementById(`src-${id}`);
+  if (!row) return false;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  row.scrollIntoView({ behavior: reduced ? "auto" : behavior, block: "start" });
+  document.querySelectorAll(".source.is-target").forEach((r) => r.classList.remove("is-target"));
+  row.classList.add("is-target");
+  clearTimeout(revealTimer);
+  revealTimer = window.setTimeout(() => row.classList.remove("is-target"), 2600);
+  return true;
+}
+
 const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
 const kindLabel: Record<string, string> = { flock: "Flock", independent: "Independent", government: "Government", court: "Court" };
 const kindTitle: Record<string, string> = {
@@ -191,9 +205,10 @@ export function renderSources(host: HTMLElement): void {
     }
     const row = el("div", "source");
     row.id = `src-${s.id}`;
+    // The whole title cell is the link, so a tap between wrapped lines still opens the document.
     row.innerHTML = `
       <span class="id">${escape(s.id)}</span>
-      <span><a href="${escape(s.url)}" rel="noopener noreferrer" target="_blank">${escape(s.title)}</a><br /><span class="pub">${escape(s.publisher)}</span></span>
+      <a class="src-link" href="${escape(s.url)}" rel="noopener noreferrer" target="_blank"><span class="t">${escape(s.title)}</span><span class="pub">${escape(s.publisher)}</span></a>
       <span class="date">${escape(s.date)}<br />checked ${escape(s.lastVerified)}</span>`;
     list.appendChild(row);
   }
