@@ -1,4 +1,4 @@
-import { myths, economics, sources, partById, hopById, stillById } from "../content";
+import { myths, economics, sources, products, partById, hopById, stillById } from "../content";
 import { cite, escape } from "../ui/cite";
 
 /**
@@ -72,8 +72,22 @@ export interface ClaimLinks {
   onHop?(n: number): void;
 }
 
+/** The product line from products.json as a table: several claims depend on which device is on the pole. */
+export function renderProducts(host: HTMLElement): void {
+  host.appendChild(el("p", undefined, "Flock sells several devices with different capabilities. The plate reader captures still frames; the video camera streams; the acoustic sensor detects gunshots."));
+  table(host, ["Product", "Type", "Captures", "Notes"], products.map((pr) => ({ cells: [pr.name, pr.type, pr.captures, pr.note ? `${pr.not}. ${pr.note}` : pr.not], sources: pr.sources })));
+  host.lastElementChild?.classList.add("products");
+}
+
 /** Twenty-one claims as a running list: claim, documented position, related component or stage, sources. */
 export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
+  const ph = el("h3", undefined, "Product line");
+  ph.id = "products";
+  host.appendChild(ph);
+  renderProducts(host);
+  const ch = el("h3", undefined, "Claims");
+  ch.id = "claims";
+  host.appendChild(ch);
   host.appendChild(el("p", undefined, "Each entry states a claim, the documented position, the product or setting it applies to, and the sources. Entries link to the related component or data stage."));
   host.appendChild(jumpList(myths.map((m, i) => ({ id: `claim-${m.id}`, label: `${String(i + 1).padStart(2, "0")} ${m.claim.replace(/\.$/, "")}` }))));
   const list = el("div", "claims");

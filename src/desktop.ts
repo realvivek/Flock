@@ -23,20 +23,28 @@ import { degToRad, window01, smooth } from "./lib/math";
 export async function startDesktop() {
   const canvas = document.getElementById("stage") as HTMLCanvasElement;
   const status = document.getElementById("status")!;
+  let fellBack = false;
+  const fallbackToStills = (why: unknown) => {
+    if (fellBack) return;
+    fellBack = true;
+    console.error("3D view unavailable, showing the stills version", why);
+    canvas.hidden = true;
+    import("./mobile/stepper").then(({ initStepper }) => initStepper({ notice: "The 3D view could not start on this device. This is the stills version of the same content." }));
+  };
   let boot;
+  let world: World;
   try {
     boot = await bootEngine(canvas);
+    set({ tier: boot.tier });
+    status.textContent = `${boot.backend} · ${boot.tier}`;
+    world = await createWorld(boot.engine, boot.tier);
   } catch (e) {
-    console.error(e);
-    document.getElementById("webgl-fallback")!.hidden = false;
-    wireScroll();
+    boot?.engine.dispose();
+    fallbackToStills(e);
     return;
   }
-  const { engine, backend, tier } = boot;
-  set({ tier });
-  status.textContent = `${backend} · ${tier}`;
-
-  const world: World = await createWorld(engine, tier);
+  const { engine } = boot;
+  engine.onContextLostObservable.add(() => fallbackToStills("context lost"));
   const { scene, camera, mount, tilt, parts } = world;
   const partList = components.parts.slice().sort((a, b) => a.order - b.order);
   const n = partList.length;

@@ -22,7 +22,10 @@ function guessTier(): Tier {
 /** Prefer WebGPU, fall back to WebGL2. Query ?gl=1 forces the fallback for testing. */
 export async function bootEngine(canvas: HTMLCanvasElement): Promise<Boot> {
   const tier = guessTier();
-  const forceGL = new URLSearchParams(location.search).has("gl");
+  const q = new URLSearchParams(location.search);
+  const forceGL = q.has("gl");
+  // ?fail3d simulates a device where no engine can start, to exercise the stills fallback.
+  if (q.has("fail3d")) throw new Error("3D disabled by ?fail3d");
   const dpr = tier === "low" ? Math.min(devicePixelRatio, 1.25) : Math.min(devicePixelRatio, 2);
   if (!forceGL) {
     try {

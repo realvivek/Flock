@@ -1,7 +1,7 @@
 import "./stepper.css";
-import { components, install, dataflow, economics, products, stillById, partById } from "../content";
+import { components, install, dataflow, economics, stillById, partById } from "../content";
 import { cite, escape, tag, setCiteHandler } from "../ui/cite";
-import { renderClaims, renderEconomics, renderSources, revealSource } from "../ui/article";
+import { renderClaims, renderEconomics, renderSources, renderProducts, revealSource } from "../ui/article";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
@@ -44,7 +44,7 @@ function buildChapters(): Chapter[] {
 
   chapters.push({ id: "street", label: "Street", screens: [
     { eyebrow: "Reference", title: "Anatomy of a Flock camera", figure: { still: "pole-flock", alt: "A Flock camera on its pole" }, body: (h) => { p(h, "Flock Safety reports more than 120,000 license plate reader cameras in 49 states. This page documents one Falcon unit: the pole and mount, each internal component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms."); p(h, "Sources are Flock Safety's specification sheets, price lists and data-architecture document, three independent teardowns, audit logs released under public records requests, and court and congressional records. Each figure carries a citation. Use Next to move through the screens.", true); } },
-    { eyebrow: "Product line", title: "Flock Safety products", figure: { still: "falcon-front", alt: "Falcon front view" }, body: (h) => { p(h, "Flock sells several devices with different capabilities. The plate reader captures still frames; the video camera streams; the acoustic sensor detects gunshots.", true); for (const pr of products) { const d = document.createElement("div"); d.innerHTML = `<dl class="st-kv"><dt>${escape(pr.name)}</dt><dd><strong>${escape(pr.type)}.</strong> ${escape(pr.captures)} <span class="muted">${escape(pr.not)}</span></dd></dl>`; d.querySelector("dd")!.appendChild(cite(pr.sources, 1)); h.appendChild(d); } } },
+    { eyebrow: "Product line", title: "Flock Safety products", figure: { still: "falcon-front", alt: "Falcon front view" }, cls: "st-products", body: (h) => renderProducts(h) },
   ]});
 
   const modeScreens: Screen[] = (["flock", "existing", "ac"] as const).map((m) => ({
@@ -133,7 +133,7 @@ function render(): void {
 }
 
 /** Mount the stills stepper into the page, hiding the desktop document. */
-export function initStepper(): void {
+export function initStepper(opts: { notice?: string } = {}): void {
   chapters = buildChapters();
   document.getElementById("main")!.hidden = true;
   document.getElementById("stage")!.hidden = true;
@@ -145,9 +145,11 @@ export function initStepper(): void {
   root.innerHTML = `
     <div class="st-top"><span class="brand"><span class="brand-mark"></span> Anatomy of a Flock camera</span></div>
     <nav class="st-chapters" aria-label="Chapters"></nav>
+    ${opts.notice ? `<p class="st-notice" role="status">${escape(opts.notice)} <button type="button" aria-label="Dismiss">×</button></p>` : ""}
     <div class="st-screen"></div>
     <div class="st-nav"><button id="st-back" type="button">Back</button><div class="st-dots"></div><button id="st-next" type="button" class="pri">Next</button></div>`;
   document.body.appendChild(root);
+  root.querySelector(".st-notice button")?.addEventListener("click", (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
   const nav = root.querySelector(".st-chapters")!;
   chapters.forEach((ch, i) => { const b = document.createElement("button"); b.textContent = ch.label; b.addEventListener("click", () => go(i, 0)); nav.appendChild(b); });
   // Citation chips open the Sources page at the cited row; the page hash stays on the chapter.

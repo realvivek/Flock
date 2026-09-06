@@ -40,3 +40,11 @@
 .st-form button { font: 12px var(--mono); border: 1px solid var(--ink); background: var(--ink); color: #fff; border-radius: 999px; padding: .4rem .8rem; }
 .st-readout { font: 12.5px var(--mono); color: var(--cyan); }
 .st-list { margin: 0; padding-left: 1.1rem; font-size: 13.5px; color: var(--ink-2); display: grid; gap: .3rem; }
+.st-notice { margin: .6rem .9rem 0; padding: .55rem .8rem; font: 13px var(--sans); color: var(--ink); background: rgba(217,145,31,.12); border: 1px solid rgba(217,145,31,.5); border-radius: 4px; display: flex; gap: .6rem; align-items: center; }
+.st-notice button { margin-left: auto; font: 16px var(--sans); line-height: 1; background: none; border: 0; color: var(--ink-2); cursor: pointer; }
+.st-products .article-body, .st-products .tablewrap { width: 100%; }
+/* Wide screens reach the stepper only as a fallback or via ?mode=stills: keep it a readable column. */
+@media (min-width: 801px) {
+  .stepper { max-width: 44rem; margin: 0 auto; }
+  .st-nav { left: 50%; right: auto; width: min(44rem, 100%); transform: translateX(-50%); }
+}

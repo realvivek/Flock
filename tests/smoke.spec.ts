@@ -39,8 +39,9 @@ test("boots, renders, and each act reaches its state", async ({ page }) => {
   await page.locator("#deputy-form button").click();
   await expect(page.locator("#deputy-readout")).toContainText("6,809");
 
-  // Acts 5 to 7 are articles: the scene fades out and the claims list is complete
+  // Acts 5 to 7 are articles: the scene fades out, the product line and the claims list are complete
   await scrollToAct(page, 5, 0.5);
+  await expect(page.locator("#act-5 .products tbody tr")).toHaveCount(8);
   await expect(page.locator("#act-5 .article .claim")).toHaveCount(21);
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById("stage")!).opacity)).toBe("0");
   await scrollToAct(page, 6, 0.3);
@@ -103,6 +104,7 @@ test("phones get the stills stepper and never load the 3D engine", async ({ brow
   await expect(page.locator("#stepper h3", { hasText: "Installation workforce" })).toBeVisible();
   // a citation chip opens the Sources page at the cited row
   await page.goto("/?s=myths/0");
+  await expect(page.locator("#stepper .products tbody tr")).toHaveCount(8);
   const mchip = page.locator("#stepper .cite a").first();
   const mhref = (await mchip.getAttribute("href"))!;
   await mchip.click();
@@ -119,4 +121,17 @@ test("phones get the stills stepper and never load the 3D engine", async ({ brow
   await popup.close();
   expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
+});
+
+test("desktop falls back to the stills version when no 3D engine can start", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/?fail3d");
+  await page.waitForSelector("#stepper .st-screen h2");
+  await expect(page.locator("#stepper .st-notice")).toContainText("stills version");
+  await expect(page.locator("#stage")).toBeHidden();
+  await expect(page.locator("#stepper h2")).toContainText("Anatomy of a Flock camera");
+  await page.locator("#stepper .st-notice button").click();
+  await expect(page.locator("#stepper .st-notice")).toHaveCount(0);
+  expect(errors).toEqual([]);
 });
