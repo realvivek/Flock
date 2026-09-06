@@ -9,6 +9,7 @@ It is written for a technical audience: installers who need dimensions, mount he
 | Act | Content |
 |---|---|
 | 0 · Street | A Flock pole at real scale on a dusk roadside |
+| Deployments | An article between the street and the pole: documented cameras by city as a bar chart, the largest public contracts by agency and level with values and terms, the public funding behind local contracts, where the records are, and what is not documented |
 | 1 · Pole | Installer callouts: pole, clamps, panel, battery, base, ladder limit; a draggable aim with the published field of view drawn on the road; Flock pole / existing pole / 120 V AC toggle |
 | 2 · Inside | The Falcon V2 enclosure separates and fourteen components explode in order, each with a spec card, part number and vendor |
 | 3 · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used, with cutaways |
@@ -17,7 +18,7 @@ It is written for a technical audience: installers who need dimensions, mount he
 | 6 · Economics | An article: items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
 | 7 · Sources | An article: all sources grouped by origin, with the date each was last checked |
 
-Acts 5 to 7 are plain articles on a paper sheet; the 3D scene fades out behind them and stops rendering.
+Acts 5 to 7 and the Deployments section are plain articles on a paper sheet; the 3D scene fades out behind them and stops rendering.
 
 ## Phones
 

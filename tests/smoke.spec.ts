@@ -39,6 +39,12 @@ test("boots, renders, and each act reaches its state", async ({ page }) => {
   await page.locator("#deputy-form button").click();
   await expect(page.locator("#deputy-readout")).toContainText("6,809");
 
+  // The deployments article sits between the street and the pole; the scene fades while it is in view
+  await page.evaluate(() => document.getElementById("deployments")!.scrollIntoView({ behavior: "instant", block: "center" }));
+  await expect(page.locator("#deployments .chart-bars .bar")).toHaveCount(10);
+  await expect(page.locator("#deployments .contracts tbody tr")).toHaveCount(10);
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById("stage")!).opacity)).toBe("0");
+
   // Acts 5 to 7 are articles: the scene fades out, the product line and the claims list are complete
   await scrollToAct(page, 5, 0.5);
   await expect(page.locator("#act-5 .products tbody tr")).toHaveCount(8);
@@ -112,6 +118,9 @@ test("phones get the stills stepper and never load the 3D engine", async ({ brow
   await expect(page.locator(mhref)).toHaveClass(/is-target/);
   await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, mhref)).toBe(true);
   expect(await page.evaluate(() => location.hash)).toMatch(/^#s=sources\/0/);
+  await page.goto("/?s=deployments/0");
+  await expect(page.locator("#stepper .chart-bars .bar")).toHaveCount(10);
+  await expect(page.locator("#stepper .contracts tbody tr")).toHaveCount(10);
   await page.goto("/?s=sources/0");
   await expect(page.locator("#stepper .src-group")).toHaveCount(4);
   await expect(page.locator("#stepper .source").first()).toBeVisible();

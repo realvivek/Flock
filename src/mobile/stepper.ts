@@ -1,7 +1,7 @@
 import "./stepper.css";
 import { components, install, dataflow, economics, stillById, partById } from "../content";
 import { cite, escape, tag, setCiteHandler } from "../ui/cite";
-import { renderClaims, renderEconomics, renderSources, renderProducts, revealSource } from "../ui/article";
+import { renderClaims, renderEconomics, renderSources, renderProducts, renderDeployments, revealSource } from "../ui/article";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
@@ -52,6 +52,7 @@ function buildChapters(): Chapter[] {
     body: (h) => { if (m === "flock") p(h, "Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing vehicles pass through the field of view."); facts(h, install.modes[m]!.facts); },
   }));
   modeScreens.push({ eyebrow: "01 · Pole · field of view", title: "Field of view", figure: { still: "falcon-side", alt: "Falcon side view" }, body: (h) => { const c = install.coverage; kv(h, [["Field of view", `${c.widthFt} ft wide at ${c.distFt} ft`], ["Range", `up to ${c.maxFt} ft, ${c.lanes} lanes, ${c.mph} mph`], ["Frames", `${c.framesPerVehicle} stills per vehicle`], ["Aims at", c.aims]]); h.appendChild(cite(c.sources)); p(h, "Flock's specification sheet gives the field of view at 65 ft; Flock's product page gives a range of up to 100 ft.", true); } });
+  chapters.push({ id: "deployments", label: "Deployments", screens: [{ eyebrow: "Deployments and contracts", title: "Where it is deployed, and what the contracts say", cls: "st-article cyan", body: (h) => renderDeployments(h) }] });
   chapters.push({ id: "pole", label: "Pole", screens: modeScreens });
 
   const inside: Screen[] = [];

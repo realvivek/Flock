@@ -4,7 +4,7 @@
  */
 import { readFileSync } from "node:fs";
 import { existsSync } from "node:fs";
-import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile } from "../src/content/schema";
+import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile } from "../src/content/schema";
 
 const read = (f: string) => JSON.parse(readFileSync(new URL(`../src/content/${f}`, import.meta.url), "utf8"));
 
@@ -45,6 +45,13 @@ for (const p of components.parts) if (p.hop && !hopIds.has(p.hop)) problems.push
 
 const products = ProductsFile.parse(read("products.json")).products;
 for (const p of products) need(`product ${p.id}`, p.sources);
+
+const dep = DeploymentsFile.parse(read("deployments.json"));
+need("deployments.intro", dep.intro.sources);
+need("deployments.cities", dep.citiesSources);
+for (const key of ["records", "contracts", "funding", "unknowns"] as const) {
+  (dep[key] as { sources: string[] }[]).forEach((row, i) => need(`deployments.${key}[${i}]`, row.sources));
+}
 
 const econ = EconomicsFile.parse(read("economics.json"));
 need("economics.intro", econ.intro.sources);

@@ -1125,6 +1125,195 @@
       "url": "https://dftcommunications.com/companynews/dft-communications-statement-regarding-flock-cameras/",
       "date": "2026",
       "lastVerified": "2026-09-04"
+    },
+    {
+      "id": "usaspending-flock",
+      "kind": "government",
+      "title": "Flock Group Inc, federal award recipient profile",
+      "publisher": "USAspending.gov",
+      "url": "https://www.usaspending.gov/recipient/4fbcf525-e991-fad8-2aaa-6a02c70053aa-C/latest",
+      "date": "2026",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "usaspending-uspp-2025",
+      "kind": "government",
+      "title": "Contract 140D0425P0230: United States Park Police automated license plate reader system",
+      "publisher": "Department of the Interior via USAspending.gov",
+      "url": "https://www.usaspending.gov/award/CONT_AWD_140D0425P0230_1406_-NONE-_-NONE-",
+      "date": "2025-09-25",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "usaspending-va-2023",
+      "kind": "government",
+      "title": "Contract 36C25023P1216: license plate reader",
+      "publisher": "Department of Veterans Affairs via USAspending.gov",
+      "url": "https://www.usaspending.gov/award/CONT_AWD_36C25023P1216_3600_-NONE-_-NONE-",
+      "date": "2023-07-02",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "usaspending-va-2025",
+      "kind": "government",
+      "title": "Contract 36C25025P1681: software license renewal, Flock Safety platform",
+      "publisher": "Department of Veterans Affairs via USAspending.gov",
+      "url": "https://www.usaspending.gov/award/CONT_AWD_36C25025P1681_3600_-NONE-_-NONE-",
+      "date": "2025-09-18",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "texastribune-dps-2026",
+      "kind": "independent",
+      "title": "DPS will continue its vast Flock camera network in Texas",
+      "publisher": "The Texas Tribune",
+      "url": "https://www.texastribune.org/2026/09/04/texas-flock-cameras-dps-network-search-abbott/",
+      "date": "2026-09-04",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "texastribune-abbott-2026",
+      "kind": "independent",
+      "title": "Abbott blocks state agencies from spending money on Flock cameras",
+      "publisher": "The Texas Tribune",
+      "url": "https://www.texastribune.org/2026/08/28/texas-greg-abbott-flock-cameras-order-state-money/",
+      "date": "2026-08-28",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "houstonchronicle-2023",
+      "kind": "independent",
+      "title": "As Flock cameras expand in the Houston area, here's what to know from proponents and critics",
+      "publisher": "Houston Chronicle",
+      "url": "https://www.houstonchronicle.com/neighborhood/spring-klein/article/flock-camera-houston-license-plate-readers-17841501.php",
+      "date": "2023",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "houstonchronicle-flock-2025",
+      "kind": "independent",
+      "title": "Houston police are using Flock Safety with few, if any, guardrails",
+      "publisher": "Houston Chronicle",
+      "url": "https://www.houstonchronicle.com/projects/2025/houston-flock-surveillance-explained/",
+      "date": "2025",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "govtech-dallas-2026",
+      "kind": "independent",
+      "title": "With state funding pause, Dallas to switch off Flock cameras",
+      "publisher": "Government Technology",
+      "url": "https://www.govtech.com/public-safety/with-state-funding-pause-dallas-to-switch-off-flock-cameras",
+      "date": "2026-09",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "wsbtv-smyrna-2025",
+      "kind": "independent",
+      "title": "Smyrna City Council OKs 70 new Flock Safety cameras for $5.7 million",
+      "publisher": "WSB-TV Atlanta",
+      "url": "https://www.wsbtv.com/news/local/cobb-county/smyrna-city-council-oks-70-new-flock-safety-cameras-57-million/ZN6ZSSEB2NHZTNXHNWPDDU5YTE/",
+      "date": "2025-12-25",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "mdjonline-smyrna-2025",
+      "kind": "independent",
+      "title": "Smyrna approves $5.7M deal for cameras, drones in public safety expansion",
+      "publisher": "Marietta Daily Journal",
+      "url": "https://www.mdjonline.com/news/local/smyrna-approves-5-7m-deal-for-cameras-drones-in-public-safety-expansion/article_177acc3b-95f0-4520-8b45-b54b0f04472a.html",
+      "date": "2025-12",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "wvwatch-huntington-2026",
+      "kind": "independent",
+      "title": "Huntington City Council approves purchase of Flock cameras despite public opposition",
+      "publisher": "West Virginia Watch",
+      "url": "https://westvirginiawatch.com/2026/07/14/huntington-city-council-approves-purchase-of-flock-cameras-despite-public-opposition/",
+      "date": "2026-07-14",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "heralddispatch-huntington-2026",
+      "kind": "independent",
+      "title": "Flock equipment not delivered as contract yet to be signed",
+      "publisher": "The Herald-Dispatch",
+      "url": "https://www.herald-dispatch.com/news/flock-equipment-not-delivered-as-contract-yet-to-be-signed/article_c9c4169c-ed33-41e1-a216-324800763a40.html",
+      "date": "2026-09-02",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "turnto10-ri-2026",
+      "kind": "independent",
+      "title": "Rhode Island State Police to install 39 plate readers statewide under Flock contract",
+      "publisher": "WJAR NBC 10",
+      "url": "https://turnto10.com/news/local/rhode-island-state-police-install-39-plate-readers-statewide-under-flock-contract-surveillance-drivers-roadways-officers-july-30-2026",
+      "date": "2026-07-30",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "okcfox-okc-2026",
+      "kind": "independent",
+      "title": "Oklahoma City Council approves controversial Flock camera contract after weeks of delays",
+      "publisher": "KOKH Fox 25",
+      "url": "https://okcfox.com/news/local/oklahoma-city-council-to-revisit-controversial-flock-camera-contract-after-weeks-of-delays",
+      "date": "2026-08-18",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "kfor-okc-2026",
+      "kind": "independent",
+      "title": "Oklahoma City Council votes to renew $270k Flock camera contract",
+      "publisher": "KFOR",
+      "url": "https://kfor.com/news/instagram/oklahoma-city-council-votes-to-renew-270k-flock-camera-contract/",
+      "date": "2026-08",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "capitolnews-il-2025",
+      "kind": "independent",
+      "title": "Hundreds of police departments use camera company accused of breaking state law",
+      "publisher": "Capitol News Illinois",
+      "url": "https://capitolnewsillinois.com/news/hundreds-of-police-departments-use-camera-company-accused-of-breaking-state-law/",
+      "date": "2025-08-27",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "flockscanner-cities",
+      "kind": "independent",
+      "title": "What cities have Flock cameras? Documented camera counts from OpenStreetMap",
+      "publisher": "FlockScanner",
+      "url": "https://flockscanner.com/what-cities-have-flock-cameras/",
+      "date": "2026-09-06",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "whoapprovedthis",
+      "kind": "independent",
+      "title": "Who Approved This: Flock contract tracker",
+      "publisher": "Who Approved This",
+      "url": "https://whoapprovedthis.org/",
+      "date": "2026",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "atlas-of-surveillance",
+      "kind": "independent",
+      "title": "Atlas of Surveillance",
+      "publisher": "Electronic Frontier Foundation",
+      "url": "https://atlasofsurveillance.org/",
+      "date": "2026",
+      "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "aclu-toolkit",
+      "kind": "independent",
+      "title": "Get the Flock Out toolkit: finding and reading your community's Flock contract",
+      "publisher": "American Civil Liberties Union",
+      "url": "https://www.aclu.org/get-the-flock-out-toolkit",
+      "date": "2026",
+      "lastVerified": "2026-09-06"
     }
   ]
 }

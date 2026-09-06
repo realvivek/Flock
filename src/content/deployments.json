@@ -1,0 +1,49 @@
+{
+  "$comment": "Where Flock's contracts are public and what the largest documented deployments look like: federal awards from USAspending, state and city contracts from procurement records and council reporting, and documented camera counts by city. Every row cites sources.json. Values are contract ceilings or approved amounts as reported; they are not annual spend.",
+  "intro": {
+    "summary": "Flock Safety does not publish a customer list. Its contracts with public agencies are public records: federal awards appear in USAspending, state contracts in state procurement portals and grant records, and city and county contracts in council agendas and minutes or through public records requests. Independent trackers compile these records and map camera locations. The rows below are the largest deployments and contract values documented in those records as of September 2026.",
+    "sources": ["usaspending-flock", "whoapprovedthis", "atlas-of-surveillance", "flockscanner-cities"]
+  },
+  "records": [
+    { "k": "Federal", "v": "Contracts are listed in USAspending and the Federal Procurement Data System under Flock Group Inc (UEI QDLLBKCGL851). Three contracts totalling $297,050 are on record: the United States Park Police and two Department of Veterans Affairs purchases. Flock states it has no contract with any Department of Homeland Security agency; CBP and HSI held pilot access in 2025.", "sources": ["usaspending-flock", "usaspending-uspp-2025", "flock-statement-2025", "404-cbp-2025"] },
+    { "k": "State", "v": "State agency contracts and grant programs are in state procurement and legislative records. Texas DPS's contract and the Motor Vehicle Crime Prevention Authority grants to local agencies were documented from state records by the Texas Tribune; Florida's grant awards for about 440 readers were documented by WUSF.", "sources": ["texastribune-2026", "texastribune-dps-2026", "wusf-florida-funding-2026"] },
+    { "k": "City and county", "v": "Contracts are approved in open council or commission meetings, often on the consent agenda, and the agreement, fee schedule and funding source are attached to the agenda packet. Copies and audit logs are obtainable by public records request.", "sources": ["richland-agreement-2023", "parkridge-2025", "aclu-toolkit"] },
+    { "k": "Trackers", "v": "Who Approved This compiles council votes and contract values by city. DeFlock and FlockScanner map camera locations from OpenStreetMap contributions. EFF's Atlas of Surveillance records which agencies use plate readers.", "sources": ["whoapprovedthis", "deflock", "flockscanner-cities", "atlas-of-surveillance"] }
+  ],
+  "contracts": [
+    { "agency": "Texas Department of Public Safety", "level": "State", "state": "TX", "cameras": "1,183 proposed; at least 940 installed by Sep 2026", "value": "$26 million contract (2025); $15.9 million plus $3 million in MVCPA funding", "term": "Operation Lone Star and state roads; 206 partner agencies", "note": "Governor's order of 27 Aug 2026 halted new state spending; DPS continues operating installed cameras", "sources": ["texastribune-2026", "texastribune-dps-2026", "texastribune-abbott-2026"] },
+    { "agency": "Houston Police Department", "level": "City", "state": "TX", "cameras": "318 leased under the 2022 contract; 3,800 operating citywide per city officials in 2024", "value": "Up to $6.4 million", "term": "Five years, approved Aug 2022", "note": "Largest documented deployment of any city", "sources": ["houstonchronicle-2023", "houstonchronicle-flock-2025", "flockscanner-cities"] },
+    { "agency": "Dallas Police Department", "level": "City", "state": "TX", "cameras": "684", "value": "$5.7 million, of which $1.7 million from a state MVCPA grant", "term": "Three years, approved May 2025", "note": "321 cameras deactivated on 15 Sep 2026 after the state funding pause", "sources": ["govtech-dallas-2026"] },
+    { "agency": "City of Smyrna", "level": "City", "state": "GA", "cameras": "75 plate readers, 70 video cameras, one trailer, two drones", "value": "$5.7 million", "term": "Ten years, approved Dec 2025", "note": "", "sources": ["wsbtv-smyrna-2025", "mdjonline-smyrna-2025"] },
+    { "agency": "City of Huntington", "level": "City", "state": "WV", "cameras": "More than 40 plate readers, 17 video cameras, two drones, two gunshot detectors", "value": "$2.1 million", "term": "Five years, approved by a 6 to 4 vote in Jul 2026", "note": "Contract unsigned as of 2 Sep 2026", "sources": ["wvwatch-huntington-2026", "heralddispatch-huntington-2026"] },
+    { "agency": "Rhode Island State Police", "level": "State", "state": "RI", "cameras": "39", "value": "$597,000", "term": "Three years, announced Jul 2026", "note": "Statewide; two towns declined installation", "sources": ["turnto10-ri-2026"] },
+    { "agency": "Oklahoma City Police Department", "level": "City", "state": "OK", "cameras": "90", "value": "About $270,000", "term": "Renewal approved 18 Aug 2026 by a 5 to 3 vote", "note": "Data shared with 109 agencies per council testimony", "sources": ["okcfox-okc-2026", "kfor-okc-2026"] },
+    { "agency": "United States Park Police (Department of the Interior)", "level": "Federal", "state": "DC", "cameras": "Not stated", "value": "$231,600", "term": "Awarded 25 Sep 2025; ends Sep 2027", "note": "ALPR system in the greater Washington area", "sources": ["usaspending-uspp-2025"] },
+    { "agency": "Illinois State Police", "level": "State", "state": "IL", "cameras": "None; data access only", "value": "About $50,000 per year", "term": "Ongoing", "note": "ISP operates its own Motorola readers and does not share their data with Flock", "sources": ["capitolnews-il-2025"] },
+    { "agency": "Department of Veterans Affairs", "level": "Federal", "state": "US", "cameras": "Not stated", "value": "$44,450 (2023) and $21,000 (2025 renewal)", "term": "One-year purchases", "note": "", "sources": ["usaspending-va-2023", "usaspending-va-2025"] }
+  ],
+  "funding": [
+    { "k": "Texas MVCPA grants", "v": "At least $30 million from the Motor Vehicle Crime Prevention Authority, funded by a $1 fee on vehicle insurance policies, paid for at least 3,200 cameras at local agencies before the governor's order of 27 Aug 2026", "sources": ["texastribune-dps-2026", "texastribune-abbott-2026"] },
+    { "k": "Florida state grants", "v": "Grant funding approved for about 440 readers in 2026, shortly before the state DOT revoked right-of-way permits for cameras on state roads", "sources": ["wusf-florida-funding-2026", "wusf-fdot-2026"] },
+    { "k": "Federal grants to local agencies", "v": "Some city contracts draw on federal Homeland Security (UASI) or Justice Assistance (JAG) grants; Dallas's 2025 contract lists $125,000 of UASI funds", "sources": ["govtech-dallas-2026", "flock-funding-blog"] }
+  ],
+  "cities": [
+    { "name": "Houston", "state": "TX", "cameras": 2255 },
+    { "name": "New York", "state": "NY", "cameras": 993 },
+    { "name": "Los Angeles", "state": "CA", "cameras": 926 },
+    { "name": "Dallas", "state": "TX", "cameras": 888 },
+    { "name": "Chicago", "state": "IL", "cameras": 793 },
+    { "name": "San Diego", "state": "CA", "cameras": 676 },
+    { "name": "Indianapolis", "state": "IN", "cameras": 666 },
+    { "name": "Atlanta", "state": "GA", "cameras": 596 },
+    { "name": "Fort Worth", "state": "TX", "cameras": 548 },
+    { "name": "Phoenix", "state": "AZ", "cameras": 540 }
+  ],
+  "citiesNote": "Documented camera counts within city limits, from OpenStreetMap contributions compiled by FlockScanner on 6 Sep 2026. Counts include cameras operated by police, private property owners and retailers, and exclude cameras not yet mapped.",
+  "citiesSources": ["flockscanner-cities"],
+  "unknowns": [
+    { "v": "Flock's full customer list and the contract value for most of the 6,000 communities it reports", "sources": ["wikipedia-flock", "whoapprovedthis"] },
+    { "v": "State-level contract totals outside Texas, Rhode Island and Illinois", "sources": ["texastribune-2026"] },
+    { "v": "How many of the Texas MVCPA-funded cameras remain in service after the August 2026 order", "sources": ["texastribune-dps-2026"] }
+  ]
+}

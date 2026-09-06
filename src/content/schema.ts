@@ -72,6 +72,17 @@ export const EconomicsFile = z.object({
   unknowns: z.array(z.object({ v: z.string(), sources: ids })),
   pricedPole: z.array(z.object({ id: z.string(), anchor: z.tuple([z.number(), z.number(), z.number()]), k: z.string(), v: z.string(), dx: z.number(), dy: z.number(), sources: ids })),
 }).passthrough();
+export const DeploymentsFile = z.object({
+  intro: z.object({ summary: z.string(), sources: ids }),
+  records: z.array(Row),
+  contracts: z.array(z.object({ agency: z.string(), level: z.string(), state: z.string(), cameras: z.string(), value: z.string(), term: z.string(), note: z.string(), sources: ids })),
+  funding: z.array(Row),
+  cities: z.array(z.object({ name: z.string(), state: z.string(), cameras: z.number().int().nonnegative() })),
+  citiesNote: z.string(),
+  citiesSources: ids,
+  unknowns: z.array(z.object({ v: z.string(), sources: ids })),
+}).passthrough();
+
 export const StillsFile = z.object({
   dir: z.string(),
   stills: z.array(z.object({ id: z.string(), file: z.string(), job: z.string(), args: z.record(z.string(), z.union([z.string(), z.number()])).optional() })),

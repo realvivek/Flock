@@ -13,7 +13,7 @@ import { initAct5 } from "./acts/act5";
 import { initAct6 } from "./acts/act6";
 import { initAct7 } from "./acts/act7";
 import { setCiteHandler } from "./ui/cite";
-import { revealSource } from "./ui/article";
+import { revealSource, renderDeployments } from "./ui/article";
 import { createDataViz } from "./scene/dataviz";
 import anim from "./content/animation.json";
 import { lerp } from "./lib/math";
@@ -141,7 +141,12 @@ export async function startDesktop() {
   }
 
   // Acts 5 to 7 are articles: fade the scene out and stop rendering it.
-  subscribe((s, changed) => { if (changed.has("act")) document.body.classList.toggle("is-article", s.act >= 5); });
+  renderDeployments(document.getElementById("deployments-body")!);
+  let depInView = false;
+  let articleAct = false;
+  const applyArticle = () => document.body.classList.toggle("is-article", articleAct || depInView);
+  new IntersectionObserver((entries) => { depInView = entries.some((e) => e.isIntersecting); applyArticle(); }, { rootMargin: "-30% 0px -30% 0px" }).observe(document.getElementById("deployments")!);
+  subscribe((s, changed) => { if (changed.has("act")) { articleAct = s.act >= 5; applyArticle(); } });
   engine.runRenderLoop(() => { if (!document.body.classList.contains("is-article")) scene.render(); });
   addEventListener("resize", () => engine.resize());
   wireScroll();

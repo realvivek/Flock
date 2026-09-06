@@ -6,7 +6,8 @@ import mythsRaw from "./myths.json";
 import productsRaw from "./products.json";
 import economicsRaw from "./economics.json";
 import stillsRaw from "./stills.json";
-import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile } from "./schema";
+import deploymentsRaw from "./deployments.json";
+import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile } from "./schema";
 
 export const sources = SourcesFile.parse(sourcesRaw).sources;
 export const components = ComponentsFile.parse(componentsRaw);
@@ -16,6 +17,7 @@ export const myths = MythsFile.parse(mythsRaw).myths;
 export const products = ProductsFile.parse(productsRaw).products;
 export const economics = EconomicsFile.parse(economicsRaw);
 export const stills = StillsFile.parse(stillsRaw);
+export const deployments = DeploymentsFile.parse(deploymentsRaw);
 export const stillById = new Map(stills.stills.map((s) => [s.id, `${stills.dir}/${s.file}`]));
 
 export const sourceById = new Map(sources.map((s) => [s.id, s]));

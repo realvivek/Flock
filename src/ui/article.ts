@@ -1,4 +1,4 @@
-import { myths, economics, sources, products, partById, hopById, stillById } from "../content";
+import { myths, economics, sources, products, deployments, partById, hopById, stillById } from "../content";
 import { cite, escape } from "../ui/cite";
 
 /**
@@ -190,6 +190,57 @@ export function revealSource(id: string, behavior: ScrollBehavior = "smooth"): b
   clearTimeout(revealTimer);
   revealTimer = window.setTimeout(() => row.classList.remove("is-target"), 2600);
   return true;
+}
+
+/** Documented camera counts by city as a single-series horizontal bar chart in HTML, so labels stay readable at any width. */
+function cityBars(list: { name: string; state: string; cameras: number }[]): HTMLElement {
+  const max = Math.max(...list.map((c) => c.cameras));
+  const fig = el("figure", "chart chart-bars");
+  fig.setAttribute("role", "img");
+  fig.setAttribute("aria-label", "Documented Flock cameras by city, largest first");
+  for (const c of list) {
+    const row = el("div", "bar");
+    row.tabIndex = 0;
+    row.title = `${c.name}, ${c.state}: ${c.cameras.toLocaleString()} documented cameras`;
+    row.innerHTML = `<span class="l">${escape(c.name)}, ${escape(c.state)}</span><span class="t"><span class="f" style="width:${((c.cameras / max) * 100).toFixed(1)}%"></span></span><span class="v">${c.cameras.toLocaleString()}</span>`;
+    fig.appendChild(row);
+  }
+  return fig;
+}
+
+/** Where Flock's contracts are public, the largest documented contracts, funding sources and documented camera counts by city. */
+export function renderDeployments(host: HTMLElement): void {
+  const d = deployments;
+  const intro = el("p", "lede-p", d.intro.summary);
+  intro.appendChild(cite(d.intro.sources));
+  host.appendChild(intro);
+  const sections: { id: string; title: string; render(h: HTMLElement): void }[] = [
+    { id: "dep-cities", title: "Documented cameras by city", render: (h) => {
+      h.appendChild(cityBars(d.cities));
+      const cap = el("p", "fine", d.citiesNote);
+      cap.appendChild(cite(d.citiesSources));
+      h.appendChild(cap);
+    } },
+    { id: "dep-contracts", title: "Largest documented contracts", render: (h) => {
+      table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [`${c.agency} · ${c.level}, ${c.state}`, c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
+      h.lastElementChild?.classList.add("contracts");
+    } },
+    { id: "dep-funding", title: "Public funding behind local contracts", render: (h) => rows(h, d.funding) },
+    { id: "dep-records", title: "Where the records are", render: (h) => rows(h, d.records) },
+    { id: "dep-unknowns", title: "Not publicly documented", render: (h) => {
+      const ul = el("ul", "unknown-list");
+      for (const u of d.unknowns) { const li = el("li", undefined, u.v); li.appendChild(cite(u.sources, 1)); ul.appendChild(li); }
+      h.appendChild(ul);
+    } },
+  ];
+  host.appendChild(jumpList(sections.map((s) => ({ id: s.id, label: s.title }))));
+  for (const s of sections) {
+    const sec = el("section", "econ-block");
+    sec.id = s.id;
+    sec.appendChild(el("h3", undefined, s.title));
+    s.render(sec);
+    host.appendChild(sec);
+  }
 }
 
 const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
