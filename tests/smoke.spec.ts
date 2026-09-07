@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 declare global {
   interface Window {
     __flock?: {
-      state: { ready: boolean; act: number; tab: string; sub: string; explodeStage: number; dataStage: number; cutaway: boolean; tweening: boolean; focusedPart: string | null; acts: number[] };
+      state: { ready: boolean; act: number; tab: string; sub: string; explodeStage: number; dataStage: number; tweening: boolean; focusedPart: string | null; acts: number[] };
       set(p: Record<string, unknown>): void;
       go(route: string): void;
     };
@@ -62,11 +62,11 @@ test("desktop: tabs, controls and articles", async ({ page }) => {
   await expect(page.locator("#spec-card")).toContainText("Open-Q 624A");
   await page.keyboard.press("Escape");
   await expect(page.locator("#spec-card")).toBeHidden();
-  await page.locator("[data-inside=cutaway]").click();
-  await expect.poll(() => page.evaluate(() => window.__flock!.state.cutaway)).toBe(true);
-  await expect(page.locator("#explode-row")).toBeHidden();
-  await page.locator("[data-inside=exploded]").click();
-  await expect.poll(() => page.evaluate(() => window.__flock!.state.cutaway)).toBe(false);
+  // Stage 0: the shell is see-through and every marker is already on the model
+  await page.locator("#explode-stage").fill("0");
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.acts[2]), { timeout: 5000 }).toBe(0);
+  await settled(page);
+  await expect(page.locator("#pins .pin.badge.is-visible")).toHaveCount(14);
 
   // Power sub-tab
   await page.locator(".subtabs a", { hasText: "Power" }).click();

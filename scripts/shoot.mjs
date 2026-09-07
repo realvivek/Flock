@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 // Usage: node scripts/shoot.mjs <outDir> <url> <stops>
 // Stops are routes with an optional state suffix: "overview", "hardware/pole", "hardware/inside:5" (explode stage),
-// "hardware/inside:cut" (cutaway), "data:10" (data stage), "claims", "economics", "sources".
+// "data:10" (data stage), "claims", "economics", "sources".
 const out = process.argv[2] || "test-results";
 const url = process.argv[3] || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--disable-gpu-compositing"] });
@@ -22,7 +22,7 @@ for (const s of stops) {
   await page.evaluate(({ route, arg }) => {
     const f = window.__flock;
     f.go(route);
-    if (route.endsWith("inside")) { if (arg === "cut") f.set({ cutaway: true }); else if (arg !== undefined) f.set({ cutaway: false, explodeStage: Number(arg) }); }
+    if (route.endsWith("inside") && arg !== undefined) f.set({ explodeStage: Number(arg) });
     if (route === "data" && arg !== undefined) f.set({ dataStage: Number(arg) });
   }, { route, arg });
   if (process.env.SHOT_EVAL) await page.evaluate(process.env.SHOT_EVAL);

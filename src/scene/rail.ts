@@ -39,11 +39,11 @@ export function evalRail(t: number, out: { pos: Vector3; target: Vector3; fov: n
 export interface Pose { pos: Vector3; target: Vector3; fov: number }
 
 /** Rail t for a view state. The values live in animation.json "views" so they can be tuned without code. */
-export function railTFor(s: { act: number; explodeStage: number; dataStage: number; poleView: "mount" | "fov"; cutaway?: boolean }): number {
+export function railTFor(s: { act: number; explodeStage: number; dataStage: number; poleView: "mount" | "fov" }): number {
   const v = rail.views;
   switch (s.act) {
     case 1: return s.poleView === "fov" ? v.poleFov : v.pole;
-    case 2: return s.cutaway ? v.cutaway : lerp(v.inside[0]!, v.inside[1]!, s.explodeStage / 5);
+    case 2: return lerp(v.inside[0]!, v.inside[1]!, s.explodeStage / 5);
     case 3: return v.power;
     case 4: return lerp(v.data[0]!, v.data[1]!, (s.dataStage - 1) / 11);
     default: return v.overview;

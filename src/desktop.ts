@@ -150,7 +150,7 @@ export async function startDesktop() {
     let moving = u2 < 1 || u4 < 1;
 
     if (!debugView) {
-      const key = `${state.act}|${state.explodeStage}|${state.dataStage}|${state.poleView}|${state.pathMode}|${state.cutaway ? 1 : 0}`;
+      const key = `${state.act}|${state.explodeStage}|${state.dataStage}|${state.poleView}|${state.pathMode}`;
       if (key !== poseKey) { tween.retarget(railOut, now, state.reducedMotion); poseKey = key; set({ progress: railTFor(state) }); }
       if (state.act === 3 && state.pathMode === "wing") { dest.pos.copyFrom(wingView.pos); dest.target.copyFrom(wingView.target); dest.fov = wingView.fov; }
       else evalRail(railTFor(state), dest, world.falcon ? world.falcon.getWorldMatrix() : null);

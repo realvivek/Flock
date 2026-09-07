@@ -23,7 +23,6 @@ export interface State {
   /** Pole tab camera: the mount close-up or the aerial field-of-view shot */
   poleView: "mount" | "fov";
   /** Inside tab: assembled camera with a translucent shell instead of the explosion */
-  cutaway: boolean;
   /** Part under the pointer in the exploded view (badge, halo or legend row) */
   hoverPart: string | null;
   /** A camera or stage tween is in flight */
@@ -54,7 +53,6 @@ export const state: State = {
   explodeStage: 0,
   dataStage: 1,
   poleView: "mount",
-  cutaway: false,
   hoverPart: null,
   tweening: false,
   focusedPart: null,

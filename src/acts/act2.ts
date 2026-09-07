@@ -1,5 +1,6 @@
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { components, hopById, stillById, EXPLODE_STAGES, PART_GROUPS } from "../content";
+import { lerp, smooth } from "../lib/math";
 import { cite, escape } from "../ui/cite";
 import type { PinLayer } from "../ui/pins";
 import type { World } from "../scene/world";
@@ -7,7 +8,8 @@ import { state, set, subscribe } from "../store";
 
 const confidenceLabel = { measured: "Measured or documented", estimated: "Estimated from the envelope", disputed: "Sources disagree" } as const;
 
-/** Inside tab: explode stage control, callout cards in two columns with one leader each, numbered badges, spec card and isolate. */
+/** Inside tab: a see-through enclosure with a dot marker on every part and one leader per callout card; the stage slider
+ *  separates the parts front to back while the shell fades back to solid. Selecting a card or a marker isolates the part. */
 export function initAct2(world: World, pins: PinLayer): void {
   const card = document.getElementById("spec-card")!;
   const stageInput = document.getElementById("explode-stage") as HTMLInputElement;
@@ -32,7 +34,6 @@ export function initAct2(world: World, pins: PinLayer): void {
     const still = stillById.get(`part-${p.id}`);
     b.innerHTML = `${still ? `<img src="${BASE}${still}" alt="" loading="lazy" decoding="async" />` : `<span class="thumb"></span>`}<span class="txt"><span class="n">${nn(p.order)}</span><span class="t">${escape(p.name)}</span><span class="d">${escape(firstSentence(p.function))}</span></span>`;
     b.addEventListener("click", () => {
-      if (!state.cutaway && state.explodeStage < 5) set({ explodeStage: 5 });
       set({ focusedPart: state.focusedPart === p.id ? null : p.id });
     });
     b.addEventListener("pointerenter", () => set({ hoverPart: p.id }));
@@ -77,19 +78,11 @@ export function initAct2(world: World, pins: PinLayer): void {
     });
   }
 
-  // View toggle: exploded stages, or the assembled camera with a translucent shell.
-  const viewChips = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-inside]"));
-  viewChips.forEach((c) => c.addEventListener("click", () => set({ cutaway: c.dataset.inside === "cutaway" })));
-  const applyCutaway = () => {
-    viewChips.forEach((c) => c.classList.toggle("is-active", (c.dataset.inside === "cutaway") === state.cutaway));
-    (document.getElementById("explode-row") as HTMLElement).hidden = state.cutaway;
-    pins.dots = state.cutaway;
-    if (state.cutaway) set({ explodeStage: 0 });
-    world.setShellAlpha(state.cutaway && !state.focusedPart ? 0.16 : 1);
-  };
+  // Markers are dots at each part's centre; the numbers live on the cards.
+  pins.dots = true;
 
   // Stage control
-  const setStage = (n: number) => { if (state.cutaway) set({ cutaway: false }); set({ explodeStage: Math.max(0, Math.min(5, Math.round(n))) }); };
+  const setStage = (n: number) => set({ explodeStage: Math.max(0, Math.min(5, Math.round(n))) });
   stageInput.addEventListener("input", () => setStage(Number(stageInput.value)));
   document.getElementById("explode-prev")!.addEventListener("click", () => setStage(state.explodeStage - 1));
   document.getElementById("explode-next")!.addEventListener("click", () => setStage(state.explodeStage + 1));
@@ -141,7 +134,7 @@ export function initAct2(world: World, pins: PinLayer): void {
   };
   world.scene.onAfterRenderObservable.add(() => {
     // Leaders follow the badges; only drawn when the card column is visible and the part is separated.
-    const showLeaders = state.act === 2 && ((state.acts[2] ?? 0) > 0.02 || state.cutaway);
+    const showLeaders = state.act === 2;
     if (showLeaders && !state.tweening) { reorder(colL, "left"); reorder(colR, "right"); }
     for (const p of parts) {
       const pl = leaders.get(p.id)!;
@@ -192,28 +185,23 @@ export function initAct2(world: World, pins: PinLayer): void {
     if (changed.has("focusedPart")) {
       for (const [id, b] of buttons) b.classList.toggle("is-active", id === s.focusedPart);
       world.isolate(s.focusedPart);
-      if (s.cutaway) world.setShellAlpha(s.focusedPart ? 1 : 0.16);
       renderCard(s.focusedPart);
     }
-    if (changed.has("cutaway")) applyCutaway();
-    if (changed.has("act") && s.act !== 2 && s.cutaway) world.setShellAlpha(1);
-    if (changed.has("act") && s.act === 2 && s.cutaway) world.setShellAlpha(s.focusedPart ? 1 : 0.16);
     if (changed.has("hoverPart")) renderHover();
     if (changed.has("explodeStage")) renderStage();
     if (changed.has("act") && s.act !== 2) { if (s.focusedPart) set({ focusedPart: null }); if (s.hoverPart) set({ hoverPart: null }); }
   });
   renderStage();
-  applyCutaway();
 
-  // Badges appear once parts have separated, or immediately in the cutaway.
+  // Shell opacity: see-through while assembled, solid once the parts have separated (nothing is hidden then).
+  // Isolating a part restores the shell so the bezel and rear shell can be inspected on their own.
+  let shellAlpha = -1;
   world.scene.onBeforeRenderObservable.add(() => {
     const p2 = state.acts[2] ?? 0;
-    const inAct = state.act === 2 && (p2 > 0.02 || state.cutaway);
-    for (const p of parts) {
-      const rec = world.parts.get(p.id);
-      const sep = rec ? Vector3.Distance(rec.node.position, rec.rest) : 0;
-      pins.show(`part-${p.id}`, inAct && (sep > 0.02 || p.id === "mainboard" || state.cutaway) && (!state.focusedPart || state.focusedPart === p.id));
-    }
+    const inAct = state.act === 2;
+    const want = inAct && !state.focusedPart ? lerp(0.16, 1, smooth(p2)) : 1;
+    if (Math.abs(want - shellAlpha) > 0.004) { shellAlpha = want; world.setShellAlpha(want); }
+    for (const p of parts) pins.show(`part-${p.id}`, inAct && (!state.focusedPart || state.focusedPart === p.id));
     for (const g of PART_GROUPS) pins.showHalo(g.id, false);
   });
 }

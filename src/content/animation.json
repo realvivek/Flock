@@ -88,31 +88,16 @@
     {
       "t": 0.2502,
       "pos": [
-        -0.95,
-        0.22,
-        0.7
-      ],
-      "target": [
-        0.0,
-        0.02,
-        0.0
-      ],
-      "fov": 36,
-      "frame": "falcon"
-    },
-    {
-      "t": 0.262,
-      "pos": [
-        -0.72,
-        0.16,
-        0.5
+        -0.78,
+        0.18,
+        0.55
       ],
       "target": [
         0.0,
         0.0,
         0.02
       ],
-      "fov": 32,
+      "fov": 33,
       "frame": "falcon"
     },
     {
@@ -346,7 +331,7 @@
     -1.2
   ],
   "views": {
-    "$comment": "Preset rail positions per view. Keys 0.2502 to 0.3754 are falcon-frame; every preset sits on or between keys of one frame. 'cutaway' is the closer assembled view used when the shell is made translucent.",
+    "$comment": "Preset rail positions per view. Keys 0.2502 to 0.3754 are falcon-frame; every preset sits on or between keys of one frame.",
     "overview": 0.0,
     "pole": 0.1663,
     "poleFov": 0.2013,
@@ -358,7 +343,6 @@
     "data": [
       0.5425,
       0.6247
-    ],
-    "cutaway": 0.262
+    ]
   }
 }
