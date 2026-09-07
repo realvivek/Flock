@@ -1,0 +1,17 @@
+{
+  "$comment": "The splash: what the page covers and the ordered list of sections with one-line descriptions. Prose only; the figures it mentions are cited where they appear in the sections.",
+  "intro": {
+    "lede": "Flock Safety reports more than 120,000 license plate reader cameras in 49 states. This page documents one Falcon unit at scale: the pole and mount, each internal component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms.",
+    "sources": "Sources are Flock Safety's specification sheets, price lists and data-architecture document, three independent teardowns, audit logs released under public records requests, and court and congressional records. Each figure carries a citation. Statements from Flock and from independent sources are labelled separately; where they differ, both are cited."
+  },
+  "sections": [
+    { "id": "deployments", "label": "Deployments", "title": "Deployments and contracts", "blurb": "Where the contracts are public, the largest documented contracts by agency, the public funding behind them, and documented camera counts by city." },
+    { "id": "pole", "label": "Pole", "title": "Pole and mount", "blurb": "The standard pole, clamps, solar panel and battery box, the three mount configurations, and the field of view drawn on the road." },
+    { "id": "inside", "label": "Inside", "title": "Inside the enclosure", "blurb": "Fourteen components from the bezel to the clamps, each with its function, specifications, part number and sources." },
+    { "id": "power", "label": "Power", "title": "Power and cable", "blurb": "Solar and battery DC, the 120 V AC kit, and the Wing gateway configuration in which Ethernet, PoE and fiber are used." },
+    { "id": "data", "label": "Data", "title": "Data path", "blurb": "Twelve stages from capture to deletion with the processing location and payload at each, retention presets, and a documented network search." },
+    { "id": "myths", "label": "Claims", "title": "Common claims", "blurb": "The product line, then twenty-one common claims checked against the public record, each with sources." },
+    { "id": "economics", "label": "Economics", "title": "Economics", "blurb": "List prices, what the annual fee includes and excludes, fee schedules, price history, installation workflow, permitting, contract terms and scale." },
+    { "id": "sources", "label": "Sources", "title": "Sources", "blurb": "Every source grouped by origin, with the date each was last checked." }
+  ]
+}

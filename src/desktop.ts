@@ -13,7 +13,8 @@ import { initAct5 } from "./acts/act5";
 import { initAct6 } from "./acts/act6";
 import { initAct7 } from "./acts/act7";
 import { setCiteHandler } from "./ui/cite";
-import { revealSource, renderDeployments } from "./ui/article";
+import { revealSource, renderDeployments, renderContents } from "./ui/article";
+import { overview } from "./content";
 import { createDataViz } from "./scene/dataviz";
 import anim from "./content/animation.json";
 import { lerp } from "./lib/math";
@@ -142,6 +143,11 @@ export async function startDesktop() {
 
   // Acts 5 to 7 are articles: fade the scene out and stop rendering it.
   renderDeployments(document.getElementById("deployments-body")!);
+  // Splash: lede, contents cards linking to each section, source sentence.
+  document.getElementById("hero-lede")!.textContent = overview.intro.lede;
+  document.getElementById("hero-sources")!.textContent = overview.intro.sources;
+  const actFor: Record<string, string> = { deployments: "#deployments", pole: "#act-1", inside: "#act-2", power: "#act-3", data: "#act-4", myths: "#act-5", economics: "#act-6", sources: "#act-7" };
+  renderContents(document.getElementById("contents-host")!, (id) => actFor[id] ?? "#act-0");
   let depInView = false;
   let articleAct = false;
   const applyArticle = () => document.body.classList.toggle("is-article", articleAct || depInView);

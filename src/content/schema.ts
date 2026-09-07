@@ -83,6 +83,11 @@ export const DeploymentsFile = z.object({
   unknowns: z.array(z.object({ v: z.string(), sources: ids })),
 }).passthrough();
 
+export const OverviewFile = z.object({
+  intro: z.object({ lede: z.string(), sources: z.string() }),
+  sections: z.array(z.object({ id: z.string(), label: z.string(), title: z.string(), blurb: z.string() })),
+}).passthrough();
+
 export const StillsFile = z.object({
   dir: z.string(),
   stills: z.array(z.object({ id: z.string(), file: z.string(), job: z.string(), args: z.record(z.string(), z.union([z.string(), z.number()])).optional() })),

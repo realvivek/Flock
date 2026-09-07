@@ -1,7 +1,7 @@
 import "./stepper.css";
-import { components, install, dataflow, economics, stillById, partById } from "../content";
+import { components, install, dataflow, economics, overview, stillById, partById } from "../content";
 import { cite, escape, tag, setCiteHandler } from "../ui/cite";
-import { renderClaims, renderEconomics, renderSources, renderProducts, renderDeployments, revealSource } from "../ui/article";
+import { renderClaims, renderEconomics, renderSources, renderDeployments, renderContents, revealSource } from "../ui/article";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
@@ -42,9 +42,8 @@ function buildChapters(): Chapter[] {
   const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
   const chapters: Chapter[] = [];
 
-  chapters.push({ id: "street", label: "Street", screens: [
-    { eyebrow: "Reference", title: "Anatomy of a Flock camera", figure: { still: "pole-flock", alt: "A Flock camera on its pole" }, body: (h) => { p(h, "Flock Safety reports more than 120,000 license plate reader cameras in 49 states. This page documents one Falcon unit: the pole and mount, each internal component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms."); p(h, "Sources are Flock Safety's specification sheets, price lists and data-architecture document, three independent teardowns, audit logs released under public records requests, and court and congressional records. Each figure carries a citation. Use Next to move through the screens.", true); } },
-    { eyebrow: "Product line", title: "Flock Safety products", figure: { still: "falcon-front", alt: "Falcon front view" }, cls: "st-products", body: (h) => renderProducts(h) },
+  chapters.push({ id: "overview", label: "Overview", screens: [
+    { eyebrow: "Reference", title: "Anatomy of a Flock camera", figure: { still: "pole-flock", alt: "A Flock camera on its pole" }, cls: "st-overview", body: (h) => { p(h, overview.intro.lede); renderContents(h, (id) => `#ch-${id}`); p(h, overview.intro.sources, true); } },
   ]});
 
   const modeScreens: Screen[] = (["flock", "existing", "ac"] as const).map((m) => ({
@@ -80,60 +79,78 @@ function buildChapters(): Chapter[] {
 
 let chapters: Chapter[] = [];
 let root: HTMLElement;
-let cur = { c: 0, i: 0 };
 
-function go(chapterId: string | number, index = 0): void {
-  const c = typeof chapterId === "number" ? chapterId : Math.max(0, chapters.findIndex((x) => x.id === chapterId));
-  const ch = chapters[c]!;
-  cur = { c, i: Math.max(0, Math.min(ch.screens.length - 1, index)) };
-  history.replaceState(null, "", `#s=${ch.id}/${cur.i}`);
-  render();
-  scrollTo({ top: 0, behavior: "auto" });
-}
+/** A multi-screen chapter shown one screen at a time inside the scrolling page, with its own Back, Next, dots and count. */
+interface Deck { ch: Chapter; i: number; el: HTMLElement; screen: HTMLElement; bar: HTMLElement }
+const decks = new Map<string, Deck>();
+const chapterEl = (id: string) => document.getElementById(`ch-${id}`);
 
-function next(dir: 1 | -1): void {
-  const ch = chapters[cur.c]!;
-  const i = cur.i + dir;
-  if (i >= 0 && i < ch.screens.length) return go(cur.c, i);
-  const c = cur.c + dir;
-  if (c < 0 || c >= chapters.length) return;
-  go(c, dir === 1 ? 0 : chapters[c]!.screens.length - 1);
-}
-
-function render(): void {
-  const ch = chapters[cur.c]!;
-  const sc = ch.screens[cur.i]!;
-  root.querySelectorAll(".st-chapters button").forEach((b, i) => b.classList.toggle("is-active", i === cur.c));
-  const screen = root.querySelector<HTMLElement>(".st-screen")!;
-  screen.innerHTML = "";
-  screen.className = `st-screen ${sc.cls ?? ""}`;
-  const article = (sc.cls ?? "").includes("st-article");
-  const host: HTMLElement = article ? document.createElement("div") : screen;
-  if (article) { host.className = "article sheet"; screen.appendChild(host); }
+function renderScreen(sc: Screen, host: HTMLElement, count?: string): void {
+  host.innerHTML = "";
+  host.className = `st-screen ${sc.cls ?? ""}`;
   if (sc.figure) {
     const fig = document.createElement("div");
     fig.className = "st-figure";
     if (sc.figure.still) { const img = document.createElement("img"); img.src = still(sc.figure.still); img.alt = sc.figure.alt ?? ""; img.decoding = "async"; fig.appendChild(img); }
     else if (sc.figure.svg) fig.innerHTML = sc.figure.svg;
-    fig.insertAdjacentHTML("beforeend", `<span class="st-count">${cur.i + 1} / ${ch.screens.length}</span>`);
-    screen.appendChild(fig);
+    if (count) fig.insertAdjacentHTML("beforeend", `<span class="st-count">${count}</span>`);
+    host.appendChild(fig);
   }
   const eb = document.createElement("div"); eb.className = `st-eyebrow ${(sc.cls ?? "").includes("cyan") ? "cyan" : ""}`; eb.textContent = sc.eyebrow; host.appendChild(eb);
   const h2 = document.createElement("h2"); h2.textContent = sc.title; host.appendChild(h2);
-  if (article) { const body = document.createElement("div"); body.className = "article-body"; host.appendChild(body); sc.body(body); }
-  else sc.body(host);
-  // preload the next still
-  const nx = ch.screens[cur.i + 1] ?? chapters[cur.c + 1]?.screens[0];
-  if (nx?.figure?.still) { const pre = new Image(); pre.src = still(nx.figure.still); }
-  const dots = root.querySelector<HTMLElement>(".st-dots")!;
-  dots.hidden = ch.screens.length === 1;
-  dots.innerHTML = ch.screens.length === 1 ? "" : ch.screens.map((_, i) => `<i class="${i === cur.i ? "on" : ""}"></i>`).join("");
-  (root.querySelector("#st-back") as HTMLButtonElement).disabled = cur.c === 0 && cur.i === 0;
-  (root.querySelector("#st-next") as HTMLButtonElement).disabled = cur.c === chapters.length - 1 && cur.i === ch.screens.length - 1;
-  (root.querySelector("#st-next") as HTMLButtonElement).textContent = cur.i === ch.screens.length - 1 && cur.c < chapters.length - 1 ? `Next: ${chapters[cur.c + 1]!.label}` : "Next";
+  sc.body(host);
 }
 
-/** Mount the stills stepper into the page, hiding the desktop document. */
+function renderDeck(d: Deck): void {
+  const n = d.ch.screens.length;
+  const sc = d.ch.screens[d.i]!;
+  renderScreen(sc, d.screen, `${d.i + 1} / ${n}`);
+  const nx = d.ch.screens[d.i + 1];
+  if (nx?.figure?.still) { const pre = new Image(); pre.src = still(nx.figure.still); }
+  d.bar.querySelector(".st-dots")!.innerHTML = d.ch.screens.map((_, i) => `<i class="${i === d.i ? "on" : ""}"></i>`).join("");
+  d.bar.querySelector(".st-barcount")!.textContent = `${d.i + 1} / ${n}`;
+  (d.bar.querySelector(".st-back") as HTMLButtonElement).disabled = d.i === 0;
+  (d.bar.querySelector(".st-next") as HTMLButtonElement).disabled = d.i === n - 1;
+}
+
+function setHash(chapterId: string, i: number): void {
+  history.replaceState(null, "", `#s=${chapterId}/${i}`);
+}
+
+/** Show screen `index` of a chapter and scroll the chapter into view. Article chapters ignore the index. */
+function go(chapterId: string | number, index = 0, scroll = true): void {
+  const ch = typeof chapterId === "number" ? chapters[chapterId] : chapters.find((x) => x.id === chapterId) ?? (chapterId === "street" ? chapters[0] : undefined);
+  if (!ch) return;
+  const d = decks.get(ch.id);
+  if (d) { d.i = Math.max(0, Math.min(ch.screens.length - 1, index)); renderDeck(d); }
+  setHash(ch.id, d?.i ?? 0);
+  if (scroll) chapterEl(ch.id)?.scrollIntoView({ behavior: "auto", block: "start" });
+}
+
+function step(d: Deck, dir: 1 | -1): void {
+  const i = d.i + dir;
+  if (i < 0 || i >= d.ch.screens.length) return;
+  d.i = i;
+  renderDeck(d);
+  setHash(d.ch.id, d.i);
+  // Keep the deck's top in view when its height changes between screens.
+  const top = d.el.getBoundingClientRect().top;
+  if (top < 0) d.el.scrollIntoView({ behavior: "auto", block: "start" });
+}
+
+/** The deck nearest the middle of the viewport, for arrow keys. */
+function activeDeck(): Deck | undefined {
+  let best: Deck | undefined; let bestD = Infinity;
+  for (const d of decks.values()) {
+    const r = d.el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) continue;
+    const dist = Math.abs((r.top + r.bottom) / 2 - innerHeight / 2);
+    if (dist < bestD) { bestD = dist; best = d; }
+  }
+  return best;
+}
+
+/** Mount the scrolling stills document into the page, hiding the desktop document. */
 export function initStepper(opts: { notice?: string } = {}): void {
   chapters = buildChapters();
   document.getElementById("main")!.hidden = true;
@@ -146,26 +163,79 @@ export function initStepper(opts: { notice?: string } = {}): void {
   root.innerHTML = `
     <div class="st-top"><span class="brand"><span class="brand-mark"></span> Anatomy of a Flock camera</span></div>
     <nav class="st-chapters" aria-label="Chapters"></nav>
-    ${opts.notice ? `<p class="st-notice" role="status">${escape(opts.notice)} <button type="button" aria-label="Dismiss">×</button></p>` : ""}
-    <div class="st-screen"></div>
-    <div class="st-nav"><button id="st-back" type="button">Back</button><div class="st-dots"></div><button id="st-next" type="button" class="pri">Next</button></div>`;
+    ${opts.notice ? `<p class="st-notice" role="status">${escape(opts.notice)} <button type="button" aria-label="Dismiss">×</button></p>` : ""}`;
   document.body.appendChild(root);
   root.querySelector(".st-notice button")?.addEventListener("click", (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
-  const nav = root.querySelector(".st-chapters")!;
-  chapters.forEach((ch, i) => { const b = document.createElement("button"); b.textContent = ch.label; b.addEventListener("click", () => go(i, 0)); nav.appendChild(b); });
-  // Citation chips open the Sources page at the cited row; the page hash stays on the chapter.
-  setCiteHandler((id) => { go("sources", 0); requestAnimationFrame(() => revealSource(id, "auto")); });
-  root.querySelector("#st-back")!.addEventListener("click", () => next(-1));
-  root.querySelector("#st-next")!.addEventListener("click", () => next(1));
-  addEventListener("keydown", (e) => { if (e.key === "ArrowRight") next(1); if (e.key === "ArrowLeft") next(-1); });
-  let tx = 0, ty = 0, inTable = false;
-  root.addEventListener("touchstart", (e) => { tx = e.touches[0]!.clientX; ty = e.touches[0]!.clientY; inTable = !!(e.target as Element).closest(".tablewrap"); }, { passive: true });
-  root.addEventListener("touchend", (e) => { if (inTable) return; const dx = e.changedTouches[0]!.clientX - tx, dy = e.changedTouches[0]!.clientY - ty; if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) next(dx < 0 ? 1 : -1); }, { passive: true });
-  // deep link: #s=chapter/index
+  const nav = root.querySelector<HTMLElement>(".st-chapters")!;
+
+  for (const ch of chapters) {
+    const sec = document.createElement("section");
+    sec.className = "st-chapter";
+    sec.id = `ch-${ch.id}`;
+    sec.dataset.chapter = ch.id;
+    const first = ch.screens[0]!;
+    const article = (first.cls ?? "").includes("st-article");
+    if (ch.id !== "overview") sec.innerHTML = `<div class="st-chhead"><span>${escape(ch.label)}</span><span class="st-chmeta">${article ? "article" : `${ch.screens.length} screens`}</span></div>`;
+    if (article) {
+      const sheet = document.createElement("div"); sheet.className = `article sheet ${first.cls ?? ""}`;
+      const eb = document.createElement("div"); eb.className = `st-eyebrow ${(first.cls ?? "").includes("cyan") ? "cyan" : ""}`; eb.textContent = first.eyebrow; sheet.appendChild(eb);
+      const h2 = document.createElement("h2"); h2.textContent = first.title; sheet.appendChild(h2);
+      const body = document.createElement("div"); body.className = "article-body"; sheet.appendChild(body);
+      first.body(body);
+      sec.appendChild(sheet);
+    } else {
+      const screen = document.createElement("div");
+      sec.appendChild(screen);
+      if (ch.screens.length === 1) {
+        renderScreen(first, screen);
+      } else {
+        const bar = document.createElement("div");
+        bar.className = "st-deckbar";
+        bar.innerHTML = `<button type="button" class="st-back">Back</button><div class="st-mid"><div class="st-dots"></div><span class="st-barcount"></span></div><button type="button" class="st-next pri">Next</button>`;
+        sec.appendChild(bar);
+        const d: Deck = { ch, i: 0, el: sec, screen, bar };
+        decks.set(ch.id, d);
+        bar.querySelector(".st-back")!.addEventListener("click", () => step(d, -1));
+        bar.querySelector(".st-next")!.addEventListener("click", () => step(d, 1));
+        let tx = 0, ty = 0, inTable = false;
+        sec.addEventListener("touchstart", (e) => { tx = e.touches[0]!.clientX; ty = e.touches[0]!.clientY; inTable = !!(e.target as Element).closest(".tablewrap"); }, { passive: true });
+        sec.addEventListener("touchend", (e) => { if (inTable) return; const dx = e.changedTouches[0]!.clientX - tx, dy = e.changedTouches[0]!.clientY - ty; if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) step(d, dx < 0 ? 1 : -1); }, { passive: true });
+        renderDeck(d);
+      }
+    }
+    root.appendChild(sec);
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = ch.label;
+    b.dataset.chapter = ch.id;
+    b.addEventListener("click", () => go(ch.id, decks.get(ch.id)?.i ?? 0));
+    nav.appendChild(b);
+  }
+
+  // Highlight the chapter at the top of the viewport and keep its chip visible in the rail.
+  const chips = Array.from(nav.querySelectorAll<HTMLButtonElement>("button"));
+  let current = "";
+  const io = new IntersectionObserver((entries) => {
+    const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    const top = visible[0]?.target as HTMLElement | undefined;
+    if (!top || top.dataset.chapter === current) return;
+    current = top.dataset.chapter!;
+    chips.forEach((c) => c.classList.toggle("is-active", c.dataset.chapter === current));
+    const chip = chips.find((c) => c.dataset.chapter === current);
+    if (chip) nav.scrollLeft = Math.max(0, chip.offsetLeft - nav.clientWidth / 2 + chip.offsetWidth / 2);
+    setHash(current, decks.get(current)?.i ?? 0);
+  }, { rootMargin: "-25% 0px -60% 0px", threshold: 0 });
+  root.querySelectorAll<HTMLElement>(".st-chapter").forEach((s) => io.observe(s));
+
+  // Citation chips scroll to the cited bibliography row; every article is already in the page.
+  setCiteHandler((id) => revealSource(id));
+  addEventListener("keydown", (e) => { const d = activeDeck(); if (!d) return; if (e.key === "ArrowRight") step(d, 1); if (e.key === "ArrowLeft") step(d, -1); });
+
+  // deep link: #s=chapter/index or ?s=chapter/index
   const m = /#s=([a-z]+)\/(\d+)/.exec(location.hash);
   const q = new URLSearchParams(location.search).get("s");
   const mm = q ? /^([a-z]+)\/(\d+)$/.exec(q) : null;
   const target = m ?? mm;
-  if (target) go(target[1]!, Number(target[2])); else go(0, 0);
+  if (target && target[1] !== "overview" && target[1] !== "street") requestAnimationFrame(() => go(target[1]!, Number(target[2])));
   (window as unknown as { __flock: unknown }).__flock = { state: { ready: true, mode: "stills", act: -1, acts: [], focusedPart: null }, go, get frame() { return Math.floor(performance.now() / 16); } };
 }

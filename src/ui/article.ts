@@ -1,4 +1,4 @@
-import { myths, economics, sources, products, deployments, partById, hopById, stillById } from "../content";
+import { myths, economics, sources, products, deployments, overview, partById, hopById, stillById } from "../content";
 import { cite, escape } from "../ui/cite";
 
 /**
@@ -26,6 +26,29 @@ function jumpList(items: { id: string; label: string }[]): HTMLElement {
     a.addEventListener("click", (e) => { e.preventDefault(); document.getElementById(it.id)?.scrollIntoView({ behavior: "smooth", block: "start" }); });
     nav.appendChild(a);
   }
+  return nav;
+}
+
+/** The splash contents: one card per section with a one-line description; `hrefFor` maps a section id to its anchor. */
+export function renderContents(host: HTMLElement, hrefFor: (id: string) => string): HTMLElement {
+  const nav = el("nav", "contents");
+  nav.setAttribute("aria-label", "Sections");
+  overview.sections.forEach((sec, i) => {
+    const a = el("a");
+    a.href = hrefFor(sec.id);
+    a.dataset.section = sec.id;
+    a.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${escape(sec.title)}</span><span class="b">${escape(sec.blurb)}</span>`;
+    a.addEventListener("click", (e) => {
+      const target = document.querySelector<HTMLElement>(a.getAttribute("href")!);
+      if (!target) return;
+      e.preventDefault();
+      // Land a few pixels inside the section so the scroll-driven act index reads this section, not the previous one.
+      const top = target.getBoundingClientRect().top + scrollY + 4;
+      scrollTo({ top, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+    nav.appendChild(a);
+  });
+  host.appendChild(nav);
   return nav;
 }
 

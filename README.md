@@ -8,7 +8,7 @@ It is written for a technical audience: installers who need dimensions, mount he
 
 | Act | Content |
 |---|---|
-| 0 · Street | A Flock pole at real scale on a dusk roadside |
+| 0 · Street | The splash: title, lede and a card for every section over the street scene at real scale |
 | Deployments | An article between the street and the pole: documented cameras by city as a bar chart, the largest public contracts by agency and level with values and terms, the public funding behind local contracts, where the records are, and what is not documented |
 | 1 · Pole | Installer callouts: pole, clamps, panel, battery, base, ladder limit; a draggable aim with the published field of view drawn on the road; Flock pole / existing pole / 120 V AC toggle |
 | 2 · Inside | The Falcon V2 enclosure separates and fourteen components explode in order, each with a spec card, part number and vendor |
@@ -22,7 +22,7 @@ Acts 5 to 7 and the Deployments section are plain articles on a paper sheet; the
 
 ## Phones
 
-Screens under 800 px wide (or any screen with `?mode=stills`) get a stepper instead of the 3D scene: one screen per state, with a pre-rendered still on top, the same copy, specs and citations, Back and Next, chapter chips, swipe and arrow keys, and deep links of the form `?s=inside/13`. Claims, Economics and Sources are single scrolling article pages rather than slides (`?s=myths/0`, `?s=economics/0`, `?s=sources/0`), rendered by the same code as the desktop acts (`src/ui/article.ts`). Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the page falls back to the same stills version with a notice; `?fail3d` simulates that.
+Screens under 800 px wide (or any screen with `?mode=stills`) get a scrolling document instead of the 3D scene: an overview with a card for every section, then each chapter in order. Pole, Inside, Power and Data step through pre-rendered stills in place (Back, Next, dots, swipe, arrow keys); Deployments, Claims, Economics and Sources are laid out in full. A sticky chapter rail scrolls to any chapter, and deep links of the form `?s=inside/13` open a chapter at a screen. The articles are rendered by the same code as the desktop acts (`src/ui/article.ts`); the section list comes from `src/content/overview.json`, which also feeds the desktop splash. Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the page falls back to the same stills version with a notice; `?fail3d` simulates that.
 
 The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart.
 

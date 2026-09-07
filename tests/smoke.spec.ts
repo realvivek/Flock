@@ -18,6 +18,10 @@ test("boots, renders, and each act reaches its state", async ({ page }) => {
   await page.goto("/?gl");
   await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
   await expect(page.locator("#status")).toContainText(/webgl2|webgpu/);
+  // Splash: contents cards link to every section
+  await expect(page.locator("#act-0 .contents a")).toHaveCount(8);
+  await page.locator("#act-0 .contents a", { hasText: "Economics" }).click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.act)).toBe(6);
 
   for (let act = 0; act < 8; act++) {
     await scrollToAct(page, act, 0.5);
@@ -83,47 +87,43 @@ test("reduced motion snaps progress to steps", async ({ browser }) => {
   await ctx.close();
 });
 
-test("phones get the stills stepper and never load the 3D engine", async ({ browser }) => {
+test("phones get the scrolling stills document and never load the 3D engine", async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
   await page.goto("/");
-  await page.waitForSelector("#stepper .st-screen h2");
-  await expect(page.locator("#stepper h2")).toContainText("Anatomy of a Flock camera");
-  await page.locator("#st-next").click();
-  await expect(page.locator("#stepper h2")).toContainText("Flock Safety products");
-  await page.locator(".st-chapters button", { hasText: "Inside" }).click();
-  await expect(page.locator(".st-count")).toContainText("1 / 20");
-  await expect(page.locator(".st-figure img")).toHaveAttribute("src", /stills\/explode-0\.webp$/);
-  // deep link into a part
-  await page.goto("/?s=inside/13");
-  await expect(page.locator("#stepper h2")).toContainText("System on module");
-  await page.screenshot({ path: "test-results/mobile-som.png" });
-  // Claims, Economics and Sources are single scrolling articles
-  await page.goto("/?s=myths/0");
+  await page.waitForSelector("#ch-overview h2");
+  await expect(page.locator("#ch-overview h2")).toContainText("Anatomy of a Flock camera");
+  await expect(page.locator("#ch-overview .contents a")).toHaveCount(8);
+  // every section is on the page without stepping
   await expect(page.locator("#stepper .claim")).toHaveCount(21);
-  await expect(page.locator(".st-dots i")).toHaveCount(0);
-  await page.locator("#st-next").click();
-  await expect(page.locator("#stepper h2")).toContainText("Pricing and cost structure");
-  await expect(page.locator("#stepper .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
-  await expect(page.locator("#stepper h3", { hasText: "Installation workforce" })).toBeVisible();
-  // a citation chip opens the Sources page at the cited row
-  await page.goto("/?s=myths/0");
   await expect(page.locator("#stepper .products tbody tr")).toHaveCount(8);
-  const mchip = page.locator("#stepper .cite a").first();
-  const mhref = (await mchip.getAttribute("href"))!;
-  await mchip.click();
-  await expect(page.locator("#stepper h2")).toContainText("Sources");
-  await expect(page.locator(mhref)).toHaveClass(/is-target/);
-  await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, mhref)).toBe(true);
-  expect(await page.evaluate(() => location.hash)).toMatch(/^#s=sources\/0/);
-  await page.goto("/?s=deployments/0");
   await expect(page.locator("#stepper .chart-bars .bar")).toHaveCount(10);
   await expect(page.locator("#stepper .contracts tbody tr")).toHaveCount(10);
-  await page.goto("/?s=sources/0");
   await expect(page.locator("#stepper .src-group")).toHaveCount(4);
-  await expect(page.locator("#stepper .source").first()).toBeVisible();
+  await expect(page.locator("#stepper .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+  // the overview's contents link jumps to a section
+  await page.locator("#ch-overview .contents a", { hasText: "Economics" }).click();
+  await expect.poll(() => page.evaluate(() => Math.abs(document.getElementById("ch-economics")!.getBoundingClientRect().top) < 120)).toBe(true);
+  // the chapter rail scrolls to a chapter; decks step in place
+  await page.locator(".st-chapters button", { hasText: "Inside" }).click();
+  await expect(page.locator("#ch-inside .st-count")).toContainText("1 / 20");
+  await expect(page.locator("#ch-inside .st-figure img")).toHaveAttribute("src", /stills\/explode-0\.webp$/);
+  await page.locator("#ch-inside .st-next").click();
+  await expect(page.locator("#ch-inside .st-count")).toContainText("2 / 20");
+  // deep link into a part
+  await page.goto("/?s=inside/13");
+  await expect(page.locator("#ch-inside h2")).toContainText("System on module");
+  await expect.poll(() => page.evaluate(() => Math.abs(document.getElementById("ch-inside")!.getBoundingClientRect().top) < 120)).toBe(true);
+  await page.screenshot({ path: "test-results/mobile-som.png" });
+  // a citation chip scrolls to the cited bibliography row
+  await page.goto("/?s=myths/0");
+  const mchip = page.locator("#ch-myths .cite a").first();
+  const mhref = (await mchip.getAttribute("href"))!;
+  await mchip.click();
+  await expect(page.locator(mhref)).toHaveClass(/is-target/);
+  await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, mhref)).toBe(true);
   // a bibliography title opens the document in a new tab
   const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#stepper .src-link").first().click()]);
   expect(popup).toBeTruthy();
@@ -136,10 +136,10 @@ test("desktop falls back to the stills version when no 3D engine can start", asy
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/?fail3d");
-  await page.waitForSelector("#stepper .st-screen h2");
+  await page.waitForSelector("#ch-overview h2");
   await expect(page.locator("#stepper .st-notice")).toContainText("stills version");
   await expect(page.locator("#stage")).toBeHidden();
-  await expect(page.locator("#stepper h2")).toContainText("Anatomy of a Flock camera");
+  await expect(page.locator("#ch-overview h2")).toContainText("Anatomy of a Flock camera");
   await page.locator("#stepper .st-notice button").click();
   await expect(page.locator("#stepper .st-notice")).toHaveCount(0);
   expect(errors).toEqual([]);
