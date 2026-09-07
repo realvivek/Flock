@@ -4,7 +4,8 @@
 .st-chhead { display: flex; justify-content: space-between; align-items: baseline; margin: 1.2rem .9rem .3rem; padding-top: .8rem; border-top: 1px solid var(--line); font: 500 11.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
 .st-chmeta { text-transform: none; letter-spacing: 0; }
 .stepper .st-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: .6rem; padding: .6rem .9rem; background: rgba(247,248,246,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-.stepper .st-top .brand { font-size: 13px; }
+.stepper .st-top .brand { font-size: 13px; color: var(--ink); text-decoration: none; }
+.st-totop { margin-left: auto; font: 500 11.5px var(--mono); color: var(--ink-2); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .3rem .6rem; }
 .stepper .st-chapters { position: sticky; top: 2.55rem; z-index: 5; display: flex; gap: .35rem; overflow-x: auto; padding: .5rem .9rem; scrollbar-width: none; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); }
 .stepper .st-chapters::-webkit-scrollbar { display: none; }
 .stepper .st-chapters button { flex: none; font: 500 11.5px var(--mono); color: var(--ink-2); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .35rem .7rem; }

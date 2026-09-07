@@ -66,6 +66,7 @@ export async function startDesktop() {
   let wingBlend = 0;
   let lastInside = -1;
   const railOut = { pos: new Vector3(), target: new Vector3(), fov: 0.7 };
+  let compShift = 0, compZoom = 1;
   const debugView = new URLSearchParams(location.search).get("view");
 
   scene.onBeforeRenderObservable.add(() => {
@@ -84,6 +85,31 @@ export async function startDesktop() {
       }
       // Portrait phones: keep the subject in the top part of the frame, above the text.
       if (engine.getRenderHeight() > engine.getRenderWidth()) { railOut.target.y -= 0.9 + 0.08 * Vector3.Distance(railOut.pos, railOut.target); railOut.fov *= 1.25; }
+      // Exploded view: keep the whole assembly in the free area right of the text panel at any aspect.
+      // A feedback loop shifts the camera sideways and widens the field of view until the projected
+      // anchors of the parts fit; outside act 2 the shift decays back to zero.
+      if (state.act === 2 && innerWidth >= 800) {
+        const box = pins.groupBox("parts");
+        const panelRight = document.querySelector<HTMLElement>("#act-2 .panel")?.getBoundingClientRect().right ?? 0;
+        if (!box) compShift *= 0.9;
+        if (box) {
+          const freeL = panelRight + 60, freeR = innerWidth - 60;
+          const err = (freeL + freeR) / 2 - (box.left + box.right) / 2;
+          const dist = Vector3.Distance(railOut.pos, railOut.target);
+          const worldPerPx = (2 * dist * Math.tan(railOut.fov / 2)) / innerHeight;
+          const span = worldPerPx * innerWidth;
+          compShift = Math.max(-span * 0.5, Math.min(span * 0.5, compShift + err * worldPerPx * 0.3));
+          const width = box.right - box.left;
+          compZoom = Math.max(1, Math.min(1.6, compZoom * (width > (freeR - freeL) * 0.92 ? 1.04 : 0.985)));
+        }
+      } else { compShift *= 0.85; compZoom = 1 + (compZoom - 1) * 0.85; }
+      if (Math.abs(compShift) > 1e-4 || compZoom > 1.001) {
+        const fwd = railOut.target.subtract(railOut.pos).normalize();
+        const right = Vector3.Cross(Vector3.Up(), fwd).normalize();
+        const off = right.scale(compShift);
+        railOut.pos.addInPlace(off); railOut.target.addInPlace(off);
+        railOut.fov *= compZoom;
+      }
       camera.position.copyFrom(railOut.pos);
       camera.setTarget(railOut.target);
       camera.fov = railOut.fov;
@@ -120,7 +146,7 @@ export async function startDesktop() {
 
   let fpDirty = true;
   subscribe((_, changed) => { if (changed.has("aimYaw") || changed.has("aimPitch")) fpDirty = true; });
-  scene.onAfterRenderObservable.add(() => { if (fpDirty) { updateFootprint(world); fpDirty = false; } pins.update(scene, scene.activeCamera ?? camera); });
+  scene.onAfterRenderObservable.add(() => { if (fpDirty) { updateFootprint(world); fpDirty = false; } pins.update(scene, scene.activeCamera ?? camera, innerWidth >= 800 ? (document.querySelector<HTMLElement>(`#act-${state.act} .panel`)?.getBoundingClientRect().right ?? 0) : 0); });
 
   // Debug orbit views for checking the models: ?view=falcon|pole|wing
   if (debugView) {

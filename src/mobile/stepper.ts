@@ -161,11 +161,14 @@ export function initStepper(opts: { notice?: string } = {}): void {
   root.className = "stepper";
   root.id = "stepper";
   root.innerHTML = `
-    <div class="st-top"><span class="brand"><span class="brand-mark"></span> Anatomy of a Flock camera</span></div>
+    <div class="st-top"><a class="brand" href="#top" aria-label="Back to the top"><span class="brand-mark"></span> Anatomy of a Flock camera</a><button type="button" class="st-totop" aria-label="Back to the top">↑ Top</button></div>
     <nav class="st-chapters" aria-label="Chapters"></nav>
     ${opts.notice ? `<p class="st-notice" role="status">${escape(opts.notice)} <button type="button" aria-label="Dismiss">×</button></p>` : ""}`;
   document.body.appendChild(root);
   root.querySelector(".st-notice button")?.addEventListener("click", (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
+  const toTop = (e: Event) => { e.preventDefault(); scrollTo({ top: 0, behavior: "auto" }); };
+  root.querySelector(".st-top .brand")!.addEventListener("click", toTop);
+  root.querySelector(".st-totop")!.addEventListener("click", toTop);
   const nav = root.querySelector<HTMLElement>(".st-chapters")!;
 
   for (const ch of chapters) {

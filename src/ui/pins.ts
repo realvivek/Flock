@@ -24,6 +24,16 @@ export class PinLayer {
   private pins = new Map<string, { spec: PinSpec; el: HTMLDivElement; line: SVGLineElement; dot: SVGCircleElement; visible: boolean; alpha: number; sx: number; sy: number; w: number }>();
   private tmp = new Vector3();
 
+  /** Screen-space extent (CSS px) of the visible anchors in a layout group, from the last update; null if none. */
+  groupBox(group: string): { left: number; right: number; top: number; bottom: number } | null {
+    let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity, n = 0;
+    for (const p of this.pins.values()) {
+      if (p.spec.group !== group || p.alpha < 0.5) continue;
+      left = Math.min(left, p.sx); right = Math.max(right, p.sx); top = Math.min(top, p.sy); bottom = Math.max(bottom, p.sy); n++;
+    }
+    return n ? { left, right, top, bottom } : null;
+  }
+
   add(spec: PinSpec): void {
     if (this.pins.has(spec.id)) return;
     const el = document.createElement("div");
@@ -63,7 +73,8 @@ export class PinLayer {
     for (const p of this.pins.values()) p.visible = false;
   }
 
-  update(scene: Scene, camera: Camera): void {
+  /** `leftBound` is the right edge of the text panel in CSS px; labels are kept to its right. */
+  update(scene: Scene, camera: Camera, leftBound = 0): void {
     const dt = Math.min(0.1, scene.getEngine().getDeltaTime() / 1000);
     const ease = 1 - Math.exp(-dt / 0.12);
     const w = scene.getEngine().getRenderWidth();
@@ -87,31 +98,50 @@ export class PinLayer {
       if (!p.w) p.w = p.el.offsetWidth || 140;
       live.push(p);
     }
-    // Pass 2: layout. Grouped pins get alternating bands above/below with three lanes each, then a nudge
-    // along the band so no two labels overlap. Ungrouped pins use their fixed offsets.
+    // Pass 2: layout. Each grouped pin takes the nearest free slot above or below its own anchor
+    // (alternating sides, up to six lanes, small horizontal shifts), clamped to the viewport and kept
+    // clear of the text panel, so leaders stay short and every label stays on screen. Ungrouped pins
+    // use their fixed offsets, clamped the same way.
+    const H = 26;
+    const minY = 56 + H / 2 + 6, maxY = cssH - H / 2 - 10;
+    const clampX = (x: number, w: number) => Math.max(leftBound + w / 2 + 8, Math.min(cssW - w / 2 - 8, x));
+    const clampY = (y: number) => Math.max(minY, Math.min(maxY, y));
     const placed = new Map<typeof live[number], { lx: number; ly: number }>();
     const groups = new Map<string, typeof live>();
     for (const p of live) {
       if (p.spec.group) { const g = groups.get(p.spec.group) ?? []; g.push(p); groups.set(p.spec.group, g); }
-      else placed.set(p, { lx: narrow ? Math.max(70, Math.min(cssW - 70, p.sx + (p.spec.dx ?? 90) * 0.5)) : p.sx + (p.spec.dx ?? 90), ly: p.sy + (p.spec.dy ?? -60) });
+      else {
+        const lx = narrow ? Math.max(70, Math.min(cssW - 70, p.sx + (p.spec.dx ?? 90) * 0.5)) : clampX(p.sx + (p.spec.dx ?? 90), p.w);
+        placed.set(p, { lx, ly: clampY(p.sy + (p.spec.dy ?? -60)) });
+      }
     }
     for (const g of groups.values()) {
       g.sort((a, b) => a.sx - b.sx);
-      // Bands sit above and below the whole group, so labels never land between parts.
-      let top = Infinity, bottom = -Infinity;
-      for (const p of g) { top = Math.min(top, p.sy); bottom = Math.max(bottom, p.sy); }
-      top = Math.max(60, top); bottom = Math.min(cssH - 40, bottom);
-      const lanes: { above: number[][]; below: number[][] } = { above: [[], [], []], below: [[], [], []] };
+      const rects: { x: number; y: number; w: number }[] = [];
+      const overlaps = (x: number, y: number, w: number) => rects.some((r) => Math.abs(r.x - x) < (r.w + w) / 2 + 8 && Math.abs(r.y - y) < H + 4);
       g.forEach((p, i) => {
-        const above = i % 2 === 0;
-        const lane = Math.floor(i / 2) % 3;
-        const dist = 44 + lane * 32;
-        let lx = Math.max(p.w / 2 + 8, Math.min(cssW - p.w / 2 - 8, p.sx));
-        const row = (above ? lanes.above : lanes.below)[lane]!;
-        const prevRight = row.length ? row[row.length - 1]! : -1e9;
-        if (lx - p.w / 2 < prevRight + 10) lx = prevRight + 10 + p.w / 2;
-        row.push(lx + p.w / 2);
-        placed.set(p, { lx, ly: above ? top - dist : bottom + dist });
+        const sides = i % 2 === 0 ? [-1, 1] : [1, -1];
+        type Slot = { lx: number; ly: number; cost: number };
+        let best: Slot | null = null;
+        for (const side of sides) {
+          for (let lane = 0; lane < 6; lane++) {
+            const ly = p.sy + side * (46 + lane * 30);
+            if (ly < minY || ly > maxY) continue;
+            for (let k = 0; k <= 2; k++) {
+              for (const dir of k === 0 ? [0] : [-1, 1]) {
+                const lx = clampX(p.sx + dir * k * (p.w / 2 + 14), p.w);
+                if (overlaps(lx, ly, p.w)) continue;
+                const cost = lane * 30 + Math.abs(lx - p.sx) * 1.4 + (side === sides[0] ? 0 : 25);
+                if (best === null || cost < (best as Slot).cost) best = { lx, ly, cost };
+              }
+            }
+            if (best !== null && (best as Slot).cost <= lane * 30 + 40) break;
+          }
+          if (best !== null && (best as Slot).cost <= 70) break;
+        }
+        const slot: Slot = best ?? { lx: clampX(p.sx, p.w), ly: clampY(p.sy - 46), cost: 0 };
+        rects.push({ x: slot.lx, y: slot.ly, w: p.w });
+        placed.set(p, { lx: slot.lx, ly: slot.ly });
       });
     }
     for (const p of live) {

@@ -45,7 +45,8 @@ a { color: var(--cyan); }
 
 .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; gap: 1.5rem;
   padding: .75rem 1.25rem; font-size: 13px; background: linear-gradient(to bottom, rgba(247,248,246,.92), rgba(247,248,246,0)); }
-.brand { display: flex; align-items: center; gap: .5rem; font-weight: 600; letter-spacing: .01em; font-family: var(--display); }
+.brand { display: flex; align-items: center; gap: .5rem; font-weight: 600; letter-spacing: .01em; font-family: var(--display); color: var(--ink); text-decoration: none; }
+.nav-top::before { content: "\2191 "; }
 .brand-mark { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); }
 .acts-nav { display: flex; gap: 1rem; margin-left: auto; }
 .acts-nav a { color: var(--ink-3); text-decoration: none; font-family: var(--mono); font-size: 12px; }
