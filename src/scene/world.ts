@@ -49,6 +49,8 @@ export interface World {
   hemi: HemisphericLight;
   setContextAlpha(a: number): void;
   setFalconAlpha(a: number): void;
+  /** Translucent enclosure (bezel and rear shell) for the cutaway view; 1 restores it. */
+  setShellAlpha(a: number): void;
   isolate(id: string | null): void;
   loadAct(name: "wing"): Promise<void>;
 }
@@ -240,6 +242,13 @@ export async function createWorld(engine: AbstractEngine, tier: Tier): Promise<W
     setFalconAlpha(a: number) {
       for (const m of allMeshes(falconC)) { m.visibility = a; ghostMaterial(m, a); }
     },
+    setShellAlpha(a: number) {
+      for (const pid of ["bezel", "rear"]) {
+        const p = parts.get(pid);
+        if (!p) continue;
+        for (const m of p.node.getChildMeshes()) { m.visibility = a; if (m instanceof Mesh) ghostMaterial(m, a); }
+      }
+    },
     isolate(id: string | null) {
       for (const [pid, p] of parts) {
         const on = id === null || pid === id;
@@ -269,10 +278,7 @@ export function explodeAmount(p: number, i: number, n: number): number {
   const local = clamp01((p - e.start) / (e.end - e.start));
   const s = e.stagger;
   const start = (i / Math.max(1, n - 1)) * s;
-  const out = smooth(clamp01((local - start) / (1 - s)));
-  // Re-assemble in the last stretch of the act so the next act sees an intact camera.
-  const back = 1 - smooth(clamp01((p - e.implodeStart) / (1 - e.implodeStart)));
-  return out * back;
+  return smooth(clamp01((local - start) / (1 - s)));
 }
 
 /** Update the footprint quad from the camera's pose and the published field of view. */

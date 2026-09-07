@@ -1,93 +1,140 @@
 import { test, expect } from "@playwright/test";
 
-declare global { interface Window { __flock?: { state: { ready: boolean; act: number; focusedPart: string | null; acts: number[] }; set(p: Record<string, unknown>): void } } }
-
-async function scrollToAct(page: import("@playwright/test").Page, act: number, p: number) {
-  const y = await page.evaluate(({ act, p }) => {
-    const sec = document.querySelectorAll<HTMLElement>("section.act")[act]!;
-    return Math.round(sec.offsetTop + (sec.offsetHeight - innerHeight) * p);
-  }, { act, p });
-  await page.evaluate((y) => { document.documentElement.style.scrollBehavior = "auto"; window.scrollTo({ top: y, behavior: "instant" }); }, y);
-  await page.waitForFunction((y) => Math.abs(scrollY - y) < 2, y);
-  await page.waitForTimeout(400);
+declare global {
+  interface Window {
+    __flock?: {
+      state: { ready: boolean; act: number; tab: string; sub: string; explodeStage: number; dataStage: number; cutaway: boolean; tweening: boolean; focusedPart: string | null; acts: number[] };
+      set(p: Record<string, unknown>): void;
+      go(route: string): void;
+    };
+  }
 }
 
-test("boots, renders, and each act reaches its state", async ({ page }) => {
+const settled = (page: import("@playwright/test").Page) => page.waitForFunction(() => window.__flock!.state.tweening !== true);
+
+test("desktop: tabs, controls and articles", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/?gl");
   await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
   await expect(page.locator("#status")).toContainText(/webgl2|webgpu/);
-  // Splash: contents cards link to every section
-  await expect(page.locator("#act-0 .contents a")).toHaveCount(8);
-  await page.locator("#act-0 .contents a", { hasText: "Economics" }).click();
-  await expect.poll(() => page.evaluate(() => window.__flock!.state.act)).toBe(6);
 
-  for (let act = 0; act < 8; act++) {
-    await scrollToAct(page, act, 0.5);
-    const st = await page.evaluate(() => ({ act: window.__flock!.state.act, p: window.__flock!.state.acts[window.__flock!.state.act] }));
-    expect(st.act).toBe(act);
-    expect(st.p).toBeGreaterThan(0.3);
-    await page.screenshot({ path: `test-results/act-${act}.png` });
-  }
+  // Overview: one screen, no page scroll, a card for every section
+  await expect(page.locator("body")).toHaveClass(/is-tabs/);
+  await expect(page.locator("#view-overview")).toBeVisible();
+  await expect(page.locator("#view-overview .contents a")).toHaveCount(8);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1)).toBe(true);
 
-  // Exploded view: focusing a part shows its spec card
-  await scrollToAct(page, 2, 0.5);
-  await page.locator("#part-list button", { hasText: "System on module" }).click();
+  // A contents card opens its tab; the scene stops on article tabs
+  await page.locator("#view-overview .contents a", { hasText: "Economics" }).click();
+  await expect(page.locator("#view-economics")).toBeVisible();
+  await expect(page.locator("#view-overview")).toBeHidden();
+  await expect(page.locator("body")).not.toHaveClass(/is-3d/);
+  expect(await page.evaluate(() => location.hash)).toBe("#/economics");
+  await expect(page.locator("#view-economics .econ-block table").first()).toBeVisible();
+  await expect(page.locator("#view-economics .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+
+  // The brand returns home
+  await page.locator(".topbar .brand").click();
+  await expect(page.locator("#view-overview")).toBeVisible();
+  await expect(page.locator("body")).toHaveClass(/is-3d/);
+
+  // Hardware: Pole sub-tab with mount and view chips
+  await page.locator(".tabs a", { hasText: "Hardware" }).click();
+  await expect(page.locator("#view-hardware .panel[data-sub=pole]")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.act)).toBe(1);
+  await page.locator("[data-view=fov]").click();
+  await settled(page);
+
+  // Inside: explode stages, cards, badges, spec card
+  await page.locator(".subtabs a", { hasText: "Inside" }).click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.act)).toBe(2);
+  await expect(page.locator("#callouts-left .callout")).toHaveCount(8);
+  await expect(page.locator("#callouts-right .callout")).toHaveCount(6);
+  await page.locator("#explode-stage").fill("5");
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.explodeStage)).toBe(5);
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.acts[2]), { timeout: 5000 }).toBe(1);
+  await settled(page);
+  await expect(page.locator("#pins .pin.badge.is-visible")).toHaveCount(14);
+  await page.screenshot({ path: "test-results/inside-5.png" });
+  await page.locator(".callout", { hasText: "System on module" }).click();
   await expect(page.locator("#spec-card")).toBeVisible();
   await expect(page.locator("#spec-card")).toContainText("Open-Q 624A");
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#spec-card")).toBeHidden();
+  await page.locator("[data-inside=cutaway]").click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.cutaway)).toBe(true);
+  await expect(page.locator("#explode-row")).toBeHidden();
+  await page.locator("[data-inside=exploded]").click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.cutaway)).toBe(false);
 
-  // Data act: the deputy form writes a readout
-  await scrollToAct(page, 4, 0.7);
+  // Power sub-tab
+  await page.locator(".subtabs a", { hasText: "Power" }).click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.act)).toBe(3);
+  await page.locator("[data-path=wing]").click();
+  await expect(page.locator("#path-facts")).toContainText(/SFP|PoE/);
+
+  // Data: hop list drives the stage; deputy form writes a readout
+  await page.locator(".tabs a", { hasText: "Data" }).click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.act)).toBe(4);
+  await page.locator("#hops li").nth(9).click();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.dataStage)).toBe(10);
+  await expect(page.locator("#data-readout")).toContainText("Stage 10 of 12");
   await page.fill("#deputy-reason", "investigation");
   await page.locator("#deputy-form button").click();
   await expect(page.locator("#deputy-readout")).toContainText("6,809");
 
-  // The deployments article sits between the street and the pole; the scene fades while it is in view
-  await page.evaluate(() => document.getElementById("deployments")!.scrollIntoView({ behavior: "instant", block: "center" }));
-  await expect(page.locator("#deployments .chart-bars .bar")).toHaveCount(10);
-  await expect(page.locator("#deployments .contracts tbody tr")).toHaveCount(10);
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById("stage")!).opacity)).toBe("0");
+  // Claims: product line, 21 claims; a component link opens the Inside stage with the part isolated
+  await page.locator(".tabs a", { hasText: "Claims" }).click();
+  await expect(page.locator("#view-claims .products tbody tr")).toHaveCount(8);
+  await expect(page.locator("#view-claims .claim")).toHaveCount(21);
+  await page.locator("#view-claims .claim button", { hasText: /^Component/ }).first().click();
+  await expect(page.locator("#view-hardware")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__flock!.state.explodeStage)).toBe(5);
+  await expect(page.locator("#spec-card")).toBeVisible();
 
-  // Acts 5 to 7 are articles: the scene fades out, the product line and the claims list are complete
-  await scrollToAct(page, 5, 0.5);
-  await expect(page.locator("#act-5 .products tbody tr")).toHaveCount(8);
-  await expect(page.locator("#act-5 .article .claim")).toHaveCount(21);
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById("stage")!).opacity)).toBe("0");
-  await scrollToAct(page, 6, 0.3);
-  await expect(page.locator("#act-6 .econ-block table").first()).toBeVisible();
-  await expect(page.locator("#act-6 .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+  // Deployments article
+  await page.locator(".tabs a", { hasText: "Deployments" }).click();
+  await expect(page.locator("#deployments-body .chart-bars .bar")).toHaveCount(10);
+  await expect(page.locator("#deployments-body .contracts tbody tr")).toHaveCount(10);
 
-  // A citation chip scrolls to its bibliography row and flashes it
-  await scrollToAct(page, 1, 0.5);
-  const chip = page.locator("#install-facts .cite a").first();
+  // A citation chip opens Sources at its row and flashes it
+  const chip = page.locator("#deployments-body .cite a").first();
   const href = (await chip.getAttribute("href"))!;
   await chip.click();
+  await expect(page.locator("#view-sources")).toBeVisible();
   await expect(page.locator(href)).toHaveClass(/is-target/);
   await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, href)).toBe(true);
-  expect(await page.evaluate(() => location.hash)).toBe(href);
 
-  // Sources render and every citation chip resolves to a bibliography row
+  // Every citation chip resolves to a bibliography row
   const missing = await page.evaluate(() => {
     const ids = new Set([...document.querySelectorAll(".source")].map((r) => r.id));
     return [...document.querySelectorAll<HTMLAnchorElement>(".cite a")].map((a) => a.getAttribute("href")!.slice(1)).filter((h) => !ids.has(h));
   });
   expect(missing).toEqual([]);
+
+  // Back returns to the previous tab; legacy links still resolve
+  await page.goBack();
+  await expect(page.locator("#view-deployments")).toBeVisible();
+  await page.goto("/?gl#act-2");
+  await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
+  await expect(page.locator("#view-hardware")).toBeVisible();
+  expect(await page.evaluate(() => window.__flock!.state.sub)).toBe("inside");
   expect(errors).toEqual([]);
 });
 
-test("reduced motion snaps progress to steps", async ({ browser }) => {
+test("reduced motion: stage changes apply instantly", async ({ browser }) => {
   const ctx = await browser.newContext({ reducedMotion: "reduce" });
   const page = await ctx.newPage();
-  await page.goto("/?gl");
+  await page.goto("/?gl#/hardware/inside");
   await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
-  await scrollToAct(page, 1, 0.37);
-  const p = await page.evaluate(() => window.__flock!.state.acts[1]);
-  expect([0, 0.25, 0.5, 0.75, 1]).toContain(p);
+  await page.evaluate(() => window.__flock!.set({ explodeStage: 3 }));
+  await page.waitForTimeout(100);
+  expect(await page.evaluate(() => window.__flock!.state.acts[2])).toBeCloseTo(0.6, 5);
   await ctx.close();
 });
 
-test("phones get the scrolling stills document and never load the 3D engine", async ({ browser }) => {
+test("phones get the same tabs as stills and never load the 3D engine", async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();
   const requests: string[] = [];
@@ -96,49 +143,59 @@ test("phones get the scrolling stills document and never load the 3D engine", as
   await page.waitForSelector("#ch-overview h2");
   await expect(page.locator("#ch-overview h2")).toContainText("Anatomy of a Flock camera");
   await expect(page.locator("#ch-overview .contents a")).toHaveCount(8);
-  // every section is on the page without stepping
-  await expect(page.locator("#stepper .claim")).toHaveCount(21);
-  await expect(page.locator("#stepper .products tbody tr")).toHaveCount(8);
-  await expect(page.locator("#stepper .chart-bars .bar")).toHaveCount(10);
-  await expect(page.locator("#stepper .contracts tbody tr")).toHaveCount(10);
-  await expect(page.locator("#stepper .src-group")).toHaveCount(4);
-  await expect(page.locator("#stepper .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
-  // the overview's contents link jumps to a section
+  await expect(page.locator("#ch-economics")).toBeHidden();
+  // a contents card opens a tab
   await page.locator("#ch-overview .contents a", { hasText: "Economics" }).click();
-  await expect.poll(() => page.evaluate(() => Math.abs(document.getElementById("ch-economics")!.getBoundingClientRect().top) < 120)).toBe(true);
-  // the chapter rail scrolls to a chapter; decks step in place
+  await expect(page.locator("#ch-economics")).toBeVisible();
+  await expect(page.locator("#ch-overview")).toBeHidden();
+  await expect(page.locator("#ch-economics .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+  expect(await page.evaluate(() => location.hash)).toBe("#/economics");
+  // the chip rail switches tabs; decks step in place and write the screen into the hash
   await page.locator(".st-chapters button", { hasText: "Inside" }).click();
+  await expect(page.locator("#ch-inside")).toBeVisible();
   await expect(page.locator("#ch-inside .st-count")).toContainText("1 / 20");
   await expect(page.locator("#ch-inside .st-figure img")).toHaveAttribute("src", /stills\/explode-0\.webp$/);
   await page.locator("#ch-inside .st-next").click();
   await expect(page.locator("#ch-inside .st-count")).toContainText("2 / 20");
-  // deep link into a part
+  expect(await page.evaluate(() => location.hash)).toBe("#/inside/1");
+  // articles are complete
+  await page.locator(".st-chapters button", { hasText: "Claims" }).click();
+  await expect(page.locator("#ch-claims .claim")).toHaveCount(21);
+  await expect(page.locator("#ch-claims .products tbody tr")).toHaveCount(8);
+  await page.locator(".st-chapters button", { hasText: "Deployments" }).click();
+  await expect(page.locator("#ch-deployments .chart-bars .bar")).toHaveCount(10);
+  await expect(page.locator("#ch-deployments .contracts tbody tr")).toHaveCount(10);
+  // deep links, new and legacy
+  await page.goto("/#/inside/13");
+  await expect(page.locator("#ch-inside h2")).toContainText("System on module");
   await page.goto("/?s=inside/13");
   await expect(page.locator("#ch-inside h2")).toContainText("System on module");
-  await expect.poll(() => page.evaluate(() => Math.abs(document.getElementById("ch-inside")!.getBoundingClientRect().top) < 120)).toBe(true);
   await page.screenshot({ path: "test-results/mobile-som.png" });
-  // a citation chip scrolls to the cited bibliography row
-  await page.goto("/?s=myths/0");
-  const mchip = page.locator("#ch-myths .cite a").first();
+  // a citation chip opens Sources at the cited row
+  await page.goto("/#/claims");
+  const mchip = page.locator("#ch-claims .cite a").first();
   const mhref = (await mchip.getAttribute("href"))!;
   await mchip.click();
+  await expect(page.locator("#ch-sources")).toBeVisible();
   await expect(page.locator(mhref)).toHaveClass(/is-target/);
   await expect.poll(() => page.evaluate((h) => { const r = document.querySelector(h)!.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; }, mhref)).toBe(true);
+  await expect(page.locator("#ch-sources .src-group")).toHaveCount(4);
   // a bibliography title opens the document in a new tab
-  const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#stepper .src-link").first().click()]);
+  const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#ch-sources .src-link").first().click()]);
   expect(popup).toBeTruthy();
   await popup.close();
   expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
 });
 
-test("desktop falls back to the stills version when no 3D engine can start", async ({ page }) => {
+test("desktop falls back to the stills tabs when no 3D engine can start", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/?fail3d");
   await page.waitForSelector("#ch-overview h2");
   await expect(page.locator("#stepper .st-notice")).toContainText("stills version");
   await expect(page.locator("#stage")).toBeHidden();
+  await expect(page.locator("body")).not.toHaveClass(/is-tabs/);
   await expect(page.locator("#ch-overview h2")).toContainText("Anatomy of a Flock camera");
   await page.locator("#stepper .st-notice button").click();
   await expect(page.locator("#stepper .st-notice")).toHaveCount(0);

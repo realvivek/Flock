@@ -6,7 +6,7 @@ import type { DataViz } from "../scene/dataviz";
 import { state, set, subscribe } from "../store";
 import { clamp01, window01, smooth } from "../lib/math";
 
-/** Act 4: the data journey. Hop stepper synced to scroll, retention slider, deputy search, and the 3D packet. */
+/** Data tab: twelve-stage stepper, retention slider, network-search example, and the 3D packet. */
 export function initAct4(world: World, viz: DataViz, pins: PinLayer): void {
   const list = document.getElementById("hops")!;
   const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
@@ -28,9 +28,25 @@ export function initAct4(world: World, viz: DataViz, pins: PinLayer): void {
         </div>
       </div>`;
     li.querySelector(".body")!.appendChild(cite(h.sources));
+    li.addEventListener("click", (e) => { if ((e.target as Element).closest("a, button")) return; set({ dataStage: h.n }); });
     list.appendChild(li);
     items.push(li);
   }
+  const stageInput = document.getElementById("data-stage") as HTMLInputElement;
+  const stageReadout = document.getElementById("data-readout")!;
+  const setStage = (n: number) => set({ dataStage: Math.max(1, Math.min(hops.length, Math.round(n))) });
+  stageInput.addEventListener("input", () => setStage(Number(stageInput.value)));
+  document.getElementById("data-prev")!.addEventListener("click", () => setStage(state.dataStage - 1));
+  document.getElementById("data-next")!.addEventListener("click", () => setStage(state.dataStage + 1));
+  const renderStage = () => {
+    const h = hops[state.dataStage - 1] ?? hops[0]!;
+    stageInput.value = String(state.dataStage);
+    stageReadout.textContent = `Stage ${String(state.dataStage).padStart(2, "0")} of ${hops.length} · ${h.title} · ${h.where}`;
+    (document.getElementById("data-prev") as HTMLButtonElement).disabled = state.dataStage <= 1;
+    (document.getElementById("data-next") as HTMLButtonElement).disabled = state.dataStage >= hops.length;
+    setActive(state.act === 4 ? state.dataStage - 1 : -1);
+    items[state.dataStage - 1]?.scrollIntoView({ block: "nearest", behavior: state.reducedMotion ? "auto" : "smooth" });
+  };
   let active = -1;
   const setActive = (i: number) => {
     if (i === active) return;
@@ -74,20 +90,20 @@ export function initAct4(world: World, viz: DataViz, pins: PinLayer): void {
 
   subscribe((s, changed) => {
     if (changed.has("retentionIndex")) renderRetention();
+    if (changed.has("dataStage")) renderStage();
     if (changed.has("act")) {
       const on = s.act === 4;
       viz.setVisible(on);
       pins.show("p4-cloud", false); pins.show("p4-phone", false); pins.show("p4-camera", false);
-      if (!on) setActive(-1);
+      if (!on) setActive(-1); else renderStage();
     }
   });
   renderRetention();
+  renderStage();
 
   world.scene.onBeforeRenderObservable.add(() => {
     if (state.act !== 4) return;
     const p4 = state.acts[4] ?? 0;
-    const idx = Math.min(hops.length - 1, Math.floor(clamp01((p4 - 0.04) / 0.82) * hops.length));
-    setActive(p4 < 0.02 ? -1 : idx);
     viz.setPacketProgress(p4, world.mount.getAbsolutePosition());
     pins.show("p4-camera", p4 > 0.03 && p4 < 0.3);
     pins.show("p4-cloud", p4 > 0.3 && p4 < 0.6);

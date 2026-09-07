@@ -1,28 +1,30 @@
 # Anatomy of a Flock camera
 
-A scroll-driven 3D reference for a Flock Safety license plate reader: the pole and mount, the enclosure and each component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms. All copy states facts from cited public documents.
+A 3D reference for a Flock Safety license plate reader: the pole and mount, the enclosure and each component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms. All copy states facts from cited public documents.
 
 It is written for a technical audience: installers who need dimensions, mount heights and power options; residents and officials who need to know what is collected, who can access it, and what it costs; and anyone checking a claim against the record.
 
 ## What is in it
 
-| Act | Content |
-|---|---|
-| 0 · Street | The splash: title, lede and a card for every section over the street scene at real scale |
-| Deployments | An article between the street and the pole: documented cameras by city as a bar chart, the largest public contracts by agency and level with values and terms, the public funding behind local contracts, where the records are, and what is not documented |
-| 1 · Pole | Installer callouts: pole, clamps, panel, battery, base, ladder limit; a draggable aim with the published field of view drawn on the road; Flock pole / existing pole / 120 V AC toggle |
-| 2 · Inside | The Falcon V2 enclosure separates and fourteen components explode in order, each with a spec card, part number and vendor |
-| 3 · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used, with cutaways |
-| 4 · Data | One detection traced through twelve stages from capture to deletion, a retention slider, and a network search example reproducing the counts from one documented query |
-| 5 · Claims | A single-column article: the product line (Falcon, Flex, Sparrow, Condor, Raven, Wing, Alpha, Nova) as a table, then twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
-| 6 · Economics | An article: items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
-| 7 · Sources | An article: all sources grouped by origin, with the date each was last checked |
+The site is a set of tabs; nothing scrolls across sections, and the brand or the Overview tab returns home from anywhere. The 3D tabs are driven by controls rather than by scrolling.
 
-Acts 5 to 7 and the Deployments section are plain articles on a paper sheet; the 3D scene fades out behind them and stops rendering.
+| Tab | Content |
+|---|---|
+| Overview | Title, lede and a card for every section, over the street scene at real scale |
+| Deployments | An article: documented cameras by city as a bar chart, the largest public contracts by agency and level with values and terms, the public funding behind local contracts, where the records are, and what is not documented |
+| Hardware · Pole and mount | Installer callouts: pole, clamps, panel, battery, base; Flock pole / existing pole / 120 V AC toggle; a Mount / Field of view camera toggle and yaw and pitch sliders, with the published field of view drawn on the road |
+| Hardware · Inside the enclosure | The Falcon V2 in an Exploded view with a six-stage slider, or a Cutaway with a translucent shell. Fourteen numbered badges on the model match fourteen callout cards in two columns (rear-half parts left, optics right), each with a part still, one thin leader coloured by group and a two-way hover highlight; selecting a card or a badge isolates the part and opens its spec card with part number, vendor and sources |
+| Hardware · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used, with cutaways |
+| Data | One detection traced through twelve stages from capture to deletion, stepped with a slider or by selecting a stage; a retention slider; a network search example reproducing the counts from one documented query |
+| Claims | An article: the product line (Falcon, Flex, Sparrow, Condor, Raven, Wing, Alpha, Nova) as a table, then twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
+| Economics | An article: items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
+| Sources | An article: all sources grouped by origin, with the date each was last checked |
+
+Routes are hashes: `#/overview`, `#/deployments`, `#/hardware/pole|inside|power`, `#/data`, `#/claims`, `#/economics`, `#/sources`, with an optional index (`#/hardware/inside/5` opens the Inside stage at explode stage 5, `#/data/10` the Data tab at stage 10) or anchor (`#/sources/src-<id>`). Tab changes are history entries, so Back returns to the previous tab. The older `#act-N`, `#src-<id>`, `#claim-<id>` and `?s=<chapter>/<i>` links still resolve.
 
 ## Phones
 
-Screens under 800 px wide (or any screen with `?mode=stills`) get a scrolling document instead of the 3D scene: an overview with a card for every section, then each chapter in order. Pole, Inside, Power and Data step through pre-rendered stills in place (Back, Next, dots, swipe, arrow keys); Deployments, Claims, Economics and Sources are laid out in full. A sticky chapter rail scrolls to any chapter, and deep links of the form `?s=inside/13` open a chapter at a screen. The articles are rendered by the same code as the desktop acts (`src/ui/article.ts`); the section list comes from `src/content/overview.json`, which also feeds the desktop splash. Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the page falls back to the same stills version with a notice; `?fail3d` simulates that.
+Screens under 800 px wide (or any screen with `?mode=stills`) get the same tabs built from pre-rendered stills instead of the 3D scene: Overview, Deployments, Pole, Inside, Power, Data, Claims, Economics, Sources. One tab is shown at a time; Pole, Inside, Power and Data step through stills in place (Back, Next, dots, swipe, arrow keys) and write the screen into the hash (`#/inside/13` is the System on module), while Deployments, Claims, Economics and Sources are laid out in full. The articles are rendered by the same code as the desktop tabs (`src/ui/article.ts`); the section list comes from `src/content/overview.json`, which also feeds the desktop overview. Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the page falls back to the same stills tabs with a notice; `?fail3d` simulates that.
 
 The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart.
 
@@ -46,7 +48,7 @@ npm run preview    # serves dist/ at http://127.0.0.1:4173
 npm test           # Playwright smoke test against the preview server
 ```
 
-Debug views for checking the models: `?view=falcon`, `?view=pole`, `?view=wing` (orbit with `a`, `b`, `r` for alpha, beta, radius). Presets for screenshots: `?pole=existing|ac`, `?path=solar|ac|wing`, `?focus=<part id>`, `?aim=<yaw>,<pitch>`, `?gl` forces WebGL2, `?mode=stills|3d` forces the phone or desktop path. `scripts/shoot.mjs` captures screenshots headlessly; stops are page fractions or `act:progress`.
+Debug views for checking the models: `?view=falcon`, `?view=pole`, `?view=wing` (orbit with `a`, `b`, `r` for alpha, beta, radius). Presets for screenshots: `?pole=existing|ac`, `?path=solar|ac|wing`, `?focus=<part id>`, `?aim=<yaw>,<pitch>`, `?gl` forces WebGL2, `?mode=stills|3d` forces the phone or desktop path. `scripts/shoot.mjs` captures screenshots headlessly; stops are routes with an optional state, for example `hardware/inside:5`, `hardware/inside:cut`, `data:10`, `economics`. Camera presets per tab state live in `src/content/animation.json` under `views`.
 
 ## Models
 
@@ -61,7 +63,7 @@ Part naming follows the content file (`falcon.ledboard`, `falcon.som`, and so on
 
 ## Stack
 
-Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback), GSAP ScrollTrigger for scroll scrubbing, Zod for content validation, Playwright for the smoke tests. Text lives in the DOM for accessibility and search; the canvas only carries the scene. `prefers-reduced-motion` switches the scroll scrub to stepped states. The ground is a white blueprint sheet: a faint blue hairline grid with dotted majors on the page, and the same grid on the scene floor so the two read as one surface. Type is Archivo for headings, IBM Plex Sans for body and IBM Plex Mono for labels.
+Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback), a small hash router, Zod for content validation, Playwright for the smoke tests. Text lives in the DOM for accessibility and search; the canvas only carries the scene. Camera moves and stage changes are 600 ms eased tweens; `prefers-reduced-motion` makes them instant. The ground is a white blueprint sheet: a faint blue hairline grid with dotted majors on the page, and the same grid on the scene floor so the two read as one surface. Type is Archivo for headings, IBM Plex Sans for body and IBM Plex Mono for labels.
 
 ## Deploy
 

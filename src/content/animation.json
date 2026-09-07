@@ -1,5 +1,5 @@
 {
-  "$comment": "Camera rail. World keys are metres: pole base at the origin, Y up, road toward +Z (near edge z=3), traffic toward +X. frame:'falcon' keys are in the Falcon body's local frame (x right, y up, z toward the lens, origin at the body centre). t is global progress; act i spans [i/8, (i+1)/8].",
+  "$comment": "Camera rail. World keys are metres: pole base at the origin, Y up, road toward +Z (near edge z=3), traffic toward +X. frame:'falcon' keys are in the Falcon body's local frame (x right, y up, z toward the lens, origin at the body centre). t is a position on the rail in eighths (act i owns [i/8, (i+1)/8]); 'views' names the preset t for each tab state.",
   "camera": [
     {
       "t": 0.0,
@@ -89,8 +89,8 @@
       "t": 0.2502,
       "pos": [
         -0.95,
-        0.18,
-        0.62
+        0.22,
+        0.7
       ],
       "target": [
         0.0,
@@ -101,48 +101,63 @@
       "frame": "falcon"
     },
     {
-      "t": 0.28,
+      "t": 0.262,
       "pos": [
-        -1.75,
-        0.34,
-        0.25
+        -0.72,
+        0.16,
+        0.5
       ],
       "target": [
         0.0,
-        0.02,
-        -0.04
+        0.0,
+        0.02
       ],
-      "fov": 38,
+      "fov": 32,
+      "frame": "falcon"
+    },
+    {
+      "t": 0.28,
+      "pos": [
+        -1.3,
+        0.4,
+        0.9
+      ],
+      "target": [
+        0.0,
+        0.06,
+        -0.03
+      ],
+      "fov": 37,
       "frame": "falcon"
     },
     {
       "t": 0.35,
       "pos": [
-        -1.9,
-        0.36,
-        -0.05
+        -1.7,
+        0.62,
+        1.12
       ],
       "target": [
         0.0,
-        0.0,
+        0.1,
         -0.08
       ],
-      "fov": 40,
+      "fov": 38,
       "frame": "falcon"
     },
     {
       "t": 0.3754,
       "pos": [
-        -1.5,
-        0.5,
-        -0.6
+        -1.9,
+        0.72,
+        1.28
       ],
       "target": [
         0.0,
-        -0.05,
-        -0.12
+        0.12,
+        -0.1
       ],
-      "fov": 40,
+      "fov": 38,
       "frame": "falcon"
     },
     {
@@ -314,11 +329,10 @@
     "fov": 40
   },
   "explode": {
-    "$comment": "Explosion is driven by act 2 progress. Part order and offsets live in components.json; this holds timing.",
-    "start": 0.08,
-    "end": 0.62,
+    "$comment": "Explosion amount is acts[2] = stage/5. Part order and offsets live in components.json; this holds timing.",
+    "start": 0.0,
+    "end": 1.0,
     "stagger": 0.55,
-    "implodeStart": 0.86,
     "scale": 1.6
   },
   "cloud": [
@@ -330,5 +344,21 @@
     5.0,
     1.25,
     -1.2
-  ]
+  ],
+  "views": {
+    "$comment": "Preset rail positions per view. Keys 0.2502 to 0.3754 are falcon-frame; every preset sits on or between keys of one frame. 'cutaway' is the closer assembled view used when the shell is made translucent.",
+    "overview": 0.0,
+    "pole": 0.1663,
+    "poleFov": 0.2013,
+    "inside": [
+      0.2502,
+      0.3754
+    ],
+    "power": 0.455,
+    "data": [
+      0.5425,
+      0.6247
+    ],
+    "cutaway": 0.262
+  }
 }

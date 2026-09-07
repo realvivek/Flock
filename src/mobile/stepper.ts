@@ -1,7 +1,8 @@
 import "./stepper.css";
-import { components, install, dataflow, economics, overview, stillById, partById } from "../content";
+import { components, install, dataflow, economics, overview, stillById, partById, EXPLODE_STAGES } from "../content";
 import { cite, escape, tag, setCiteHandler } from "../ui/cite";
 import { renderClaims, renderEconomics, renderSources, renderDeployments, renderContents, revealSource } from "../ui/article";
+import { wireRouter, navigate, parseRoute, routeForChapter, chapterFor, hashFor, type Route } from "../router";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
@@ -43,7 +44,7 @@ function buildChapters(): Chapter[] {
   const chapters: Chapter[] = [];
 
   chapters.push({ id: "overview", label: "Overview", screens: [
-    { eyebrow: "Reference", title: "Anatomy of a Flock camera", figure: { still: "pole-flock", alt: "A Flock camera on its pole" }, cls: "st-overview", body: (h) => { p(h, overview.intro.lede); renderContents(h, (id) => `#ch-${id}`); p(h, overview.intro.sources, true); } },
+    { eyebrow: "Reference", title: "Anatomy of a Flock camera", figure: { still: "pole-flock", alt: "A Flock camera on its pole" }, cls: "st-overview", body: (h) => { p(h, overview.intro.lede); renderContents(h, (id) => hashFor(routeForChapter(id), true)); p(h, overview.intro.sources, true); } },
   ]});
 
   const modeScreens: Screen[] = (["flock", "existing", "ac"] as const).map((m) => ({
@@ -55,7 +56,7 @@ function buildChapters(): Chapter[] {
   chapters.push({ id: "pole", label: "Pole", screens: modeScreens });
 
   const inside: Screen[] = [];
-  const stageCopy = ["Assembled: 8.75 in tall, about 3 lb, band-clamped to the pole.", "Stage 1: bezel and illuminator ring.", "Stage 2: lens, mechanical IR-cut filter and image sensor.", "Stage 3: system on module, storage and LTE module lifted from the mainboard.", "Stage 4: Wi-Fi and Bluetooth module, GPS patch and rear shell.", "Stage 5: all fourteen components, front to back."];
+  const stageCopy = EXPLODE_STAGES.map((s) => s.copy);
   for (let k = 0; k <= 5; k++) inside.push({ eyebrow: "02 · Inside the enclosure", title: k === 0 ? "Components, front to back" : `Stage ${k} of 5`, figure: { still: `explode-${k}`, alt: `Exploded view stage ${k}` }, body: (h) => { p(h, stageCopy[k]!); if (k === 5) { const chips = document.createElement("div"); chips.className = "st-chips"; parts.forEach((pt, i) => { const b = document.createElement("button"); b.textContent = `${String(pt.order).padStart(2, "0")} ${pt.name}`; b.addEventListener("click", () => go("inside", 6 + i)); chips.appendChild(b); }); h.appendChild(chips); } } });
   for (const pt of parts) inside.push({ eyebrow: `02 · Inside · part ${String(pt.order).padStart(2, "0")} of 14`, title: pt.name, figure: { still: `part-${pt.id}`, alt: pt.name }, body: (h) => { if (pt.partNumber) p(h, `${pt.partNumber}${pt.vendor ? " · " + pt.vendor : ""}`, true); p(h, pt.function); kv(h, Object.entries(pt.spec)); h.appendChild(cite(pt.sources)); } });
   chapters.push({ id: "inside", label: "Inside", screens: inside });
@@ -68,7 +69,7 @@ function buildChapters(): Chapter[] {
   chapters.push({ id: "data", label: "Data", screens: data });
 
   // Claims, Economics and Sources are single scrolling articles, shared with the desktop acts.
-  chapters.push({ id: "myths", label: "Claims", screens: [{ eyebrow: "05 · Common claims", title: "Common claims and the public record", cls: "st-article cyan", body: (h) => renderClaims(h, {
+  chapters.push({ id: "claims", label: "Claims", screens: [{ eyebrow: "05 · Common claims", title: "Common claims and the public record", cls: "st-article cyan", body: (h) => renderClaims(h, {
     onPart: (id) => { const pt = partById.get(id); if (pt) go("inside", 6 + parts.findIndex((x) => x.id === pt.id)); },
     onHop: (n) => go("data", n - 1),
   }) }] });
@@ -80,10 +81,11 @@ function buildChapters(): Chapter[] {
 let chapters: Chapter[] = [];
 let root: HTMLElement;
 
-/** A multi-screen chapter shown one screen at a time inside the scrolling page, with its own Back, Next, dots and count. */
+/** A multi-screen chapter shown one screen at a time, with its own Back, Next, dots and count. */
 interface Deck { ch: Chapter; i: number; el: HTMLElement; screen: HTMLElement; bar: HTMLElement }
 const decks = new Map<string, Deck>();
 const chapterEl = (id: string) => document.getElementById(`ch-${id}`);
+let current = "";
 
 function renderScreen(sc: Screen, host: HTMLElement, count?: string): void {
   host.innerHTML = "";
@@ -113,62 +115,65 @@ function renderDeck(d: Deck): void {
   (d.bar.querySelector(".st-next") as HTMLButtonElement).disabled = d.i === n - 1;
 }
 
-function setHash(chapterId: string, i: number): void {
-  history.replaceState(null, "", `#s=${chapterId}/${i}`);
+/** Show one chapter (a tab) at screen `index`; every other chapter is hidden. Article chapters ignore the index. */
+function show(chapterId: string, index?: number): void {
+  const ch = chapters.find((x) => x.id === chapterId) ?? chapters[0]!;
+  const changed = ch.id !== current;
+  current = ch.id;
+  for (const c of chapters) { const el = chapterEl(c.id); if (el) el.hidden = c.id !== ch.id; }
+  const chips = root.querySelectorAll<HTMLButtonElement>(".st-chapters button");
+  chips.forEach((c) => { c.classList.toggle("is-active", c.dataset.chapter === ch.id); c.setAttribute("aria-selected", String(c.dataset.chapter === ch.id)); });
+  const nav = root.querySelector<HTMLElement>(".st-chapters")!;
+  const chip = Array.from(chips).find((c) => c.dataset.chapter === ch.id);
+  if (chip) nav.scrollLeft = Math.max(0, chip.offsetLeft - nav.clientWidth / 2 + chip.offsetWidth / 2);
+  const d = decks.get(ch.id);
+  if (d && index !== undefined) { const i = Math.max(0, Math.min(ch.screens.length - 1, index)); if (i !== d.i || changed) { d.i = i; renderDeck(d); } }
+  if (changed) scrollTo({ top: 0, behavior: "auto" });
 }
 
-/** Show screen `index` of a chapter and scroll the chapter into view. Article chapters ignore the index. */
-function go(chapterId: string | number, index = 0, scroll = true): void {
-  const ch = typeof chapterId === "number" ? chapters[chapterId] : chapters.find((x) => x.id === chapterId) ?? (chapterId === "street" ? chapters[0] : undefined);
+/** Navigate to a chapter (and screen). Chapter changes push history; screen steps replace it. */
+function go(chapterId: string | number, index = 0): void {
+  const ch = typeof chapterId === "number" ? chapters[chapterId] : chapters.find((x) => x.id === chapterId) ?? (chapterId === "street" || chapterId === "myths" ? chapters.find((x) => x.id === (chapterId === "myths" ? "claims" : "overview")) : undefined);
   if (!ch) return;
-  const d = decks.get(ch.id);
-  if (d) { d.i = Math.max(0, Math.min(ch.screens.length - 1, index)); renderDeck(d); }
-  setHash(ch.id, d?.i ?? 0);
-  if (scroll) chapterEl(ch.id)?.scrollIntoView({ behavior: "auto", block: "start" });
+  const r = routeForChapter(ch.id, decks.has(ch.id) ? index : undefined);
+  navigate(r, ch.id === current);
 }
 
 function step(d: Deck, dir: 1 | -1): void {
   const i = d.i + dir;
   if (i < 0 || i >= d.ch.screens.length) return;
-  d.i = i;
-  renderDeck(d);
-  setHash(d.ch.id, d.i);
+  navigate(routeForChapter(d.ch.id, i), true);
   // Keep the deck's top in view when its height changes between screens.
   const top = d.el.getBoundingClientRect().top;
   if (top < 0) d.el.scrollIntoView({ behavior: "auto", block: "start" });
 }
 
-/** The deck nearest the middle of the viewport, for arrow keys. */
-function activeDeck(): Deck | undefined {
-  let best: Deck | undefined; let bestD = Infinity;
-  for (const d of decks.values()) {
-    const r = d.el.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > innerHeight) continue;
-    const dist = Math.abs((r.top + r.bottom) / 2 - innerHeight / 2);
-    if (dist < bestD) { bestD = dist; best = d; }
-  }
-  return best;
+function applyRoute(r: Route): void {
+  const id = chapterFor(r);
+  show(id, r.index ?? (r.tab === "hardware" || r.tab === "data" ? decks.get(id)?.i ?? 0 : undefined));
+  if (r.anchor?.startsWith("src-")) requestAnimationFrame(() => revealSource(r.anchor!.slice(4), "auto"));
+  else if (r.anchor) requestAnimationFrame(() => document.getElementById(r.anchor!)?.scrollIntoView({ behavior: "auto", block: "start" }));
 }
 
-/** Mount the scrolling stills document into the page, hiding the desktop document. */
+/** Mount the tabbed stills document into the page, hiding the desktop document. */
 export function initStepper(opts: { notice?: string } = {}): void {
   chapters = buildChapters();
   document.getElementById("main")!.hidden = true;
   document.getElementById("stage")!.hidden = true;
   document.getElementById("leaders")!.hidden = true;
+  document.getElementById("pins")!.hidden = true;
   document.querySelector<HTMLElement>(".topbar")!.hidden = true;
+  document.body.classList.remove("is-tabs", "is-3d");
   root = document.createElement("div");
   root.className = "stepper";
   root.id = "stepper";
   root.innerHTML = `
-    <div class="st-top"><a class="brand" href="#top" aria-label="Back to the top"><span class="brand-mark"></span> Anatomy of a Flock camera</a><button type="button" class="st-totop" aria-label="Back to the top">↑ Top</button></div>
-    <nav class="st-chapters" aria-label="Chapters"></nav>
+    <div class="st-top"><a class="brand" href="#/overview" aria-label="Overview"><span class="brand-mark"></span> Anatomy of a Flock camera</a><button type="button" class="st-totop" aria-label="Back to the top">↑ Top</button></div>
+    <nav class="st-chapters" role="tablist" aria-label="Sections"></nav>
     ${opts.notice ? `<p class="st-notice" role="status">${escape(opts.notice)} <button type="button" aria-label="Dismiss">×</button></p>` : ""}`;
   document.body.appendChild(root);
   root.querySelector(".st-notice button")?.addEventListener("click", (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
-  const toTop = (e: Event) => { e.preventDefault(); scrollTo({ top: 0, behavior: "auto" }); };
-  root.querySelector(".st-top .brand")!.addEventListener("click", toTop);
-  root.querySelector(".st-totop")!.addEventListener("click", toTop);
+  root.querySelector(".st-totop")!.addEventListener("click", () => scrollTo({ top: 0, behavior: "auto" }));
   const nav = root.querySelector<HTMLElement>(".st-chapters")!;
 
   for (const ch of chapters) {
@@ -176,9 +181,9 @@ export function initStepper(opts: { notice?: string } = {}): void {
     sec.className = "st-chapter";
     sec.id = `ch-${ch.id}`;
     sec.dataset.chapter = ch.id;
+    sec.hidden = true;
     const first = ch.screens[0]!;
     const article = (first.cls ?? "").includes("st-article");
-    if (ch.id !== "overview") sec.innerHTML = `<div class="st-chhead"><span>${escape(ch.label)}</span><span class="st-chmeta">${article ? "article" : `${ch.screens.length} screens`}</span></div>`;
     if (article) {
       const sheet = document.createElement("div"); sheet.className = `article sheet ${first.cls ?? ""}`;
       const eb = document.createElement("div"); eb.className = `st-eyebrow ${(first.cls ?? "").includes("cyan") ? "cyan" : ""}`; eb.textContent = first.eyebrow; sheet.appendChild(eb);
@@ -209,36 +214,17 @@ export function initStepper(opts: { notice?: string } = {}): void {
     root.appendChild(sec);
     const b = document.createElement("button");
     b.type = "button";
+    b.setAttribute("role", "tab");
     b.textContent = ch.label;
     b.dataset.chapter = ch.id;
     b.addEventListener("click", () => go(ch.id, decks.get(ch.id)?.i ?? 0));
     nav.appendChild(b);
   }
 
-  // Highlight the chapter at the top of the viewport and keep its chip visible in the rail.
-  const chips = Array.from(nav.querySelectorAll<HTMLButtonElement>("button"));
-  let current = "";
-  const io = new IntersectionObserver((entries) => {
-    const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-    const top = visible[0]?.target as HTMLElement | undefined;
-    if (!top || top.dataset.chapter === current) return;
-    current = top.dataset.chapter!;
-    chips.forEach((c) => c.classList.toggle("is-active", c.dataset.chapter === current));
-    const chip = chips.find((c) => c.dataset.chapter === current);
-    if (chip) nav.scrollLeft = Math.max(0, chip.offsetLeft - nav.clientWidth / 2 + chip.offsetWidth / 2);
-    setHash(current, decks.get(current)?.i ?? 0);
-  }, { rootMargin: "-25% 0px -60% 0px", threshold: 0 });
-  root.querySelectorAll<HTMLElement>(".st-chapter").forEach((s) => io.observe(s));
+  // Citation chips open the Sources tab at the cited row.
+  setCiteHandler((id) => navigate({ tab: "sources", anchor: `src-${id}` }));
+  addEventListener("keydown", (e) => { const d = decks.get(current); if (!d) return; if (e.key === "ArrowRight") step(d, 1); if (e.key === "ArrowLeft") step(d, -1); });
 
-  // Citation chips scroll to the cited bibliography row; every article is already in the page.
-  setCiteHandler((id) => revealSource(id));
-  addEventListener("keydown", (e) => { const d = activeDeck(); if (!d) return; if (e.key === "ArrowRight") step(d, 1); if (e.key === "ArrowLeft") step(d, -1); });
-
-  // deep link: #s=chapter/index or ?s=chapter/index
-  const m = /#s=([a-z]+)\/(\d+)/.exec(location.hash);
-  const q = new URLSearchParams(location.search).get("s");
-  const mm = q ? /^([a-z]+)\/(\d+)$/.exec(q) : null;
-  const target = m ?? mm;
-  if (target && target[1] !== "overview" && target[1] !== "street") requestAnimationFrame(() => go(target[1]!, Number(target[2])));
-  (window as unknown as { __flock: unknown }).__flock = { state: { ready: true, mode: "stills", act: -1, acts: [], focusedPart: null }, go, get frame() { return Math.floor(performance.now() / 16); } };
+  wireRouter(applyRoute, { phone: true });
+  (window as unknown as { __flock: unknown }).__flock = { state: { ready: true, mode: "stills", act: -1, acts: [], focusedPart: null }, go: (s: string) => navigate(parseRoute("#/" + s.replace(/^#?\/?/, ""))), navigate, get frame() { return Math.floor(performance.now() / 16); } };
 }

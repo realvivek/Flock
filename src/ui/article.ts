@@ -29,7 +29,7 @@ function jumpList(items: { id: string; label: string }[]): HTMLElement {
   return nav;
 }
 
-/** The splash contents: one card per section with a one-line description; `hrefFor` maps a section id to its anchor. */
+/** The splash contents: one card per section with a one-line description; `hrefFor` maps a section id to its route. Plain links, so the hash router handles the click. */
 export function renderContents(host: HTMLElement, hrefFor: (id: string) => string): HTMLElement {
   const nav = el("nav", "contents");
   nav.setAttribute("aria-label", "Sections");
@@ -38,14 +38,6 @@ export function renderContents(host: HTMLElement, hrefFor: (id: string) => strin
     a.href = hrefFor(sec.id);
     a.dataset.section = sec.id;
     a.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${escape(sec.title)}</span><span class="b">${escape(sec.blurb)}</span>`;
-    a.addEventListener("click", (e) => {
-      const target = document.querySelector<HTMLElement>(a.getAttribute("href")!);
-      if (!target) return;
-      e.preventDefault();
-      // Land a few pixels inside the section so the scroll-driven act index reads this section, not the previous one.
-      const top = target.getBoundingClientRect().top + scrollY + 4;
-      scrollTo({ top, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    });
     nav.appendChild(a);
   });
   host.appendChild(nav);

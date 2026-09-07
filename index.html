@@ -14,172 +14,200 @@
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <a class="skip" href="#act-1">Skip to content</a>
+    <a class="skip" href="#main">Skip to content</a>
 
     <canvas id="stage" aria-hidden="true"></canvas>
     <svg id="leaders" aria-hidden="true"></svg>
     <div id="pins" aria-hidden="true"></div>
 
     <header class="topbar">
-      <a class="brand" href="#act-0" aria-label="Back to the top"><span class="brand-mark"></span> Anatomy of a Flock camera</a>
-      <nav class="acts-nav" aria-label="Sections">
-        <a href="#act-0" data-nav="0" class="nav-top">Top</a>
-        <a href="#deployments">Deployments</a>
-        <a href="#act-1" data-nav="1">Pole</a>
-        <a href="#act-2" data-nav="2">Inside</a>
-        <a href="#act-3" data-nav="3">Power &amp; cable</a>
-        <a href="#act-4" data-nav="4">Data</a>
-        <a href="#act-5" data-nav="5">Claims</a>
-        <a href="#act-6" data-nav="6">Economics</a>
-        <a href="#act-7" data-nav="7">Sources</a>
+      <a class="brand" href="#/overview" aria-label="Overview"><span class="brand-mark"></span> Anatomy of a Flock camera</a>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <a role="tab" data-tab="overview" href="#/overview">Overview</a>
+        <a role="tab" data-tab="deployments" href="#/deployments">Deployments</a>
+        <a role="tab" data-tab="hardware" href="#/hardware/pole">Hardware</a>
+        <a role="tab" data-tab="data" href="#/data">Data</a>
+        <a role="tab" data-tab="claims" href="#/claims">Claims</a>
+        <a role="tab" data-tab="economics" href="#/economics">Economics</a>
+        <a role="tab" data-tab="sources" href="#/sources">Sources</a>
       </nav>
       <div class="status" id="status" aria-live="polite"></div>
     </header>
 
     <main id="main">
-      <!-- ACT 0: STREET -->
-      <section class="act act-hero" id="act-0" data-act="0">
-        <div class="panel hero splash">
+      <!-- OVERVIEW: the splash over the 3D street -->
+      <section class="view view-3d view-splash" id="view-overview" hidden>
+        <div class="splash sheet">
           <p class="eyebrow">Reference</p>
-          <h1>Anatomy of a<br />Flock camera</h1>
+          <h1>Anatomy of a Flock camera</h1>
           <p class="lede" id="hero-lede"></p>
           <div id="contents-host" class="contents-host"></div>
           <p class="lede small" id="hero-sources"></p>
-          <p class="scroll-hint" aria-hidden="true">Scroll</p>
         </div>
       </section>
 
-      <!-- DEPLOYMENTS: an article between the street and the pole; not an act, so the scene rail is unaffected -->
-      <section class="act-article act-standalone" id="deployments" aria-labelledby="deployments-title">
-        <div class="article sheet">
-          <p class="eyebrow cyan">Deployments and contracts</p>
-          <h2 id="deployments-title">Where it is deployed, and what the contracts say</h2>
-          <div id="deployments-body" class="article-body"></div>
-        </div>
-      </section>
-
-      <!-- ACT 1: POLE -->
-      <section class="act" id="act-1" data-act="1">
-        <div class="panel">
-          <p class="eyebrow amber">01 · Pole and mount</p>
-          <h2>Pole, mount and field of view</h2>
-          <p>
-            Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is
-            band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing
-            vehicles pass through the field of view. No conductor runs to grade: power is supplied by the pole-top
-            solar array and data is transmitted over LTE. Two other mount configurations are documented below.
-          </p>
-          <div class="toggle-row" role="group" aria-label="Mount type">
-            <button class="chip is-active" data-pole="flock">Flock pole · solar</button>
-            <button class="chip" data-pole="existing">Existing pole · solar</button>
-            <button class="chip" data-pole="ac">Existing pole · 120 V AC</button>
-          </div>
-          <div id="install-facts" class="facts"></div>
-          <div class="aim-box">
-            <p class="aim-title">Field of view</p>
-            <p class="aim-help">Drag the camera or use the sliders. The footprint drawn on the road uses the field of view from Flock's specification sheet.</p>
-            <label>Yaw <input id="aim-yaw" type="range" min="-60" max="60" value="0" step="1" /></label>
-            <label>Pitch <input id="aim-pitch" type="range" min="-25" max="5" value="-8" step="1" /></label>
-            <p class="aim-readout" id="aim-readout"></p>
+      <!-- DEPLOYMENTS -->
+      <section class="view view-article" id="view-deployments" hidden>
+        <div class="view-scroll">
+          <div class="article sheet">
+            <p class="eyebrow cyan">Deployments and contracts</p>
+            <h2 id="deployments-title">Where it is deployed, and what the contracts say</h2>
+            <div id="deployments-body" class="article-body"></div>
           </div>
         </div>
       </section>
 
-      <!-- ACT 2: INSIDE -->
-      <section class="act act-long" id="act-2" data-act="2">
-        <div class="panel">
-          <p class="eyebrow amber">02 · Inside the enclosure</p>
-          <h2>Components, front to back</h2>
-          <p>
-            The enclosure separates at its seam. Inside are a Qualcomm APQ8053 system on module running Android 8.1,
-            a five-megapixel infrared-optimised image sensor, a ring of six 850 nm emitters, an LTE module, Wi-Fi
-            and Bluetooth, GPS, and a passive infrared trigger. Fourteen components are listed. Select a component to
-            isolate it.
-          </p>
-          <div id="part-list" class="part-list" role="list"></div>
+      <!-- HARDWARE: pole, inside, power -->
+      <section class="view view-3d" id="view-hardware" hidden>
+        <nav class="subtabs" role="tablist" aria-label="Hardware">
+          <a role="tab" data-sub="pole" href="#/hardware/pole">Pole and mount</a>
+          <a role="tab" data-sub="inside" href="#/hardware/inside">Inside the enclosure</a>
+          <a role="tab" data-sub="power" href="#/hardware/power">Power and cable</a>
+        </nav>
+        <div class="panel-col">
+          <div class="panel" data-sub="pole" hidden>
+            <p class="eyebrow amber">Pole and mount</p>
+            <h2>Pole, mount and field of view</h2>
+            <p>
+              Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is
+              band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing
+              vehicles pass through the field of view. No conductor runs to grade: power is supplied by the pole-top
+              solar array and data is transmitted over LTE.
+            </p>
+            <div class="toggle-row" role="group" aria-label="Mount type">
+              <button class="chip is-active" data-pole="flock">Flock pole · solar</button>
+              <button class="chip" data-pole="existing">Existing pole · solar</button>
+              <button class="chip" data-pole="ac">Existing pole · 120 V AC</button>
+            </div>
+            <div id="install-facts" class="facts"></div>
+            <div class="aim-box">
+              <div class="toggle-row" role="group" aria-label="View">
+                <button class="chip is-active" data-view="mount">Mount</button>
+                <button class="chip" data-view="fov">Field of view on the road</button>
+              </div>
+              <p class="aim-help">Drag the camera or use the sliders. The footprint drawn on the road uses the field of view from Flock's specification sheet.</p>
+              <label>Yaw <input id="aim-yaw" type="range" min="-60" max="60" value="0" step="1" /></label>
+              <label>Pitch <input id="aim-pitch" type="range" min="-25" max="5" value="-8" step="1" /></label>
+              <p class="aim-readout" id="aim-readout"></p>
+            </div>
+          </div>
+          <div class="panel" data-sub="power" hidden>
+            <p class="eyebrow amber">Power and cable</p>
+            <h2>Power and network connections</h2>
+            <p>
+              The Falcon has no wired network interface and is not a Power over Ethernet device. In the solar
+              configuration the conductors on the pole carry DC from the solar array and the external battery box to
+              the camera's rear connector. In the AC configuration a licensed electrician terminates 120 V mains in a
+              junction box and Flock's AC kit converts it to DC.
+            </p>
+            <p>
+              Fiber, SFP modules and PoE are used in one configuration: <strong>Flock Wing</strong>, a gateway
+              appliance installed in a network closet that ingests video from an agency's existing cameras and runs
+              plate recognition on it. That configuration is modelled as the third path.
+            </p>
+            <div class="toggle-row" role="group" aria-label="Path">
+              <button class="chip is-active" data-path="solar">Solar + battery</button>
+              <button class="chip" data-path="ac">120 V AC kit</button>
+              <button class="chip" data-path="wing">Wing gateway · PoE · SFP</button>
+            </div>
+            <div id="path-facts" class="facts"></div>
+          </div>
+        </div>
+        <div class="callouts" hidden>
+          <div class="inside-strip sheet">
+            <div class="inside-head">
+              <p class="eyebrow amber">Inside the enclosure</p>
+              <h2>Components, front to back</h2>
+              <p class="inside-lede">Fourteen components. Numbers on the model match the cards; select a card or a number to isolate that part.</p>
+            </div>
+            <div class="stage-box">
+              <div class="toggle-row" role="group" aria-label="View">
+                <button type="button" class="chip is-active" data-inside="exploded">Exploded</button>
+                <button type="button" class="chip" data-inside="cutaway">Cutaway</button>
+              </div>
+              <div class="stage-row" id="explode-row">
+                <button type="button" class="chip" id="explode-prev" aria-label="Previous stage">‹</button>
+                <input id="explode-stage" type="range" min="0" max="5" value="0" step="1" aria-label="Explode stage" />
+                <button type="button" class="chip" id="explode-next" aria-label="Next stage">›</button>
+              </div>
+              <p class="aim-readout" id="explode-readout"></p>
+            </div>
+          </div>
+          <div class="callout-col left" id="callouts-left" role="list"></div>
+          <div class="callout-col right" id="callouts-right" role="list"></div>
         </div>
         <aside class="spec-card" id="spec-card" hidden></aside>
       </section>
 
-      <!-- ACT 3: POWER AND CABLE -->
-      <section class="act" id="act-3" data-act="3">
-        <div class="panel">
-          <p class="eyebrow amber">03 · Power and cable</p>
-          <h2>Power and network connections</h2>
-          <p>
-            The Falcon has no wired network interface and is not a Power over Ethernet device. In the solar
-            configuration the conductors on the pole carry DC from the solar array and the external battery box to
-            the camera's rear connector. In the AC configuration a licensed electrician terminates 120 V mains in a
-            junction box and Flock's AC kit converts it to DC.
-          </p>
-          <p>
-            Fiber, SFP modules and PoE are used in one configuration: <strong>Flock Wing</strong>, a gateway
-            appliance installed in a network closet that ingests video from an agency's existing cameras and runs
-            plate recognition on it. That configuration is modelled as the third path.
-          </p>
-          <div class="toggle-row" role="group" aria-label="Path">
-            <button class="chip is-active" data-path="solar">Solar + battery</button>
-            <button class="chip" data-path="ac">120 V AC kit</button>
-            <button class="chip" data-path="wing">Wing gateway · PoE · SFP</button>
-          </div>
-          <div id="path-facts" class="facts"></div>
-        </div>
-      </section>
-
-      <!-- ACT 4: DATA -->
-      <section class="act act-long" id="act-4" data-act="4">
-        <div class="panel">
-          <p class="eyebrow cyan">04 · Data path · capture to deletion</p>
-          <h2>Data path in twelve stages</h2>
-          <p>
-            A vehicle triggers the motion sensor, the image sensor captures six to twelve frames, the on-device model
-            reads the plate and classifies the vehicle, and the result is transmitted over LTE. The twelve stages
-            below trace one detection through Flock's cloud, hot-list matching, network search, audit logging and
-            scheduled deletion, with the processing location stated at each stage.
-          </p>
-          <ol id="hops" class="hops"></ol>
-          <div class="retention">
-            <p class="aim-title">Retention</p>
-            <p class="aim-help">Retention presets from Flock's default and from state statutes. The markers show one vehicle's reads over the selected period.</p>
-            <input id="retention" type="range" min="0" max="4" value="0" step="1" aria-label="Retention preset" />
-            <p class="aim-readout" id="retention-readout"></p>
-          </div>
-          <div class="deputy">
-            <p class="aim-title">Network search example</p>
-            <p class="aim-help">Enter a reason and run the search. The camera and network counts shown are those recorded in the audit log of one documented April 2025 query.</p>
-            <form id="deputy-form">
-              <input id="deputy-reason" type="text" maxlength="60" placeholder="Reason for search" aria-label="Reason for search" />
-              <button type="submit" class="chip">Search network</button>
-            </form>
-            <p class="aim-readout" id="deputy-readout"></p>
+      <!-- DATA -->
+      <section class="view view-3d" id="view-data" hidden>
+        <div class="panel-col">
+          <div class="panel">
+            <p class="eyebrow cyan">Data path · capture to deletion</p>
+            <h2>Data path in twelve stages</h2>
+            <p>
+              A vehicle triggers the motion sensor, the image sensor captures six to twelve frames, the on-device model
+              reads the plate and classifies the vehicle, and the result is transmitted over LTE. Step through the
+              twelve stages; the processing location is stated at each.
+            </p>
+            <div class="stage-box">
+              <div class="stage-row">
+                <button type="button" class="chip" id="data-prev" aria-label="Previous stage">‹</button>
+                <input id="data-stage" type="range" min="1" max="12" value="1" step="1" aria-label="Data stage" />
+                <button type="button" class="chip" id="data-next" aria-label="Next stage">›</button>
+              </div>
+              <p class="aim-readout" id="data-readout"></p>
+            </div>
+            <ol id="hops" class="hops"></ol>
+            <div class="retention">
+              <p class="aim-title">Retention</p>
+              <p class="aim-help">Retention presets from Flock's default and from state statutes. The markers show one vehicle's reads over the selected period.</p>
+              <input id="retention" type="range" min="0" max="4" value="0" step="1" aria-label="Retention preset" />
+              <p class="aim-readout" id="retention-readout"></p>
+            </div>
+            <div class="deputy">
+              <p class="aim-title">Network search example</p>
+              <p class="aim-help">Enter a reason and run the search. The camera and network counts shown are those recorded in the audit log of one documented April 2025 query.</p>
+              <form id="deputy-form">
+                <input id="deputy-reason" type="text" maxlength="60" placeholder="Reason for search" aria-label="Reason for search" />
+                <button type="submit" class="chip">Search network</button>
+              </form>
+              <p class="aim-readout" id="deputy-readout"></p>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ACT 5: CLAIMS -->
-      <section class="act act-article" id="act-5" data-act="5">
-        <div class="article sheet">
-          <p class="eyebrow cyan">05 · Common claims</p>
-          <h2>Common claims and the public record</h2>
-          <div id="myths" class="article-body"></div>
+      <!-- CLAIMS -->
+      <section class="view view-article" id="view-claims" hidden>
+        <div class="view-scroll">
+          <div class="article sheet">
+            <p class="eyebrow cyan">Common claims</p>
+            <h2>Common claims and the public record</h2>
+            <div id="myths" class="article-body"></div>
+          </div>
         </div>
       </section>
 
-      <!-- ACT 6: ECONOMICS -->
-      <section class="act act-article" id="act-6" data-act="6">
-        <div class="article sheet">
-          <p class="eyebrow amber">06 · Economics</p>
-          <h2>Pricing and cost structure</h2>
-          <div id="economics" class="article-body"></div>
+      <!-- ECONOMICS -->
+      <section class="view view-article" id="view-economics" hidden>
+        <div class="view-scroll">
+          <div class="article sheet">
+            <p class="eyebrow amber">Economics</p>
+            <h2>Pricing and cost structure</h2>
+            <div id="economics" class="article-body"></div>
+          </div>
         </div>
       </section>
 
-      <!-- ACT 7: SOURCES -->
-      <section class="act act-article" id="act-7" data-act="7">
-        <div class="article sheet">
-          <p class="eyebrow">07 · Sources</p>
-          <h2>Sources</h2>
-          <div id="sources" class="article-body"></div>
+      <!-- SOURCES -->
+      <section class="view view-article" id="view-sources" hidden>
+        <div class="view-scroll">
+          <div class="article sheet">
+            <p class="eyebrow">Sources</p>
+            <h2>Sources</h2>
+            <div id="sources" class="article-body"></div>
+          </div>
         </div>
       </section>
     </main>

@@ -49,6 +49,8 @@ export function initAct1(world: World, pins: PinLayer): void {
   };
 
   chips.forEach((c) => c.addEventListener("click", () => set({ poleMode: c.dataset.pole as PoleMode })));
+  const viewChips = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-view]"));
+  viewChips.forEach((c) => c.addEventListener("click", () => set({ poleView: c.dataset.view as "mount" | "fov" })));
   yaw.addEventListener("input", () => set({ aimYaw: Number(yaw.value) }));
   pitch.addEventListener("input", () => set({ aimPitch: Number(pitch.value) }));
 
@@ -77,6 +79,7 @@ export function initAct1(world: World, pins: PinLayer): void {
   canvas.addEventListener("pointercancel", stop);
 
   subscribe((s, changed) => {
+    if (changed.has("poleView")) viewChips.forEach((c) => c.classList.toggle("is-active", c.dataset.view === s.poleView));
     if (changed.has("poleMode")) applyMode(s.poleMode);
     if (changed.has("aimYaw") || changed.has("aimPitch")) updateReadout();
     if (changed.has("act")) {
