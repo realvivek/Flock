@@ -71,7 +71,8 @@ body:not(.is-3d) #stage, body:not(.is-3d) #leaders, body:not(.is-3d) #pins { vis
 /* Inside stage: a strip on top and callout cards in two columns flanking the model, one leader each. */
 #view-hardware.is-inside .panel-col { display: none; }
 #view-hardware.is-inside .callouts { display: grid; }
-.callouts { display: none; grid-row: 2; grid-column: 1 / -1; grid-template-columns: 19rem minmax(0, 1fr) 19rem; grid-template-rows: auto minmax(0, 1fr); gap: .6rem 1rem; padding: 0 1.25rem 1rem; min-height: 0; }
+.callouts { display: none; grid-row: 2; grid-column: 1 / -1; grid-template-columns: 19rem minmax(0, 1fr) 19rem; grid-template-rows: auto minmax(0, 1fr); gap: .6rem 1rem; padding: 0 1.25rem 1rem; min-height: 0; width: min(100%, 120rem); justify-self: center; box-sizing: border-box; }
+#view-hardware.is-isolated .callout-col.right { visibility: hidden; }
 .inside-strip { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 22rem; gap: 1rem; align-items: center; padding: .7rem 1rem; pointer-events: auto; }
 .inside-head h2 { font-size: 1.25rem; margin: .15rem 0 .2rem; }
 .inside-lede { font-size: 13px; color: var(--ink-2); margin: 0; }
@@ -96,12 +97,14 @@ body:not(.is-3d) #stage, body:not(.is-3d) #leaders, body:not(.is-3d) #pins { vis
 #leaders .halo { fill: rgba(27,79,216,.05); stroke: rgba(27,79,216,.35); stroke-width: 1; }
 #leaders .halo.is-hl { fill: rgba(27,79,216,.12); }
 #leaders .halo-caption { font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; fill: var(--cyan); }
-.pin.badge { width: 20px; height: 20px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--g, #111318); color: #fff; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); font: 600 10px var(--mono); pointer-events: auto; cursor: pointer; transition: opacity .25s, transform .1s; }
+.pin.badge::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; }
+.pin.badge { position: absolute; width: 20px; height: 20px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--g, #111318); color: #fff; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); font: 600 10px var(--mono); pointer-events: auto; cursor: pointer; transition: opacity .25s, transform .1s; }
 .pin.badge .k { color: #fff; }
 .pin.badge.is-hl { transform: translate(-50%, -50%) scale(1.25) !important; z-index: 3; }
 .pin.badge:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
 .pin-tip { position: fixed; left: 0; top: 0; z-index: 5; font: 500 12px var(--mono); color: var(--ink); background: rgba(255,255,255,.96); border: 1px solid var(--line); border-radius: 3px; padding: .3rem .55rem; pointer-events: none; white-space: nowrap; }
 .stage-box { display: grid; gap: .4rem; }
+#view-data .stage-box { position: sticky; top: 0; z-index: 2; }
 .stage-row { display: grid; grid-template-columns: auto 1fr auto; gap: .5rem; align-items: center; }
 .stage-row input[type="range"] { width: 100%; }
 .stage-row .chip { padding: .3rem .7rem; }
@@ -156,7 +159,7 @@ input[type=range] { width: 100%; accent-color: var(--amber); }
 .part-list button .n { color: var(--ink-3); margin-right: .35rem; }
 .part-list button.is-active .n { color: rgba(255,255,255,.6); }
 
-.spec-card { position: fixed; top: calc(48px + 3.6rem); right: 1.5rem; width: min(24rem, 90vw); max-height: calc(100vh - 7rem); overflow: auto;
+.spec-card { grid-column: 3; grid-row: 2; align-self: start; z-index: 2; width: 100%; max-height: 100%; overflow: auto; box-sizing: border-box; pointer-events: auto;
   background: #fff; border: 1px solid rgba(17,19,24,.3); border-radius: 4px; padding: 1rem 1.15rem; z-index: 4; font-size: 13px; }
 .spec-card h3 { margin: 0 0 .25rem; font-size: 1.05rem; }
 .spec-card .pn { font-family: var(--mono); font-size: 11.5px; color: var(--amber); }
@@ -164,7 +167,7 @@ input[type=range] { width: 100%; accent-color: var(--amber); }
 .spec-card dt { color: var(--ink-3); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
 .spec-card dd { margin: 0; color: var(--ink); }
 .spec-card .cite { margin-top: .6rem; }
-@media (max-width: 900px) { .spec-card { top: auto; bottom: 1rem; left: 1rem; right: 1rem; width: auto; max-height: 45vh; } }
+@media (max-width: 900px) { .spec-card { position: fixed; top: auto; bottom: 1rem; left: 1rem; right: 1rem; width: auto; max-height: 45vh; } }
 
 .hops { list-style: none; padding: 1rem 1.15rem; display: flex; flex-direction: column; gap: .35rem; counter-reset: hop; }
 .hop { display: grid; grid-template-columns: 2rem 1fr; gap: .4rem; padding: .45rem .5rem; border-radius: 6px; border: 1px solid transparent; opacity: .45; transition: opacity .2s, border-color .2s; font-size: 13px; }
@@ -293,3 +296,23 @@ input[type=range] { width: 100%; accent-color: var(--amber); }
 .tl .n { color: var(--ink-2); }
 .pill { display: inline-block; font: 500 10.5px var(--mono); border: 1px solid var(--line); border-radius: 999px; padding: .05rem .45rem; margin-right: .3rem; color: var(--ink-2); }
 @media (max-width: 800px) { .econ-grid { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr; } .tl { grid-template-columns: 1fr; } }
+
+/* Short windows: compact panels, cards and the overview so nothing sits below the fold. */
+@media (max-height: 900px) {
+  .panel { gap: .6rem; }
+  .panel > h2 { font-size: 1.5rem; }
+  .panel > p, .panel > div, .panel > ol { font-size: 14px; }
+  .panel > p, .panel > h1, .panel > h2, .panel > div, .panel > ol { padding: .7rem .9rem; }
+}
+@media (max-height: 820px) {
+  .splash { padding: 1.2rem 1.6rem; gap: .6rem; max-height: calc(100vh - 64px); }
+  .splash h1 { font-size: 2rem; }
+  .splash .lede { font-size: .95rem; }
+  .contents .b { display: none; }
+  .contents a { min-height: auto; }
+  .callout { grid-template-columns: 40px 1fr; padding: .35rem .5rem .35rem .4rem; }
+  .callout img, .callout .thumb { width: 40px; height: 40px; }
+  .callout .d { display: none; }
+  .inside-strip { padding: .5rem 1rem; }
+  .inside-head h2 { font-size: 1.1rem; margin: .1rem 0; }
+}

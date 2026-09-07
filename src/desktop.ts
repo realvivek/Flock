@@ -150,10 +150,21 @@ export async function startDesktop() {
     let moving = u2 < 1 || u4 < 1;
 
     if (!debugView) {
-      const key = `${state.act}|${state.explodeStage}|${state.dataStage}|${state.poleView}|${state.pathMode}`;
+      const key = `${state.act}|${state.explodeStage}|${state.dataStage}|${state.poleView}|${state.pathMode}|${state.act === 2 ? state.focusedPart ?? "" : ""}`;
       if (key !== poseKey) { tween.retarget(railOut, now, state.reducedMotion); poseKey = key; set({ progress: railTFor(state) }); }
       if (state.act === 3 && state.pathMode === "wing") { dest.pos.copyFrom(wingView.pos); dest.target.copyFrom(wingView.target); dest.fov = wingView.fov; }
       else evalRail(railTFor(state), dest, world.falcon ? world.falcon.getWorldMatrix() : null);
+      // Isolated part: keep the viewing direction, aim at the part's centre and close in until it fills about
+      // a third of the frame height.
+      const focusRec = state.act === 2 && state.focusedPart ? world.parts.get(state.focusedPart) : undefined;
+      if (focusRec) {
+        const bb = focusRec.node.getHierarchyBoundingVectors(true);
+        const c = bb.min.add(bb.max).scale(0.5);
+        const r = Math.max(0.05, Vector3.Distance(bb.min, bb.max) / 2);
+        const dir = dest.pos.subtract(dest.target).normalize();
+        const d = Math.max(0.3, (r / Math.tan(dest.fov / 2)) * 2.4);
+        dest.target.copyFrom(c); dest.pos.copyFrom(c.add(dir.scale(d)));
+      }
       const camMoving = tween.mix(dest, now, railOut);
       moving = moving || camMoving;
       const dt = Math.min(0.1, engine.getDeltaTime() / 1000);
@@ -174,9 +185,11 @@ export async function startDesktop() {
           const dist = Vector3.Distance(railOut.pos, railOut.target);
           const worldPerPx = (2 * dist * Math.tan(railOut.fov / 2)) / innerHeight;
           const span = worldPerPx * innerWidth;
-          compShift = Math.max(-span * 0.5, Math.min(span * 0.5, compShift + err * worldPerPx * 0.3));
-          const width = box.right - box.left;
-          compZoom = Math.max(1, Math.min(1.6, compZoom * (width > (freeR - freeL) * 0.9 ? 1.04 : 0.985)));
+          // Deadband and hysteresis so the loop settles instead of creeping or oscillating around its target.
+          if (Math.abs(err) > 3) compShift = Math.max(-span * 0.5, Math.min(span * 0.5, compShift + err * worldPerPx * 0.3));
+          const width = box.right - box.left, free = freeR - freeL;
+          if (width > free * 0.92) compZoom = Math.min(1.6, compZoom * 1.04);
+          else if (width < free * 0.8) compZoom = Math.max(0.7, compZoom * 0.985);
         }
       } else { compShift *= 0.85; compZoom = 1 + (compZoom - 1) * 0.85; }
       if (Math.abs(compShift) > 1e-4 || compZoom > 1.001) {

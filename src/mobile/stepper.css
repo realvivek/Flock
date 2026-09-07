@@ -1,5 +1,15 @@
 /* Stills document: phones get the same tabs as the desktop; one chapter is shown at a time and multi-screen chapters step in place. No 3D engine. */
-.stepper { position: relative; min-height: 100vh; display: flex; flex-direction: column; background: transparent; padding-bottom: 3rem; }
+.stepper { position: relative; min-height: 100vh; display: flex; flex-direction: column; background: transparent; padding-bottom: 3rem; --st-chrome: 5.2rem; }
+.stepper.is-deck-view { min-height: 0; padding-bottom: 0; }
+/* Deck chapters (Pole, Inside, Power, Data) fit the viewport: figure, a text row that scrolls inside itself, and the bar. */
+.st-chapter.is-deck { height: calc(100dvh - var(--st-chrome)); display: grid; grid-template-rows: minmax(0, 1fr) auto; padding: .4rem 0 0; box-sizing: border-box; }
+.st-chapter.is-deck > .st-screen { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .6rem; min-height: 0; margin-bottom: 0; }
+.st-chapter.is-deck .st-figure { height: clamp(150px, 30dvh, 280px); min-height: 0; }
+.st-chapter.is-deck .st-count { display: none; }
+.st-text { display: flex; flex-direction: column; gap: .7rem; min-height: 0; }
+.st-chapter.is-deck .st-text { overflow-y: auto; overscroll-behavior: contain; padding-bottom: .4rem; }
+.st-chapter.is-deck .st-text.is-overflow { mask-image: linear-gradient(#000 calc(100% - 32px), transparent); -webkit-mask-image: linear-gradient(#000 calc(100% - 32px), transparent); }
+.st-chapter.is-deck .st-deckbar { margin: .35rem .5rem 0; padding-bottom: calc(.5rem + env(safe-area-inset-bottom)); }
 .st-chapter { padding: .4rem 0 1rem; }
 .stepper .st-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: .6rem; padding: .6rem .9rem; background: rgba(247,248,246,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .stepper .st-top .brand { font-size: 13px; color: var(--ink); text-decoration: none; }
@@ -48,7 +58,7 @@
 .st-list { margin: 0; padding-left: 1.1rem; font-size: 13.5px; color: var(--ink-2); display: grid; gap: .3rem; }
 .st-notice { margin: .6rem .9rem 0; padding: .55rem .8rem; font: 13px var(--sans); color: var(--ink); background: rgba(217,145,31,.12); border: 1px solid rgba(217,145,31,.5); border-radius: 4px; display: flex; gap: .6rem; align-items: center; }
 .st-notice button { margin-left: auto; font: 16px var(--sans); line-height: 1; background: none; border: 0; color: var(--ink-2); cursor: pointer; }
-.st-screen > * { min-width: 0; max-width: 100%; }
+.st-screen > *, .st-text > * { min-width: 0; max-width: 100%; }
 .st-products .article-body, .st-products .tablewrap { width: 100%; }
 /* Wide screens reach the stepper only as a fallback or via ?mode=stills: keep it a readable column. */
 @media (min-width: 801px) {

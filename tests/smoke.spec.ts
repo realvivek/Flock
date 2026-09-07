@@ -123,6 +123,39 @@ test("desktop: tabs, controls and articles", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("laptop window: nothing a reader needs sits below the fold", async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+  const page = await ctx.newPage();
+  await page.goto("/?gl");
+  await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
+  const inView = (sel: string) => page.evaluate((sel) => [...document.querySelectorAll<HTMLElement>(sel)].filter((e) => e.offsetParent !== null).map((e) => { const r = e.getBoundingClientRect(); return r.bottom <= innerHeight + 1 && r.top >= 47; }), sel);
+  // Overview: all eight contents cards
+  expect(await inView("#view-overview .contents a")).toEqual(Array(8).fill(true));
+  // Pole: mount chips and aim sliders visible without scrolling
+  await page.evaluate(() => window.__flock!.go("hardware/pole"));
+  await settled(page);
+  expect(await inView("#view-hardware .panel[data-sub=pole] .toggle-row, #view-hardware .aim-box")).toEqual([true, true, true]);
+  // Inside: every callout card on screen, a marker is clickable and the spec card covers no card
+  await page.evaluate(() => { window.__flock!.go("hardware/inside"); window.__flock!.set({ explodeStage: 5 }); });
+  await settled(page);
+  expect((await inView(".callout")).every(Boolean)).toBe(true);
+  await page.locator("#pins .pin.badge.is-visible").first().click();
+  await expect(page.locator("#spec-card")).toBeVisible();
+  const overlap = await page.evaluate(() => {
+    const c = document.getElementById("spec-card")!.getBoundingClientRect();
+    const others = [...document.querySelectorAll<HTMLElement>(".callout, .inside-strip")].filter((e) => e.offsetParent !== null && getComputedStyle(e.closest(".callout-col") ?? e).visibility !== "hidden").map((e) => e.getBoundingClientRect());
+    return others.filter((r) => r.left < c.right && c.left < r.right && r.top < c.bottom && c.top < r.bottom).length;
+  });
+  expect(overlap).toBe(0);
+  await page.keyboard.press("Escape");
+  // Data: selecting stage 10 keeps the stage slider in view
+  await page.evaluate(() => { window.__flock!.go("data"); window.__flock!.set({ dataStage: 10 }); });
+  await settled(page);
+  await page.waitForTimeout(600);
+  expect(await inView("#view-data .stage-box")).toEqual([true]);
+  await ctx.close();
+});
+
 test("reduced motion: stage changes apply instantly", async ({ browser }) => {
   const ctx = await browser.newContext({ reducedMotion: "reduce" });
   const page = await ctx.newPage();
@@ -186,6 +219,33 @@ test("phones get the same tabs as stills and never load the 3D engine", async ({
   await popup.close();
   expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
+});
+
+test("phone deck screens fit the viewport", async ({ browser }) => {
+  for (const [w, h] of [[360, 740], [390, 844]] as const) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true });
+    const page = await ctx.newPage();
+    await page.goto("/");
+    await page.waitForSelector("#ch-overview h2");
+    for (const r of ["pole/0", "pole/3", "inside/0", "inside/5", "inside/13", "power/2", "data/0", "data/9"]) {
+      await page.evaluate((r) => (window.__flock as unknown as { go(s: string): void }).go(r), r);
+      await page.waitForTimeout(150);
+      const m = await page.evaluate(() => {
+        const ch = document.querySelector<HTMLElement>(".st-chapter:not([hidden])")!;
+        const bar = ch.querySelector(".st-deckbar")!.getBoundingClientRect();
+        const fig = ch.querySelector(".st-figure")!.getBoundingClientRect();
+        const next = ch.querySelector<HTMLButtonElement>(".st-next")!;
+        return { barBottom: bar.bottom, figBottom: fig.bottom, nextVisible: next.getBoundingClientRect().bottom <= innerHeight, pageScroll: document.documentElement.scrollHeight > innerHeight + 1 };
+      });
+      expect(m.barBottom, `${w}x${h} ${r} bar`).toBeLessThanOrEqual(h + 1);
+      expect(m.figBottom, `${w}x${h} ${r} figure`).toBeLessThanOrEqual(h);
+      expect(m.nextVisible, `${w}x${h} ${r} next`).toBe(true);
+    }
+    // the text row scrolls when a part's record is long
+    await page.evaluate(() => (window.__flock as unknown as { go(s: string): void }).go("inside/13"));
+    await expect(page.locator("#ch-inside .st-text")).toHaveClass(/is-overflow/);
+    await ctx.close();
+  }
 });
 
 test("desktop falls back to the stills tabs when no 3D engine can start", async ({ page }) => {

@@ -68,18 +68,11 @@
           <div class="panel" data-sub="pole" hidden>
             <p class="eyebrow amber">Pole and mount</p>
             <h2>Pole, mount and field of view</h2>
-            <p>
-              Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is
-              band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing
-              vehicles pass through the field of view. No conductor runs to grade: power is supplied by the pole-top
-              solar array and data is transmitted over LTE.
-            </p>
             <div class="toggle-row" role="group" aria-label="Mount type">
               <button class="chip is-active" data-pole="flock">Flock pole · solar</button>
               <button class="chip" data-pole="existing">Existing pole · solar</button>
               <button class="chip" data-pole="ac">Existing pole · 120 V AC</button>
             </div>
-            <div id="install-facts" class="facts"></div>
             <div class="aim-box">
               <div class="toggle-row" role="group" aria-label="View">
                 <button class="chip is-active" data-view="mount">Mount</button>
@@ -90,10 +83,23 @@
               <label>Pitch <input id="aim-pitch" type="range" min="-25" max="5" value="-8" step="1" /></label>
               <p class="aim-readout" id="aim-readout"></p>
             </div>
+            <p>
+              Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is
+              band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing
+              vehicles pass through the field of view. No conductor runs to grade: power is supplied by the pole-top
+              solar array and data is transmitted over LTE.
+            </p>
+            <div id="install-facts" class="facts"></div>
           </div>
           <div class="panel" data-sub="power" hidden>
             <p class="eyebrow amber">Power and cable</p>
             <h2>Power and network connections</h2>
+            <div class="toggle-row" role="group" aria-label="Path">
+              <button class="chip is-active" data-path="solar">Solar + battery</button>
+              <button class="chip" data-path="ac">120 V AC kit</button>
+              <button class="chip" data-path="wing">Wing gateway · PoE · SFP</button>
+            </div>
+            <div id="path-facts" class="facts"></div>
             <p>
               The Falcon has no wired network interface and is not a Power over Ethernet device. In the solar
               configuration the conductors on the pole carry DC from the solar array and the external battery box to
@@ -105,12 +111,6 @@
               appliance installed in a network closet that ingests video from an agency's existing cameras and runs
               plate recognition on it. That configuration is modelled as the third path.
             </p>
-            <div class="toggle-row" role="group" aria-label="Path">
-              <button class="chip is-active" data-path="solar">Solar + battery</button>
-              <button class="chip" data-path="ac">120 V AC kit</button>
-              <button class="chip" data-path="wing">Wing gateway · PoE · SFP</button>
-            </div>
-            <div id="path-facts" class="facts"></div>
           </div>
         </div>
         <div class="callouts" hidden>
@@ -131,8 +131,8 @@
           </div>
           <div class="callout-col left" id="callouts-left" role="list"></div>
           <div class="callout-col right" id="callouts-right" role="list"></div>
+          <aside class="spec-card" id="spec-card" hidden></aside>
         </div>
-        <aside class="spec-card" id="spec-card" hidden></aside>
       </section>
 
       <!-- DATA -->

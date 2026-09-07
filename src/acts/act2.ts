@@ -184,6 +184,7 @@ export function initAct2(world: World, pins: PinLayer): void {
   subscribe((s, changed) => {
     if (changed.has("focusedPart")) {
       for (const [id, b] of buttons) b.classList.toggle("is-active", id === s.focusedPart);
+      document.getElementById("view-hardware")!.classList.toggle("is-isolated", !!s.focusedPart);
       world.isolate(s.focusedPart);
       renderCard(s.focusedPart);
     }

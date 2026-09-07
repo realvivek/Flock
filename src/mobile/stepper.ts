@@ -98,9 +98,13 @@ function renderScreen(sc: Screen, host: HTMLElement, count?: string): void {
     if (count) fig.insertAdjacentHTML("beforeend", `<span class="st-count">${count}</span>`);
     host.appendChild(fig);
   }
-  const eb = document.createElement("div"); eb.className = `st-eyebrow ${(sc.cls ?? "").includes("cyan") ? "cyan" : ""}`; eb.textContent = sc.eyebrow; host.appendChild(eb);
-  const h2 = document.createElement("h2"); h2.textContent = sc.title; host.appendChild(h2);
-  sc.body(host);
+  const text = document.createElement("div"); text.className = "st-text"; host.appendChild(text);
+  const eb = document.createElement("div"); eb.className = `st-eyebrow ${(sc.cls ?? "").includes("cyan") ? "cyan" : ""}`; eb.textContent = sc.eyebrow; text.appendChild(eb);
+  const h2 = document.createElement("h2"); h2.textContent = sc.title; text.appendChild(h2);
+  sc.body(text);
+  // Deck screens fit the viewport: the text row scrolls inside itself, and a fade marks that there is more.
+  requestAnimationFrame(() => text.classList.toggle("is-overflow", text.scrollHeight > text.clientHeight + 2));
+  text.addEventListener("scroll", () => text.classList.toggle("is-overflow", text.scrollTop + text.clientHeight < text.scrollHeight - 2), { passive: true });
 }
 
 function renderDeck(d: Deck): void {
@@ -128,6 +132,7 @@ function show(chapterId: string, index?: number): void {
   if (chip) nav.scrollLeft = Math.max(0, chip.offsetLeft - nav.clientWidth / 2 + chip.offsetWidth / 2);
   const d = decks.get(ch.id);
   if (d && index !== undefined) { const i = Math.max(0, Math.min(ch.screens.length - 1, index)); if (i !== d.i || changed) { d.i = i; renderDeck(d); } }
+  root.classList.toggle("is-deck-view", decks.has(ch.id));
   if (changed) scrollTo({ top: 0, behavior: "auto" });
 }
 
@@ -175,6 +180,9 @@ export function initStepper(opts: { notice?: string } = {}): void {
   root.querySelector(".st-notice button")?.addEventListener("click", (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
   root.querySelector(".st-totop")!.addEventListener("click", () => scrollTo({ top: 0, behavior: "auto" }));
   const nav = root.querySelector<HTMLElement>(".st-chapters")!;
+  // Height of the sticky chrome (brand row and chip rail), so deck chapters can size themselves to the rest.
+  const chrome = () => root.style.setProperty("--st-chrome", `${root.querySelector<HTMLElement>(".st-top")!.offsetHeight + nav.offsetHeight}px`);
+  addEventListener("resize", chrome);
 
   for (const ch of chapters) {
     const sec = document.createElement("section");
@@ -197,6 +205,7 @@ export function initStepper(opts: { notice?: string } = {}): void {
       if (ch.screens.length === 1) {
         renderScreen(first, screen);
       } else {
+        sec.classList.add("is-deck");
         const bar = document.createElement("div");
         bar.className = "st-deckbar";
         bar.innerHTML = `<button type="button" class="st-back">Back</button><div class="st-mid"><div class="st-dots"></div><span class="st-barcount"></span></div><button type="button" class="st-next pri">Next</button>`;
@@ -225,6 +234,7 @@ export function initStepper(opts: { notice?: string } = {}): void {
   setCiteHandler((id) => navigate({ tab: "sources", anchor: `src-${id}` }));
   addEventListener("keydown", (e) => { const d = decks.get(current); if (!d) return; if (e.key === "ArrowRight") step(d, 1); if (e.key === "ArrowLeft") step(d, -1); });
 
+  chrome();
   wireRouter(applyRoute, { phone: true });
   (window as unknown as { __flock: unknown }).__flock = { state: { ready: true, mode: "stills", act: -1, acts: [], focusedPart: null }, go: (s: string) => navigate(parseRoute("#/" + s.replace(/^#?\/?/, ""))), navigate, get frame() { return Math.floor(performance.now() / 16); } };
 }
