@@ -187,7 +187,7 @@ async function initLocator(): Promise<void> {
     console.warn("locator: stills", why);
     canvas.hidden = true; ui.hidden = true;
     img.src = still("explode-0"); img.hidden = false;
-    note.textContent = "The assembled camera. Select a part above for its record.";
+    note.textContent = "The assembled camera. Select a part for its record.";
     status.textContent = "stills";
     set({ ready: true, mode: "stills" });
   };
