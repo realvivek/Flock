@@ -1,5 +1,6 @@
 import { myths, economics, sources, products, deployments, overview, partById, hopById, stillById } from "../content";
 import { cite, escape } from "../ui/cite";
+import { BASE } from "../lib/base";
 
 /**
  * Article renderers shared by the desktop acts 5 to 7 and the phone stepper.
@@ -7,7 +8,6 @@ import { cite, escape } from "../ui/cite";
  * the economics sections, and the bibliography. Both surfaces get identical DOM and styling.
  */
 
-const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string): HTMLElementTagNameMap[K] => {
   const e = document.createElement(tag);

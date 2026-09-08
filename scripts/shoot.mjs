@@ -1,8 +1,8 @@
 import { chromium } from "@playwright/test";
 // Usage: node scripts/shoot.mjs <outDir> <url> <stops>
-// Stops are section ids ("top", "deployments", "components", "pole", "power", "data", "claims", "economics",
-// "sources"), optionally with a part or stage: "components:som" selects a part, "components:stage=5" sets the
-// explode stage of the locator, "data:9" scrolls to stage 9.
+// Stops are section ids of whichever page the url points at ("top", "deployments", "pole", "power", "data",
+// "claims", "economics", "sources" on the main page; "components" on components/), optionally with a part or
+// stage: "components:som" selects a part, "components:stage=5" sets the explode stage, "data:9" scrolls to stage 9.
 const out = process.argv[2] || "test-results";
 const url = process.argv[3] || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--disable-gpu-compositing"] });

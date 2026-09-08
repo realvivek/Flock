@@ -1,8 +1,8 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
 // Renders the hero's preview image of the components grid from the live page.
-// Usage: node scripts/knolling.mjs [url] [out]   (default http://127.0.0.1:4173, public/img/knolling.jpg)
-const url = process.argv[2] || "http://127.0.0.1:4173/";
+// Usage: node scripts/knolling.mjs [url] [out]   (default http://127.0.0.1:4173/components/, public/img/knolling.jpg)
+const url = process.argv[2] || "http://127.0.0.1:4173/components/";
 const out = process.argv[3] || "public/img/knolling.jpg";
 fs.mkdirSync(out.replace(/\/[^/]+$/, ""), { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || "/opt/pw-browsers/chromium", args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--disable-gpu-compositing"] });

@@ -6,12 +6,12 @@ It is written for a technical audience: installers who need dimensions, mount he
 
 ## What is in it
 
-One scrolling page. Section links in the header jump to each section and mark the one in view; a Top button returns to the start. The page opens with a preview of the components grid and a link to it.
+Two pages. The main page is one scroll: it opens with a preview of the components grid and a link to the components page, then the sections below; section links in the header jump to each section and mark the one in view, and a Top button returns to the start. The components page (`components/`) holds the grid on its own, with the same header links pointing back to the main page's sections.
 
 | Section | Content |
 |---|---|
 | Deployments | An article: documented cameras by city as a bar chart, the largest public contracts by agency and level with values and terms, the public funding behind local contracts, where the records are, and what is not documented |
-| Components | The fourteen parts of the Falcon V2 laid out in a grid at a consistent scale, in five groups: Shell, Optics, Compute, Radios, Mount. Selecting a part opens its record under its group: function, specification, part number, vendor, sources and the related data stage. On desktops that can run a 3D engine, a locator beside the grid shows the assembled camera see-through, frames the selected part, and has a slider that separates the parts front to back; other screens show the assembled still |
+| Components (`components/`) | Its own page: the fourteen parts of the Falcon V2 laid out in a grid at a consistent scale, in five groups: Shell, Optics, Compute, Radios, Mount. Selecting a part opens its record under its group (function, specification, part number, vendor, sources and the related data stage) and writes the part into the address (`components/#som`). On desktops that can run a 3D engine, a locator beside the grid shows the assembled camera see-through, frames the selected part, and has a slider that separates the parts front to back; other screens show the assembled still |
 | Pole | Three mount configurations (Flock pole, existing pole, 120 V AC) as cards with the still and the documented facts, and the published field of view |
 | Power | The solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used |
 | Data | One detection traced through twelve stages from capture to deletion, each with a diagram, the processing location, transport, storage, retention and payload; retention presets; a network search example reproducing the counts from one documented query |
@@ -19,13 +19,13 @@ One scrolling page. Section links in the header jump to each section and mark th
 | Economics | An article: items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
 | Sources | All sources grouped by origin, with the date each was last checked |
 
-Links are plain anchors (`#components`, `#data`, `#stage-9`, `#src-<id>`, `#claim-<id>`). Older links (`#/hardware/inside/13`, `#act-4`, `#s=inside/13`, `?s=data/9`) still resolve to the section, part or stage they named.
+Links are plain anchors (`#data`, `#stage-9`, `#src-<id>`, `#claim-<id>`) and `components/#<part id>`. Older links (`#/hardware/inside/13`, `#act-4`, `#s=inside/13`, `?s=data/9`) still resolve to the page, section, part or stage they named.
 
 ## Phones
 
-Phones get the same page. The section links become a scrolling rail, the components grid is two columns, the locator is the assembled still, and the pole, power and data cards stack. Phones never download the 3D engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the locator on a small screen, `?mode=stills` forces the still on a desktop. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the locator falls back to the still; `?fail3d` simulates that.
+Phones get the same two pages. The section links become a scrolling rail, the components grid is two columns, the locator is the assembled still, and the pole, power and data cards stack. Phones never download the 3D engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the locator on a small screen, `?mode=stills` forces the still on a desktop. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the locator falls back to the still; `?fail3d` simulates that.
 
-The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart. The preview image of the grid at the top of the page is `public/img/knolling.jpg`, rendered from the page itself by `node scripts/knolling.mjs` against a preview server.
+The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart. The preview image of the grid at the top of the main page is `public/img/knolling.jpg`, rendered from the components page by `node scripts/knolling.mjs` against a preview server.
 
 ## Sourcing policy
 
@@ -48,7 +48,7 @@ npm test           # Playwright smoke test against the preview server
 node scripts/qa.mjs test-results/qa   # viewport sweep: five desktop sizes and three phones, reports anything cut off, off screen or unclickable
 ```
 
-`?gl` forces WebGL2, `?mode=stills|3d` forces the still or the locator. `scripts/shoot.mjs` captures screenshots headlessly; stops are section ids with an optional state, for example `components:som` (selects a part), `components:stage=5` (explode stage of the locator), `data:9` (scrolls to stage 9). The locator's camera pose lives in `src/content/animation.json` under `views.inside`.
+`?gl` forces WebGL2, `?mode=stills|3d` forces the still or the locator. `scripts/shoot.mjs` captures screenshots headlessly of whichever page the url names; stops are section ids with an optional state, for example `components:som` (selects a part, on `components/`), `components:stage=5` (explode stage of the locator), `data:9` (scrolls to stage 9 on the main page). The locator's camera pose lives in `src/content/animation.json` under `views.inside`.
 
 ## Models
 

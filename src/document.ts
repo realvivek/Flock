@@ -1,24 +1,16 @@
 /**
- * The page: one scrolling document with section links at the top, a knolling grid of the fourteen components in
- * five groups, and the pole, power, data, claims, economics and sources sections beneath. Desktops that can run
- * a 3D engine get a locator beside the grid; every other screen gets the same document with stills.
+ * The main page: hero with a preview of the components grid and a link to the components page, then Deployments,
+ * Pole, Power, Data, Claims, Economics and Sources in one scroll with section links at the top.
  */
 import "./document.css";
-import { components, install, dataflow, economics, overview, stillById, partById, hopById, EXPLODE_STAGES, PART_GROUPS } from "./content";
+import { components, install, dataflow, overview } from "./content";
 import { cite, escape, tag, setCiteHandler } from "./ui/cite";
 import { renderClaims, renderEconomics, renderSources, renderDeployments, revealSource } from "./ui/article";
+import { BASE, still, nn, el, p, kv, facts, scrollToEl, initNav, reduced } from "./ui/common";
 import { parseRoute, chapterFor } from "./router";
-import { state, set, subscribe } from "./store";
+import { state, set } from "./store";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-const still = (id: string) => `${BASE}${stillById.get(id) ?? ""}`;
-const nn = (o: number) => String(o).padStart(2, "0");
-const confidenceLabel = { measured: "Measured or documented", estimated: "Estimated from the envelope", disputed: "Sources disagree" } as const;
-
-const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, html?: string): HTMLElementTagNameMap[K] => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
-const p = (host: HTMLElement, text: string, cls = "") => { const e = el("p", cls); e.textContent = text; host.appendChild(e); return e; };
-const kv = (host: HTMLElement, rows: [string, string][]) => { const dl = el("dl", "kv"); for (const [k, v] of rows) dl.insertAdjacentHTML("beforeend", `<dt>${escape(k)}</dt><dd>${escape(v)}</dd>`); host.appendChild(dl); return dl; };
-const facts = (host: HTMLElement, rows: { k: string; v: string; sources: string[] }[]) => { const dl = el("dl", "kv"); for (const r of rows) { dl.insertAdjacentHTML("beforeend", `<dt>${escape(r.k)}</dt><dd>${escape(r.v)}</dd>`); dl.lastElementChild!.appendChild(cite(r.sources, 1)); } host.appendChild(dl); };
+const COMPONENTS = "components/";
 
 /** Small inline diagram for a data stage: camera, cloud, officer and network, with the active stage lit. */
 function hopSvg(n: number): string {
@@ -40,73 +32,6 @@ function hopSvg(n: number): string {
 
 const parts = components.parts.slice().sort((a, b) => a.order - b.order);
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
-const cells = new Map<string, HTMLButtonElement>();
-let detail: HTMLElement | null = null;
-
-/** Scroll an element into view under the sticky header. */
-function scrollToEl(target: Element | null, block: ScrollLogicalPosition = "start"): void {
-  if (!target) return;
-  target.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block });
-}
-
-// ---- Components: knolling grid in five groups, a detail block under the selected part's group --------------
-function buildKnolling(host: HTMLElement): void {
-  for (const g of PART_GROUPS) {
-    const members = parts.filter((x) => x.group === g.id);
-    if (!members.length) continue;
-    const group = el("div", `group g-${g.id}`);
-    group.dataset.group = g.id;
-    group.innerHTML = `<div class="group-head"><span class="mono">${members.length === 1 ? nn(members[0]!.order) : `${nn(members[0]!.order)}–${nn(members[members.length - 1]!.order)}`}</span><h3>${escape(g.label)}</h3><span class="count">${members.length} part${members.length === 1 ? "" : "s"}</span></div>`;
-    const grid = el("div", "cells");
-    grid.setAttribute("role", "list");
-    for (const pt of members) {
-      const b = el("button", "cell");
-      b.type = "button";
-      b.dataset.part = pt.id;
-      b.setAttribute("role", "listitem");
-      b.setAttribute("aria-expanded", "false");
-      const s = stillById.get(`part-${pt.id}`);
-      b.innerHTML = `${s ? `<img src="${BASE}${s}" alt="" loading="lazy" decoding="async" />` : `<span class="thumb"></span>`}<span class="txt"><span class="n">${nn(pt.order)}</span><span class="t">${escape(pt.name)}</span><span class="pn">${escape(pt.partNumber ?? "")}</span></span>`;
-      b.addEventListener("click", () => set({ focusedPart: state.focusedPart === pt.id ? null : pt.id }));
-      grid.appendChild(b);
-      cells.set(pt.id, b);
-    }
-    group.appendChild(grid);
-    host.appendChild(group);
-  }
-}
-
-function renderDetail(id: string | null): void {
-  for (const [pid, b] of cells) { b.classList.toggle("is-active", pid === id); b.setAttribute("aria-expanded", String(pid === id)); }
-  detail?.remove(); detail = null;
-  if (!id) return;
-  const pt = partById.get(id);
-  const cell = cells.get(id);
-  if (!pt || !cell) return;
-  const hop = pt.hop ? hopById.get(pt.hop) : null;
-  const d = el("div", `detail g-${pt.group}`);
-  d.id = "part-detail";
-  d.innerHTML = `
-    <div class="detail-fig"><img src="${still(`part-${pt.id}`)}" alt="" /></div>
-    <div class="detail-body">
-      <div class="mono">${nn(pt.order)} · ${escape(PART_GROUPS.find((g) => g.id === pt.group)?.label ?? pt.group)}</div>
-      <h3>${escape(pt.name)}</h3>
-      ${pt.partNumber ? `<div class="pn">${escape(pt.partNumber)}${pt.vendor ? " · " + escape(pt.vendor) : ""}</div>` : ""}
-      <p>${escape(pt.function)}</p>
-      <dl class="kv">${Object.entries(pt.spec).map(([k, v]) => `<dt>${escape(k)}</dt><dd>${escape(v)}</dd>`).join("")}</dl>
-      <p class="fine">${confidenceLabel[pt.confidence]}${hop ? ` · <a href="#stage-${hop.n}">data stage ${nn(hop.n)}: ${escape(hop.title)}</a>` : ""}</p>
-    </div>`;
-  const body = d.querySelector(".detail-body")!;
-  body.appendChild(cite(pt.sources));
-  const close = el("button", "chip", "Close");
-  close.type = "button";
-  close.addEventListener("click", () => set({ focusedPart: null }));
-  body.appendChild(close);
-  cell.closest(".group")!.appendChild(d);
-  detail = d;
-  // Bring the record into view; a record taller than the viewport (phones) aligns its top under the header.
-  requestAnimationFrame(() => { const r = d.getBoundingClientRect(); if (r.bottom > innerHeight || r.top < 60) scrollToEl(d, r.height > innerHeight * 0.6 ? "start" : "nearest"); });
-}
 
 // ---- Pole, power and data sections from the install and dataflow content -------------------------------
 function buildPole(host: HTMLElement): void {
@@ -174,90 +99,22 @@ function buildData(host: HTMLElement): void {
   host.appendChild(dep);
 }
 
-// ---- Locator: 3D on capable desktops, the assembled still elsewhere ---------------------------------------
-async function initLocator(): Promise<void> {
-  const canvas = document.getElementById("locator-canvas") as HTMLCanvasElement;
-  const img = document.getElementById("locator-img") as HTMLImageElement;
-  const ui = document.getElementById("locator-ui")!;
-  const note = document.getElementById("locator-note")!;
-  const status = document.getElementById("status")!;
-  const q = new URLSearchParams(location.search);
-  const wantStills = q.get("mode") === "stills" || (q.get("mode") !== "3d" && matchMedia("(max-width: 800px)").matches);
-  const fallback = (why: unknown) => {
-    console.warn("locator: stills", why);
-    canvas.hidden = true; ui.hidden = true;
-    img.src = still("explode-0"); img.hidden = false;
-    note.textContent = "The assembled camera. Select a part for its record.";
-    status.textContent = "stills";
-    set({ ready: true, mode: "stills" });
-  };
-  if (wantStills) { fallback("small screen"); return; }
-  canvas.hidden = false;
-  try {
-    const { initLocator: boot } = await import("./locator");
-    const loc = await boot(canvas, status);
-    ui.hidden = false;
-    (window as unknown as { __flock: unknown }).__flock = { state, set, scene: loc.scene, engine: loc.engine, world: loc.world, get frame() { return loc.frame; } };
-    // Explode stage control
-    const input = document.getElementById("explode-stage") as HTMLInputElement;
-    const readout = document.getElementById("explode-readout")!;
-    const setStage = (n: number) => set({ explodeStage: Math.max(0, Math.min(5, Math.round(n))) });
-    input.addEventListener("input", () => setStage(Number(input.value)));
-    document.getElementById("explode-prev")!.addEventListener("click", () => setStage(state.explodeStage - 1));
-    document.getElementById("explode-next")!.addEventListener("click", () => setStage(state.explodeStage + 1));
-    const renderStage = () => {
-      const s = EXPLODE_STAGES[state.explodeStage] ?? EXPLODE_STAGES[0];
-      input.value = String(state.explodeStage);
-      readout.textContent = `Stage ${state.explodeStage} of 5 · ${s.label}. ${s.copy}`;
-      (document.getElementById("explode-prev") as HTMLButtonElement).disabled = state.explodeStage === 0;
-      (document.getElementById("explode-next") as HTMLButtonElement).disabled = state.explodeStage === 5;
-    };
-    subscribe((_, changed) => { if (changed.has("explodeStage")) renderStage(); });
-    renderStage();
-    loc.engine.onContextLostObservable.add(() => fallback("context lost"));
-  } catch (e) { fallback(e); }
-}
-
-// ---- Navigation: section links, current section, Top button, legacy hashes --------------------------------
-function initNav(): void {
-  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".sections a"));
-  const secs = Array.from(document.querySelectorAll<HTMLElement>("section.sec"));
-  const nav = document.querySelector<HTMLElement>(".sections")!;
-  let current = "";
-  const mark = (id: string) => {
-    if (id === current) return;
-    current = id;
-    for (const a of links) a.classList.toggle("is-active", a.getAttribute("href") === `#${id}`);
-    const a = links.find((l) => l.getAttribute("href") === `#${id}`);
-    if (a && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2);
-  };
-  const io = new IntersectionObserver((entries) => {
-    const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-    const top = visible[0]?.target as HTMLElement | undefined;
-    if (top) mark(top.id);
-  }, { rootMargin: "-20% 0px -65% 0px", threshold: 0 });
-  secs.forEach((s) => io.observe(s));
-  const totop = document.getElementById("totop") as HTMLAnchorElement;
-  const onScroll = () => { totop.hidden = scrollY < 500; if (scrollY < 200) mark(""); };
-  addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-  totop.addEventListener("click", (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); history.replaceState(null, "", location.pathname + location.search); });
-}
-
 /** Older links (#/hardware/inside/13, #act-2, #s=inside/13, ?s=data/9, #src-<id>, #claim-<id>) still land on the right place. */
 function resolveLegacy(): void {
   const h = location.hash;
   const q = new URLSearchParams(location.search).get("s");
+  if (h.startsWith("#src-")) { revealSource(h.slice(5), "auto"); return; }
   if (!q && (h === "" || h === "#top" || document.getElementById(h.slice(1)))) return;
   const r = parseRoute(h, location.search);
   const ch = chapterFor(r);
-  const id = ch === "overview" ? "top" : ch === "inside" ? "components" : ch === "myths" ? "claims" : ch;
+  if (ch === "inside") {
+    const pt = r.index !== undefined && r.index >= 6 ? parts[r.index - 6] : undefined;
+    location.replace(`${COMPONENTS}${pt ? `#${pt.id}` : ""}`);
+    return;
+  }
+  const id = ch === "overview" ? "top" : ch === "myths" ? "claims" : ch;
   if (r.anchor?.startsWith("src-")) { revealSource(r.anchor.slice(4), "auto"); return; }
   if (r.anchor) { const t = document.getElementById(r.anchor); if (t) { history.replaceState(null, "", `#${r.anchor}`); scrollToEl(t); return; } }
-  if (id === "components" && r.index !== undefined) {
-    if (r.index >= 6) { const pt = parts[r.index - 6]; if (pt) set({ focusedPart: pt.id }); }
-    else set({ explodeStage: r.index });
-  }
   if (id === "data" && r.index !== undefined) { const t = document.getElementById(`stage-${Math.max(1, Math.min(hops.length, r.index + 1))}`); if (t) { history.replaceState(null, "", `#${t.id}`); scrollToEl(t); return; } }
   history.replaceState(null, "", `#${id}`);
   scrollToEl(document.getElementById(id));
@@ -268,22 +125,20 @@ export function initDocument(): void {
   document.getElementById("hero-sources")!.textContent = overview.intro.sources;
   (document.getElementById("preview-img") as HTMLImageElement).src = `${BASE}img/knolling.jpg`;
   renderDeployments(document.getElementById("deployments-body")!);
-  buildKnolling(document.getElementById("knolling")!);
   buildPole(document.getElementById("pole-body")!);
   buildPower(document.getElementById("power-body")!);
   buildData(document.getElementById("data-body")!);
   renderClaims(document.getElementById("myths")!, {
-    onPart: (id) => { set({ focusedPart: id }); scrollToEl(cells.get(id) ?? document.getElementById("components")); },
+    onPart: (id) => { location.href = `${COMPONENTS}#${id}`; },
     onHop: (n) => scrollToEl(document.getElementById(`stage-${n}`)),
   });
   renderEconomics(document.getElementById("economics-body")!);
   renderSources(document.getElementById("sources-body")!);
   setCiteHandler((id) => revealSource(id));
-  subscribe((s, changed) => { if (changed.has("focusedPart")) renderDetail(s.focusedPart); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape" && state.focusedPart) set({ focusedPart: null }); });
   initNav();
   addEventListener("hashchange", resolveLegacy);
-  set({ reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches });
+  set({ reducedMotion: reduced(), ready: true, mode: "stills" });
+  document.getElementById("status")!.textContent = "";
   (window as unknown as { __flock: unknown }).__flock = { state, set, get frame() { return Math.floor(performance.now() / 16); } };
-  void initLocator().finally(() => requestAnimationFrame(resolveLegacy));
+  requestAnimationFrame(resolveLegacy);
 }

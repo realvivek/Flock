@@ -27,8 +27,8 @@ import { components, install } from "../content";
 import { degToRad, feetToM, inchesToM, clamp01, smooth } from "../lib/math";
 import { state, type Tier } from "../store";
 import anim from "../content/animation.json";
+import { BASE } from "../lib/base";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 export const ROAD_NEAR = 3.0;
 export const LANE = 3.6;
 

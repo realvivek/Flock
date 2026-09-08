@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Components · Anatomy of a Flock Camera</title>
+    <meta name="description" content="The fourteen components of a Flock Safety Falcon camera in five groups, with specifications, part numbers and sources." />
+    <meta name="theme-color" content="#f7f8f6" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23f2b441' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23f2b441'/%3E%3C/svg%3E" />
+    <meta property="og:title" content="Anatomy of a Flock Camera" />
+    <meta property="og:description" content="Pole, enclosure, components, power and data paths, pricing and sources for a Flock Safety license plate reader." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="Back to the main page"><span class="brand-mark"></span><span class="brand-text">Anatomy of a Flock camera</span></a>
+      <nav class="sections" aria-label="Sections">
+        <a href="../#deployments">Deployments</a>
+        <a href="#top" class="is-active is-fixed">Components</a>
+        <a href="../#pole">Pole</a>
+        <a href="../#power">Power</a>
+        <a href="../#data">Data</a>
+        <a href="../#claims">Claims</a>
+        <a href="../#economics">Economics</a>
+        <a href="../#sources">Sources</a>
+      </nav>
+      <div class="status" id="status" aria-live="polite"></div>
+    </header>
+
+    <main id="main">
+      <section class="page-head" id="top">
+        <p class="eyebrow amber">Inside the enclosure</p>
+        <h1>Fourteen components in five groups</h1>
+        <p class="lede">Every part of the Falcon V2 at a consistent scale, grouped by function: Shell, Optics, Compute, Radios, Mount. Select a part for its specification, part number and sources.</p>
+        <p class="lede small"><a href="../">← Back to the main page</a></p>
+      </section>
+      <section class="sec" id="components">
+        <div class="components">
+          <aside class="locator sheet" id="locator">
+            <figure class="locator-fig"><canvas id="locator-canvas" aria-label="The assembled camera, see-through" hidden></canvas><img id="locator-img" alt="The assembled Falcon camera" hidden /></figure>
+            <div class="locator-ui" id="locator-ui" hidden>
+              <div class="stage-row"><button type="button" class="chip" id="explode-prev" aria-label="Previous stage">‹</button><input id="explode-stage" type="range" min="0" max="5" value="0" step="1" aria-label="Explode stage" /><button type="button" class="chip" id="explode-next" aria-label="Next stage">›</button></div>
+              <p class="aim-readout" id="explode-readout"></p>
+            </div>
+            <p class="locator-note" id="locator-note">In place. The shell is drawn see-through; a selected part is framed on its own.</p>
+          </aside>
+          <div id="knolling" class="knolling"></div>
+        </div>
+      </section>
+    </main>
+
+    <a class="totop" id="totop" href="#top" hidden>↑ Top</a>
+
+    <script type="module" src="/src/components.ts"></script>
+  </body>
+</html>
