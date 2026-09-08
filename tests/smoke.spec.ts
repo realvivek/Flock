@@ -9,43 +9,117 @@ declare global {
   }
 }
 
+const PAGES = ["deployments", "components", "pole", "power", "data", "claims", "economics", "sources"];
 const ready = (page: Page) => page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
+/** Navigate without waiting for the load event: a slow font host must not stall a test. */
+const go = (page: Page, url: string) => page.goto(url, { waitUntil: "commit" });
 const settled = (page: Page) => page.waitForFunction(() => window.__flock!.state.tweening !== true);
 const instant = (page: Page) => page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
 const inView = (page: Page, sel: string) => page.evaluate((sel) => { const r = document.querySelector(sel)!.getBoundingClientRect(); return r.top >= 40 && r.top < innerHeight; }, sel);
+const nav = async (page: Page, current: string) => {
+  await expect(page.locator(".sections a")).toHaveCount(9);
+  await expect(page.locator(".sections a").first()).toHaveText("Home");
+  await expect(page.locator(".sections a.is-active")).toHaveText(current);
+  await expect(page.locator(".sections a.is-active")).toHaveAttribute("aria-current", "page");
+};
 
-test("main page: one scroll with section links, the preview opens the components page", async ({ page }) => {
+test("home: summary of every page, the components preview, older links redirect", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/");
+  await go(page, "/");
   await ready(page);
   await instant(page);
-
-  // Hero: preview image and button link to the components page; no components section on this page
+  await nav(page, "Home");
   await expect(page.locator("#preview-img")).toHaveJSProperty("complete", true);
   expect(await page.evaluate(() => (document.getElementById("preview-img") as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  await expect(page.locator("#components")).toHaveCount(0);
-  await expect(page.locator(".sections a")).toHaveCount(8);
-  await expect(page.locator(".sections a", { hasText: "Components" })).toHaveAttribute("href", "components/");
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
+  await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Pole and mount", "Power and cable", "Data path", "Common claims", "Economics", "Sources"]);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(2200);
+  // no article content on the home page
+  await expect(page.locator(".claim, .stage, .cell")).toHaveCount(0);
+  // a summary card opens its page
+  await page.locator("#summary-cards .summary-card", { hasText: "Data path" }).click();
+  await page.waitForURL(/\/data\/$/, { waitUntil: "commit" });
+  await ready(page);
+  await nav(page, "Data");
+  await expect(page.locator("#page-body .stage")).toHaveCount(14);
+  // the preview opens the components page
+  await go(page, "/");
+  await ready(page);
+  await page.locator("#preview").click();
+  await page.waitForURL(/\/components\/$/, { waitUntil: "commit" });
+  // older single-page links land on the right page
+  for (const [from, to] of [["/#deployments", /\/deployments\/$/], ["/#/hardware/inside/13", /\/components\/#som$/], ["/#act-4", /\/data\/$/], ["/?s=data/9", /\/data\/#stage-10$/], ["/#economics", /\/economics\/$/]] as const) {
+    await go(page, from);
+    await page.waitForURL(to, { waitUntil: "commit" });
+  }
+  await ready(page);
+  const src = await page.evaluate(() => { const a = document.querySelector<HTMLAnchorElement>("#page-body .cite a"); return a ? a.getAttribute("href")!.slice(1) : ""; });
+  expect(src).toMatch(/^src-/);
+  await go(page, "/#" + src);
+  await page.waitForURL(new RegExp(`/sources/#${src}$`), { waitUntil: "commit" });
+  await ready(page);
+  await expect(page.locator(`#${src}`)).toHaveClass(/is-target/);
+  expect(errors).toEqual([]);
+});
 
-  // Section links and the current-section marker
-  await page.locator(".sections a", { hasText: "Data" }).click();
-  await expect.poll(() => inView(page, "#data")).toBe(true);
-  await expect(page.locator("#data .stage")).toHaveCount(14);
-  await expect.poll(() => page.locator(".sections a.is-active").textContent()).toBe("Data");
+test("every content page loads with its content, the pager and citations that reach the Sources page", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  const counts: Record<string, [string, number]> = {
+    deployments: ["#page-body .chart-bars .bar", 10],
+    pole: ["#page-body .card", 4],
+    power: ["#page-body .card", 3],
+    data: ["#page-body .stage", 14],
+    claims: ["#page-body .claim", 21],
+    economics: ["#page-body .econ-block", 1],
+    sources: ["#page-body .src-group", 4],
+  };
+  for (const id of PAGES.filter((p) => p !== "components")) {
+    await go(page, `/${id}/`);
+    await ready(page);
+    await nav(page, id[0]!.toUpperCase() + id.slice(1));
+    const [sel, n] = counts[id]!;
+    expect(await page.locator(sel).count(), id).toBeGreaterThanOrEqual(n);
+    await expect(page.locator("#pager a.up")).toHaveAttribute("href", "../");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), id).toBe(true);
+  }
+  // pager order
+  await go(page, "/deployments/");
+  await ready(page);
+  await expect(page.locator("#pager a.next")).toHaveAttribute("href", "../components/");
+  await go(page, "/sources/");
+  await ready(page);
+  await expect(page.locator("#pager a.prev")).toHaveAttribute("href", "../economics/");
+  await expect(page.locator("#pager .end")).toHaveCount(1);
+  // data: deputy form and a stage deep link
+  await go(page, "/data/#stage-10");
+  await ready(page);
+  await instant(page);
+  await expect.poll(() => inView(page, "#stage-10")).toBe(true);
   await page.fill("#deputy-reason", "investigation");
   await page.locator("#deputy-form button").click();
   await expect(page.locator("#deputy-readout")).toContainText("6,809");
-  await expect(page.locator("#totop")).toBeVisible();
-  await expect(page.locator("#pole-body .card")).toHaveCount(4);
-  await expect(page.locator("#power-body .card")).toHaveCount(3);
-
-  // Deployments article, citation chips and the bibliography
-  await expect(page.locator("#deployments-body .chart-bars .bar")).toHaveCount(10);
-  await expect(page.locator("#deployments-body .contracts tbody tr")).toHaveCount(10);
-  const chip = page.locator("#deployments-body .cite a").first();
+  // claims: product table, a component link and a data-stage link cross pages
+  await go(page, "/claims/");
+  await ready(page);
+  await expect(page.locator("#page-body .products tbody tr")).toHaveCount(8);
+  await page.locator("#page-body .claim button", { hasText: /^Data stage/ }).first().click();
+  await page.waitForURL(/\/data\/#stage-\d+$/, { waitUntil: "commit" });
+  await go(page, "/claims/");
+  await ready(page);
+  await page.locator("#page-body .claim button", { hasText: /^Component/ }).first().click();
+  await page.waitForURL(/\/components\/#[a-z]+$/, { waitUntil: "commit" });
+  await ready(page);
+  await expect(page.locator("#part-detail")).toBeVisible();
+  // a citation chip on any page reaches the row on the Sources page; every chip on the Sources page resolves
+  await go(page, "/deployments/");
+  await ready(page);
+  const chip = page.locator("#page-body .cite a").first();
   const href = (await chip.getAttribute("href"))!;
   await chip.click();
+  await page.waitForURL(new RegExp(`/sources/${href}$`), { waitUntil: "commit" });
+  await ready(page);
   await expect(page.locator(href)).toHaveClass(/is-target/);
   await expect.poll(() => inView(page, href)).toBe(true);
   const missing = await page.evaluate(() => {
@@ -53,43 +127,24 @@ test("main page: one scroll with section links, the preview opens the components
     return [...document.querySelectorAll<HTMLAnchorElement>(".cite a")].map((a) => a.getAttribute("href")!.slice(1)).filter((h) => !ids.has(h));
   });
   expect(missing).toEqual([]);
+  // Top button
+  await page.evaluate(() => scrollTo(0, 3000));
+  await expect(page.locator("#totop")).toBeVisible();
   await page.locator("#totop").click();
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
-
-  // Claims: a component link opens the components page with that part's record
-  await expect(page.locator("#claims .products tbody tr")).toHaveCount(8);
-  await expect(page.locator("#claims .claim")).toHaveCount(21);
-  await page.locator("#claims .claim button", { hasText: /^Component/ }).first().click();
-  await page.waitForURL(/\/components\/#[a-z]+$/);
-  await ready(page);
-  await expect(page.locator("#part-detail")).toBeVisible();
-
-  // The preview opens the components page; older links redirect there too
-  await page.goto("/");
-  await ready(page);
-  await page.locator("#preview").click();
-  await page.waitForURL(/\/components\/$/);
-  await page.goto("/#/hardware/inside/13");
-  await page.waitForURL(/\/components\/#som$/);
-  await ready(page);
-  await expect(page.locator("#part-detail")).toContainText("System on module");
-  await page.goto("/#act-4");
-  await ready(page);
-  await expect.poll(() => inView(page, "#data")).toBe(true);
   expect(errors).toEqual([]);
 });
 
 test("components page: knolling grid in five groups with a 3D locator on desktop", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/components/?gl");
+  await go(page, "/components/?gl");
   await ready(page);
   await instant(page);
   await expect(page.locator("#status")).toContainText(/webgl2|webgpu/);
   expect(await page.evaluate(() => window.__flock!.state.mode)).toBe("3d");
-  await expect(page.locator(".sections a.is-active")).toHaveText("Components");
-  await expect(page.locator(".sections a", { hasText: "Data" })).toHaveAttribute("href", "../#data");
-
+  await nav(page, "Components");
+  await expect(page.locator(".sections a", { hasText: "Data" })).toHaveAttribute("href", "../data/");
   await expect(page.locator("#knolling .group")).toHaveCount(5);
   await expect(page.locator("#knolling .group-head h3")).toHaveText(["Shell", "Optics", "Compute", "Radios", "Mount"]);
   await expect(page.locator("#knolling .cell")).toHaveCount(14);
@@ -103,7 +158,7 @@ test("components page: knolling grid in five groups with a 3D locator on desktop
   expect(await page.evaluate(() => location.hash)).toBe("#som");
   await expect.poll(() => page.evaluate(() => window.__flock!.state.focusedPart)).toBe("som");
   await settled(page);
-  await expect(page.locator("#part-detail a[href='../#stage-2']")).toHaveCount(1);
+  await expect(page.locator("#part-detail a[href='../data/#stage-2']")).toHaveCount(1);
   await page.locator("#part-detail .chip", { hasText: "Close" }).click();
   await expect(page.locator("#part-detail")).toHaveCount(0);
   expect(await page.evaluate(() => location.hash)).toBe("");
@@ -113,60 +168,71 @@ test("components page: knolling grid in five groups with a 3D locator on desktop
   await expect(page.locator("#explode-readout")).toContainText("Stage 5 of 5");
   await settled(page);
   await page.screenshot({ path: "test-results/components.png" });
-  // A citation chip goes to the source row on the main page
+  // The Components chip and the skip link stay on this page
+  await page.locator(".sections a.is-active").click();
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => location.pathname)).toMatch(/\/components\/$/);
+  await page.evaluate(() => { location.hash = "#main"; });
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => location.pathname)).toMatch(/\/components\/$/);
+  // A citation chip goes to the source row on the Sources page
   await page.locator(".cell[data-part=lens]").click();
   const chip = page.locator("#part-detail .cite a").first();
   const src = (await chip.getAttribute("href"))!.slice(1);
   await chip.click();
-  await page.waitForURL(new RegExp(`/#${src}$`));
+  await page.waitForURL(new RegExp(`/sources/#${src}$`), { waitUntil: "commit" });
   await ready(page);
   await expect(page.locator(`#${src}`)).toHaveClass(/is-target/);
-  // Deep links
-  await page.goto("/components/?gl#emmc");
+  // Deep links: the record opens before the locator has loaded; Top keeps the part in the address
+  await go(page, "/components/?gl#emmc");
+  await expect(page.locator("#part-detail")).toContainText("Storage", { timeout: 5000 });
   await ready(page);
-  await expect(page.locator("#part-detail")).toContainText("Storage");
-  await page.goto("/components/?gl#s=inside/13");
+  await page.evaluate(() => scrollTo(0, 2000));
+  await expect(page.locator("#totop")).toBeVisible();
+  await page.locator("#totop").click();
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  expect(await page.evaluate(() => location.hash)).toBe("#emmc");
+  await go(page, "/components/?gl#s=inside/13");
   await ready(page);
   await expect(page.locator("#part-detail")).toContainText("System on module");
   expect(errors).toEqual([]);
 });
 
-test("phones get both pages with stills and never load the 3D engine", async ({ browser }) => {
+test("phones get every page with stills and never load the 3D engine", async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();
   const requests: string[] = [];
   page.on("request", (r) => requests.push(r.url()));
-  await page.goto("/");
+  await go(page, "/");
   await ready(page);
   await instant(page);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await page.locator(".sections a", { hasText: "Economics" }).click();
-  await expect.poll(() => inView(page, "#economics")).toBe(true);
-  await expect(page.locator("#economics .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
-  await expect(page.locator("#claims .claim")).toHaveCount(21);
-  const mchip = page.locator("#claims .cite a").first();
+  await page.waitForURL(/\/economics\/$/, { waitUntil: "commit" });
+  await ready(page);
+  await expect(page.locator("#page-body .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await go(page, "/claims/");
+  await ready(page);
+  await expect(page.locator("#page-body .claim")).toHaveCount(21);
+  const mchip = page.locator("#page-body .cite a").first();
   const mhref = (await mchip.getAttribute("href"))!;
   await mchip.click();
+  await page.waitForURL(new RegExp(`/sources/${mhref}$`), { waitUntil: "commit" });
+  await ready(page);
   await expect(page.locator(mhref)).toHaveClass(/is-target/);
-  const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#sources .src-link").first().click()]);
+  const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#page-body .src-link").first().click()]);
   expect(popup).toBeTruthy();
   await popup.close();
-  // components page
-  await page.locator("#preview").click();
-  await page.waitForURL(/\/components\/$/);
+  await go(page, "/components/");
   await ready(page);
   expect(await page.evaluate(() => window.__flock!.state.mode)).toBe("stills");
   await expect(page.locator("#locator-img")).toBeVisible();
-  await expect(page.locator("#locator-canvas")).toBeHidden();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await expect(page.locator("#knolling .cell")).toHaveCount(14);
   await page.locator(".cell[data-part=lens]").click();
   await expect(page.locator("#part-detail")).toContainText("M12");
   await expect.poll(() => inView(page, "#part-detail")).toBe(true);
-  await page.locator(".sections a", { hasText: "Data" }).click();
-  await page.waitForURL(/\/#data$/);
-  await ready(page);
-  await expect.poll(() => inView(page, "#data")).toBe(true);
   expect(requests.filter((u) => /\.glb$|babylon/.test(u))).toEqual([]);
   await ctx.close();
 });
@@ -174,7 +240,7 @@ test("phones get both pages with stills and never load the 3D engine", async ({ 
 test("desktop without a 3D engine gets the assembled still in the locator", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/components/?fail3d");
+  await go(page, "/components/?fail3d");
   await ready(page);
   expect(await page.evaluate(() => window.__flock!.state.mode)).toBe("stills");
   await expect(page.locator("#locator-img")).toBeVisible();

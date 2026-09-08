@@ -193,8 +193,7 @@ export function renderEconomics(host: HTMLElement): void {
   }
 }
 
-let revealTimer = 0;
-/** Scroll a bibliography row into view and flash it so the landing point is visible among the rows. */
+/** Scroll a bibliography row into view and mark it so the landing point stays visible among the rows until the next citation. */
 export function revealSource(id: string, behavior: ScrollBehavior = "smooth"): boolean {
   const row = document.getElementById(`src-${id}`);
   if (!row) return false;
@@ -202,8 +201,6 @@ export function revealSource(id: string, behavior: ScrollBehavior = "smooth"): b
   row.scrollIntoView({ behavior: reduced ? "auto" : behavior, block: "start" });
   document.querySelectorAll(".source.is-target").forEach((r) => r.classList.remove("is-target"));
   row.classList.add("is-target");
-  clearTimeout(revealTimer);
-  revealTimer = window.setTimeout(() => row.classList.remove("is-target"), 2600);
   return true;
 }
 

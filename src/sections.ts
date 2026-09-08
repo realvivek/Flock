@@ -1,16 +1,8 @@
-/**
- * The main page: hero with a preview of the components grid and a link to the components page, then Deployments,
- * Pole, Power, Data, Claims, Economics and Sources in one scroll with section links at the top.
- */
-import "./document.css";
-import { components, install, dataflow, overview } from "./content";
-import { cite, escape, tag, setCiteHandler } from "./ui/cite";
-import { renderClaims, renderEconomics, renderSources, renderDeployments, revealSource } from "./ui/article";
-import { BASE, still, nn, el, p, kv, facts, scrollToEl, initNav, reduced } from "./ui/common";
-import { parseRoute, chapterFor } from "./router";
-import { state, set } from "./store";
-
-const COMPONENTS = "components/";
+/** The Pole, Power and Data pages, built from the install and dataflow content. */
+import { install, dataflow } from "./content";
+import { cite, escape, tag } from "./ui/cite";
+import { still, nn, el, p, kv, facts } from "./ui/common";
+import { set } from "./store";
 
 /** Small inline diagram for a data stage: camera, cloud, officer and network, with the active stage lit. */
 function hopSvg(n: number): string {
@@ -30,11 +22,10 @@ function hopSvg(n: number): string {
   </svg>`;
 }
 
-const parts = components.parts.slice().sort((a, b) => a.order - b.order);
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
 
 // ---- Pole, power and data sections from the install and dataflow content -------------------------------
-function buildPole(host: HTMLElement): void {
+export function buildPole(host: HTMLElement): void {
   for (const m of ["flock", "existing", "ac"] as const) {
     const mode = install.modes[m]!;
     const card = el("article", "card sheet");
@@ -51,7 +42,7 @@ function buildPole(host: HTMLElement): void {
   host.appendChild(fov);
 }
 
-function buildPower(host: HTMLElement): void {
+export function buildPower(host: HTMLElement): void {
   for (const m of ["solar", "ac", "wing"] as const) {
     const path = install.paths[m]!;
     const card = el("article", "card sheet");
@@ -62,7 +53,7 @@ function buildPower(host: HTMLElement): void {
   }
 }
 
-function buildData(host: HTMLElement): void {
+export function buildData(host: HTMLElement): void {
   for (const h of hops) {
     const row = el("article", "stage sheet");
     row.id = `stage-${h.n}`;
@@ -99,46 +90,5 @@ function buildData(host: HTMLElement): void {
   host.appendChild(dep);
 }
 
-/** Older links (#/hardware/inside/13, #act-2, #s=inside/13, ?s=data/9, #src-<id>, #claim-<id>) still land on the right place. */
-function resolveLegacy(): void {
-  const h = location.hash;
-  const q = new URLSearchParams(location.search).get("s");
-  if (h.startsWith("#src-")) { revealSource(h.slice(5), "auto"); return; }
-  if (!q && (h === "" || h === "#top" || document.getElementById(h.slice(1)))) return;
-  const r = parseRoute(h, location.search);
-  const ch = chapterFor(r);
-  if (ch === "inside") {
-    const pt = r.index !== undefined && r.index >= 6 ? parts[r.index - 6] : undefined;
-    location.replace(`${COMPONENTS}${pt ? `#${pt.id}` : ""}`);
-    return;
-  }
-  const id = ch === "overview" ? "top" : ch === "myths" ? "claims" : ch;
-  if (r.anchor?.startsWith("src-")) { revealSource(r.anchor.slice(4), "auto"); return; }
-  if (r.anchor) { const t = document.getElementById(r.anchor); if (t) { history.replaceState(null, "", `#${r.anchor}`); scrollToEl(t); return; } }
-  if (id === "data" && r.index !== undefined) { const t = document.getElementById(`stage-${Math.max(1, Math.min(hops.length, r.index + 1))}`); if (t) { history.replaceState(null, "", `#${t.id}`); scrollToEl(t); return; } }
-  history.replaceState(null, "", `#${id}`);
-  scrollToEl(document.getElementById(id));
-}
-
-export function initDocument(): void {
-  document.getElementById("hero-lede")!.textContent = overview.intro.lede;
-  document.getElementById("hero-sources")!.textContent = overview.intro.sources;
-  (document.getElementById("preview-img") as HTMLImageElement).src = `${BASE}img/knolling.jpg`;
-  renderDeployments(document.getElementById("deployments-body")!);
-  buildPole(document.getElementById("pole-body")!);
-  buildPower(document.getElementById("power-body")!);
-  buildData(document.getElementById("data-body")!);
-  renderClaims(document.getElementById("myths")!, {
-    onPart: (id) => { location.href = `${COMPONENTS}#${id}`; },
-    onHop: (n) => scrollToEl(document.getElementById(`stage-${n}`)),
-  });
-  renderEconomics(document.getElementById("economics-body")!);
-  renderSources(document.getElementById("sources-body")!);
-  setCiteHandler((id) => revealSource(id));
-  initNav();
-  addEventListener("hashchange", resolveLegacy);
-  set({ reducedMotion: reduced(), ready: true, mode: "stills" });
-  document.getElementById("status")!.textContent = "";
-  (window as unknown as { __flock: unknown }).__flock = { state, set, get frame() { return Math.floor(performance.now() / 16); } };
-  requestAnimationFrame(resolveLegacy);
-}
+/** Element ids of the twelve data stages, in order. */
+export function dataStageIds(): string[] { return hops.map((h) => `stage-${h.n}`); }

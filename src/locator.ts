@@ -101,6 +101,7 @@ export async function initLocator(canvas: HTMLCanvasElement, status: HTMLElement
     if (moving !== tweening) { tweening = moving; set({ tweening }); }
   });
   subscribe((s, changed) => { if (changed.has("focusedPart")) world.isolate(s.focusedPart); });
+  if (state.focusedPart) world.isolate(state.focusedPart);
 
   // Render only while the locator is on screen.
   let visible = true;

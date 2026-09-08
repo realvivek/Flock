@@ -2,10 +2,10 @@
  * The components page: the fourteen parts of the Falcon V2 in a knolling grid in five groups, the record of the
  * selected part under its group, and on desktops that can run a 3D engine a locator that frames the part.
  */
-import "./document.css";
 import { components, partById, hopById, stillById, EXPLODE_STAGES, PART_GROUPS } from "./content";
-import { cite, escape, setCiteHandler } from "./ui/cite";
-import { BASE, ROOT, still, nn, el, scrollToEl, initNav, reduced } from "./ui/common";
+import { cite, escape } from "./ui/cite";
+import { still, nn, el, scrollToEl } from "./ui/common";
+import { BASE, ROOT } from "./lib/base";
 import { parseRoute, chapterFor } from "./router";
 import { state, set, subscribe } from "./store";
 
@@ -59,7 +59,7 @@ function renderDetail(id: string | null): void {
       ${pt.partNumber ? `<div class="pn">${escape(pt.partNumber)}${pt.vendor ? " · " + escape(pt.vendor) : ""}</div>` : ""}
       <p>${escape(pt.function)}</p>
       <dl class="kv">${Object.entries(pt.spec).map(([k, v]) => `<dt>${escape(k)}</dt><dd>${escape(v)}</dd>`).join("")}</dl>
-      <p class="fine">${confidenceLabel[pt.confidence]}${hop ? ` · <a href="${ROOT}#stage-${hop.n}">data stage ${nn(hop.n)}: ${escape(hop.title)}</a>` : ""}</p>
+      <p class="fine">${confidenceLabel[pt.confidence]}${hop ? ` · <a href="${ROOT}data/#stage-${hop.n}">data stage ${nn(hop.n)}: ${escape(hop.title)}</a>` : ""}</p>
     </div>`;
   const body = d.querySelector(".detail-body")!;
   body.appendChild(cite(pt.sources));
@@ -116,27 +116,30 @@ async function initLocator(): Promise<void> {
   } catch (e) { fallback(e); }
 }
 
-/** `#som` opens a part; older links (#/hardware/inside/13, #s=inside/13, ?s=inside/13, #act-2) still resolve. */
+/** `#som` opens a part; older links (#/hardware/inside/13, #s=inside/13, ?s=inside/13, #act-2) still resolve.
+ *  Section and skip-link hashes (#top, #main) and anything that names an element on this page are left alone. */
 function resolveHash(): void {
   const h = location.hash.slice(1);
   if (partById.has(h)) { if (state.focusedPart !== h) set({ focusedPart: h }); return; }
   const q = new URLSearchParams(location.search).get("s");
-  if (!h && !q) return;
+  if (!q && (!h || document.getElementById(h))) return;
+  if (!q && !/^(\/|act-|s=)/.test(h)) return;
   const r = parseRoute(location.hash, location.search);
-  if (chapterFor(r) === "inside" && r.index !== undefined) {
-    if (r.index >= 6) { const pt = parts[r.index - 6]; if (pt) set({ focusedPart: pt.id }); }
-    else set({ explodeStage: r.index });
-  } else if (chapterFor(r) !== "inside") location.replace(`${ROOT}${location.hash}`);
+  if (chapterFor(r) === "inside") {
+    if (r.index !== undefined) {
+      if (r.index >= 6) { const pt = parts[r.index - 6]; if (pt) set({ focusedPart: pt.id }); }
+      else set({ explodeStage: r.index });
+    }
+  } else location.replace(`${ROOT}${location.hash}`);
 }
 
 export function initComponentsPage(): void {
   buildKnolling(document.getElementById("knolling")!);
-  setCiteHandler((id) => { location.href = `${ROOT}#src-${id}`; });
   subscribe((s, changed) => { if (changed.has("focusedPart")) renderDetail(s.focusedPart); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && state.focusedPart) set({ focusedPart: null }); });
-  initNav();
   addEventListener("hashchange", resolveHash);
-  set({ reducedMotion: reduced() });
   (window as unknown as { __flock: unknown }).__flock = { state, set, get frame() { return Math.floor(performance.now() / 16); } };
+  // Resolve the address at once so a linked record opens before the locator has loaded its models.
+  resolveHash();
   void initLocator().finally(() => requestAnimationFrame(resolveHash));
 }

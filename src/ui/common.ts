@@ -20,32 +20,17 @@ export function scrollToEl(target: Element | null, block: ScrollLogicalPosition 
   target.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block });
 }
 
-/** Section links in the header mark the section in view (when the page has sections); the Top button appears once scrolled. */
+/** Header: the current page is marked in the markup; Home and the brand on the home page scroll to the start without a
+ *  reload; the Top button appears once scrolled and keeps a part hash (components/#som) in the address. */
 export function initNav(): void {
-  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".sections a"));
-  const secs = Array.from(document.querySelectorAll<HTMLElement>("section.sec"));
   const nav = document.querySelector<HTMLElement>(".sections")!;
-  const fixed = links.find((a) => a.classList.contains("is-fixed"));
-  let current = "";
-  const mark = (id: string) => {
-    if (id === current) return;
-    current = id;
-    if (!fixed) for (const a of links) a.classList.toggle("is-active", a.getAttribute("href") === `#${id}`);
-    const a = fixed ?? links.find((l) => l.getAttribute("href") === `#${id}`);
-    if (a && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2);
-  };
-  if (secs.length && !fixed) {
-    const io = new IntersectionObserver((entries) => {
-      const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-      const top = visible[0]?.target as HTMLElement | undefined;
-      if (top) mark(top.id);
-    }, { rootMargin: "-20% 0px -65% 0px", threshold: 0 });
-    secs.forEach((s) => io.observe(s));
-  }
-  if (fixed) mark(fixed.getAttribute("href")!.slice(1));
+  const active = nav.querySelector<HTMLAnchorElement>("a.is-active");
+  if (active && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, active.offsetLeft - nav.clientWidth / 2 + active.offsetWidth / 2);
+  const toTop = () => { scrollTo({ top: 0, behavior: reduced() ? "auto" : "smooth" }); if (!location.hash || /^#(top|main|summary)$/.test(location.hash)) history.replaceState(null, "", location.pathname + location.search); };
+  if (ROOT === "./") for (const a of [nav.querySelector<HTMLAnchorElement>("a.home"), document.querySelector<HTMLAnchorElement>(".topbar .brand")]) a?.addEventListener("click", (e) => { e.preventDefault(); toTop(); });
   const totop = document.getElementById("totop") as HTMLAnchorElement;
-  const onScroll = () => { totop.hidden = scrollY < 500; if (scrollY < 200 && !fixed) mark(""); };
+  const onScroll = () => { totop.hidden = scrollY < 500; };
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
-  totop.addEventListener("click", (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: reduced() ? "auto" : "smooth" }); history.replaceState(null, "", location.pathname + location.search); });
+  totop.addEventListener("click", (e) => { e.preventDefault(); toTop(); });
 }
