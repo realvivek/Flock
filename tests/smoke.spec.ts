@@ -213,6 +213,13 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await ready(page);
   await expect(page.locator("#page-body .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  // every header link, Home included, sits inside the fixed header on a phone; scrolling does not move it
+  await page.evaluate(() => scrollTo(0, 1200));
+  await expect.poll(() => page.evaluate(() => { const tb = document.querySelector(".topbar")!.getBoundingClientRect(); return tb.top === 0 && [...document.querySelectorAll(".sections a")].every((a) => { const r = a.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth && r.top >= tb.top && r.bottom <= tb.bottom; }); })).toBe(true);
+  await page.locator(".sections a.home").click();
+  await page.waitForURL(/\/Flock\/$|:4173\/$/, { waitUntil: "commit" });
+  await ready(page);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
   await go(page, "/claims/");
   await ready(page);
   await expect(page.locator("#page-body .claim")).toHaveCount(21);

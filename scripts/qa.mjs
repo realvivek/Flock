@@ -23,8 +23,10 @@ const pageChecks = () => {
   out.first = document.querySelector(".sections a")?.textContent;
   out.active = document.querySelector(".sections a.is-active")?.textContent;
   out.current = document.querySelector(".sections a[aria-current=page]")?.textContent;
-  const a = document.querySelector(".sections a.is-active"); const nav = document.querySelector(".sections");
-  out.chipInView = !a || (a.getBoundingClientRect().left >= nav.getBoundingClientRect().left - 1 && a.getBoundingClientRect().right <= nav.getBoundingClientRect().right + 1);
+  const tb = document.querySelector(".topbar").getBoundingClientRect();
+  out.allChipsInView = [...document.querySelectorAll(".sections a")].every((a) => { const r = a.getBoundingClientRect(); return r.left >= -1 && r.right <= innerWidth + 1 && r.top >= tb.top - 1 && r.bottom <= tb.bottom + 1; });
+  const h1 = document.querySelector(".page-head h1, .hero h1");
+  out.h1UnderHeader = !!h1 && scrollY === 0 && h1.getBoundingClientRect().top < tb.bottom;
   out.pager = document.getElementById("pager") ? document.querySelectorAll("#pager a").length : -1;
   out.height = document.documentElement.scrollHeight;
   out.mode = window.__flock.state.mode;
@@ -51,9 +53,10 @@ for (const [w, h, phone] of sizes) {
     if (g.clipped.length) F(vp, name, "clipped text: " + g.clipped.join(" | "));
     if (g.links !== 9 || g.first !== "Home") F(vp, name, `${g.links} header links, first "${g.first}"`);
     if (g.active !== labels[id] || g.current !== labels[id]) F(vp, name, `header marks "${g.active}" (aria-current "${g.current}")`);
-    if (!g.chipInView) F(vp, name, "current page link scrolled out of the rail");
+    if (!g.allChipsInView) F(vp, name, "a header link is outside the header or the viewport");
+    if (g.h1UnderHeader) F(vp, name, "the page title sits under the fixed header");
     if (id && g.pager < 2) F(vp, name, `pager has ${g.pager} links`);
-    if (!id && g.height > 2600) F(vp, name, `home is ${g.height} px tall`);
+    if (!id && g.height > 2700) F(vp, name, `home is ${g.height} px tall`);
     if (g.totopAtTop) F(vp, name, "Top button shown at the top");
     if (!phone && id === "components" && g.mode !== "3d") F(vp, name, "no 3D on desktop");
     await page.screenshot({ path: `${Q}/${vp}-${name}.png` });

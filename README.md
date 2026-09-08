@@ -24,7 +24,7 @@ Citation chips on any page open the Sources page at the cited row. Claims link t
 
 ## Phones
 
-Phones get the same pages. The header links become a scrolling rail, the components grid is two columns, the locator is the assembled still, and the pole, power and data cards stack. Phones never download the 3D engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the locator on a small screen, `?mode=stills` forces the still on a desktop. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the locator falls back to the still; `?fail3d` simulates that.
+Phones get the same pages. The header links wrap into two rows so all nine stay visible, the components grid is two columns, the locator is the assembled still, and the pole, power and data cards stack. Phones never download the 3D engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the locator on a small screen, `?mode=stills` forces the still on a desktop. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the locator falls back to the still; `?fail3d` simulates that.
 
 The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart. The preview image of the grid on the home page is `public/img/knolling.jpg`, rendered from the components page by `node scripts/knolling.mjs` against a preview server.
 

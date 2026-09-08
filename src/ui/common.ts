@@ -14,7 +14,10 @@ export const facts = (host: HTMLElement, rows: { k: string; v: string; sources: 
 
 export const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** Scroll an element into view under the sticky header. */
+/** Height of the fixed header in CSS pixels, from the --topbar-h token. */
+export const topbarHeight = (): number => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-h")) || 48;
+
+/** Scroll an element into view under the fixed header. */
 export function scrollToEl(target: Element | null, block: ScrollLogicalPosition = "start"): void {
   if (!target) return;
   target.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block });
@@ -24,8 +27,6 @@ export function scrollToEl(target: Element | null, block: ScrollLogicalPosition 
  *  reload; the Top button appears once scrolled and keeps a part hash (components/#som) in the address. */
 export function initNav(): void {
   const nav = document.querySelector<HTMLElement>(".sections")!;
-  const active = nav.querySelector<HTMLAnchorElement>("a.is-active");
-  if (active && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, active.offsetLeft - nav.clientWidth / 2 + active.offsetWidth / 2);
   const toTop = () => { scrollTo({ top: 0, behavior: reduced() ? "auto" : "smooth" }); if (!location.hash || /^#(top|main|summary)$/.test(location.hash)) history.replaceState(null, "", location.pathname + location.search); };
   if (ROOT === "./") for (const a of [nav.querySelector<HTMLAnchorElement>("a.home"), document.querySelector<HTMLAnchorElement>(".topbar .brand")]) a?.addEventListener("click", (e) => { e.preventDefault(); toTop(); });
   const totop = document.getElementById("totop") as HTMLAnchorElement;

@@ -1,9 +1,9 @@
-/* The document: sticky header with section links, hero with the knolling preview, then sections in order. */
-html { scroll-behavior: smooth; scroll-padding-top: 4rem; }
+/* Every page: a fixed header with the page links (one row on desktop, two rows on phones), then the page. Offsets that clear the header follow --topbar-h. */
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--topbar-h) + 1rem); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-main { display: flex; flex-direction: column; gap: 4rem; width: min(78rem, 100% - 2.5rem); margin: 0 auto; padding: 4.5rem 0 6rem; }
-.sec { scroll-margin-top: 3.6rem; display: flex; flex-direction: column; gap: 1.2rem; }
-body:not([data-page="home"]) main { gap: 2rem; padding-top: 4rem; }
+main { display: flex; flex-direction: column; gap: 4rem; width: min(78rem, 100% - 2.5rem); margin: 0 auto; padding: calc(var(--topbar-h) + 1.5rem) 0 6rem; }
+.sec { scroll-margin-top: calc(var(--topbar-h) + .6rem); display: flex; flex-direction: column; gap: 1.2rem; }
+body:not([data-page="home"]) main { gap: 2rem; padding-top: calc(var(--topbar-h) + 1rem); }
 .sec-head { display: flex; flex-direction: column; gap: .5rem; max-width: 60rem; }
 .sec-head .lede { margin: 0; color: var(--ink-2); }
 .sec > .article { padding: 2rem 2.2rem 2.4rem; width: min(52rem, 100%); }
@@ -56,7 +56,7 @@ body:not([data-page="home"]) main { gap: 2rem; padding-top: 4rem; }
 
 /* Components: locator beside the grid on desktop, stacked on phones */
 .components { display: grid; grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-.locator { position: sticky; top: 4rem; display: flex; flex-direction: column; gap: .6rem; padding: .7rem; }
+.locator { position: sticky; top: calc(var(--topbar-h) + 1rem); display: flex; flex-direction: column; gap: .6rem; padding: .7rem; }
 .locator-fig { margin: 0; aspect-ratio: 4 / 5; background: #fff; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
 .locator-fig canvas, .locator-fig img { width: 100%; height: 100%; display: block; object-fit: contain; touch-action: none; outline: none; }
 .locator-ui { display: grid; gap: .3rem; }
@@ -102,7 +102,7 @@ body:not([data-page="home"]) main { gap: 2rem; padding-top: 4rem; }
 .card h3 { margin: 0; font-size: 1.05rem; }
 .card p { margin: 0; }
 .stages { display: flex; flex-direction: column; gap: .7rem; }
-.stage { display: grid; grid-template-columns: 16rem minmax(0, 1fr); gap: 1.2rem; padding: 1rem; scroll-margin-top: 4rem; font-size: 13.5px; }
+.stage { display: grid; grid-template-columns: 16rem minmax(0, 1fr); gap: 1.2rem; padding: 1rem; scroll-margin-top: calc(var(--topbar-h) + 1rem); font-size: 13.5px; }
 .stage-fig { background: #fff; border: 1px solid var(--line); border-radius: 3px; align-self: start; }
 .stage-fig svg { width: 100%; height: auto; display: block; }
 .stage-body { display: flex; flex-direction: column; gap: .5rem; }
@@ -120,12 +120,15 @@ body:not([data-page="home"]) main { gap: 2rem; padding-top: 4rem; }
   .locator { position: static; display: grid; grid-template-columns: 12rem 1fr; align-items: center; }
   .locator-fig { aspect-ratio: 1; }
 }
+@media (max-width: 640px) { :root { --topbar-h: 84px; } }
 @media (max-width: 800px) {
-  main { width: min(100%, 100% - 1.6rem); gap: 3rem; padding-top: 4rem; }
+  main { width: min(100%, 100% - 1.6rem); gap: 3rem; padding-top: calc(var(--topbar-h) + 1rem); }
+  /* Phone header: the brand dot beside a two-row grid of all nine links, so Home is always in reach. Nothing scrolls inside the header. */
   .topbar { padding: 0 .8rem; gap: .6rem; }
   .topbar .status { display: none; }
   .topbar .brand-text { display: none; }
-  .sections { margin-left: 0; }
+  .sections { margin-left: 0; flex: 1; flex-wrap: wrap; overflow: visible; gap: .25rem .1rem; align-content: center; }
+  .sections a { padding: .3rem .5rem; }
   .hero h1 { font-size: 2.2rem; }
   .sec > .article { padding: 1.1rem 1rem 1.4rem; }
   .locator { grid-template-columns: 9rem 1fr; }

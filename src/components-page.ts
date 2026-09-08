@@ -4,7 +4,7 @@
  */
 import { components, partById, hopById, stillById, EXPLODE_STAGES, PART_GROUPS } from "./content";
 import { cite, escape } from "./ui/cite";
-import { still, nn, el, scrollToEl } from "./ui/common";
+import { still, nn, el, scrollToEl, topbarHeight } from "./ui/common";
 import { BASE, ROOT } from "./lib/base";
 import { parseRoute, chapterFor } from "./router";
 import { state, set, subscribe } from "./store";
@@ -70,7 +70,7 @@ function renderDetail(id: string | null): void {
   cell.closest(".group")!.appendChild(d);
   detail = d;
   // Bring the record into view; a record taller than the viewport (phones) aligns its top under the header.
-  requestAnimationFrame(() => { const r = d.getBoundingClientRect(); if (r.bottom > innerHeight || r.top < 60) scrollToEl(d, r.height > innerHeight * 0.6 ? "start" : "nearest"); });
+  requestAnimationFrame(() => { const r = d.getBoundingClientRect(); if (r.bottom > innerHeight || r.top < topbarHeight() + 12) scrollToEl(d, r.height > innerHeight * 0.6 ? "start" : "nearest"); });
 }
 
 // ---- Locator: 3D on capable desktops, the assembled still elsewhere ---------------------------------------
