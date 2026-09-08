@@ -81,7 +81,7 @@ for (const [w,h] of sizes) {
   if (!hov.tip || hov.hl!==1) F(vp,"inside hover",`tooltip ${hov.tip} "${hov.tipText}" highlighted ${hov.hl} dimmed ${hov.dimmed}`);
   await page.screenshot({ path: `${Q}/${vp}-inside-hover.png` });
   await card.click(); await settle();
-  const iso = await page.evaluate(()=>{const c=document.getElementById("spec-card"); const r=c.getBoundingClientRect(); const cols=[...document.querySelectorAll(".callout-col")].map(e=>e.getBoundingClientRect()); const strip=document.querySelector(".inside-strip").getBoundingClientRect(); const overl = cols.some(k=>r.left<k.right&&k.left<r.right&&r.top<k.bottom&&k.top<r.bottom) || (r.top<strip.bottom && r.left<strip.right && r.right>strip.left); return {hidden:c.hidden, top:r.top, bottom:r.bottom, right:r.right, left:r.left, overl, off:r.bottom>innerHeight||r.right>innerWidth, badges:document.querySelectorAll("#pins .pin.badge.is-visible").length, leaders:[...document.querySelectorAll("#leaders .leader")].filter(l=>l.getAttribute("opacity")!=="0").length, hash:location.hash, scrollH: c.scrollHeight, clientH: c.clientHeight};});
+  const iso = await page.evaluate(()=>{const c=document.getElementById("spec-card"); const r=c.getBoundingClientRect(); const cols=[...document.querySelectorAll(".callout-col")].filter(e=>getComputedStyle(e).visibility!=="hidden").map(e=>e.getBoundingClientRect()); const strip=document.querySelector(".inside-strip").getBoundingClientRect(); const overl = cols.some(k=>r.left<k.right&&k.left<r.right&&r.top<k.bottom&&k.top<r.bottom) || (r.top<strip.bottom && r.left<strip.right && r.right>strip.left); return {hidden:c.hidden, top:r.top, bottom:r.bottom, right:r.right, left:r.left, overl, off:r.bottom>innerHeight||r.right>innerWidth, badges:document.querySelectorAll("#pins .pin.badge.is-visible").length, leaders:[...document.querySelectorAll("#leaders .leader")].filter(l=>l.getAttribute("opacity")!=="0").length, hash:location.hash, scrollH: c.scrollHeight, clientH: c.clientHeight};});
   if (iso.hidden) F(vp,"inside isolate","spec card hidden after click");
   if (iso.overl) F(vp,"inside isolate",`spec card overlaps cards/strip (l${Math.round(iso.left)} t${Math.round(iso.top)} r${Math.round(iso.right)} b${Math.round(iso.bottom)})`);
   if (iso.off) F(vp,"inside isolate",`spec card off screen (b${Math.round(iso.bottom)} r${Math.round(iso.right)})`);
@@ -90,6 +90,7 @@ for (const [w,h] of sizes) {
   await page.screenshot({ path: `${Q}/${vp}-inside-isolated.png` });
   await page.keyboard.press("Escape"); await page.waitForTimeout(200);
   if (!(await page.evaluate(()=>document.getElementById("spec-card").hidden))) F(vp,"inside","Escape did not close the spec card");
+  await settle();
   await page.locator("#pins .pin.badge.is-visible").first().click({ timeout: 3000 }).catch(e=>F(vp,"inside","badge not clickable: "+e.message.split("\n")[0]));
   await page.waitForTimeout(300);
   if (await page.evaluate(()=>document.getElementById("spec-card").hidden)) F(vp,"inside","clicking a badge did not open the spec card");

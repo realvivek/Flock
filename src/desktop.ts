@@ -186,10 +186,11 @@ export async function startDesktop() {
           const worldPerPx = (2 * dist * Math.tan(railOut.fov / 2)) / innerHeight;
           const span = worldPerPx * innerWidth;
           // Deadband and hysteresis so the loop settles instead of creeping or oscillating around its target.
-          if (Math.abs(err) > 3) compShift = Math.max(-span * 0.5, Math.min(span * 0.5, compShift + err * worldPerPx * 0.3));
+          if (Math.abs(err) > 3) compShift = Math.max(-span * 0.5, Math.min(span * 0.5, compShift + err * worldPerPx * 0.45));
           const width = box.right - box.left, free = freeR - freeL;
-          if (width > free * 0.92) compZoom = Math.min(1.6, compZoom * 1.04);
-          else if (width < free * 0.8) compZoom = Math.max(0.7, compZoom * 0.985);
+          const bandTop = (document.querySelector<HTMLElement>("#view-hardware .inside-strip")?.getBoundingClientRect().bottom ?? 48) + 24;
+          if (width > free * 0.92 || box.top < bandTop || box.bottom > innerHeight - 24) compZoom = Math.min(1.6, compZoom * 1.06);
+          else if (width < free * 0.8 && box.top > bandTop + 40 && box.bottom < innerHeight - 64) compZoom = Math.max(0.7, compZoom * 0.97);
         }
       } else { compShift *= 0.85; compZoom = 1 + (compZoom - 1) * 0.85; }
       if (Math.abs(compShift) > 1e-4 || compZoom > 1.001) {
