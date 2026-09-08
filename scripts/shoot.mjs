@@ -1,35 +1,35 @@
 import { chromium } from "@playwright/test";
 // Usage: node scripts/shoot.mjs <outDir> <url> <stops>
-// Stops are routes with an optional state suffix: "overview", "hardware/pole", "hardware/inside:5" (explode stage),
-// "data:10" (data stage), "claims", "economics", "sources".
+// Stops are section ids ("top", "deployments", "components", "pole", "power", "data", "claims", "economics",
+// "sources"), optionally with a part or stage: "components:som" selects a part, "components:stage=5" sets the
+// explode stage of the locator, "data:9" scrolls to stage 9.
 const out = process.argv[2] || "test-results";
 const url = process.argv[3] || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--disable-gpu-compositing"] });
 const [vw, vh] = (process.env.SHOT_VIEWPORT || "1440x900").split("x").map(Number);
 const page = await browser.newPage({ viewport: { width: vw, height: vh }, isMobile: vw < 800, hasTouch: vw < 800 });
-const waitFrames = async (n) => { const f0 = await page.evaluate(() => window.__flock.frame); await page.waitForFunction(({ f0, n }) => window.__flock.frame >= f0 + n, { f0, n }, { timeout: 20000 }).catch(() => {}); };
-const settle = async () => { await page.waitForFunction(() => window.__flock.state.tweening !== true, null, { timeout: 8000 }).catch(() => {}); await waitFrames(Number(process.env.SHOT_FRAMES || 12)); };
 const logs = [];
 page.on("console", m => logs.push(`[${m.type()}] ${m.text()}`));
 page.on("pageerror", e => logs.push(`[pageerror] ${e.message}`));
 page.on("response", r => { if (r.status() >= 400) logs.push(`[http ${r.status()}] ${r.url()}`); });
 await page.goto(url, { waitUntil: "networkidle" });
 await page.waitForFunction(() => window.__flock && window.__flock.state.ready, null, { timeout: 60000 }).catch(() => logs.push("[timeout] not ready"));
+await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
+const settle = async () => { await page.waitForFunction(() => window.__flock.state.tweening !== true, null, { timeout: 8000 }).catch(() => {}); await page.waitForTimeout(Number(process.env.SHOT_WAIT || 700)); };
 const status = await page.textContent("#status");
-const stops = (process.argv[4] || "overview,hardware/pole,hardware/inside:0,hardware/inside:5,hardware/power,data:10,claims,economics").split(",");
+const stops = (process.argv[4] || "top,deployments,components,pole,power,data,claims,economics,sources").split(",");
 for (const s of stops) {
-  const [route, arg] = s.split(":");
-  await page.evaluate(({ route, arg }) => {
+  const [id, arg] = s.split(":");
+  await page.evaluate(({ id, arg }) => {
     const f = window.__flock;
-    f.go(route);
-    if (route.endsWith("inside") && arg !== undefined) f.set({ explodeStage: Number(arg) });
-    if (route === "data" && arg !== undefined) f.set({ dataStage: Number(arg) });
-  }, { route, arg });
+    if (id === "components" && arg) { if (arg.startsWith("stage=")) f.set({ explodeStage: Number(arg.slice(6)) }); else f.set({ focusedPart: arg }); }
+    const target = id === "data" && arg ? document.getElementById(`stage-${arg}`) : document.getElementById(id);
+    if (id === "top") window.scrollTo({ top: 0, behavior: "instant" }); else target?.scrollIntoView({ behavior: "instant", block: "start" });
+  }, { id, arg });
   if (process.env.SHOT_EVAL) await page.evaluate(process.env.SHOT_EVAL);
   await settle();
-  const st = await page.evaluate(() => ({ tab: window.__flock.state.tab, sub: window.__flock.state.sub, act: window.__flock.state.act, stage: window.__flock.state.explodeStage, data: window.__flock.state.dataStage, fp: window.__flock.state.focusedPart }));
-  await page.screenshot({ path: `${out}/shot-${s.replace(/[\/:]/g, "_")}.png` });
-  console.log("stop", s, JSON.stringify(st));
+  await page.screenshot({ path: `${out}/shot-${s.replace(/[:=]/g, "_")}.png` });
+  console.log("stop", s, JSON.stringify({ y: await page.evaluate(() => scrollY), fp: await page.evaluate(() => window.__flock.state.focusedPart) }));
 }
 console.log("status:", status);
 console.log(logs.filter(l => !l.includes("[debug]")).slice(0, 40).join("\n"));

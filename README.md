@@ -1,32 +1,31 @@
 # Anatomy of a Flock camera
 
-A 3D reference for a Flock Safety license plate reader: the pole and mount, the enclosure and each component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms. All copy states facts from cited public documents.
+A reference for a Flock Safety license plate reader: the pole and mount, the enclosure and each component, the power and network connections, the data path from capture to deletion, common claims against the public record, and pricing and contract terms. All copy states facts from cited public documents.
 
 It is written for a technical audience: installers who need dimensions, mount heights and power options; residents and officials who need to know what is collected, who can access it, and what it costs; and anyone checking a claim against the record.
 
 ## What is in it
 
-The site is a set of tabs; nothing scrolls across sections, and the brand or the Overview tab returns home from anywhere. The 3D tabs are driven by controls rather than by scrolling.
+One scrolling page. Section links in the header jump to each section and mark the one in view; a Top button returns to the start. The page opens with a preview of the components grid and a link to it.
 
-| Tab | Content |
+| Section | Content |
 |---|---|
-| Overview | Title, lede and a card for every section, over the street scene at real scale |
 | Deployments | An article: documented cameras by city as a bar chart, the largest public contracts by agency and level with values and terms, the public funding behind local contracts, where the records are, and what is not documented |
-| Hardware · Pole and mount | Installer callouts: pole, clamps, panel, battery, base; Flock pole / existing pole / 120 V AC toggle; a Mount / Field of view camera toggle and yaw and pitch sliders, with the published field of view drawn on the road |
-| Hardware · Inside the enclosure | The Falcon V2 behind a see-through shell, with a dot marker on each of the fourteen parts and a callout card for each in two columns (rear-half parts left, optics right): part still, number, name, one-line function, one thin leader coloured by group and a two-way hover highlight. A six-stage slider separates the parts front to back while the shell fades back to solid; selecting a card or a marker isolates the part and opens its spec card with part number, vendor and sources |
-| Hardware · Power and cable | Solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used, with cutaways |
-| Data | One detection traced through twelve stages from capture to deletion, stepped with a slider or by selecting a stage; a retention slider; a network search example reproducing the counts from one documented query |
+| Components | The fourteen parts of the Falcon V2 laid out in a grid at a consistent scale, in five groups: Shell, Optics, Compute, Radios, Mount. Selecting a part opens its record under its group: function, specification, part number, vendor, sources and the related data stage. On desktops that can run a 3D engine, a locator beside the grid shows the assembled camera see-through, frames the selected part, and has a slider that separates the parts front to back; other screens show the assembled still |
+| Pole | Three mount configurations (Flock pole, existing pole, 120 V AC) as cards with the still and the documented facts, and the published field of view |
+| Power | The solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used |
+| Data | One detection traced through twelve stages from capture to deletion, each with a diagram, the processing location, transport, storage, retention and payload; retention presets; a network search example reproducing the counts from one documented query |
 | Claims | An article: the product line (Falcon, Flex, Sparrow, Condor, Raven, Wing, Alpha, Nova) as a table, then twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
 | Economics | An article: items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
-| Sources | An article: all sources grouped by origin, with the date each was last checked |
+| Sources | All sources grouped by origin, with the date each was last checked |
 
-Routes are hashes: `#/overview`, `#/deployments`, `#/hardware/pole|inside|power`, `#/data`, `#/claims`, `#/economics`, `#/sources`, with an optional index (`#/hardware/inside/5` opens the Inside stage at explode stage 5, `#/data/10` the Data tab at stage 10) or anchor (`#/sources/src-<id>`). Tab changes are history entries, so Back returns to the previous tab. The older `#act-N`, `#src-<id>`, `#claim-<id>` and `?s=<chapter>/<i>` links still resolve.
+Links are plain anchors (`#components`, `#data`, `#stage-9`, `#src-<id>`, `#claim-<id>`). Older links (`#/hardware/inside/13`, `#act-4`, `#s=inside/13`, `?s=data/9`) still resolve to the section, part or stage they named.
 
 ## Phones
 
-Screens under 800 px wide (or any screen with `?mode=stills`) get the same tabs built from pre-rendered stills instead of the 3D scene: Overview, Deployments, Pole, Inside, Power, Data, Claims, Economics, Sources. One tab is shown at a time. Pole, Inside, Power and Data are decks that fit the screen: the still on top, the text in a row that scrolls inside itself (a fade marks that there is more), and Back, Next, dots and the count always visible at the bottom; swipe and arrow keys step too, and the screen is written into the hash (`#/inside/13` is the System on module). Deployments, Claims, Economics and Sources are laid out in full and scroll as pages. The articles are rendered by the same code as the desktop tabs (`src/ui/article.ts`); the section list comes from `src/content/overview.json`, which also feeds the desktop overview. Phones never download the engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the scene on a small screen. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the page falls back to the same stills tabs with a notice; `?fail3d` simulates that.
+Phones get the same page. The section links become a scrolling rail, the components grid is two columns, the locator is the assembled still, and the pole, power and data cards stack. Phones never download the 3D engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the locator on a small screen, `?mode=stills` forces the still on a desktop. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the locator falls back to the still; `?fail3d` simulates that.
 
-The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart.
+The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart. The preview image of the grid at the top of the page is `public/img/knolling.jpg`, rendered from the page itself by `node scripts/knolling.mjs` against a preview server.
 
 ## Sourcing policy
 
@@ -49,7 +48,7 @@ npm test           # Playwright smoke test against the preview server
 node scripts/qa.mjs test-results/qa   # viewport sweep: five desktop sizes and three phones, reports anything cut off, off screen or unclickable
 ```
 
-Debug views for checking the models: `?view=falcon`, `?view=pole`, `?view=wing` (orbit with `a`, `b`, `r` for alpha, beta, radius). Presets for screenshots: `?pole=existing|ac`, `?path=solar|ac|wing`, `?focus=<part id>`, `?aim=<yaw>,<pitch>`, `?gl` forces WebGL2, `?mode=stills|3d` forces the phone or desktop path. `scripts/shoot.mjs` captures screenshots headlessly; stops are routes with an optional state, for example `hardware/inside:5`, `hardware/inside:cut`, `data:10`, `economics`. Camera presets per tab state live in `src/content/animation.json` under `views`.
+`?gl` forces WebGL2, `?mode=stills|3d` forces the still or the locator. `scripts/shoot.mjs` captures screenshots headlessly; stops are section ids with an optional state, for example `components:som` (selects a part), `components:stage=5` (explode stage of the locator), `data:9` (scrolls to stage 9). The locator's camera pose lives in `src/content/animation.json` under `views.inside`.
 
 ## Models
 
@@ -64,7 +63,7 @@ Part naming follows the content file (`falcon.ledboard`, `falcon.som`, and so on
 
 ## Stack
 
-Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback), a small hash router, Zod for content validation, Playwright for the smoke tests. Text lives in the DOM for accessibility and search; the canvas only carries the scene. Camera moves and stage changes are 600 ms eased tweens; `prefers-reduced-motion` makes them instant. The ground is a white blueprint sheet: a faint blue hairline grid with dotted majors on the page, and the same grid on the scene floor so the two read as one surface. Type is Archivo for headings, IBM Plex Sans for body and IBM Plex Mono for labels.
+Vite, TypeScript, Babylon.js 9 (WebGPU with a WebGL2 fallback) for the locator, Zod for content validation, Playwright for the smoke tests. Text lives in the DOM for accessibility and search; the canvas only carries the locator, and renders only while it is on screen. Camera moves and stage changes are 600 ms eased tweens; `prefers-reduced-motion` makes them instant and turns off smooth scrolling. The ground is a white blueprint sheet: a faint blue hairline grid with dotted majors on the page, and the same grid on the scene floor so the two read as one surface. Type is Archivo for headings, IBM Plex Sans for body and IBM Plex Mono for labels.
 
 ## Deploy
 
