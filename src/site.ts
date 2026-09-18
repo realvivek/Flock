@@ -20,8 +20,6 @@ import { escape } from "./ui/cite";
 export const PAGES: { id: string; label: string; section: string }[] = [
   { id: "deployments", label: "Deployments", section: "deployments" },
   { id: "components", label: "Components", section: "inside" },
-  { id: "pole", label: "Pole", section: "pole" },
-  { id: "power", label: "Power", section: "power" },
   { id: "data", label: "Data", section: "data" },
   { id: "journey", label: "Journey", section: "journey" },
   { id: "claims", label: "Claims", section: "myths" },
@@ -54,24 +52,26 @@ function buildHome(): void {
   });
 }
 
-/** Older single-page links (#act-N, #/hardware/inside/13, #deployments, #s=data/9, ?s=…, #src-<id>, #claim-<id>) go to the page they named. */
+/** Older links (#act-N, #/hardware/inside/13, #deployments, #pole, #s=data/9, ?s=…, #src-<id>, #claim-<id>) go to the page or section they named. */
 function redirectLegacy(): void {
   const h = location.hash;
   const q = new URLSearchParams(location.search).get("s");
   if (!h && !q) return;
   const plain = h.slice(1);
   if (PAGES.some((p) => p.id === plain)) { location.replace(`${plain}/`); return; }
+  if (plain === "pole" || plain === "power") { location.replace(`components/#${plain}`); return; }
   if (plain.startsWith("src-")) { location.replace(`sources/${h}`); return; }
   if (plain.startsWith("claim-")) { location.replace(`claims/${h}`); return; }
   if (plain.startsWith("stage-")) { location.replace(`data/${h}`); return; }
   const r = parseRoute(h, location.search);
   const ch = chapterFor(r);
   if (ch === "overview") { if (plain !== "top" && plain !== "summary" && plain !== "main") history.replaceState(null, "", location.pathname); return; }
-  const page = pageFor(ch) ?? ch;
+  let page = pageFor(ch) ?? ch;
   let tail = "";
+  if (ch === "pole" || ch === "power") { page = "components"; tail = `#${ch}`; }
   if (page === "components" && r.index !== undefined && r.index >= 6) { const pt = components.parts.slice().sort((a, b) => a.order - b.order)[r.index - 6]; tail = pt ? `#${pt.id}` : ""; }
   if (page === "data" && r.index !== undefined) tail = `#${dataStageIds()[Math.max(0, Math.min(11, r.index))]}`;
-  if (r.anchor) tail = `#${r.anchor}`;
+  if (r.anchor && page !== "components") tail = `#${r.anchor}`;
   location.replace(`${page}/${tail}`);
 }
 
@@ -80,9 +80,7 @@ function init(): void {
   switch (PAGE) {
     case "home": buildHome(); redirectLegacy(); break;
     case "deployments": renderDeployments(body!); break;
-    case "components": initComponentsPage(); break;
-    case "pole": buildPole(body!); break;
-    case "power": buildPower(body!); break;
+    case "components": initComponentsPage(); buildPole(document.getElementById("pole-body")!); buildPower(document.getElementById("power-body")!); break;
     case "data": buildData(body!); break;
     case "journey": buildJourney(body!); break;
     case "claims": renderClaims(body!, { onPart: (id) => { location.href = `${ROOT}components/#${id}`; }, onHop: (n) => { location.href = `${ROOT}data/#stage-${n}`; } }); break;

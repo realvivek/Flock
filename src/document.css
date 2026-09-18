@@ -8,6 +8,11 @@ body:not([data-page="home"]) main { gap: 2rem; padding-top: calc(var(--topbar-h)
 .sec-head .lede { margin: 0; color: var(--ink-2); }
 .sec > .article { padding: 2rem 2.2rem 2.4rem; width: min(52rem, 100%); }
 .page-head { display: flex; flex-direction: column; gap: .8rem; max-width: 60rem; padding-top: 1rem; }
+.jump { display: flex; flex-wrap: wrap; gap: .4rem; }
+.jump a { font: 500 12px var(--mono); color: var(--ink-2); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: .35rem .7rem; }
+.jump a:hover { color: var(--ink); border-color: var(--ink-3); }
+.jump a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+body[data-page="components"] main { gap: 3rem; }
 .page-head h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.2rem); }
 .page-head .lede { margin: 0; color: var(--ink-2); }
 .mono { font: 500 11.5px var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }

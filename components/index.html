@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Components · Anatomy of a Flock Camera</title>
-    <meta name="description" content="Every part of the Falcon V2 at a consistent scale, grouped by function: Shell, Optics, Compute, Radios, Mount. Select a part for its specification, part number and sources." />
+    <title>Components, pole and power · Anatomy of a Flock Camera</title>
+    <meta name="description" content="Every part of the Falcon V2 at a consistent scale in five groups, then the pole and mount configurations and the power and cable options, each with its documented facts and sources." />
     <meta name="theme-color" content="#f7f8f6" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23f2b441' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23f2b441'/%3E%3C/svg%3E" />
-    <meta property="og:title" content="Components · Anatomy of a Flock Camera" />
-    <meta property="og:description" content="Every part of the Falcon V2 at a consistent scale, grouped by function: Shell, Optics, Compute, Radios, Mount. Select a part for its specification, part number and sources." />
+    <meta property="og:title" content="Components, pole and power · Anatomy of a Flock Camera" />
+    <meta property="og:description" content="Every part of the Falcon V2 at a consistent scale in five groups, then the pole and mount configurations and the power and cable options, each with its documented facts and sources." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="/src/styles.css" />
@@ -22,8 +22,6 @@
         <a href="../" class="home">Home</a>
         <a href="../deployments/">Deployments</a>
         <a href="../components/" class="is-active" aria-current="page">Components</a>
-        <a href="../pole/">Pole</a>
-        <a href="../power/">Power</a>
         <a href="../data/">Data</a>
         <a href="../journey/">Journey</a>
         <a href="../claims/">Claims</a>
@@ -37,7 +35,8 @@
       <section class="page-head" id="top">
         <p class="eyebrow amber">Inside the enclosure</p>
         <h1>Fourteen components in five groups</h1>
-        <p class="lede">Every part of the Falcon V2 at a consistent scale, grouped by function: Shell, Optics, Compute, Radios, Mount. Select a part for its specification, part number and sources.</p>
+        <p class="lede">Every part of the Falcon V2 at a consistent scale, grouped by function: Shell, Optics, Compute, Radios, Mount. Select a part for its specification, part number and sources. Below the parts: the pole and mount, then the power and cable options.</p>
+        <nav class="jump" aria-label="On this page"><a href="#components">Components</a><a href="#pole">Pole and mount</a><a href="#power">Power and cable</a></nav>
       </section>
       <section class="sec" id="components">
         <div class="components">
@@ -51,6 +50,22 @@
           </aside>
           <div id="knolling" class="knolling"></div>
         </div>
+      </section>
+      <section class="sec" id="pole">
+        <div class="sec-head">
+          <p class="eyebrow amber">Pole and mount</p>
+          <h2>Pole, mount and field of view</h2>
+          <p class="lede">Flock's standard installation is a dedicated breakaway pole set in soil by a Flock crew. The camera is band-clamped at about ten feet and aimed diagonally along the lane so that the rear plates of departing vehicles pass through the field of view.</p>
+        </div>
+        <div id="pole-body" class="cards"></div>
+      </section>
+      <section class="sec" id="power">
+        <div class="sec-head">
+          <p class="eyebrow amber">Power and cable</p>
+          <h2>Power and network connections</h2>
+          <p class="lede">The Falcon has no wired network interface and is not a Power over Ethernet device. Fiber, SFP modules and PoE are used in one configuration, the Wing gateway, which ingests video from an agency's existing cameras.</p>
+        </div>
+        <div id="power-body" class="cards"></div>
       </section>
       <nav class="pager" id="pager" aria-label="Pages in order"></nav>
     </main>
