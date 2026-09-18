@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const PAGES = ["deployments", "components", "pole", "power", "data", "claims", "economics", "sources"];
+const PAGES = ["deployments", "components", "pole", "power", "data", "journey", "claims", "economics", "sources"];
 const ready = (page: Page) => page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
 /** Navigate without waiting for the load event: a slow font host must not stall a test. */
 const go = (page: Page, url: string) => page.goto(url, { waitUntil: "commit" });
@@ -17,7 +17,7 @@ const settled = (page: Page) => page.waitForFunction(() => window.__flock!.state
 const instant = (page: Page) => page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
 const inView = (page: Page, sel: string) => page.evaluate((sel) => { const r = document.querySelector(sel)!.getBoundingClientRect(); return r.top >= 40 && r.top < innerHeight; }, sel);
 const nav = async (page: Page, current: string) => {
-  await expect(page.locator(".sections a")).toHaveCount(9);
+  await expect(page.locator(".sections a")).toHaveCount(10);
   await expect(page.locator(".sections a").first()).toHaveText("Home");
   await expect(page.locator(".sections a.is-active")).toHaveText(current);
   await expect(page.locator(".sections a.is-active")).toHaveAttribute("aria-current", "page");
@@ -32,8 +32,8 @@ test("home: summary of every page, the components preview, older links redirect"
   await nav(page, "Home");
   await expect(page.locator("#preview-img")).toHaveJSProperty("complete", true);
   expect(await page.evaluate(() => (document.getElementById("preview-img") as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
-  await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Pole and mount", "Power and cable", "Data path", "Common claims", "Economics", "Sources"]);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(9);
+  await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Pole and mount", "Power and cable", "Data path", "Where the picture goes", "Common claims", "Economics", "Sources"]);
   expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(2200);
   // no article content on the home page
   await expect(page.locator(".claim, .stage, .cell")).toHaveCount(0);
@@ -48,6 +48,13 @@ test("home: summary of every page, the components preview, older links redirect"
   await ready(page);
   await page.locator("#preview").click();
   await page.waitForURL(/\/components\/$/, { waitUntil: "commit" });
+  await go(page, "/");
+  await ready(page);
+  expect(await page.evaluate(() => (document.getElementById("preview-journey-img") as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await page.locator("#preview-journey").click();
+  await page.waitForURL(/\/journey\/$/, { waitUntil: "commit" });
+  await ready(page);
+  await expect(page.locator("#page-body .stop")).toHaveCount(7);
   // older single-page links land on the right page
   for (const [from, to] of [["/#deployments", /\/deployments\/$/], ["/#/hardware/inside/13", /\/components\/#som$/], ["/#act-4", /\/data\/$/], ["/?s=data/9", /\/data\/#stage-10$/], ["/#economics", /\/economics\/$/]] as const) {
     await go(page, from);
@@ -71,6 +78,7 @@ test("every content page loads with its content, the pager and citations that re
     pole: ["#page-body .card", 4],
     power: ["#page-body .card", 3],
     data: ["#page-body .stage", 14],
+    journey: ["#page-body .stop", 7],
     claims: ["#page-body .claim", 21],
     economics: ["#page-body .econ-block", 1],
     sources: ["#page-body .src-group", 4],
@@ -84,6 +92,15 @@ test("every content page loads with its content, the pager and citations that re
     await expect(page.locator("#pager a.up")).toHaveAttribute("href", "../");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), id).toBe(true);
   }
+  // journey: the slip follows the stop that has scrolled past the middle of the viewport
+  await go(page, "/journey/");
+  await ready(page);
+  await instant(page);
+  await expect(page.locator("#slip-status")).toHaveText("Picked up");
+  await page.locator("#search").scrollIntoViewIfNeeded();
+  await page.evaluate(() => scrollBy(0, 200));
+  await expect(page.locator("#slip-status")).toHaveText("Available for pickup");
+  await expect(page.locator(".stop.is-reached")).toHaveCount(6);
   // pager order
   await go(page, "/deployments/");
   await ready(page);
@@ -206,7 +223,7 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await go(page, "/");
   await ready(page);
   await instant(page);
-  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(9);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await page.locator(".sections a", { hasText: "Economics" }).click();
   await page.waitForURL(/\/economics\/$/, { waitUntil: "commit" });
@@ -219,7 +236,7 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await page.locator(".sections a.home").click();
   await page.waitForURL(/\/Flock\/$|:4173\/$/, { waitUntil: "commit" });
   await ready(page);
-  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(9);
   await go(page, "/claims/");
   await ready(page);
   await expect(page.locator("#page-body .claim")).toHaveCount(21);

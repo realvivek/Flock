@@ -713,14 +713,7 @@
       "lastVerified": "2026-09-04"
     },
     {
-      "id": "fccid-2bmek",
-      "kind": "government",
-      "title": "FCC grantee 2BMEK (Flock MFG): only one filing, Gauge-01; Falcon uses pre-certified modules",
-      "publisher": "FCC via fccid.io",
-      "url": "https://fccid.io/2BMEK",
-      "date": "2024-12-10",
-      "lastVerified": "2026-09-04"
-    },
+      "id": "fccid-2bkg8", "kind": "government", "title": "FCC grantee 2BKG8 (Flock Group, Inc., Atlanta): registered August 2024 with no FCC ID applications; the Falcon's radios are pre-certified modules", "publisher": "FCC via fccid.io", "url": "https://fccid.io/2BKG8", "date": "2024-08-20", "lastVerified": "2026-09-18"},
     {
       "id": "wikipedia-flock",
       "kind": "independent",

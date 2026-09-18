@@ -11,6 +11,7 @@ import { BASE, ROOT, PAGE } from "./lib/base";
 import { el, initNav, scrollToEl } from "./ui/common";
 import { buildPole, buildPower, buildData, dataStageIds } from "./sections";
 import { initComponentsPage } from "./components-page";
+import { buildJourney } from "./journey";
 import { parseRoute, chapterFor } from "./router";
 import { state, set } from "./store";
 import { escape } from "./ui/cite";
@@ -22,6 +23,7 @@ export const PAGES: { id: string; label: string; section: string }[] = [
   { id: "pole", label: "Pole", section: "pole" },
   { id: "power", label: "Power", section: "power" },
   { id: "data", label: "Data", section: "data" },
+  { id: "journey", label: "Journey", section: "journey" },
   { id: "claims", label: "Claims", section: "myths" },
   { id: "economics", label: "Economics", section: "economics" },
   { id: "sources", label: "Sources", section: "sources" },
@@ -41,6 +43,7 @@ function buildHome(): void {
   document.getElementById("hero-lede")!.textContent = overview.intro.lede;
   document.getElementById("hero-sources")!.textContent = overview.intro.sources;
   (document.getElementById("preview-img") as HTMLImageElement).src = `${BASE}img/knolling.jpg`;
+  (document.getElementById("preview-journey-img") as HTMLImageElement).src = `${BASE}img/journey.jpg`;
   const host = document.getElementById("summary-cards")!;
   PAGES.forEach((pg, i) => {
     const sec = overview.sections.find((s) => s.id === pg.section);
@@ -81,6 +84,7 @@ function init(): void {
     case "pole": buildPole(body!); break;
     case "power": buildPower(body!); break;
     case "data": buildData(body!); break;
+    case "journey": buildJourney(body!); break;
     case "claims": renderClaims(body!, { onPart: (id) => { location.href = `${ROOT}components/#${id}`; }, onHop: (n) => { location.href = `${ROOT}data/#stage-${n}`; } }); break;
     case "economics": renderEconomics(body!); break;
     case "sources": renderSources(body!); break;

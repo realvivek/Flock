@@ -80,7 +80,7 @@
       "function": "Sole data path from the unit. Image crops and metadata are transmitted over a carrier SIM included in the subscription; the unit has no wired network interface. Flock uses pre-certified radio modules, so the Falcon has no FCC filing of its own and no FCC internal photos.",
       "spec": { "Bearer": "LTE; carrier depends on area (Verizon Business and AT&T SIMs documented)", "Category": "Cat-1 vs Cat-4 reported for the same FCC ID; unresolved", "Placement": "Daughter module stacked above the SOM" },
       "dims": { "w": 1.0, "h": 1.2, "d": 0.12 }, "explode": [0, 0.24, -0.09], "hop": "hop-4",
-      "confidence": "disputed", "sources": ["ryanohoro-2024", "cehrp-dissection", "flockcamre", "fccid-2bmek", "gainsec-2026"]
+      "confidence": "disputed", "sources": ["ryanohoro-2024", "cehrp-dissection", "flockcamre", "fccid-2bkg8", "gainsec-2026"]
     },
     {
       "id": "wifi", "node": "falcon.wifi", "order": 11, "group": "radio",

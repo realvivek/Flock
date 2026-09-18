@@ -8,7 +8,8 @@ import economicsRaw from "./economics.json";
 import stillsRaw from "./stills.json";
 import deploymentsRaw from "./deployments.json";
 import overviewRaw from "./overview.json";
-import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile, OverviewFile } from "./schema";
+import journeyRaw from "./journey.json";
+import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile, OverviewFile, JourneyFile } from "./schema";
 
 export const sources = SourcesFile.parse(sourcesRaw).sources;
 export const components = ComponentsFile.parse(componentsRaw);
@@ -20,6 +21,7 @@ export const economics = EconomicsFile.parse(economicsRaw);
 export const stills = StillsFile.parse(stillsRaw);
 export const deployments = DeploymentsFile.parse(deploymentsRaw);
 export const overview = OverviewFile.parse(overviewRaw);
+export const journey = JourneyFile.parse(journeyRaw);
 export const stillById = new Map(stills.stills.map((s) => [s.id, `${stills.dir}/${s.file}`]));
 
 export const sourceById = new Map(sources.map((s) => [s.id, s]));

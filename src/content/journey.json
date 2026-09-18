@@ -1,0 +1,74 @@
+{
+  "$comment": "The journey page: the data path retold as a parcel tracker for one photograph. Every stop cites the sources of the data-path stage it summarises; figures are quoted from dataflow.json and sources.json.",
+  "intro": {
+    "eyebrow": "Where the picture goes",
+    "title": "Tracking one photograph",
+    "lede": "A car passes a Falcon camera. This page follows the picture it takes like a parcel: seven stops from the pole to deletion, with what is in the package at each stop, who can open it there, and how long it takes.",
+    "parcel": { "label": "One read", "plate": "ABC 1234", "contents": "6 to 12 photos of the rear of a car, the plate text and state, a vehicle description, the time and the camera's position" }
+  },
+  "stops": [
+    {
+      "id": "pole", "status": "Picked up", "where": "On the pole", "when": "0 s", "icon": "pole",
+      "title": "The camera takes six to twelve photos and reads the plate",
+      "body": "A passive infrared sensor fires on a warm moving object. The camera captures six to twelve still frames of the back of the vehicle, lit at night by an 850 nm infrared ring. Before anything leaves the pole, the module reads the plate and its state and writes a vehicle description Flock calls Vehicle Fingerprint: make, body type, colour, roof rack, bumper stickers, damage, trailer hitch, paper or covered plate.",
+      "packed": ["Image crops, not full frames or video", "Plate text and state with a confidence score", "Vehicle description", "Time, position from the GPS antenna, camera id"],
+      "opens": "Only the camera's own software. People and cyclists who trigger the sensor appear in frame; Flock states they are not indexed.",
+      "hops": ["hop-1", "hop-2", "hop-3"],
+      "sources": ["cehrp-dissection", "flock-lpr-policy", "flockcamre", "aclu-2022"]
+    },
+    {
+      "id": "carrier", "status": "In transit", "where": "Carrier network", "when": "seconds", "icon": "tower",
+      "title": "Sent over LTE on a carrier SIM",
+      "body": "The unit has no wired network. Each read goes out over the cellular module on a SIM included in the subscription, over HTTPS with TLS 1.2 or higher. The number of bytes per read is not published.",
+      "packed": ["The same crops and metadata, encrypted in transit"],
+      "opens": "Nobody, by design. In January 2026 security researchers found dozens of devices reachable on public carrier addresses with an administration page that needed no password.",
+      "hops": ["hop-4"],
+      "sources": ["flock-arch-2024", "gainsec-2026", "404-exposed-2026"]
+    },
+    {
+      "id": "cloud", "status": "Arrived at facility", "where": "Amazon Web Services, United States", "when": "seconds", "icon": "cloud",
+      "title": "Checked in, encrypted, filed",
+      "body": "Flock's architecture document describes validation on arrival and encryption with the AWS Key Management Service. Microservices index the read for search. Images go to object storage, records to databases. Criminal-justice data sits in the GovCloud region.",
+      "packed": ["A searchable detection record", "The image in object storage"],
+      "opens": "Flock staff under its access policy, and the users of the agency that owns the camera.",
+      "hops": ["hop-5", "hop-6", "hop-7"],
+      "sources": ["flock-arch-2024", "flock-privacy-access", "footnote4a-trust"]
+    },
+    {
+      "id": "sorting", "status": "Sorting", "where": "Cloud and camera", "when": "seconds", "icon": "list",
+      "title": "Compared against the hot lists",
+      "body": "The plate is compared with the national crime database, missing-children and AMBER lists, state lists and lists agencies write themselves. Lists are pushed to cameras about twice a day, so a plate taken off a list can keep producing alerts for up to twelve hours.",
+      "packed": ["A match flag and which list it came from"],
+      "opens": "The matching service, and every agency that maintains a custom list.",
+      "hops": ["hop-8"],
+      "sources": ["flock-lpr-policy", "aclu-2022"]
+    },
+    {
+      "id": "alert", "status": "Out for delivery", "where": "Officers' phones", "when": "10 to 15 s", "icon": "phone",
+      "title": "If it matches, an alert",
+      "body": "A hit sends the plate, the image, the camera location and the list source to nearby officers' phones within about ten to fifteen seconds. Audits in Roseville, California and Los Angeles found 71% and 32% of alerts involved misread plates.",
+      "packed": ["Plate, image, location, list source"],
+      "opens": "Officers in the agency's app. Multi-factor login became mandatory in August 2026.",
+      "hops": ["hop-9"],
+      "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "roseville-71"]
+    },
+    {
+      "id": "search", "status": "Available for pickup", "where": "FlockOS, any partner agency", "when": "any time before deletion", "icon": "search",
+      "title": "Searchable by far more people than the local police",
+      "body": "A user in a customer agency can search by plate, description, natural language or co-travelling vehicles, across the agency's cameras, its sharing partners, and a national lookup that about 75% of law-enforcement customers joined. The audit log of one Texas deputy's April 2025 query lists 83,345 cameras in 6,809 networks. In released logs, for every search a local agency ran, outside agencies ran 521 against its cameras.",
+      "packed": ["A row in the audit log: who, when, how many cameras, and the reason typed in"],
+      "opens": "Any user at any agency that shares with the camera's owner, with a free-text reason. About one in five reasons across twelve million searches were generic terms such as investigation.",
+      "hops": ["hop-10", "hop-11"],
+      "sources": ["flock-platform", "wyden-ftc-2025", "404-texas-2025", "alprwatch-foia-2025", "eff-protesters-2025"]
+    },
+    {
+      "id": "delete", "status": "Disposed", "where": "Object storage lifecycle", "when": "day 7", "icon": "bin",
+      "title": "Deleted, unless",
+      "body": "A storage lifecycle rule removes the images at the configured interval and logs the deletion. The default is seven days since 13 August 2026 and was thirty days before that. An elected body can approve a longer period, and Evidence Mode keeps selected data with no published limit.",
+      "packed": ["A deletion receipt"],
+      "opens": "Nobody, once deleted. Whether the derived metadata is deleted on the same clock as the images is not documented.",
+      "hops": ["hop-12"],
+      "sources": ["flock-deletion", "flock-guardrails-2026", "police1-7day-2026", "aclu-guardrails"]
+    }
+  ]
+}

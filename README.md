@@ -6,7 +6,7 @@ It is written for a technical audience: installers who need dimensions, mount he
 
 ## What is in it
 
-Nine pages. The home page is a summary: the title and lede, a preview image of the components grid with a link to it, and one card per page. The header on every page carries Home and the eight pages, with the current one marked; each page ends with previous and next links, and a Top button appears once scrolled.
+Ten pages. The home page is a summary: the title and lede, preview images of the components grid and the journey page with links to them, and one card per page. The header on every page carries Home and the nine pages, with the current one marked; each page ends with previous and next links, and a Top button appears once scrolled.
 
 | Page | Content |
 |---|---|
@@ -16,6 +16,7 @@ Nine pages. The home page is a summary: the title and lede, a preview image of t
 | Pole (`pole/`) | Three mount configurations (Flock pole, existing pole, 120 V AC) as cards with the still and the documented facts, and the published field of view |
 | Power (`power/`) | The solar and battery DC path, the AC kit, and the Wing gateway path in which PoE, fiber and SFP modules are used |
 | Data (`data/`) | One detection traced through twelve stages from capture to deletion, each with a diagram, the processing location, transport, storage, retention and payload; retention presets; a network search example reproducing the counts from one documented query |
+| Journey (`journey/`) | One photograph followed like a parcel through seven stops from the pole to deletion: what is in the package at each stop, who can open it, how long it takes, and the data-path stages and sources behind each |
 | Claims (`claims/`) | The product line (Falcon, Flex, Sparrow, Condor, Raven, Wing, Alpha, Nova) as a table, then twenty-one common claims, each with the documented position, the product or setting it applies to, sources, and a link to the related component or data stage |
 | Economics (`economics/`) | Items included in and excluded from the annual fee, list prices, the 2021 and 2026 fee schedules, price history, installation workflow and responsibilities, permitting by location type, ownership and contract terms, scale and public funding, with a priced-pole figure |
 | Sources (`sources/`) | All sources grouped by origin, with the date each was last checked |
@@ -26,7 +27,7 @@ Citation chips on any page open the Sources page at the cited row. Claims link t
 
 Phones get the same pages. The header links wrap into two rows so all nine stay visible, the components grid is two columns, the locator is the assembled still, and the pole, power and data cards stack. Phones never download the 3D engine; the JavaScript for that path is about 60 KB. `?mode=3d` forces the locator on a small screen, `?mode=stills` forces the still on a desktop. If no 3D engine can start on a desktop (no WebGL 2 or WebGPU, or the context is lost), the locator falls back to the still; `?fail3d` simulates that.
 
-The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart. The preview image of the grid on the home page is `public/img/knolling.jpg`, rendered from the components page by `node scripts/knolling.mjs` against a preview server.
+The stills come from the same models as the scene. `src/content/stills.json` lists every state; `npm run stills` renders them with Cycles into `public/stills` (about 26 images, WebP, 15 to 90 KB each). The source checker refuses to build if a listed still is missing, so the manifest and the images cannot drift apart. The preview images on the home page are `public/img/knolling.jpg` and `public/img/journey.jpg`, rendered from the components and journey pages by `node scripts/knolling.mjs` and `node scripts/journey.mjs` against a preview server.
 
 ## Sourcing policy
 

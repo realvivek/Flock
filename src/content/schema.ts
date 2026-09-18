@@ -88,6 +88,11 @@ export const OverviewFile = z.object({
   sections: z.array(z.object({ id: z.string(), label: z.string(), title: z.string(), blurb: z.string() })),
 }).passthrough();
 
+export const JourneyFile = z.object({
+  intro: z.object({ eyebrow: z.string(), title: z.string(), lede: z.string(), parcel: z.object({ label: z.string(), plate: z.string(), contents: z.string() }) }),
+  stops: z.array(z.object({ id: z.string(), status: z.string(), where: z.string(), when: z.string(), icon: z.enum(["pole", "tower", "cloud", "list", "phone", "search", "bin"]), title: z.string(), body: z.string(), packed: z.array(z.string()), opens: z.string(), hops: z.array(z.string()), sources: z.array(z.string()).min(1) })),
+}).passthrough();
+
 export const StillsFile = z.object({
   dir: z.string(),
   stills: z.array(z.object({ id: z.string(), file: z.string(), job: z.string(), args: z.record(z.string(), z.union([z.string(), z.number()])).optional() })),
