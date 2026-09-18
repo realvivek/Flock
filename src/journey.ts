@@ -1,10 +1,11 @@
 /**
  * The journey page: one photograph followed like a parcel through seven stops. A sticky slip on the left shows the
- * parcel and the stop the reader has scrolled to; the stops on the right are marked reached as they pass.
+ * parcel and the stop the reader has scrolled to; the stops on the right are marked reached as they pass. Each card
+ * shows one sentence and who can open the package; the paragraph, contents, data-path links and sources fold under Details.
  */
 import { journey, hopById } from "./content";
 import { cite, escape } from "./ui/cite";
-import { el, nn, reduced } from "./ui/common";
+import { el, nn, reduced, topbarHeight } from "./ui/common";
 import { ROOT } from "./lib/base";
 
 const ICONS: Record<string, string> = {
@@ -55,19 +56,25 @@ export function buildJourney(host: HTMLElement): void {
         </div>
         <h2>${escape(s.title)}</h2>
         <div class="where">${escape(s.where)}</div>
-        <p>${escape(s.body)}</p>
-        <dl class="kv">
-          <dt>In the package</dt><dd><ul>${s.packed.map((p) => `<li>${escape(p)}</li>`).join("")}</ul></dd>
-          <dt>Who can open it</dt><dd>${escape(s.opens)}</dd>
-          <dt>Data path</dt><dd>${s.hops.map((h) => { const hop = hopById.get(h); return hop ? `<a href="${ROOT}data/#stage-${hop.n}">stage ${nn(hop.n)}, ${escape(hop.title)}</a>` : ""; }).filter(Boolean).join(" · ")}</dd>
-        </dl>
+        <p class="line">${escape(s.line)}</p>
+        <p class="opens"><span class="mono">Who can open it</span> ${escape(s.opens)}</p>
+        <details class="more">
+          <summary><span class="mono">Details</span></summary>
+          <div class="more-body">
+            <p>${escape(s.body)}</p>
+            <dl class="kv">
+              <dt>In the package</dt><dd><ul>${s.packed.map((p) => `<li>${escape(p)}</li>`).join("")}</ul></dd>
+              <dt>Data path</dt><dd>${s.hops.map((h) => { const hop = hopById.get(h); return hop ? `<a href="${ROOT}data/#stage-${hop.n}">stage ${nn(hop.n)}, ${escape(hop.title)}</a>` : ""; }).filter(Boolean).join(" · ")}</dd>
+            </dl>
+          </div>
+        </details>
       </div>`;
-    li.querySelector(".stop-body")!.appendChild(cite(s.sources, 3));
+    li.querySelector(".more-body")!.appendChild(cite(s.sources, 3));
     list.appendChild(li);
   });
   host.appendChild(list);
 
-  // Mark stops reached as they scroll past the middle of the viewport; the slip follows.
+  // Mark stops reached as they scroll under the header; the slip follows.
   const items = [...list.querySelectorAll<HTMLElement>(".stop")];
   const routeItems = [...slip.querySelectorAll<HTMLElement>(".slip-route li")];
   const setCurrent = (i: number) => {
@@ -78,11 +85,17 @@ export function buildJourney(host: HTMLElement): void {
     document.getElementById("slip-status")!.textContent = stops[i]!.status;
     document.getElementById("slip-where")!.textContent = stops[i]!.where;
   };
+  // The current stop is the last one whose card top has passed a line just under the header; at the end of the page it
+  // is the last stop, so short cards on a tall screen still reach Disposed.
   const update = () => {
-    const line = innerHeight * 0.55;
+    const line = topbarHeight() + 160;
     let cur = 0;
     items.forEach((it, k) => { if (it.getBoundingClientRect().top < line) cur = k; });
-    setCurrent(cur);
+    // On a tall screen the page is short, so the scroll position also advances the stop; the end of the page is the last stop.
+    const range = document.documentElement.scrollHeight - innerHeight;
+    if (range > 0) cur = Math.max(cur, Math.round((scrollY / range) * (items.length - 1)));
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) cur = items.length - 1;
+    setCurrent(Math.min(cur, items.length - 1));
   };
   addEventListener("scroll", update, { passive: true });
   addEventListener("resize", update);

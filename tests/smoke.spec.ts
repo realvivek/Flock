@@ -97,10 +97,17 @@ test("every content page loads with its content, the pager and citations that re
   await ready(page);
   await instant(page);
   await expect(page.locator("#slip-status")).toHaveText("Picked up");
-  await page.locator("#search").scrollIntoViewIfNeeded();
-  await page.evaluate(() => scrollBy(0, 200));
-  await expect(page.locator("#slip-status")).toHaveText("Available for pickup");
-  await expect(page.locator(".stop.is-reached")).toHaveCount(6);
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await expect(page.locator("#slip-status")).toHaveText("Disposed");
+  await expect(page.locator(".stop.is-reached")).toHaveCount(7);
+  // each card shows one sentence; the paragraph, contents and sources fold under Details
+  await expect(page.locator(".stop details[open]")).toHaveCount(0);
+  await expect(page.locator("#search .cite a").first()).toBeHidden();
+  await page.locator("#search summary").click();
+  await expect(page.locator("#search details")).toHaveAttribute("open", "");
+  await expect(page.locator("#search .cite a").first()).toBeVisible();
+  await expect(page.locator("#search .kv dt").first()).toHaveText("In the package");
+  await expect(page.locator("#slip-status")).toHaveText("Disposed");
   // pager order
   await go(page, "/deployments/");
   await ready(page);

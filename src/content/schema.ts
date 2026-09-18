@@ -90,7 +90,7 @@ export const OverviewFile = z.object({
 
 export const JourneyFile = z.object({
   intro: z.object({ eyebrow: z.string(), title: z.string(), lede: z.string(), parcel: z.object({ label: z.string(), plate: z.string(), contents: z.string() }) }),
-  stops: z.array(z.object({ id: z.string(), status: z.string(), where: z.string(), when: z.string(), icon: z.enum(["pole", "tower", "cloud", "list", "phone", "search", "bin"]), title: z.string(), body: z.string(), packed: z.array(z.string()), opens: z.string(), hops: z.array(z.string()), sources: z.array(z.string()).min(1) })),
+  stops: z.array(z.object({ id: z.string(), status: z.string(), where: z.string(), when: z.string(), icon: z.enum(["pole", "tower", "cloud", "list", "phone", "search", "bin"]), title: z.string(), line: z.string(), body: z.string(), packed: z.array(z.string()), opens: z.string(), hops: z.array(z.string()), sources: z.array(z.string()).min(1) })),
 }).passthrough();
 
 export const StillsFile = z.object({

@@ -22,8 +22,8 @@ await page.addStyleTag({ content: `
   .marker .ring { width: 44px; height: 44px; border-color: var(--amber); color: var(--ink); transform: none; }
   .stop-body { padding: .7rem .8rem .8rem; gap: .3rem; align-content: start; }
   .stop-body h2 { font-size: 1.05rem; }
-  .stop-body p { font-size: 12.5px; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .stop-body .kv, .stop-body .cite { display: none !important; }
+  .stop-body .line { font-size: 12.5px; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .stop-body .opens, .stop-body .more { display: none !important; }
   .stop-head { flex-direction: column; align-items: flex-start; gap: .1rem; }
   .stop-head .status { color: var(--amber); }
 ` });
