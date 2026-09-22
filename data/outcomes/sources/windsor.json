@@ -97,7 +97,7 @@
       "label": "Route 159 @ Putnam Highway",
       "roads": [
         "Windsor Avenue",
-        "Route 75"
+        "re:^Putnam"
       ]
     },
     {

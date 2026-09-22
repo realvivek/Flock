@@ -331,7 +331,7 @@
       "label": "Charlotte Pike & White Bridge Pike",
       "roads": [
         "Charlotte Pike",
-        "White Bridge Road"
+        "re:^White Bridge"
       ],
       "alerts": 0,
       "stops": 0,
@@ -344,14 +344,13 @@
       "label": "Clarksville Pike & Ed Temple Boulevard",
       "roads": [
         "Clarksville Pike",
-        "Dr. D.B. Todd Jr. Boulevard"
+        "re:^Ed Temple"
       ],
       "alerts": 4,
       "stops": 0,
       "searches": 0,
       "arrests": 0,
-      "recoveries": 0,
-      "note": "Ed Temple Boulevard is the former name of part of Dr. D.B. Todd Jr. Boulevard / Clarksville Pike junction"
+      "recoveries": 0
     },
     {
       "quadrant": "D",

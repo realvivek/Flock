@@ -19,9 +19,12 @@ async function nominatim(q) {
   const wait = 1100 - (Date.now() - lastReq); if (wait > 0) await sleep(wait);
   lastReq = Date.now();
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&polygon_geojson=1`;
-  const res = await fetch(url, { headers: { "User-Agent": UA } });
-  if (!res.ok) throw new Error(`nominatim ${res.status} for ${q}`);
-  const j = await res.json();
+  let j = null;
+  for (let attempt = 0; attempt < 4 && !j; attempt++) {
+    try { const res = await fetch(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(60000) }); if (!res.ok) throw new Error(`nominatim ${res.status}`); j = await res.json(); }
+    catch (e) { console.warn("nominatim retry", attempt + 1, q, e.message); await sleep(5000 * (attempt + 1)); }
+  }
+  if (!j) return [];
   cache[q] = j.map((r) => ({ lat: +r.lat, lon: +r.lon, type: r.type, cls: r.class, name: r.display_name, geo: r.geojson }));
   saveCache();
   return cache[q];
@@ -62,10 +65,11 @@ const esc = (w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 /** An Overpass way filter for a road label: interstates and numbered routes by ref, everything else by name. */
 function roadFilter(road, state) {
   let m;
+  if (road.startsWith("re:")) return `["name"~"${road.slice(3)}",i]`;
   if ((m = road.match(/^Interstate (\d+)$/))) return `["ref"~"(^|;)I[ -]?${m[1]}($|;)"]`;
   if ((m = road.match(/^(?:Route|State Route|State Highway|Highway) (\d+)$/))) return `["ref"~"(^|;)(${state}|SR|SH|US)[ -]?${m[1]}($|;)"]`;
   const words = road.split(/\s+/).map((w) => { const k = w.toLowerCase(); if (SUFFIX[k]) return SUFFIX[k]; if (/^[A-Za-z]$/.test(w)) return `${w}\\.?`; return esc(w); });
-  return `["name"~"^${words.join(" ")}$",i]`;
+  return `["name"~"^${words.join(" ")}( (North|South|East|West|N|S|E|W|NE|NW|SE|SW))?$",i]`;
 }
 const cityBox = {};
 async function bbox(place) {
@@ -75,7 +79,7 @@ async function bbox(place) {
   if (!r) throw new Error("no bbox for " + place);
   const pts = coords(r.geo); let s = r.lat, n = r.lat, w = r.lon, e = r.lon;
   for (const [x, y] of pts) { if (y < s) s = y; if (y > n) n = y; if (x < w) w = x; if (x > e) e = x; }
-  const pad = 0.03; s -= pad; w -= pad; n += pad; e += pad;
+  const pad = 0.08; s -= pad; w -= pad; n += pad; e += pad;
   const midLat = (s + n) / 2, midLon = (w + e) / 2;
   s = Math.max(s, midLat - 0.22); n = Math.min(n, midLat + 0.22); w = Math.max(w, midLon - 0.28); e = Math.min(e, midLon + 0.28);
   return (cityBox[place] = `${s.toFixed(4)},${w.toFixed(4)},${n.toFixed(4)},${e.toFixed(4)}`);
@@ -90,7 +94,8 @@ async function intersection(roads, place, state) {
   if (shared.length) { const lat = shared.reduce((t, p) => t + p.lat, 0) / shared.length, lon = shared.reduce((t, p) => t + p.lon, 0) / shared.length; return { lon, lat, method: `shared node of the two roads (${shared.length})` }; }
   let best = { d: Infinity };
   for (const wa of a) for (const wb of b) for (const p of wa.geometry) for (const q of wb.geometry) { const d = hav([p.lon, p.lat], [q.lon, q.lat]); if (d < best.d) best = { d, lon: (p.lon + q.lon) / 2, lat: (p.lat + q.lat) / 2 }; }
-  return best.d <= 120 ? { lon: best.lon, lat: best.lat, method: `closest approach of the two roads (${Math.round(best.d)} m, grade-separated)` } : null;
+  const limit = roads.some((r) => /^(Interstate|Route|State Route|State Highway|Highway) \d+$/.test(r)) ? 320 : 120;
+  return best.d <= limit ? { lon: best.lon, lat: best.lat, method: `closest approach of the two roads (${Math.round(best.d)} m, grade-separated)` } : null;
 }
 async function roadGeo(road, place, state) { return (await roadWays(road, place, state)).map((w) => ({ geo: { type: "LineString", coordinates: w.geometry.map((p) => [p.lon, p.lat]) } })); }
 // ---- cameras -------------------------------------------------------------------------------------------------
