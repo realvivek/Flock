@@ -9,6 +9,7 @@
     { "id": "inside", "label": "Inside", "title": "Inside the enclosure", "blurb": "Fourteen components from the bezel to the clamps, each with its function, specifications, part number and sources; then the pole and mount configurations and the power and cable options." },
     { "id": "data", "label": "Data", "title": "Data path", "blurb": "Twelve stages from capture to deletion with the processing location and payload at each, retention presets, and a documented network search." },
     { "id": "journey", "label": "Journey", "title": "Where the picture goes", "blurb": "One photograph followed like a parcel: seven stops from the pole to deletion, what is in the package at each, who can open it, and how long it takes." },
+    { "id": "outcomes", "label": "Outcomes", "title": "What the reads produce", "blurb": "Every public record that ties a camera to a result: reads, alerts, wrong alerts, stops, recoveries and arrests, per camera site where an agency published it, joined to the mapped cameras." },
     { "id": "myths", "label": "Claims", "title": "Common claims", "blurb": "The product line, then twenty-one common claims checked against the public record, each with sources." },
     { "id": "economics", "label": "Economics", "title": "Economics", "blurb": "List prices, what the annual fee includes and excludes, fee schedules, price history, installation workflow, permitting, contract terms and scale." },
     { "id": "sources", "label": "Sources", "title": "Sources", "blurb": "Every source grouped by origin, with the date each was last checked." }

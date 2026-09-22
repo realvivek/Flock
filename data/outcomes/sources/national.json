@@ -1,0 +1,14 @@
+{
+  "statements": [
+    { "tag": "flock", "who": "Flock Safety, 2025 Impact Census", "text": "About 700 agencies surveyed in 43 states; Flock technology 'supported' about 1 million investigations in 2025, about 20% of cleared cases; about 10,000 missing persons located. Flock's own caveat: 'directional estimates rather than audited totals'.", "sources": ["flock-impact-2026"] },
+    { "tag": "flock", "who": "Flock Safety", "text": "About 20 billion plate reads a month across the network, as stated to reporters in 2026.", "sources": ["roseville-71"] },
+    { "tag": "independent", "who": "Mourtgos and Adams, working paper, August 2026", "text": "Staggered event study of 216 Flock agencies against about 3,000 others, 2017 to 2023: vehicle theft down 11% (confidence interval 4% to 17%), theft clearances by arrest up 15.9%. Deployment dates were supplied by Flock; not peer reviewed.", "sources": ["mourtgos-adams-2026"] },
+    { "tag": "independent", "who": "Institute for Justice database", "text": "More than 200 documented misuse or error incidents, including 27 wrongful stops or detentions, compiled from news and records.", "sources": ["ij-abuse-2026"] }
+  ],
+  "excluded": [
+    { "what": "Cincinnati calls for service with type LPR, 2018 to 2022: 2,532 calls with coordinates and dispositions including 47 auto-theft recovery reports and 28 arrests", "why": "The vendor for that period is not confirmed as Flock; the call type ends in 2022", "sources": ["cincinnati-cfs"] },
+    { "what": "Minneapolis 911 incidents with problem 'License Plate Reader', 208 calls since November 2025, with street-level coordinates and dispositions", "why": "The city states its readers are not Flock", "sources": ["minneapolis-911"] },
+    { "what": "Connecticut camera lists from 20 departments obtained by a television station", "why": "Locations without outcome counts; not published as data", "sources": ["wfsb-ct-2026"] },
+    { "what": "Minnesota statutory reader logs (times, plates captured, matches by category, fixed locations)", "why": "Published per agency behind script-rendered pages; obtainable by records request", "sources": ["mn-bca-lpr"] }
+  ]
+}

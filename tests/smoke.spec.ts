@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const PAGES = ["deployments", "components", "data", "journey", "claims", "economics", "sources"];
+const PAGES = ["deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"];
 const ready = (page: Page) => page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 90_000 });
 /** Navigate without waiting for the load event: a slow font host must not stall a test. */
 const go = (page: Page, url: string) => page.goto(url, { waitUntil: "commit" });
@@ -17,7 +17,7 @@ const settled = (page: Page) => page.waitForFunction(() => window.__flock!.state
 const instant = (page: Page) => page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
 const inView = (page: Page, sel: string) => page.evaluate((sel) => { const r = document.querySelector(sel)!.getBoundingClientRect(); return r.top >= 40 && r.top < innerHeight; }, sel);
 const nav = async (page: Page, current: string) => {
-  await expect(page.locator(".sections a")).toHaveCount(8);
+  await expect(page.locator(".sections a")).toHaveCount(9);
   await expect(page.locator(".sections a").first()).toHaveText("Home");
   await expect(page.locator(".sections a.is-active")).toHaveText(current);
   await expect(page.locator(".sections a.is-active")).toHaveAttribute("aria-current", "page");
@@ -32,8 +32,8 @@ test("home: summary of every page, the components preview, older links redirect"
   await nav(page, "Home");
   await expect(page.locator("#preview-img")).toHaveJSProperty("complete", true);
   expect(await page.evaluate(() => (document.getElementById("preview-img") as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(7);
-  await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Data path", "Where the picture goes", "Common claims", "Economics", "Sources"]);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
+  await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Data path", "Where the picture goes", "What the reads produce", "Common claims", "Economics", "Sources"]);
   expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(2200);
   // no article content on the home page
   await expect(page.locator(".claim, .stage, .cell")).toHaveCount(0);
@@ -77,12 +77,13 @@ test("every content page loads with its content, the pager and citations that re
     deployments: ["#page-body .chart-bars .bar", 10],
     data: ["#page-body .stage", 14],
     journey: ["#page-body .stop", 7],
+    outcomes: ["#page-body .site", 30],
     claims: ["#page-body .claim", 21],
     economics: ["#page-body .econ-block", 1],
     sources: ["#page-body .src-group", 4],
   };
   for (const id of PAGES.filter((p) => p !== "components")) {
-    await go(page, `/${id}/`);
+    await go(page, `/${id}/${id === "outcomes" ? "?map=off" : ""}`);
     await ready(page);
     await nav(page, id[0]!.toUpperCase() + id.slice(1));
     const [sel, n] = counts[id]!;
@@ -228,7 +229,7 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await go(page, "/");
   await ready(page);
   await instant(page);
-  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(7);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await page.locator(".sections a", { hasText: "Economics" }).click();
   await page.waitForURL(/\/economics\/$/, { waitUntil: "commit" });
@@ -241,7 +242,7 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await page.locator(".sections a.home").click();
   await page.waitForURL(/\/Flock\/$|:4173\/$/, { waitUntil: "commit" });
   await ready(page);
-  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(7);
+  await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
   await go(page, "/claims/");
   await ready(page);
   await expect(page.locator("#page-body .claim")).toHaveCount(21);

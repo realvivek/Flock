@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Economics · Anatomy of a Flock Camera</title>
-    <meta name="description" content="Items included in and excluded from the annual fee, list prices, the fee schedules, price history, installation workflow and responsibilities, permitting, ownership and contract terms, scale and public funding." />
+    <title>Outcomes · Anatomy of a Flock Camera</title>
+    <meta name="description" content="Police audits, dispatch records, court opinions and news reports that tie a Flock camera to a result: reads, alerts, wrong alerts, stops, recoveries and arrests, at the finest level each record supports, joined to the mapped cameras." />
     <meta name="theme-color" content="#f7f8f6" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23f2b441' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23f2b441'/%3E%3C/svg%3E" />
-    <meta property="og:title" content="Economics · Anatomy of a Flock Camera" />
-    <meta property="og:description" content="Items included in and excluded from the annual fee, list prices, the fee schedules, price history, installation workflow and responsibilities, permitting, ownership and contract terms, scale and public funding." />
+    <meta property="og:title" content="Outcomes · Anatomy of a Flock Camera" />
+    <meta property="og:description" content="Police audits, dispatch records, court opinions and news reports that tie a Flock camera to a result: reads, alerts, wrong alerts, stops, recoveries and arrests, at the finest level each record supports, joined to the mapped cameras." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
-  <body data-page="economics" data-root="../">
+  <body data-page="outcomes" data-root="../">
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="topbar">
@@ -24,9 +24,9 @@
         <a href="../components/">Components</a>
         <a href="../data/">Data</a>
         <a href="../journey/">Journey</a>
-        <a href="../outcomes/">Outcomes</a>
+        <a href="../outcomes/" class="is-active" aria-current="page">Outcomes</a>
         <a href="../claims/">Claims</a>
-        <a href="../economics/" class="is-active" aria-current="page">Economics</a>
+        <a href="../economics/">Economics</a>
         <a href="../sources/">Sources</a>
       </nav>
       <div class="status" id="status" aria-live="polite"></div>
@@ -34,12 +34,13 @@
 
     <main id="main">
       <section class="page-head" id="top">
-        <p class="eyebrow amber">Economics</p>
-        <h1>Pricing and cost structure</h1>
-        <p class="lede">Items included in and excluded from the annual fee, list prices, the fee schedules, price history, installation workflow and responsibilities, permitting, ownership and contract terms, scale and public funding.</p>
+        <p class="eyebrow cyan">Outcomes by location</p>
+        <h1>What the reads produce, where it is recorded</h1>
+        <p class="lede">Every public record found that ties a Flock camera to a result, on the same six rungs: plates read, hot-list alerts, alerts found wrong, stops, vehicles recovered, arrests. Each record is shown at the finest level its source supports, per camera site, per hit location, per dispatch call, per district or per agency, and joined to the mapped cameras. A blank means the source did not report that rung.</p>
+        <nav class="jump" aria-label="On this page"><a href="#sites">By camera site</a><a href="#districts">By district</a><a href="#agencies">By agency</a><a href="#national">National statements</a><a href="#coverage">Coverage</a></nav>
       </section>
-      <section class="sec" id="economics">
-        <div class="article sheet"><div id="page-body" class="article-body"></div></div>
+      <section class="sec" id="outcomes">
+        <div id="page-body" class="outcomes"></div>
       </section>
       <nav class="pager" id="pager" aria-label="Pages in order"></nav>
     </main>

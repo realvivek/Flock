@@ -9,8 +9,8 @@ const URL = process.argv[3] || "http://127.0.0.1:4173";
 fs.mkdirSync(Q, { recursive: true });
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--disable-gpu-compositing"] });
 const sizes = [[1024, 768, false], [1280, 720, false], [1440, 900, false], [1920, 1080, false], [2560, 1440, false], [360, 740, true], [390, 844, true], [430, 932, true]];
-const pages = ["", "deployments", "components", "data", "journey", "claims", "economics", "sources"];
-const labels = { "": "Home", deployments: "Deployments", components: "Components", data: "Data", journey: "Journey", claims: "Claims", economics: "Economics", sources: "Sources" };
+const pages = ["", "deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"];
+const labels = { "": "Home", deployments: "Deployments", components: "Components", data: "Data", journey: "Journey", outcomes: "Outcomes", claims: "Claims", economics: "Economics", sources: "Sources" };
 const findings = [];
 const F = (vp, where, msg) => { findings.push(`${vp} ${where}: ${msg}`); console.log("F", `${vp} ${where}: ${msg}`); };
 const pageChecks = () => {
@@ -42,7 +42,7 @@ for (const [w, h, phone] of sizes) {
   const settle = async () => { await page.waitForFunction(() => window.__flock.state.tweening !== true, null, { timeout: 8000 }).catch(() => F(vp, "", "tween never settled")); await page.waitForTimeout(500); };
   for (const id of pages) {
     const name = id || "home";
-    await page.goto(`${URL}/${id ? id + "/" : ""}${!phone && id === "components" ? "?gl" : ""}`, { waitUntil: "commit" });
+    await page.goto(`${URL}/${id ? id + "/" : ""}${!phone && id === "components" ? "?gl" : id === "outcomes" ? "?map=off" : ""}`, { waitUntil: "commit" });
     await page.waitForFunction(() => window.__flock?.state.ready, null, { timeout: 90000 }).catch(() => F(vp, name, "never ready"));
     await page.waitForTimeout(600);
     await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
@@ -51,7 +51,7 @@ for (const [w, h, phone] of sizes) {
     if (g.wide.length) F(vp, name, "wider than the viewport: " + g.wide.join(", "));
     if (g.imgs.length) F(vp, name, "images failed: " + g.imgs.join(", "));
     if (g.clipped.length) F(vp, name, "clipped text: " + g.clipped.join(" | "));
-    if (g.links !== 8 || g.first !== "Home") F(vp, name, `${g.links} header links, first "${g.first}"`);
+    if (g.links !== 9 || g.first !== "Home") F(vp, name, `${g.links} header links, first "${g.first}"`);
     if (g.active !== labels[id] || g.current !== labels[id]) F(vp, name, `header marks "${g.active}" (aria-current "${g.current}")`);
     if (!g.allChipsInView) F(vp, name, "a header link is outside the header or the viewport");
     if (g.h1UnderHeader) F(vp, name, "the page title sits under the fixed header");

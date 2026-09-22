@@ -713,7 +713,14 @@
       "lastVerified": "2026-09-04"
     },
     {
-      "id": "fccid-2bkg8", "kind": "government", "title": "FCC grantee 2BKG8 (Flock Group, Inc., Atlanta): registered August 2024 with no FCC ID applications; the Falcon's radios are pre-certified modules", "publisher": "FCC via fccid.io", "url": "https://fccid.io/2BKG8", "date": "2024-08-20", "lastVerified": "2026-09-18"},
+      "id": "fccid-2bkg8",
+      "kind": "government",
+      "title": "FCC grantee 2BKG8 (Flock Group, Inc., Atlanta): registered August 2024 with no FCC ID applications; the Falcon's radios are pre-certified modules",
+      "publisher": "FCC via fccid.io",
+      "url": "https://fccid.io/2BKG8",
+      "date": "2024-08-20",
+      "lastVerified": "2026-09-18"
+    },
     {
       "id": "wikipedia-flock",
       "kind": "independent",
@@ -1307,6 +1314,276 @@
       "url": "https://www.aclu.org/get-the-flock-out-toolkit",
       "date": "2026",
       "lastVerified": "2026-09-06"
+    },
+    {
+      "id": "nashville-lpr-2023",
+      "kind": "government",
+      "title": "LPR Council Report 2: ALPR pilot activity March 21 to May 17 2023, summary by quadrant and by ALPR site",
+      "publisher": "Metro Nashville Police Department",
+      "url": "https://www.nashville.gov/sites/default/files/2023-06/LPR-Council-Report-2.pdf",
+      "date": "2023-05-23",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "footnote4a-hotlist",
+      "kind": "independent",
+      "title": "Flock's hot lists are a hot mess (Story County erroneous hot-list hits export, Harris County custom lists)",
+      "publisher": "Footnote 4a",
+      "url": "https://footnote4a.org/news/hotlist-mess",
+      "date": "2026-03-14",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "tucson-cfs",
+      "kind": "government",
+      "title": "Tucson Police calls for service, last 45 days (nature code FLOCK, University of Arizona police)",
+      "publisher": "City of Tucson open data",
+      "url": "https://gisdata.tucsonaz.gov/datasets/tucson-police-calls-for-service-last-45-days-open-data",
+      "date": "2026-09-18",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "windsor-lpr-faq-2025",
+      "kind": "government",
+      "title": "Flock Safety license plate reader fact sheet: camera locations and case examples",
+      "publisher": "Windsor, Connecticut Police Department",
+      "url": "https://www.windsorct.gov/DocumentCenter/View/4061/Flock-Safety-License-Plate-Reader-Fact-Sheet-PDF",
+      "date": "2025-09-04",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "lehman-tracker",
+      "kind": "independent",
+      "title": "Flock crime prevention tracker: news-reported outcomes dataset (1,743 incidents, 16 court records)",
+      "publisher": "Charles Fain Lehman on GitHub",
+      "url": "https://github.com/CharlesFainLehman/flock-crime-tracker",
+      "date": "2026-09-17",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "hagwood-2026",
+      "kind": "court",
+      "title": "State v. Hagwood, 2026-Ohio-2564: hot-list alert from the Par Lane Flock camera, conviction affirmed",
+      "publisher": "Ohio Eleventh District Court of Appeals",
+      "url": "https://www.supremecourt.ohio.gov/rod/docs/pdf/11/2026/2026-Ohio-2564.pdf",
+      "date": "2026-07-06",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "lexington-lpr",
+      "kind": "government",
+      "title": "License plate readers: programme statistics, March to November 2022",
+      "publisher": "Lexington-Fayette Urban County Government",
+      "url": "https://www.lexingtonky.gov/government/departments-programs/public-safety/police/license-plate-readers",
+      "date": "2022-12-01",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "lexington-lpr-locations",
+      "kind": "government",
+      "title": "License plate reader locations by council district",
+      "publisher": "Lexington-Fayette Urban County Government",
+      "url": "https://www.lexingtonky.gov/government/departments-programs/public-safety/police/license-plate-readers/license-plate-reader-locations",
+      "date": "2025-12-15",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "oakland-pac-2026",
+      "kind": "government",
+      "title": "Privacy Advisory Commission agenda packet, June 4 2026: OPD automated license plate reader 2025 annual report",
+      "publisher": "City of Oakland",
+      "url": "https://www.oaklandca.gov/files/assets/city/v/1/public-meetings/privacy-advisory-commission/2026/june-4-pac-agenda-packet.pdf",
+      "date": "2026-06-04",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "oakland-pac-2025",
+      "kind": "government",
+      "title": "Privacy Advisory Commission agenda packet, September 4 2025: OPD ALPR report with cameras by police area",
+      "publisher": "City of Oakland",
+      "url": "https://www.oaklandca.gov/files/assets/city/v/1/public-meetings/privacy-advisory-commission/2025/09-04-25-privacy-advisory-commission-agenda-packet.pdf",
+      "date": "2025-09-04",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "oaklandside-2026",
+      "kind": "independent",
+      "title": "Oakland's Flock cameras captured 638 million license plates in 2025",
+      "publisher": "Oaklandside",
+      "url": "https://oaklandside.org/2026/06/05/flock-cameras-oakland-600-million-license-plate-reader/",
+      "date": "2026-06-05",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "lapd-oig-2026",
+      "kind": "government",
+      "title": "Review of the Department's use of automatic license plate readers, BPC 26-184",
+      "publisher": "Los Angeles Police Commission, Office of the Inspector General",
+      "url": "https://www.lapdpolicecom.lacity.org/071426/BPC_26-184x.pdf",
+      "date": "2026-07-10",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "techtimes-lapd-2026",
+      "kind": "independent",
+      "title": "LAPD cuts off Flock Safety after audit finds one in three hot-list alerts were false",
+      "publisher": "Tech Times",
+      "url": "https://www.techtimes.com/articles/320800/20260717/lapd-cuts-off-flock-safety-after-audit-finds-one-three-hot-list-alerts-were-false.htm",
+      "date": "2026-07-17",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "greenbay-audit-2026",
+      "kind": "government",
+      "title": "Automated License Plate Reader 2025 annual audit",
+      "publisher": "Green Bay Police Department",
+      "url": "https://www.greenbaywi.gov/DocumentCenter/View/18762/Green-Bay-PD-2025-Automated-License-Plate-Reader-ALPR-Annual-Audit",
+      "date": "2026-05-08",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "lafayette-co-alpr",
+      "kind": "government",
+      "title": "Flock Safety ALPR programme: cases, arrests and recoveries 2024 to 2025",
+      "publisher": "City of Lafayette, Colorado",
+      "url": "https://lafayetteco.gov/4282/Flock-Safety-ALPR-Program",
+      "date": "2026-01-01",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "columbia-mo-2025",
+      "kind": "government",
+      "title": "Surveillance technology report 2025: alerts and alert-involved case dispositions",
+      "publisher": "City of Columbia, Missouri Police Department",
+      "url": "https://www.como.gov/police/surveillance-technology-report-2025/",
+      "date": "2026-02-01",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "piedmont-2025",
+      "kind": "government",
+      "title": "Piedmont Police Department 2025 year-end report",
+      "publisher": "City of Piedmont, California",
+      "url": "https://piedmont.ca.gov/common/pages/GetFile.ashx?key=yW9DAXWR",
+      "date": "2026-03-02",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "hofer-piedmont-2021",
+      "kind": "independent",
+      "title": "Automated license plate readers: a study in failure (16 years of Piedmont data)",
+      "publisher": "Independent Institute",
+      "url": "https://www.independent.org/article/2021/11/30/automated-license-plate-readers-a-study-in-failure/",
+      "date": "2021-11-30",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "denverite-2025",
+      "kind": "independent",
+      "title": "Denver's license plate readers led to 289 arrests in a year, police say",
+      "publisher": "Denverite",
+      "url": "https://denverite.com/2025/04/03/denver-flock-license-plate-readers-arrests-contract-extension/",
+      "date": "2025-04-03",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "berkeleyside-2025",
+      "kind": "independent",
+      "title": "Berkeley's Flock cameras: arrests, audit and federal access",
+      "publisher": "Berkeleyside",
+      "url": "https://www.berkeleyside.org/2025/11/20/berkeley-flock-surveillance-cameras-ice-cbp-secure-justice",
+      "date": "2025-11-20",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "wip-cops-case-2026",
+      "kind": "independent",
+      "title": "A cop's case for Flock (Atlantic City alert stops)",
+      "publisher": "Works in Progress",
+      "url": "https://worksinprogress.co/issue/a-cops-case-for-flock/",
+      "date": "2026-08-28",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "flock-impact-2026",
+      "kind": "flock",
+      "title": "How effective is Flock? 2025 Impact Census results",
+      "publisher": "Flock Safety blog",
+      "url": "https://www.flocksafety.com/blog/how-effective-is-flock",
+      "date": "2026-05-21",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "mourtgos-adams-2026",
+      "kind": "independent",
+      "title": "Working paper: automated license plate readers, vehicle theft, and clearance",
+      "publisher": "CrimRxiv (Mourtgos and Adams)",
+      "url": "https://www.crimrxiv.com/pub/zleg04q3/release/1",
+      "date": "2026-08-14",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "ij-abuse-2026",
+      "kind": "independent",
+      "title": "The IJ database of ALPR abuse",
+      "publisher": "Institute for Justice",
+      "url": "https://ij.org/the-ij-database-of-alpr-abuse/",
+      "date": "2026-08-12",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "deflock-data",
+      "kind": "independent",
+      "title": "deflock-data: hourly OpenStreetMap ALPR camera export (GeoJSON, ODbL)",
+      "publisher": "flockhopper3 on GitHub",
+      "url": "https://github.com/flockhopper3/deflock-data",
+      "date": "2026-09-18",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "cincinnati-cfs",
+      "kind": "government",
+      "title": "Police calls for service (incident type LPR)",
+      "publisher": "City of Cincinnati open data",
+      "url": "https://data.cincinnati-oh.gov/resource/gexm-h6bt.json",
+      "date": "2026-09-18",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "minneapolis-911",
+      "kind": "government",
+      "title": "Incidents reported to 911 (initial problem: License Plate Reader)",
+      "publisher": "City of Minneapolis open data",
+      "url": "https://opendata.minneapolismn.gov/datasets/cityoflakes::incidents-reported-911/about",
+      "date": "2026-09-18",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "wfsb-ct-2026",
+      "kind": "independent",
+      "title": "Where are police Flock cameras in CT? I-Team dives into search data",
+      "publisher": "WFSB",
+      "url": "https://www.wfsb.com/2026/05/28/where-are-police-flock-cameras-ct-i-team-dives-into-search-data/",
+      "date": "2026-05-28",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "mn-bca-lpr",
+      "kind": "government",
+      "title": "Agencies that use license plate readers, with stationary reader locations (Minn. Stat. 13.824)",
+      "publisher": "Minnesota Bureau of Criminal Apprehension",
+      "url": "https://dps.mn.gov/divisions/bca/data-and-reports/agencies-use-lprs-lpr",
+      "date": "2026-09-18",
+      "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "nashville-lpr-sampling-2023",
+      "kind": "government",
+      "title": "ALPR pilot supplemental sampling data: reads, hit notifications and verified hits in four ten-day periods; arrests by quadrant",
+      "publisher": "Metro Nashville Police Department",
+      "url": "https://www.nashville.gov/sites/default/files/2023-08/LPR-Sampling-Data.pdf",
+      "date": "2023-08-03",
+      "lastVerified": "2026-09-18"
     }
   ]
 }

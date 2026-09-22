@@ -12,6 +12,7 @@ import { el, initNav, scrollToEl } from "./ui/common";
 import { buildPole, buildPower, buildData, dataStageIds } from "./sections";
 import { initComponentsPage } from "./components-page";
 import { buildJourney } from "./journey";
+import { buildOutcomes } from "./outcomes";
 import { parseRoute, chapterFor } from "./router";
 import { state, set } from "./store";
 import { escape } from "./ui/cite";
@@ -22,6 +23,7 @@ export const PAGES: { id: string; label: string; section: string }[] = [
   { id: "components", label: "Components", section: "inside" },
   { id: "data", label: "Data", section: "data" },
   { id: "journey", label: "Journey", section: "journey" },
+  { id: "outcomes", label: "Outcomes", section: "outcomes" },
   { id: "claims", label: "Claims", section: "myths" },
   { id: "economics", label: "Economics", section: "economics" },
   { id: "sources", label: "Sources", section: "sources" },
@@ -83,6 +85,7 @@ function init(): void {
     case "components": initComponentsPage(); buildPole(document.getElementById("pole-body")!); buildPower(document.getElementById("power-body")!); break;
     case "data": buildData(body!); break;
     case "journey": buildJourney(body!); break;
+    case "outcomes": void buildOutcomes(body!); break;
     case "claims": renderClaims(body!, { onPart: (id) => { location.href = `${ROOT}components/#${id}`; }, onHop: (n) => { location.href = `${ROOT}data/#stage-${n}`; } }); break;
     case "economics": renderEconomics(body!); break;
     case "sources": renderSources(body!); break;

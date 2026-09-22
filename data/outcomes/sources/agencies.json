@@ -1,0 +1,310 @@
+{
+  "$comment": "Agency-level ladders from audits and annual reports. Rungs: reads, alerts (unverified hot-list matches unless the definition says otherwise), falseAlerts, stops, recoveries, arrests. null = not reported.",
+  "ladders": [
+    {
+      "id": "lapd-2025",
+      "agency": "Los Angeles Police Department",
+      "city": "Los Angeles",
+      "state": "CA",
+      "period": "2025-08-01 to 2025-09-30",
+      "cameras": "about 2,000 readers from three vendors, of which 138 Flock poles",
+      "vendorMix": true,
+      "values": {
+        "reads": 210500000,
+        "alerts": 498,
+        "falseAlerts": 161,
+        "stops": null,
+        "recoveries": 337,
+        "arrests": 74
+      },
+      "note": "Inspector General review. False alerts were traced to stale or wrong database entries rather than misreads. The department suspended the Flock contract in July 2026.",
+      "sources": [
+        "lapd-oig-2026",
+        "techtimes-lapd-2026"
+      ]
+    },
+    {
+      "id": "oakland-2025",
+      "agency": "Oakland Police Department",
+      "city": "Oakland",
+      "state": "CA",
+      "period": "2025",
+      "cameras": "293 Flock cameras",
+      "values": {
+        "reads": 638747333,
+        "alerts": 1099837,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 174,
+        "arrests": 162
+      },
+      "note": "Alerts include more than 620,000 for stolen plates; the department kept stolen-vehicle alerts deactivated for staffing reasons. Recoveries and arrests are the 425 outcomes officers logged in the software's outcome feature, not a count of all alerts.",
+      "sources": [
+        "oakland-pac-2026",
+        "oaklandside-2026"
+      ]
+    },
+    {
+      "id": "greenbay-2025",
+      "agency": "Green Bay Police Department",
+      "city": "Green Bay",
+      "state": "WI",
+      "period": "2025 (reads: 2026-01-01 to 2026-02-07)",
+      "cameras": "42 fixed Flock cameras; 50 patrol cars with in-car readers",
+      "vendorMix": true,
+      "values": {
+        "reads": 9447030,
+        "alerts": 20386,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 31,
+        "arrests": null
+      },
+      "note": "Alerts are 1,748 on official lists plus 18,638 on agency custom lists. Reads cover the only 38-day window the system still held; purge data for 2025 was unavailable. 49 investigations used reader data. Shares camera access with 299 agencies.",
+      "sources": [
+        "greenbay-audit-2026"
+      ]
+    },
+    {
+      "id": "roseville-2023",
+      "agency": "Roseville Police Department",
+      "city": "Roseville",
+      "state": "CA",
+      "period": "2023 to 2024",
+      "cameras": "Flock",
+      "values": {
+        "reads": null,
+        "alerts": 1427,
+        "falseAlerts": 1011,
+        "stops": null,
+        "recoveries": null,
+        "arrests": null
+      },
+      "note": "Alerts on stolen-vehicle and felony lists; 71% involved a misread plate. The department states none of the 1,011 misread alerts led to a contact or arrest. Stops from correct alerts were not reported.",
+      "sources": [
+        "roseville-71"
+      ]
+    },
+    {
+      "id": "nashville-2023",
+      "agency": "Metro Nashville Police Department",
+      "city": "Nashville",
+      "state": "TN",
+      "period": "2023-03-21 to 2023-05-17",
+      "cameras": "117 readers: 76 fixed at 24 sites, 11 trailer, 30 mobile",
+      "values": {
+        "reads": null,
+        "alerts": 443,
+        "falseAlerts": null,
+        "stops": 25,
+        "recoveries": 22,
+        "arrests": 18
+      },
+      "note": "Alerts here are verified hits only, confirmed by an employee before a stop was authorised. Per-site figures are in the table above.",
+      "sources": [
+        "nashville-lpr-2023"
+      ]
+    },
+    {
+      "id": "nashville-pilot-140",
+      "agency": "Metro Nashville Police Department",
+      "city": "Nashville",
+      "state": "TN",
+      "period": "2023 pilot, 140 days",
+      "cameras": "117 readers",
+      "values": {
+        "reads": 71676804,
+        "alerts": 13399,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 26,
+        "arrests": 112
+      },
+      "note": "Reads are MNPD's estimate from four ten-day samples (20,479,087 reads, 13,399 hit notifications, 1,346 verified hits in the samples; 511,977 reads a day over 140 days). Alerts here are unverified hit notifications in the 40 sampled days only. Arrests are persons arrested over the whole pilot; recoveries are the 26 vehicles recovered unoccupied, on top of recoveries at arrest.",
+      "sources": [
+        "nashville-lpr-sampling-2023"
+      ]
+    },
+    {
+      "id": "columbia-2025",
+      "agency": "Columbia Police Department",
+      "city": "Columbia",
+      "state": "MO",
+      "period": "2025",
+      "cameras": "Flock",
+      "values": {
+        "reads": null,
+        "alerts": 5521,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": null,
+        "arrests": 69
+      },
+      "note": "Alerts: 2,877 warrant, 1,452 stolen plate, 1,192 stolen vehicle. Of 217 cases that involved an alert: 69 cleared by arrest, 52 lead generation, 33 in progress, 31 unable to locate, 20 cleared otherwise, 7 no action.",
+      "sources": [
+        "columbia-mo-2025"
+      ]
+    },
+    {
+      "id": "piedmont-2025",
+      "agency": "Piedmont Police Department",
+      "city": "Piedmont",
+      "state": "CA",
+      "period": "2025",
+      "cameras": "48",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 38,
+        "arrests": 24
+      },
+      "note": "250 incident responses attributed to the readers; 24 arrests 'directly related'. A 2021 study of the city's earlier vendor found under 0.3% of hits became leads.",
+      "sources": [
+        "piedmont-2025",
+        "hofer-piedmont-2021"
+      ]
+    },
+    {
+      "id": "lafayette-2025",
+      "agency": "Lafayette Police Department",
+      "city": "Lafayette",
+      "state": "CO",
+      "period": "2024 to 2025",
+      "cameras": "30 Flock cameras",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 14,
+        "arrests": 65
+      },
+      "note": "267 cases assisted. Retention 30 days.",
+      "sources": [
+        "lafayette-co-alpr"
+      ]
+    },
+    {
+      "id": "denver-2025",
+      "agency": "Denver Police Department",
+      "city": "Denver",
+      "state": "CO",
+      "period": "12 months from 2024-05",
+      "cameras": "111 Flock cameras at about 70 sites",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 170,
+        "arrests": 289
+      },
+      "note": "29 firearms recovered. One 30-day portal window showed about 2 million vehicles and 175,916 hits. The city later ended the contract.",
+      "sources": [
+        "denverite-2025"
+      ]
+    },
+    {
+      "id": "berkeley-2025",
+      "agency": "Berkeley Police Department",
+      "city": "Berkeley",
+      "state": "CA",
+      "period": "2025",
+      "cameras": "52 Flock cameras",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 40,
+        "arrests": 52
+      },
+      "note": "At least 52 arrests 'directly from' reader data plus 29 assists; about 40 vehicles. A January to June 2025 audit found no impermissible use.",
+      "sources": [
+        "berkeleyside-2025"
+      ]
+    },
+    {
+      "id": "lexington-2022",
+      "agency": "Lexington Police Department",
+      "city": "Lexington",
+      "state": "KY",
+      "period": "2022-03 to 2022-11",
+      "cameras": "125 Flock cameras",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": 371,
+        "arrests": 822
+      },
+      "note": "Arrests are 'individuals charged' (1,985 charges). Also 43 stolen plates, 521 warrants served, 32 missing persons located, 166 firearms seized.",
+      "sources": [
+        "lexington-lpr"
+      ]
+    },
+    {
+      "id": "atlantic-city",
+      "agency": "Atlantic City Police Department",
+      "city": "Atlantic City",
+      "state": "NJ",
+      "period": "reported 2026",
+      "cameras": "Fixed readers at every island entrance",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": 72,
+        "recoveries": 40,
+        "arrests": null
+      },
+      "note": "72 stops caused by alerts produced 40 stolen vehicles and 9 stolen plates, as reported in a 2026 essay citing the department.",
+      "sources": [
+        "wip-cops-case-2026"
+      ]
+    },
+    {
+      "id": "story-2025",
+      "agency": "Story County Sheriff's Office",
+      "city": "Ames",
+      "state": "IA",
+      "period": "2025-09-09 to 2025-10-09",
+      "cameras": "Flock",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": 214,
+        "stops": null,
+        "recoveries": null,
+        "arrests": null
+      },
+      "note": "The county's erroneous-hits export: 214 rows, 77% marked wrong state. Correct hits were not exported, so the denominator is unknown. Per-location rows are mapped above.",
+      "sources": [
+        "footnote4a-hotlist"
+      ]
+    },
+    {
+      "id": "windsor-2025",
+      "agency": "Windsor Police Department",
+      "city": "Windsor",
+      "state": "CT",
+      "period": "2023 to 2025",
+      "cameras": "16 Flock cameras, $48,000 a year",
+      "values": {
+        "reads": null,
+        "alerts": null,
+        "falseAlerts": null,
+        "stops": null,
+        "recoveries": null,
+        "arrests": null
+      },
+      "note": "The town publishes camera sites and ten dated cases rather than counts. The council paused the cameras in 2026.",
+      "sources": [
+        "windsor-lpr-faq-2025"
+      ]
+    }
+  ]
+}

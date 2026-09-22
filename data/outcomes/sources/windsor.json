@@ -1,0 +1,201 @@
+{
+  "$comment": "Windsor, Connecticut Police Department fact sheet (September 2025 draft): the sixteen camera sites and dated case examples. Cases that name the camera used are tied to that site; the others stay at agency level.",
+  "agency": "Windsor Police Department",
+  "city": "Windsor",
+  "state": "CT",
+  "cameras": 16,
+  "annualCost": 48000,
+  "retentionDays": 30,
+  "sources": [
+    "windsor-lpr-faq-2025"
+  ],
+  "sites": [
+    {
+      "id": "broad-sycamore",
+      "label": "Broad Street @ Sycamore Street",
+      "roads": [
+        "Broad Street",
+        "Sycamore Street"
+      ]
+    },
+    {
+      "id": "dayhill-dpw",
+      "label": "Day Hill Road at the DPW garage",
+      "roads": [
+        "Day Hill Road"
+      ],
+      "roadOnly": true
+    },
+    {
+      "id": "kennedy-i91",
+      "label": "Kennedy Road @ I-91",
+      "roads": [
+        "Kennedy Road",
+        "Interstate 91"
+      ],
+      "cameras": 2
+    },
+    {
+      "id": "218-columbia",
+      "label": "Route 218 @ Columbia Road",
+      "roads": [
+        "Route 218",
+        "Columbia Road"
+      ]
+    },
+    {
+      "id": "218-pine",
+      "label": "Route 218 @ Pine Lane",
+      "roads": [
+        "Route 218",
+        "Pine Lane"
+      ]
+    },
+    {
+      "id": "park-i91",
+      "label": "Park Avenue @ I-91",
+      "roads": [
+        "Park Avenue",
+        "Interstate 91"
+      ]
+    },
+    {
+      "id": "park-ludlow",
+      "label": "Park Avenue @ Ludlow Road",
+      "roads": [
+        "Park Avenue",
+        "Ludlow Road"
+      ]
+    },
+    {
+      "id": "bloomfield-i91",
+      "label": "Bloomfield Avenue @ I-91",
+      "roads": [
+        "Bloomfield Avenue",
+        "Interstate 91"
+      ],
+      "cameras": 2
+    },
+    {
+      "id": "159-wolcott",
+      "label": "Route 159 southbound @ East Wolcott Avenue",
+      "roads": [
+        "Windsor Avenue",
+        "East Wolcott Avenue"
+      ]
+    },
+    {
+      "id": "159-i91",
+      "label": "Route 159 @ I-91",
+      "roads": [
+        "Windsor Avenue",
+        "Interstate 91"
+      ]
+    },
+    {
+      "id": "159-putnam",
+      "label": "Route 159 @ Putnam Highway",
+      "roads": [
+        "Windsor Avenue",
+        "Route 75"
+      ]
+    },
+    {
+      "id": "poquonock-broad",
+      "label": "Poquonock Avenue @ Broad Street",
+      "roads": [
+        "Route 75",
+        "Broad Street"
+      ]
+    },
+    {
+      "id": "poquonock-i91",
+      "label": "Poquonock Avenue @ I-91",
+      "roads": [
+        "Route 75",
+        "Interstate 91"
+      ]
+    },
+    {
+      "id": "poquonock-hudson",
+      "label": "Poquonock Avenue @ Hudson Lane",
+      "roads": [
+        "Route 75",
+        "Hudson Lane"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "date": "2023-03-12",
+      "type": "Shots fired",
+      "site": "159-i91",
+      "summary": "Two shell casings found on Meadow Road; footage from the I-91 and Windsor Avenue camera identified the two vehicles involved.",
+      "outcome": "vehicles identified"
+    },
+    {
+      "date": "2023-06-23",
+      "type": "Evading an accident",
+      "site": null,
+      "summary": "A single-vehicle crash at 2:37 a.m. was identified from nearby security video; the LPR identified the vehicle and the evading driver was arrested.",
+      "outcome": "arrest"
+    },
+    {
+      "date": "2023-06-23",
+      "type": "Larceny from a vehicle",
+      "site": null,
+      "summary": "The suspect vehicle was later confirmed stolen; a Flock alert placed it travelling toward Hartford and three suspects were apprehended.",
+      "outcome": "three arrests"
+    },
+    {
+      "date": "2023-11-20",
+      "type": "Street takeover, evading",
+      "site": "dayhill-dpw",
+      "summary": "A fleeing vehicle hit a parked car; the Day Hill Road LPR identified it and the owner was arrested for evading.",
+      "outcome": "arrest"
+    },
+    {
+      "date": "2024-07-29",
+      "type": "Stolen vehicle recovered",
+      "site": null,
+      "summary": "A Flock alert identified a stolen vehicle, found in a driveway on East Barber Street; a second vehicle's plate was identified with Flock.",
+      "outcome": "vehicle recovered, case open"
+    },
+    {
+      "date": "2024-07-30",
+      "type": "Aggravated assault",
+      "site": "159-i91",
+      "summary": "A gunshot victim on Windsor Avenue; the Windsor Avenue/I-91 camera identified the suspect vehicle and the suspect was arrested.",
+      "outcome": "arrest"
+    },
+    {
+      "date": "2024-12-02",
+      "type": "Evading an accident",
+      "site": null,
+      "road": "Route 218",
+      "summary": "The evading vehicle's plate was obtained; Flock confirmed it had travelled Route 218 at the time, a lead used to secure a confession.",
+      "outcome": "confession"
+    },
+    {
+      "date": "2025-03-17",
+      "type": "Commercial burglary",
+      "site": null,
+      "summary": "About $880,000 of copper and wiring taken over a series of burglaries; Flock cameras identified a U-Haul van, leading to a warrant and multiple arrests.",
+      "outcome": "multiple arrests"
+    },
+    {
+      "date": "2025-06-10",
+      "type": "Stolen vehicle recovered",
+      "site": "kennedy-i91",
+      "summary": "A camera on Kennedy Road alerted on a stolen vehicle; stop sticks were deployed on I-91 southbound and the suspect was arrested in Hartford.",
+      "outcome": "arrest, vehicle recovered"
+    },
+    {
+      "date": "2025-08-31",
+      "type": "Missing person",
+      "site": null,
+      "summary": "A Flock alert indicated the missing person's vehicle was in Windsor; officers located the person safely.",
+      "outcome": "person located"
+    }
+  ]
+}

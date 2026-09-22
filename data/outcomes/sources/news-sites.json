@@ -1,0 +1,298 @@
+[
+ {
+  "id": "36",
+  "city": "Thomaston",
+  "state": "GA",
+  "date": "2026-06-21",
+  "crime": "vehicle theft",
+  "outcome": "vehicle recovered",
+  "site": "Avenue F at 2:20 a",
+  "roads": [
+   "Avenue F"
+  ],
+  "summary": "A vehicle stolen from a 6th Avenue residence early Sunday morning (June 21) was recovered the same afternoon with assistance from the Flock camera system, which detected the car passing a camera on Avenue F at 2:20 a.m., enabling officers to locate and pursue it.",
+  "url": "https://www.upsonbeacon.com/news/tpd-stolen-car-recovered-same-day-with-flock/article_38e1b0b0-fe22-42f0-a480-01d776fcb274.html"
+ },
+ {
+  "id": "137",
+  "city": "Camden",
+  "state": "SC",
+  "date": "2021-03-11",
+  "crime": "vehicle theft",
+  "outcome": "suspect arrested",
+  "site": "East Dekalb Street",
+  "roads": [
+   "East DeKalb Street"
+  ],
+  "summary": "A Flock camera on East Dekalb Street in Camden detected a stolen box truck, triggering a multi-jurisdiction chase that resulted in the arrest of Aaron Michael Wolferst after he fled on foot at Sand Hills State Park.",
+  "url": "https://www.abccolumbia.com/2021/03/11/kcso-arrests-indiana-man-after-multi-jurisdiction-chase-involving-reportedly-stolen-box-truck/"
+ },
+ {
+  "id": "208",
+  "city": "Campbell",
+  "state": "CA",
+  "date": "2023-03-24",
+  "crime": "vehicle theft",
+  "outcome": "arrest",
+  "site": "San Tomas Expressway & State Route 17",
+  "roads": [
+   "San Tomas Expressway",
+   "State Route 17"
+  ],
+  "summary": "A man and woman were captured on a Flock camera on March 24 driving a stolen vehicle at San Tomas Expressway and Highway 17 in Campbell. The driver possessed methamphetamine, drug paraphernalia, burglary tools, and stolen ID information; the passenger possessed drug paraphernalia.",
+  "url": "https://www.mercurynews.com/2023/03/28/campbell-crime-report-for-the-week-of-april-7/"
+ },
+ {
+  "id": "229",
+  "city": "Marietta",
+  "state": "GA",
+  "date": "2023-05-28",
+  "crime": "vehicle theft",
+  "outcome": "three arrests, three guns recovered",
+  "site": "Bentley Road",
+  "roads": [
+   "Bentley Road"
+  ],
+  "summary": "A Flock camera on Bentley Road detected a stolen vehicle connected to multiple car break-ins in Marietta. Police pursued the vehicle, which crashed after a brief chase; three juvenile suspects were apprehended and three guns were recovered.",
+  "url": "https://www.fox5atlanta.com/news/marietta-police-chase-stolen-car-juvenile-runaways-arrested"
+ },
+ {
+  "id": "268",
+  "city": "Fairfield",
+  "state": "CA",
+  "date": "2023-09-08",
+  "crime": "vehicle theft",
+  "outcome": "four suspects arrested/cited, vehicle recovered",
+  "site": "Lopes Road & Interstate 80",
+  "roads": [
+   "Lopes Road",
+   "Interstate 80"
+  ],
+  "summary": "Fairfield police apprehended one adult and three youths after a stolen Oakland vehicle was tracked via a Flock camera near Lopes Road and I-80 on I-80. The suspects were found in possession of key fobs, a key programmer, and a loaded handgun.",
+  "url": "https://www.mercurynews.com/2023/09/08/one-adult-three-children-arrested-in-fairfield-with-stolen-vehicle/"
+ },
+ {
+  "id": "289",
+  "city": "Decatur",
+  "state": "GA",
+  "date": "2021-09-08",
+  "crime": "shooting",
+  "outcome": "arrest and conviction",
+  "site": "an apartment complex on Columbia Drive",
+  "roads": [
+   "Columbia Drive"
+  ],
+  "summary": "A FLOCK camera near an apartment complex on Columbia Drive in Decatur captured a black Nissan Versa with a Florida license plate leaving the scene of a fatal drive-by shooting that killed Christopher Copeland on September 8, 2021. The camera footage helped identify the vehicle and led to the apprehension and conviction of Aqontise Glenn for malice murder and related felonies.",
+  "url": "https://www.wsbradio.com/news/local/dekalb-man-sentenced-deadly-drive-by-shooting/GTPSRYNTVRHE3FOSGUYW6SWQ6I/"
+ },
+ {
+  "id": "327",
+  "city": "Skokie",
+  "state": "IL",
+  "date": "2024-05-14",
+  "crime": "robbery",
+  "outcome": "arrest",
+  "site": "Tower Road generated an alert on a stolen Hyundai",
+  "roads": [
+   "Tower Road"
+  ],
+  "summary": "An 18-year-old man was arrested after committing multiple armed robberies and car thefts across the Chicago area. A Flock Safety license plate reader camera at Tower Road generated an alert on a stolen Hyundai that Glencoe officers were pursuing on the Edens Expressway, leading to the suspect's apprehension.",
+  "url": "https://patch.com/illinois/skokie/volatile-violent-18-year-old-crime-spree-suspect-stay-jailed"
+ },
+ {
+  "id": "584",
+  "city": "Springfield",
+  "state": "OR",
+  "date": "2025-11-08",
+  "crime": "vehicle theft",
+  "outcome": "vehicle recovered",
+  "site": "28th Street",
+  "roads": [
+   "28th Street"
+  ],
+  "summary": "Springfield Police recovered a stolen vehicle on November 8 after a Flock camera at 28th Street and Olympic Avenue detected it at 11:41 a.m. The camera had been unintentionally reactivated during a repair.",
+  "url": "https://nbc16.com/news/local/unintentional-reactivation-of-flock-camera-aids-springfield-police-in-vehicle-recovery-11-11-2025"
+ },
+ {
+  "id": "683",
+  "city": "Jefferson City",
+  "state": "MO",
+  "date": "2026-02-26",
+  "crime": "shooting",
+  "outcome": "charged with multiple felonies",
+  "site": "Interstate 55",
+  "roads": [
+   "Interstate 55"
+  ],
+  "summary": "Christian L. Knight is accused of firing several shots at his ex-girlfriend's new boyfriend in Jefferson City on February 26, 2026. A Flock camera on Interstate 55 in Illinois detected Knight's license plate, assisting police in the investigation that led to his charges.",
+  "url": "https://krcgtv.com/news/local/man-charged-after-police-say-he-shot-at-ex-girlfriends-new-boyfriend-in-jefferson-city"
+ },
+ {
+  "id": "707",
+  "city": "Evansville",
+  "state": "IN",
+  "date": "2026-03-28",
+  "crime": "vehicle theft",
+  "outcome": "vehicle recovered, arrests made",
+  "site": "Lloyd Expressway",
+  "roads": [
+   "Lloyd Expressway"
+  ],
+  "summary": "A 2000 Dutchman recreational vehicle was stolen from a gas station in Henderson on March 28, 2026. Flock cameras on the Lloyd Expressway and North St. Joseph Avenue/Mill Road tracked the RV and suspect vehicles through Evansville, leading authorities to identify and apprehend Joseph Desper and accomplices involved in the theft and subsequent stripping of the vehicle.",
+  "url": "https://www.14news.com/2026/04/24/vcso-evansville-man-arrested-charges-theft-conspiracy/"
+ },
+ {
+  "id": "797",
+  "city": "Johnson City",
+  "state": "TN",
+  "date": "2026-01-25",
+  "crime": "hit and run",
+  "outcome": "arrest and charges filed",
+  "site": "West Market",
+  "roads": [
+   "West Market Street"
+  ],
+  "summary": "A fatal hit-and-run incident in Johnson City was solved when a Flock camera near West Market and South Center streets identified the suspect vehicle's license plate, enabling Highway Patrol and Johnson City Police to locate and charge the driver.",
+  "url": "https://www.electric949.com/police-credit-flock-camera-technology-in-tracking-down-fatal-hit-and-run-driver-in-johnson-city/"
+ },
+ {
+  "id": "849",
+  "city": "Fairview Township",
+  "state": "PA",
+  "date": "2026-07-20",
+  "crime": "burglary",
+  "outcome": "arrest and criminal charges filed",
+  "site": "North Mountain Boulevard",
+  "roads": [
+   "North Mountain Boulevard"
+  ],
+  "summary": "A Flock camera on North Mountain Boulevard captured the license plate of a burgundy Jeep involved in a residential burglary on Woodland Avenue in Fairview Township on July 20, where seven firearms and watches were stolen. The plate led police to identify and arrest Siobhan Devine Wenzel, who was charged with criminal conspiracy to commit theft and burglary.",
+  "url": "https://www.timesleader.com/news/1749922/wilkes-barre-woman-charged-for-alleged-role-in-mountain-top-burglary"
+ },
+ {
+  "id": "881",
+  "city": "Boardman",
+  "state": "OH",
+  "date": "2026-07-11",
+  "crime": "shooting",
+  "outcome": "suspect arrested and charged",
+  "site": "South Avenue",
+  "roads": [
+   "South Avenue"
+  ],
+  "summary": "Eugene G. Thompkins was arrested and charged with attempted murder and felonious assault for shooting at two women on Market Street in Boardman on July 11, 2026. Flock Safety cameras on South Avenue and Interstate 680 captured the suspect vehicle multiple times, providing evidence that assisted investigators in identifying and locating the perpetrator.",
+  "url": "https://www.vindy.com/news/local-news/2026/07/arrest-made-in-boardman-shooting/"
+ },
+ {
+  "id": "967",
+  "city": "Oconee",
+  "state": "GA",
+  "date": "2026-07-29",
+  "crime": "theft/larceny",
+  "outcome": "arrest",
+  "site": "Oconee Connector",
+  "roads": [
+   "Oconee Connector"
+  ],
+  "summary": "A woman fled Walmart after taking $69 worth of women's clothing. A Flock camera at the Oconee Connector spotted her Chevrolet Equinox, enabling a deputy to conduct a traffic stop and recover the merchandise, leading to her arrest.",
+  "url": "https://www.yahoo.com/news/articles/jefferson-man-flees-taking-batman-080246486.html"
+ },
+ {
+  "id": "1095",
+  "city": "Monroe",
+  "state": "GA",
+  "date": "2026-07-26",
+  "crime": "hit and run",
+  "outcome": "arrest",
+  "site": "Breedlove Dr",
+  "roads": [
+   "Breedlove Drive"
+  ],
+  "summary": "A hit-and-run suspect's vehicle was located using Flock cameras at Breedlove Dr and W Spring St in Monroe, Georgia. The suspect was arrested by Gwinnett PD and transported to Walton County Jail on charges including hit-and-run, no insurance, and suspended tag.",
+  "url": "https://www.waltontribune.com/news/mpd-reports-suspect-in-hit-and-run-identified-by-flock-cameras-and-arrested-in-neighboring/article_6980b97b-e33c-56a6-b624-2cc27da2ab5d.html"
+ },
+ {
+  "id": "1413",
+  "city": "Mustang Ridge",
+  "state": "TX",
+  "date": "2026-04-28",
+  "crime": "vehicle theft",
+  "outcome": "motorcycle recovered, driver arrested",
+  "site": "State Highway 130",
+  "roads": [
+   "State Highway 130"
+  ],
+  "summary": "A Mustang Ridge police detective recovered a stolen motorcycle and arrested its driver after a Flock Safety camera on State Highway 130 flagged the vehicle. The driver was charged with unauthorized use of a motor vehicle and unlawful possession of a firearm.",
+  "url": "https://us.headtopics.com/news/mustang-ridge-police-recover-stolen-motorcycle-austin-news-82785600"
+ },
+ {
+  "id": "1657",
+  "city": "Macon",
+  "state": "GA",
+  "date": "2026-01-15",
+  "crime": "theft/larceny",
+  "outcome": "arrests made, stolen tools recovered",
+  "site": "North Avenue helped locate their Ford F-150",
+  "roads": [
+   "North Avenue"
+  ],
+  "summary": "Two men were arrested after stealing $1,500 in power tools from an Ace Hardware store in Macon. Flock cameras on North Avenue helped locate their Ford F-150, leading to their apprehension by the Sheriff's S.R.T. Unit and recovery of the merchandise.",
+  "url": "https://countryherald.com/news/bibb-county-ga-theft-arrest-1500-in-stolen-tools-recovered/"
+ },
+ {
+  "id": "2083",
+  "city": "Platte City",
+  "state": "MO",
+  "date": "2025-06-25",
+  "crime": "vehicle theft",
+  "outcome": "arrest, drug paraphernalia recovered",
+  "site": "Interstate 70",
+  "roads": [
+   "Interstate 70"
+  ],
+  "summary": "Patrick McLane was arrested after a multi-county pursuit in a stolen Ford F-150 that was initially spotted by a Flock camera on Interstate 70. The pursuit ended when McLane lost control near the Loutre River, and a subsequent search recovered methamphetamine and drug paraphernalia.",
+  "url": "https://krcgtv.com/news/local/platte-city-man-arrested-after-multi-county-pursuit"
+ },
+ {
+  "id": "2201",
+  "city": "Rehoboth Beach",
+  "state": "DE",
+  "date": "",
+  "crime": "assault",
+  "outcome": "Suspect identified",
+  "site": "Rehoboth Avenue",
+  "roads": [
+   "Rehoboth Avenue"
+  ],
+  "summary": "After an assault with serious injuries occurred in the Rehoboth Beach traffic circle, Flock Safety cameras on Rehoboth Avenue captured both the assault and the suspect vehicle's license plate, which was the only way police could identify the perpetrator and solve the crime.",
+  "url": "https://www.capegazette.com/article/flock-cameras-pop-sussex-county/354166"
+ },
+ {
+  "id": "2229",
+  "city": "Augusta",
+  "state": "GA",
+  "date": "2026-08-21",
+  "crime": "other",
+  "outcome": "arrest for second-degree criminal damage to property",
+  "site": "Pine Ridge Road",
+  "roads": [
+   "Pine Ridge Road"
+  ],
+  "summary": "Joseph Dillard was arrested for damaging two Flock cameras near Pine Ridge Road in Augusta on August 21, 2026. Flock camera surveillance footage and an LPR capture of the suspect's maroon pickup truck license plate identified the vehicle and led investigators to apprehend Dillard at his workplace.",
+  "url": "https://theaugustapress.com/flock-camera-backlash-grows-nationwide-as-augusta-suspect-is-arrested-for-vandalism/"
+ },
+ {
+  "id": "2255",
+  "city": "Owatonna",
+  "state": "MN",
+  "date": "2026-09-11",
+  "crime": "vehicle theft",
+  "outcome": "vehicle recovered",
+  "site": "24th Street",
+  "roads": [
+   "24th Street"
+  ],
+  "summary": "A truck stolen overnight near Murray Street in Owatonna was quickly recovered after police searched the Flock database and located it passing an ALPR camera at 24th Street and North Cedar Avenue.",
+  "url": "https://www.kaaltv.com/news/stolen-truck-in-owatonna-recovered-using-flock-camera-system/"
+ }
+]

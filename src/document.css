@@ -218,3 +218,41 @@ body[data-page="components"] main { gap: 3rem; }
   .stop-head { flex-direction: column; align-items: flex-start; gap: .15rem; }
 }
 @media (max-width: 400px) { .sections a { font-size: 11px; padding: .3rem .42rem; } }
+
+/* Outcomes: records tied to cameras on six shared rungs, with map panels drawn from the mapped cameras */
+.outcomes { display: grid; gap: 2.5rem; }
+.coverage-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 1rem 1.2rem; }
+.coverage-strip > div { display: grid; gap: .2rem; }
+.coverage-strip .big { font-family: var(--display); font-size: 1.8rem; font-weight: 700; line-height: 1; }
+.coverage-strip .mono { font-size: 11px; color: var(--ink-3); }
+.source-block { display: grid; gap: 1rem; }
+.source-block h2 { font-size: 1.6rem; } .source-block h3 { font-size: 1.15rem; margin: 0; }
+.panel { margin: 0; border: 1px solid var(--line); border-radius: 6px; background: #fff; overflow: hidden; }
+.panel canvas { display: block; width: 100%; height: auto; aspect-ratio: 1120 / 700; }
+.panel.national canvas { aspect-ratio: 1120 / 640; }
+.panel figcaption { font-size: 11px; color: var(--ink-3); padding: .4rem .7rem; border-top: 1px solid var(--line); }
+.rung-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.rung-table th { text-align: left; font: 500 11px var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); padding: .4rem .5rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.rung-table td { padding: .45rem .5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.rung-table td.rung { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; position: relative; }
+.rung-table td.rung .v { position: relative; z-index: 1; }
+.rung-table td.rung .bar { position: absolute; left: .5rem; bottom: 4px; height: 3px; background: var(--amber); border-radius: 2px; max-width: calc(100% - 1rem); }
+.rung-table .na { color: var(--ink-3); font-style: italic; font-family: var(--body); font-size: 11.5px; }
+.rung-table .site-label { font-weight: 600; min-width: 12rem; }
+.rung-table .small, .small { font-size: 12px; color: var(--ink-2); font-weight: 400; }
+.rung-table .ladder-note td { border-bottom: 2px solid var(--line); padding-top: 0; }
+.rung-table .rates { margin: 0 0 .3rem; font-size: 11.5px; color: var(--ink-2); }
+.rung-legend { display: flex; flex-wrap: wrap; gap: .4rem 1rem; font-size: 12px; color: var(--ink-2); }
+.district { padding: 1rem 1.2rem; display: grid; gap: .5rem; }
+.district .bars { display: grid; gap: .25rem; }
+.district .row { display: grid; grid-template-columns: 5rem 1fr 3rem; gap: .6rem; align-items: center; font-size: 12px; }
+.district .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.district .track .bar { display: block; height: 100%; background: var(--cyan); }
+.district .n { text-align: right; }
+.stmt { padding: .9rem 1.1rem; font-size: 14px; }
+.excluded ul { margin: .4rem 0 0; padding-left: 1.2rem; font-size: 13px; color: var(--ink-2); }
+@media (max-width: 800px) {
+  .coverage-strip { grid-template-columns: 1fr; }
+  .rung-table { font-size: 12px; } .rung-table th, .rung-table td { padding: .35rem .4rem; }
+  .rung-table .site-label { min-width: 9rem; }
+}

@@ -1,0 +1,380 @@
+{
+  "$comment": "Metro Nashville Police Department ALPR pilot, March 21 to May 17 2023: the 'Summary by ALPR Site' table from LPR Council Report 2 (pages 2 and 3). Verified hit = an MNPD employee confirmed the hit and authorised a stop. The report does not name the vendor of the fixed cameras.",
+  "agency": "Metro Nashville Police Department",
+  "city": "Nashville",
+  "state": "TN",
+  "period": "2023-03-21 to 2023-05-17",
+  "sources": [
+    "nashville-lpr-2023"
+  ],
+  "definitions": {
+    "alerts": "Verified hits: hit notifications an MNPD employee confirmed as accurate (stolen vehicle, stolen plate, wanted violent offender, missing or endangered person)",
+    "stops": "Vehicle stops",
+    "searches": "Driver or vehicle searches",
+    "arrests": "Arrests",
+    "recoveries": "Vehicle recoveries"
+  },
+  "totals": {
+    "alerts": 443,
+    "stops": 25,
+    "searches": 19,
+    "arrests": 18,
+    "recoveries": 22
+  },
+  "sites": [
+    {
+      "quadrant": "A",
+      "label": "Dickerson Pike & Trinity Lane",
+      "roads": [
+        "Dickerson Pike",
+        "East Trinity Lane"
+      ],
+      "alerts": 58,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "A",
+      "label": "Gallatin Pike & Briley Parkway",
+      "roads": [
+        "Gallatin Pike",
+        "Briley Parkway"
+      ],
+      "alerts": 17,
+      "stops": 1,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "A",
+      "label": "Gallatin Pike & Old Hickory Boulevard",
+      "roads": [
+        "Gallatin Pike",
+        "Old Hickory Boulevard"
+      ],
+      "alerts": 46,
+      "stops": 4,
+      "searches": 2,
+      "arrests": 1,
+      "recoveries": 4
+    },
+    {
+      "quadrant": "A",
+      "label": "Gallatin Pike & East Trinity Lane",
+      "roads": [
+        "Gallatin Pike",
+        "East Trinity Lane"
+      ],
+      "alerts": 33,
+      "stops": 4,
+      "searches": 3,
+      "arrests": 3,
+      "recoveries": 3
+    },
+    {
+      "quadrant": "A",
+      "label": "Mobile unit A",
+      "mobile": true,
+      "alerts": 4,
+      "stops": 2,
+      "searches": 3,
+      "arrests": 2,
+      "recoveries": 2
+    },
+    {
+      "quadrant": "A",
+      "label": "West Trinity Lane & Brick Church Pike",
+      "roads": [
+        "West Trinity Lane",
+        "Brick Church Pike"
+      ],
+      "alerts": 24,
+      "stops": 5,
+      "searches": 4,
+      "arrests": 4,
+      "recoveries": 4
+    },
+    {
+      "quadrant": "A",
+      "label": "Whites Creek Pike & Moormans Arm Road",
+      "roads": [
+        "Whites Creek Pike",
+        "Moormans Arm Road"
+      ],
+      "alerts": 23,
+      "stops": 2,
+      "searches": 2,
+      "arrests": 2,
+      "recoveries": 2
+    },
+    {
+      "quadrant": "B",
+      "label": "Bell Road & I-24",
+      "roads": [
+        "Bell Road",
+        "Interstate 24"
+      ],
+      "alerts": 20,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "B",
+      "label": "Harding Place & I-24",
+      "roads": [
+        "Harding Place",
+        "Interstate 24"
+      ],
+      "alerts": 21,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "B",
+      "label": "Haywood Lane & I-24",
+      "roads": [
+        "Haywood Lane",
+        "Interstate 24"
+      ],
+      "alerts": 15,
+      "stops": 1,
+      "searches": 1,
+      "arrests": 1,
+      "recoveries": 1
+    },
+    {
+      "quadrant": "B",
+      "label": "Mobile unit B",
+      "mobile": true,
+      "alerts": 1,
+      "stops": 1,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 1
+    },
+    {
+      "quadrant": "B",
+      "label": "Murfreesboro Pike & Bell Road",
+      "roads": [
+        "Murfreesboro Pike",
+        "Bell Road"
+      ],
+      "alerts": 18,
+      "stops": 1,
+      "searches": 1,
+      "arrests": 1,
+      "recoveries": 1
+    },
+    {
+      "quadrant": "B",
+      "label": "Murfreesboro Pike & Thompson Lane",
+      "roads": [
+        "Murfreesboro Pike",
+        "Briley Parkway"
+      ],
+      "alerts": 32,
+      "stops": 2,
+      "searches": 1,
+      "arrests": 1,
+      "recoveries": 2,
+      "note": "Thompson Lane becomes Briley Parkway at Murfreesboro Pike; located at that junction"
+    },
+    {
+      "quadrant": "B",
+      "label": "Stewarts Ferry Pike & I-40",
+      "roads": [
+        "Stewarts Ferry Pike",
+        "Interstate 40"
+      ],
+      "alerts": 26,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "8th Avenue South & Wedgewood Avenue",
+      "roads": [
+        "8th Avenue South",
+        "Wedgewood Avenue"
+      ],
+      "alerts": 9,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "Hermitage Avenue & Fairfield Avenue",
+      "roads": [
+        "Hermitage Avenue",
+        "Fairfield Avenue"
+      ],
+      "alerts": 1,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "Mobile unit C",
+      "mobile": true,
+      "alerts": 1,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "Murfreesboro Pike & Fesslers Lane",
+      "roads": [
+        "Murfreesboro Pike",
+        "Fesslers Lane"
+      ],
+      "alerts": 23,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "Nolensville Pike & I-440",
+      "roads": [
+        "Nolensville Pike",
+        "Interstate 440"
+      ],
+      "alerts": 14,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "Old Hickory Boulevard & Nolensville Pike",
+      "roads": [
+        "Old Hickory Boulevard",
+        "Nolensville Pike"
+      ],
+      "alerts": 26,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "C",
+      "label": "Thompson Lane & 100 Oaks",
+      "roads": [
+        "Thompson Lane",
+        "Powell Avenue"
+      ],
+      "alerts": 9,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "D",
+      "label": "1st Avenue South & Korean Veterans Boulevard",
+      "roads": [
+        "1st Avenue South",
+        "Korean Veterans Boulevard"
+      ],
+      "alerts": 2,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "D",
+      "label": "Broadway & Rosa L Parks Boulevard",
+      "roads": [
+        "Broadway",
+        "Rosa L Parks Boulevard"
+      ],
+      "alerts": 2,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "D",
+      "label": "Broadway & West End Avenue",
+      "roads": [
+        "Broadway",
+        "West End Avenue"
+      ],
+      "alerts": 1,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "D",
+      "label": "Charlotte Pike & White Bridge Pike",
+      "roads": [
+        "Charlotte Pike",
+        "White Bridge Road"
+      ],
+      "alerts": 0,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    },
+    {
+      "quadrant": "D",
+      "label": "Clarksville Pike & Ed Temple Boulevard",
+      "roads": [
+        "Clarksville Pike",
+        "Dr. D.B. Todd Jr. Boulevard"
+      ],
+      "alerts": 4,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0,
+      "note": "Ed Temple Boulevard is the former name of part of Dr. D.B. Todd Jr. Boulevard / Clarksville Pike junction"
+    },
+    {
+      "quadrant": "D",
+      "label": "Jefferson Street & 28th Avenue North",
+      "roads": [
+        "Jefferson Street",
+        "28th Avenue North"
+      ],
+      "alerts": 12,
+      "stops": 2,
+      "searches": 2,
+      "arrests": 2,
+      "recoveries": 2
+    },
+    {
+      "quadrant": "D",
+      "label": "Mobile unit D",
+      "mobile": true,
+      "alerts": 1,
+      "stops": 0,
+      "searches": 0,
+      "arrests": 0,
+      "recoveries": 0
+    }
+  ]
+}

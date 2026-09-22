@@ -1,0 +1,9 @@
+{
+  "$comment": "Camera counts by district or police area where an agency publishes them, with the agency's outcome totals for the same programme. Outcomes are not broken down by district in either source.",
+  "districts": [
+    { "agency": "Lexington Police Department", "city": "Lexington", "state": "KY", "unit": "Council district", "asOf": "2025-12-15", "cameras": 125, "sources": ["lexington-lpr-locations"],
+      "rows": [["1", 21], ["2", 11], ["3", 5], ["4", 11], ["5", 7], ["6", 16], ["7", 8], ["8", 13], ["9", 2], ["10", 5], ["11", 19], ["12", 7]] },
+    { "agency": "Oakland Police Department", "city": "Oakland", "state": "CA", "unit": "Police area", "asOf": "2025-09-04", "cameras": 290, "sources": ["oakland-pac-2025"],
+      "rows": [["Area 1", 44], ["Area 2", 57], ["Area 3", 23], ["Area 4", 55], ["Area 5", 51], ["Area 6", 60]] }
+  ]
+}
