@@ -91,6 +91,10 @@ branch-served folder, so the repository's Pages source has to be set to
 
 This is an explainer. It is not a map of camera locations (see [DeFlock](https://deflock.org)), it does not look up plates, and it does not tell anyone how to defeat a camera.
 
+## How it was built
+
+A working record of the process, page by page, with the outcomes page in most detail: [docs/process.md](docs/process.md).
+
 ## License
 
 Code is MIT. The generated models under `public/models` and the Blender scripts that produce them are CC BY 4.0. Flock, Falcon, Condor, Raven, Wing and Sparrow are trademarks of their owner and are used here descriptively.
