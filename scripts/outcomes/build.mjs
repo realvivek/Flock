@@ -46,8 +46,12 @@ function crossing(aRes, bRes, maxM = 90) {
 const OV_CACHE = path.join(ROOT, "data/outcomes/overpass-cache.json");
 const ovCache = fs.existsSync(OV_CACHE) ? JSON.parse(fs.readFileSync(OV_CACHE, "utf8")) : {};
 const OVERPASS = process.env.OVERPASS || "https://overpass.kumi.systems/api/interpreter";
+const SUFFIX_RE = /\( \(North\|South\|East\|West\|N\|S\|E\|W\|NE\|NW\|SE\|SW\)\)\?/g;
 async function overpass(q) {
   if (ovCache[q]) return ovCache[q];
+  // Earlier runs cached the same road without the optional direction suffix; reuse those results unless the road was unresolved then.
+  const base = q.replace(SUFFIX_RE, "");
+  if (base !== q && ovCache[base]?.length) return ovCache[base];
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch(OVERPASS, { method: "POST", headers: { "User-Agent": UA, "Content-Type": "application/x-www-form-urlencoded" }, body: "data=" + encodeURIComponent(q), signal: AbortSignal.timeout(240000) });

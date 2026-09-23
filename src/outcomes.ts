@@ -35,7 +35,7 @@ const depth = (v: V): Ring["depth"] => (v.arrests || v.recoveries) ? 3 : v.stops
 const SOURCE_META: Record<string, { title: string; how: string; unit: string }> = {
   nashville: { title: "Nashville, Tennessee: 24 fixed sites and 4 mobile units, eight weeks in 2023", how: "Metro Nashville Police published verified hits, stops, searches, arrests and recoveries for each intersection in its ALPR pilot. A verified hit is a hit notification an employee confirmed before a stop was authorised. The report does not name the vendor of the fixed cameras. Sites were located as the node the two named roads share in OpenStreetMap.", unit: "Verified hits" },
   windsor: { title: "Windsor, Connecticut: 16 cameras at 14 sites, cases named to a camera", how: "The town's fact sheet lists every camera site and ten dated cases; four name the camera used. Counts here are those cases, not hit totals, which the town does not publish.", unit: "Cases" },
-  story: { title: "Story County, Iowa: every wrong hot-list hit for one month, by location", how: "The sheriff's export of hits reviewed as wrong, with the coordinates of each hit. 77% were 'wrong state': the plate matched a list entry from another state. Correct hits were not exported, so the denominator is unknown. Coordinates in the export are the camera's own, so most locations match a mapped camera within a few metres.", unit: "Hits reviewed" },
+  story: { title: "Story County, Iowa: every wrong hot-list hit for one month, by location", how: "The sheriff's export of hits reviewed as wrong, with the coordinates of each hit. 77% were 'wrong state': the plate matched a list entry from another state. Correct hits were not exported, so the denominator is unknown. Each row carries a coordinate; few fall within 150 m of a camera on the crowd-sourced map, so either the county's cameras are largely unmapped or the coordinates are not the camera positions. The match column says which.", unit: "Hits reviewed" },
   tucson: { title: "Tucson, Arizona: dispatch calls with nature code FLOCK, last 45 days", how: "The city's calls-for-service layer carries a FLOCK nature code, used by the University of Arizona police, with the intersection and a disposition code. Codes: A arrest, B report, G citation, J no report, O other. The layer is a rolling window; the build keeps every snapshot.", unit: "Calls" },
   news: { title: "News reports that name the camera's road", how: "From a public dataset of 1,743 news-reported outcomes credited to Flock cameras, the records whose summary names the road or intersection of the camera. These are police statements relayed by local news; successes reach the news far more often than errors. Each row is one incident.", unit: "Incidents" },
   court: { title: "Court opinions that name the camera", how: "An appellate opinion that identifies the camera whose hot-list alert began the case.", unit: "Alerts" },
@@ -179,8 +179,9 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
     const lats = sites.map((s) => s.lat!), lons = sites.map((s) => s.lon!);
     const pad = 3000 / 111320; const k = Math.cos(lats[0]! * Math.PI / 180);
     const box = { s: Math.min(...lats) - pad, n: Math.max(...lats) + pad, w: Math.min(...lons) - pad / k, e: Math.max(...lons) + pad / k };
-    const all = d.sites.filter((s) => s.source === key);
-    const n = drawCity(canvas, cams.points, sites.map((s) => ringOf(s, all.indexOf(s) + 1)), box);
+    // Numbers match the table rows; Story County's one-hit locations are drawn but not numbered.
+    const listed = key === "story" ? d.sites.filter((s) => s.source === key && (s.values.alerts ?? 0) >= 2) : d.sites.filter((s) => s.source === key);
+    const n = drawCity(canvas, cams.points, sites.map((s) => { const i = listed.indexOf(s); return ringOf(s, i >= 0 ? i + 1 : undefined); }), box);
     cap.textContent = `${n.toLocaleString("en-US")} mapped Flock cameras in view; numbers match the table`;
   };
   const io = new IntersectionObserver((entries) => { for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); void draw(e.target as HTMLElement); } }, { rootMargin: "200px" });
