@@ -19,6 +19,7 @@ async function nominatim(q) {
   const wait = 1100 - (Date.now() - lastReq); if (wait > 0) await sleep(wait);
   lastReq = Date.now();
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&polygon_geojson=1`;
+  if (OFFLINE) return [];
   let j = null;
   for (let attempt = 0; attempt < 4 && !j; attempt++) {
     try { const res = await fetch(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(60000) }); if (!res.ok) throw new Error(`nominatim ${res.status}`); j = await res.json(); }
@@ -47,20 +48,26 @@ const OV_CACHE = path.join(ROOT, "data/outcomes/overpass-cache.json");
 const ovCache = fs.existsSync(OV_CACHE) ? JSON.parse(fs.readFileSync(OV_CACHE, "utf8")) : {};
 const OVERPASS = process.env.OVERPASS || "https://overpass.kumi.systems/api/interpreter";
 const SUFFIX_RE = /\( \(North\|South\|East\|West\|N\|S\|E\|W\|NE\|NW\|SE\|SW\)\)\?/g;
+const BBOX_RE = /\(-?\d+\.\d+,-?\d+\.\d+,-?\d+\.\d+,-?\d+\.\d+\)/g;
+const norm = (q) => q.replace(SUFFIX_RE, "").replace(BBOX_RE, "(bbox)").replace(/\[timeout:\d+\]/, "");
+const ovByNorm = new Map();
+for (const [k, v] of Object.entries(ovCache)) if (v.length) ovByNorm.set(norm(k), v);
+const OFFLINE = process.env.OVERPASS_OFFLINE === "1";
 async function overpass(q) {
   if (ovCache[q]) return ovCache[q];
-  // Earlier runs cached the same road without the optional direction suffix; reuse those results unless the road was unresolved then.
-  const base = q.replace(SUFFIX_RE, "");
-  if (base !== q && ovCache[base]?.length) return ovCache[base];
-  for (let attempt = 0; attempt < 3; attempt++) {
+  // Earlier runs may have cached the same road with a different city box, timeout or name suffix; reuse a non-empty result.
+  const hit = ovByNorm.get(norm(q));
+  if (hit) return hit;
+  if (OFFLINE) return [];
+  for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch(OVERPASS, { method: "POST", headers: { "User-Agent": UA, "Content-Type": "application/x-www-form-urlencoded" }, body: "data=" + encodeURIComponent(q), signal: AbortSignal.timeout(240000) });
+      const res = await fetch(OVERPASS, { method: "POST", headers: { "User-Agent": UA, "Content-Type": "application/x-www-form-urlencoded" }, body: "data=" + encodeURIComponent(q), signal: AbortSignal.timeout(100000) });
       if (!res.ok) throw new Error(`overpass ${res.status}`);
       const j = await res.json();
       ovCache[q] = j.elements.map((e) => ({ id: e.id, tags: e.tags ?? {}, geometry: e.geometry ?? [] }));
       fs.writeFileSync(OV_CACHE, JSON.stringify(ovCache));
       return ovCache[q];
-    } catch (e) { console.warn("overpass retry", attempt + 1, e.message); await sleep(15000 * (attempt + 1)); }
+    } catch (e) { console.warn("overpass retry", attempt + 1, e.message); await sleep(8000); }
   }
   return [];
 }
@@ -88,7 +95,24 @@ async function bbox(place) {
   s = Math.max(s, midLat - 0.22); n = Math.min(n, midLat + 0.22); w = Math.max(w, midLon - 0.28); e = Math.min(e, midLon + 0.28);
   return (cityBox[place] = `${s.toFixed(4)},${w.toFixed(4)},${n.toFixed(4)},${e.toFixed(4)}`);
 }
-async function roadWays(road, place, state) { const b = await bbox(place); return overpass(`[out:json][timeout:180];way["highway"]${roadFilter(road, state)}(${b});out tags geom;`); }
+const EXPAND = { Pike: ["Pike", "Pk"], Lane: ["Lane", "Ln"], Boulevard: ["Boulevard", "Blvd"], Avenue: ["Avenue", "Ave"], Street: ["Street", "St"], Road: ["Road", "Rd"], Drive: ["Drive", "Dr"], Parkway: ["Parkway", "Pkwy"], Place: ["Place", "Pl"], Highway: ["Highway", "Hwy"], Expressway: ["Expressway", "Expy"] };
+/** Exact-name spellings to try before the slow regex: the label, common suffix abbreviations, and direction suffixes. */
+function nameCandidates(road) {
+  const words = road.split(/\s+/);
+  let forms = [""];
+  for (const w of words) { const alts = EXPAND[w] ?? [w]; forms = forms.flatMap((f) => alts.map((a) => (f ? `${f} ${a}` : a))); }
+  return forms.flatMap((f) => [f, `${f} North`, `${f} South`, `${f} East`, `${f} West`, `${f} NE`, `${f} NW`, `${f} SE`, `${f} SW`]);
+}
+async function roadWays(road, place, state) {
+  const b = await bbox(place);
+  const byRef = /^(re:|Interstate |Route |State Route |State Highway |Highway )/.test(road);
+  if (!byRef) {
+    const names = nameCandidates(road).map((n) => `way["highway"]["name"="${n.replace(/"/g, "")}"](${b});`).join("");
+    const exact = await overpass(`[out:json][timeout:90];(${names});out tags geom;`);
+    if (exact.length) return exact;
+  }
+  return overpass(`[out:json][timeout:90];way["highway"]${roadFilter(road, state)}(${b});out tags geom;`);
+}
 async function intersection(roads, place, state) {
   const a = await roadWays(roads[0], place, state), b = await roadWays(roads[1], place, state);
   if (!a.length || !b.length) return null;

@@ -55,8 +55,9 @@ function rates(v: V): string {
   const out: string[] = [];
   if (v.reads && v.alerts != null) out.push(`${(v.alerts / v.reads * 1e6).toFixed(1)} alerts per million reads`);
   if (v.alerts && v.falseAlerts != null) out.push(`${Math.round(v.falseAlerts / v.alerts * 100)}% of alerts wrong`);
-  if (v.alerts && v.recoveries != null) out.push(`${(v.recoveries / v.alerts * 100).toFixed(1)} recoveries per 100 alerts`);
-  if (v.alerts && v.arrests != null) out.push(`${(v.arrests / v.alerts * 100).toFixed(1)} arrests per 100 alerts`);
+  const per = (n: number, what: string) => { const r = n / v.alerts! * 100; return r >= 0.1 ? `${r.toFixed(1)} ${what} per 100 alerts` : `${(n / v.alerts! * 1e5).toFixed(1)} ${what} per 100,000 alerts`; };
+  if (v.alerts && v.recoveries != null) out.push(per(v.recoveries, "recoveries"));
+  if (v.alerts && v.arrests != null) out.push(per(v.arrests, "arrests"));
   return out.length ? `<p class="rates mono">${out.join(" · ")}</p>` : "";
 }
 const matchText = (s: SiteT) => s.lat == null ? `<span class="na">${escape(s.geocode)}</span>` : s.match ? `${s.match.distanceM} m${s.match.brand && s.match.brand !== "Flock Safety" ? ` (${escape(s.match.brand)})` : ""}` : s.nearest ? `<span class="na">none within 150 m (nearest ${s.nearest.distanceM.toLocaleString("en-US")} m)</span>` : `<span class="na">none nearby</span>`;
