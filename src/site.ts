@@ -8,7 +8,7 @@ import { overview, components } from "./content";
 import { setCiteHandler } from "./ui/cite";
 import { renderClaims, renderEconomics, renderSources, renderDeployments, revealSource } from "./ui/article";
 import { BASE, ROOT, PAGE } from "./lib/base";
-import { el, initNav, scrollToEl } from "./ui/common";
+import { el, initNav, initTableWraps, scrollToEl } from "./ui/common";
 import { buildPole, buildPower, buildData, dataStageIds } from "./sections";
 import { initComponentsPage } from "./components-page";
 import { buildJourney } from "./journey";
@@ -101,6 +101,7 @@ function init(): void {
   const pager = document.getElementById("pager");
   if (pager) buildPager(pager);
   initNav();
+  if (PAGE !== "outcomes") initTableWraps();
   set({ reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches });
   if (PAGE !== "components") { set({ ready: true, mode: "stills" }); (window as unknown as { __flock: unknown }).__flock = { state, set, get frame() { return Math.floor(performance.now() / 16); } }; }
 }

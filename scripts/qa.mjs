@@ -16,7 +16,8 @@ const F = (vp, where, msg) => { findings.push(`${vp} ${where}: ${msg}`); console
 const pageChecks = () => {
   const out = {};
   out.hscroll = document.documentElement.scrollWidth > innerWidth + 1;
-  out.wide = [...document.querySelectorAll("main *")].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1) && !e.closest(".tablewrap") && !e.closest(".sections"); }).slice(0, 5).map((e) => `${e.tagName.toLowerCase()}.${String(e.className).split(" ")[0]}`);
+  out.expanded = innerWidth > screen.width + 1 ? innerWidth : 0;
+  out.wide = [...document.querySelectorAll("main *")].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.right > Math.min(innerWidth, screen.width) + 1 || r.left < -1) && !e.closest(".tablewrap") && !e.closest(".sections"); }).slice(0, 5).map((e) => `${e.tagName.toLowerCase()}.${String(e.className).split(" ")[0]}`);
   out.imgs = [...document.querySelectorAll("img")].filter((i) => i.complete && i.naturalWidth === 0 && !i.hidden && i.offsetParent !== null).map((i) => i.src.split("/").pop());
   out.clipped = [...document.querySelectorAll(".cell .t, .group-head h3, .card h3, .stage-body h3, .sections a, .kv dt, .page-head h1, .summary-card .t")].filter((e) => e.offsetParent !== null && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).textOverflow !== "ellipsis").slice(0, 5).map((e) => `${e.className || e.tagName} "${e.textContent.trim().slice(0, 30)}"`);
   out.links = document.querySelectorAll(".sections a").length;
@@ -48,6 +49,7 @@ for (const [w, h, phone] of sizes) {
     await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
     const g = await page.evaluate(pageChecks);
     if (g.hscroll) F(vp, name, "horizontal scroll");
+    if (g.expanded) F(vp, name, `layout viewport expanded to ${g.expanded} px: content wider than the screen`);
     if (g.wide.length) F(vp, name, "wider than the viewport: " + g.wide.join(", "));
     if (g.imgs.length) F(vp, name, "images failed: " + g.imgs.join(", "));
     if (g.clipped.length) F(vp, name, "clipped text: " + g.clipped.join(" | "));

@@ -75,7 +75,7 @@ body[data-page="components"] main { gap: 3rem; }
 .group-head h3 { margin: 0; font-size: 1.05rem; }
 .group-head .mono { color: var(--g); }
 .group-head .count { margin-left: auto; font: 500 11.5px var(--mono); color: var(--ink-3); }
-.cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: .6rem; }
+.cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: .6rem; }
 .cell { display: grid; grid-template-rows: auto 1fr; gap: .45rem; text-align: left; padding: .5rem; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; cursor: pointer; font: inherit; color: var(--ink); }
 .cell img, .cell .thumb { width: 100%; height: 7rem; object-fit: contain; background: #fff; border-radius: 3px; }
 .cell .txt { display: grid; gap: .1rem; border-top: 2px solid var(--g); padding-top: .35rem; min-width: 0; }
@@ -109,7 +109,7 @@ body[data-page="components"] main { gap: 3rem; }
 .card h3 { margin: 0; font-size: 1.05rem; }
 .card p { margin: 0; }
 .stages { display: flex; flex-direction: column; gap: .7rem; }
-.stage { display: grid; grid-template-columns: 16rem minmax(0, 1fr); gap: 1.2rem; padding: 1rem; scroll-margin-top: calc(var(--topbar-h) + 1rem); font-size: 13.5px; }
+.stage { display: grid; grid-template-columns: 19rem minmax(0, 1fr); gap: 1.2rem; padding: 1rem; scroll-margin-top: calc(var(--topbar-h) + 1rem); font-size: 13.5px; }
 .stage-fig { background: #fff; border: 1px solid var(--line); border-radius: 3px; align-self: start; }
 .stage-fig svg { width: 100%; height: auto; display: block; }
 .stage-body { display: flex; flex-direction: column; gap: .5rem; }
@@ -121,6 +121,7 @@ body[data-page="components"] main { gap: 3rem; }
 #deputy-form { display: flex; gap: .5rem; }
 #deputy-form input { flex: 1; min-width: 0; background: var(--bg-2); color: var(--ink); border: 1px solid rgba(17,19,24,.3); border-radius: 4px; padding: .5rem .7rem; font: 13px var(--sans); }
 
+@media (min-width: 801px) and (max-width: 1000px) { .stage-fig svg .minor { display: none; } }
 @media (max-width: 1000px) {
   .hero { grid-template-columns: 1fr; }
   .hero-text { grid-row: auto; }
@@ -220,7 +221,8 @@ body[data-page="components"] main { gap: 3rem; }
 @media (max-width: 400px) { .sections a { font-size: 11px; padding: .3rem .42rem; } }
 
 /* Outcomes: records tied to cameras on six shared rungs, with map panels drawn from the mapped cameras */
-.outcomes { display: grid; gap: 2.5rem; }
+.outcomes { display: grid; gap: 2.5rem; min-width: 0; }
+.outcomes > *, .coverage-strip > div, .source-block > * { min-width: 0; }
 .coverage-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 1rem 1.2rem; }
 .coverage-strip > div { display: grid; gap: .2rem; }
 .coverage-strip .big { font-family: var(--display); font-size: 1.8rem; font-weight: 700; line-height: 1; }

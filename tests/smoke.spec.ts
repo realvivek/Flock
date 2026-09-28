@@ -255,6 +255,10 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator("#page-body .src-link").first().click()]);
   expect(popup).toBeTruthy();
   await popup.close();
+  await go(page, "/outcomes/?map=off");
+  await ready(page);
+  await expect(page.locator("#page-body .site").first()).toBeVisible();
+  expect(await page.evaluate(() => ({ w: innerWidth, rows: new Set([...document.querySelectorAll(".sections a")].map((a) => Math.round(a.getBoundingClientRect().top))).size }))).toEqual({ w: 390, rows: 2 });
   await go(page, "/components/");
   await ready(page);
   expect(await page.evaluate(() => window.__flock!.state.mode)).toBe("stills");

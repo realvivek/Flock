@@ -5,7 +5,7 @@
  */
 import { z } from "zod";
 import { cite, escape } from "./ui/cite";
-import { el } from "./ui/common";
+import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
 import { drawNational, drawCity, loadCameras, type Ring } from "./outcomes-map";
 
@@ -163,6 +163,7 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   cv.innerHTML = `<div class="sec-head"><h2>Coverage</h2><p class="lede small">What this page can and cannot say. ${d.cameras.flock.toLocaleString("en-US")} Flock cameras are mapped; ${d.coverage.sites} locations have a published outcome record, ${d.coverage.matched} of them within 150 m of a mapped camera. Every other camera on the map has no public outcome record at all.</p></div><div class="tablewrap"><table class="rung-table"><thead><tr><th>Source</th><th>Locations</th><th>Located</th><th>Matched to a mapped camera</th></tr></thead><tbody>${by}</tbody></table></div><p class="small">What would extend it: Flock's software exports a hot-list alert report with the camera name, timestamp, plate and list, and since September 2022 an outcome field ('Apprehended' or 'Not Apprehended') officers can set on alerts and searches. Agencies release these under public-records law; Story County's export above is one. A request for the alert report and the outcome field, plus the agency's camera inventory, gives the per-camera ladder for any agency.</p><p class="fine">Camera positions: OpenStreetMap contributors via the deflock-data export, ODbL. Built ${escape(d.generated)}.</p>`;
   cv.appendChild(cite(["deflock-data"], 2));
   host.appendChild(cv);
+  initTableWraps();
   if (!mapOff) void drawPanels(d, host);
 }
 

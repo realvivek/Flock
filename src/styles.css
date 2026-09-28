@@ -96,7 +96,9 @@ input[type=range] { width: 100%; accent-color: var(--amber); }
 .article p { margin: 0; }
 .article-body { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
 .article-body > * { min-width: 0; }
-.article .tablewrap { max-width: 100%; overflow-x: auto; }
+.tablewrap { max-width: 100%; overflow-x: auto; position: relative; }
+.tablewrap.is-scroll:not(.is-end) { mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent); }
+.scroll-hint { font: 500 11px var(--mono); color: var(--ink-3); letter-spacing: .05em; text-transform: uppercase; margin: .3rem 0 0; }
 .article h3 { margin: 1.4rem 0 .2rem; font-size: 1.1rem; font-weight: 600; }
 .article .tablewrap.products table { min-width: 36rem; }
 .chart { margin: 0; }
