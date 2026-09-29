@@ -271,6 +271,22 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await ctx.close();
 });
 
+test("between phone and desktop widths every header link stays visible", async ({ browser }) => {
+  for (const [w, h, phone] of [[844, 390, true], [900, 700, false], [1024, 768, false]] as const) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: phone, hasTouch: phone });
+    const page = await ctx.newPage();
+    await go(page, "/components/");
+    await ready(page);
+    const r = await page.evaluate(() => {
+      const navEl = document.querySelector(".sections")!; const nb = navEl.getBoundingClientRect();
+      const hidden = [...document.querySelectorAll(".sections a")].filter((a) => { const b = a.getBoundingClientRect(); return b.left < nb.left - 1 || b.right > Math.min(innerWidth, nb.right) + 1; }).map((a) => a.textContent);
+      return { hidden, scrolls: navEl.scrollWidth > navEl.clientWidth + 1 };
+    });
+    expect(r, `${w}x${h}`).toEqual({ hidden: [], scrolls: false });
+    await ctx.close();
+  }
+});
+
 test("desktop without a 3D engine gets the assembled still in the locator", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));

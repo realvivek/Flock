@@ -1,6 +1,6 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
-// Viewport sweep of every page at five desktop sizes and three phones, measuring what a reader would notice:
+// Viewport sweep of every page at six desktop sizes and four phones (one held sideways), measuring what a reader would notice:
 // horizontal overflow, elements wider than the viewport, images that failed, clipped text, the header links with
 // the current page marked, the pager, the Top button, and on the components page the record and the locator.
 // Usage: node scripts/qa.mjs <outDir> [url]
@@ -8,7 +8,7 @@ const Q = process.argv[2] || "test-results/qa";
 const URL = process.argv[3] || "http://127.0.0.1:4173";
 fs.mkdirSync(Q, { recursive: true });
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--disable-gpu-compositing"] });
-const sizes = [[1024, 768, false], [1280, 720, false], [1440, 900, false], [1920, 1080, false], [2560, 1440, false], [360, 740, true], [390, 844, true], [430, 932, true]];
+const sizes = [[900, 700, false], [1024, 768, false], [1280, 720, false], [1440, 900, false], [1920, 1080, false], [2560, 1440, false], [360, 740, true], [390, 844, true], [430, 932, true], [844, 390, true]];
 const pages = ["", "deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"];
 const labels = { "": "Home", deployments: "Deployments", components: "Components", data: "Data", journey: "Journey", outcomes: "Outcomes", claims: "Claims", economics: "Economics", sources: "Sources" };
 const findings = [];
@@ -25,7 +25,9 @@ const pageChecks = () => {
   out.active = document.querySelector(".sections a.is-active")?.textContent;
   out.current = document.querySelector(".sections a[aria-current=page]")?.textContent;
   const tb = document.querySelector(".topbar").getBoundingClientRect();
-  out.allChipsInView = [...document.querySelectorAll(".sections a")].every((a) => { const r = a.getBoundingClientRect(); return r.left >= -1 && r.right <= innerWidth + 1 && r.top >= tb.top - 1 && r.bottom <= tb.bottom + 1; });
+  // Each link must sit inside the menu's own visible box (the menu clips anything that overflows it), and the menu must not scroll.
+  const navEl = document.querySelector(".sections"); const nb = navEl.getBoundingClientRect();
+  out.allChipsInView = navEl.scrollWidth <= navEl.clientWidth + 1 && [...document.querySelectorAll(".sections a")].every((a) => { const r = a.getBoundingClientRect(); return r.left >= Math.max(-1, nb.left - 1) && r.right <= Math.min(innerWidth, nb.right) + 1 && r.top >= tb.top - 1 && r.bottom <= tb.bottom + 1; });
   const h1 = document.querySelector(".page-head h1, .hero h1");
   out.h1UnderHeader = !!h1 && scrollY === 0 && h1.getBoundingClientRect().top < tb.bottom;
   out.pager = document.getElementById("pager") ? document.querySelectorAll("#pager a").length : -1;

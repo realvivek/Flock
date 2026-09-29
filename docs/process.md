@@ -289,19 +289,30 @@ agency. The page says so in its coverage block.
   were the only thing that survived a container restart, and they were enough.
 - **Approval gates.** Larger changes were planned in a plan file first and approved before implementation;
   when the environment interrupted mid-task, the plan file carried the state across the gap.
+- **Visual QA in two passes.** The automated sweep checks what can be measured; two passes of reading every
+  page screen by screen found what it could not. The first found the Outcomes page widening the phone
+  viewport to 918 px. The second, with the real fonts served locally (earlier captures had silently used
+  fallback fonts because the test browser rejected the proxy certificate) and the maps switched on, found
+  23 issues: header links clipped between 801 and 1079 px (an iPad in landscape lost Sources), a renderer
+  label left in the header, a mislabelled Windsor column, sentence fragments as News site names, empty
+  Story County labels from a Map passed to `Object.entries`, a statement cited to the wrong source, city
+  maps drawn at a fixed width that shrank their numbers to about 3.5 px on phones, whole columns of "not
+  reported", and grey and amber text below 4.5:1 contrast. Each fix that could regress got a check: the
+  sweep now judges header links against the menu's own box and runs ten sizes, and a smoke test covers the
+  in-between widths.
 
 ## 7. Numbers for the article
 
 | What | Figure |
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
-| Commits | 29, 4 to 23 September 2026 |
-| Bibliography rows | 176, tagged flock, independent, government or court |
+| Commits | 32, 4 to 29 September 2026 |
+| Bibliography rows | 177, tagged flock, independent, government or court |
 | Content files | 12 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
-| Playwright tests | 5, covering every page, citations, the locator, phones and the no-3D fallback |
-| Sweep | 9 pages at 8 sizes (5 desktop, 3 phone), zero findings at each push |
+| Playwright tests | 6, covering every page, citations, the locator, phones, in-between header widths and the no-3D fallback |
+| Sweep | 9 pages at 10 sizes (6 desktop, 4 phone including one held sideways), zero findings at each push |
 | Mapped cameras | 116,723 readers, 96,484 tagged Flock |
 | Outcome locations | 239 with a published record; 220 placed; 32 within 150 m of a mapped camera |
 | Research behind the outcomes page | 3 surveys, about 300 searches and fetches, about 45 papers and reports reviewed |

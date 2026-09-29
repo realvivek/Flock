@@ -71,7 +71,7 @@
       "city": "Roseville",
       "state": "CA",
       "period": "2023 to 2024",
-      "cameras": "Flock",
+      "cameras": "Flock cameras, count not stated",
       "values": {
         "reads": null,
         "alerts": 1427,
@@ -131,7 +131,7 @@
       "city": "Columbia",
       "state": "MO",
       "period": "2025",
-      "cameras": "Flock",
+      "cameras": "Flock cameras, count not stated",
       "values": {
         "reads": null,
         "alerts": 5521,
@@ -151,7 +151,7 @@
       "city": "Piedmont",
       "state": "CA",
       "period": "2025",
-      "cameras": "48",
+      "cameras": "48 cameras",
       "values": {
         "reads": null,
         "alerts": null,
@@ -272,7 +272,7 @@
       "city": "Ames",
       "state": "IA",
       "period": "2025-09-09 to 2025-10-09",
-      "cameras": "Flock",
+      "cameras": "Flock cameras, count not stated",
       "values": {
         "reads": null,
         "alerts": null,

@@ -46,7 +46,7 @@ npm run dev        # http://127.0.0.1:5173
 npm run build      # runs check:sources, then a production build into dist/
 npm run preview    # serves dist/ at http://127.0.0.1:4173
 npm test           # Playwright smoke test against the preview server
-node scripts/qa.mjs test-results/qa   # viewport sweep of every page: five desktop sizes and three phones, reports anything cut off, off screen or unclickable
+node scripts/qa.mjs test-results/qa   # viewport sweep of every page: six desktop sizes and four phones (one held sideways), reports anything cut off, off screen or unclickable
 ```
 
 The outcomes data is built by `node scripts/outcomes/build.mjs [cameras.geojson]`: it reads the hand-entered and fetched records under `data/outcomes/sources/`, downloads the deflock-data camera export unless a file is given, locates intersections through Overpass (the node the two named roads share, cached in `data/outcomes/overpass-cache.json`) and Nominatim, joins every located record to the nearest mapped camera, and writes `public/data/outcomes.json` and `public/data/cameras-flock.json`. `?map=off` on the page skips the camera scatter.

@@ -6,7 +6,7 @@
   "date": "2026-06-21",
   "crime": "vehicle theft",
   "outcome": "vehicle recovered",
-  "site": "Avenue F at 2:20 a",
+  "site": "Avenue F",
   "roads": [
    "Avenue F"
   ],
@@ -78,7 +78,7 @@
   "date": "2021-09-08",
   "crime": "shooting",
   "outcome": "arrest and conviction",
-  "site": "an apartment complex on Columbia Drive",
+  "site": "Columbia Drive (apartment complex)",
   "roads": [
    "Columbia Drive"
   ],
@@ -92,7 +92,7 @@
   "date": "2024-05-14",
   "crime": "robbery",
   "outcome": "arrest",
-  "site": "Tower Road generated an alert on a stolen Hyundai",
+  "site": "Tower Road",
   "roads": [
    "Tower Road"
   ],
@@ -148,7 +148,7 @@
   "date": "2026-01-25",
   "crime": "hit and run",
   "outcome": "arrest and charges filed",
-  "site": "West Market",
+  "site": "West Market Street",
   "roads": [
    "West Market Street"
   ],
@@ -204,7 +204,7 @@
   "date": "2026-07-26",
   "crime": "hit and run",
   "outcome": "arrest",
-  "site": "Breedlove Dr",
+  "site": "Breedlove Drive",
   "roads": [
    "Breedlove Drive"
   ],
@@ -232,7 +232,7 @@
   "date": "2026-01-15",
   "crime": "theft/larceny",
   "outcome": "arrests made, stolen tools recovered",
-  "site": "North Avenue helped locate their Ford F-150",
+  "site": "North Avenue",
   "roads": [
    "North Avenue"
   ],

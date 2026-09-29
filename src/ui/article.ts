@@ -56,7 +56,7 @@ export function rows(host: HTMLElement, list: { k: string; v: string; sources: s
 }
 
 export function table(host: HTMLElement, head: string[], body: { cells: string[]; num?: number[]; sources: string[] }[]): void {
-  const wrap = el("div", "tablewrap");
+  const wrap = el("div", "tablewrap stack");
   const t = document.createElement("table");
   t.innerHTML = `<thead><tr>${head.map((h) => `<th>${escape(h)}</th>`).join("")}</tr></thead>`;
   const tb = document.createElement("tbody");
@@ -65,6 +65,7 @@ export function table(host: HTMLElement, head: string[], body: { cells: string[]
     r.cells.forEach((c, i) => {
       const td = document.createElement("td");
       if (r.num?.includes(i)) td.className = "num";
+      td.dataset.label = head[i] ?? "";
       td.textContent = c;
       if (i === r.cells.length - 1) td.appendChild(cite(r.sources, 1));
       tr.appendChild(td);
@@ -268,8 +269,12 @@ const order = ["flock", "independent", "government", "court"];
 /** The bibliography, grouped by origin, each entry with its date and the date it was last checked. */
 export function renderSources(host: HTMLElement): void {
   const legend = el("p");
-  legend.innerHTML = `Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> is a teardown, court filing, government audit or news report. <span class="tag tag-unknown">Unknown</span> marks a statement not published by Flock and not verified by an independent source. Each source carries the date it was last checked.`;
+  legend.innerHTML = `Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> is a teardown, research paper or news report. <span class="tag tag-gov">Government</span> is a legislature, agency, council or public-records release, and <span class="tag tag-gov">Court</span> a filing or opinion. Elsewhere on the site, <span class="tag tag-unknown">Not verified</span> marks a statement that neither Flock nor an independent source confirms. Each source carries the date it was last checked.`;
   host.appendChild(legend);
+  const jump = el("nav", "jump");
+  jump.setAttribute("aria-label", "Source groups");
+  jump.innerHTML = order.filter((k) => sources.some((s) => s.kind === k)).map((k) => `<a href="#group-${k}">${escape(kindTitle[k]!)}</a>`).join("");
+  host.appendChild(jump);
   const list = el("div", "sources");
   const sorted = sources.slice().sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind) || a.date.localeCompare(b.date));
   let lastKind = "";
@@ -277,6 +282,7 @@ export function renderSources(host: HTMLElement): void {
     if (s.kind !== lastKind) {
       lastKind = s.kind;
       const h = el("h3", "src-group");
+      h.id = `group-${s.kind}`;
       h.innerHTML = `<span class="tag ${kindClass[s.kind]}">${kindLabel[s.kind]}</span> ${kindTitle[s.kind]}`;
       list.appendChild(h);
     }
@@ -291,6 +297,6 @@ export function renderSources(host: HTMLElement): void {
   }
   host.appendChild(list);
   const fine = el("p", "fine");
-  fine.innerHTML = `This page does not map camera locations and does not describe countermeasures. Camera locations are catalogued at <a href="https://deflock.org" rel="noopener">DeFlock</a>. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
+  fine.innerHTML = `Camera positions on the Outcomes page come from OpenStreetMap contributors via <a href="https://deflock.org" rel="noopener">DeFlock</a>. This site does not describe countermeasures. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
   host.appendChild(fine);
 }

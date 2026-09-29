@@ -20,7 +20,7 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
     a.dataset.src = s.id;
     a.addEventListener("click", (e) => { if (onCite) { e.preventDefault(); onCite(s.id); } });
     a.title = `${s.title} (${s.publisher}, ${s.date})`;
-    a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span> ${escape(short(s.publisher))} · ${escape(s.date.slice(0, 4))}`;
+    a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span>${escape(short(s.publisher))} · ${escape(s.date.slice(0, 4))}`;
     el.appendChild(a);
   }
   if (ids.length > max) {
