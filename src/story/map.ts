@@ -246,11 +246,14 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
         x = tx; y = ty - (phone() ? 16 : 22);
         if (o > 0.02) lead = `M${x.toFixed(1)} ${y.toFixed(1)}V${(ty + (phone() ? 12 : 18)).toFixed(1)}`;
       }
-      // keep the whole label inside the map's width (widths are measured once, and again after a resize)
-      if (o > 0.02) { l.w ??= l.el.offsetWidth; x = Math.max(l.w / 2 + 2, Math.min(W - l.w / 2 - 2, x)); }
+      const hide = o < 0.02 || x < a.x0 - 10 || x > a.x1 + 10 || y < a.y0 - 40 || y > a.y1 + 20;
+      // every label, shown or hidden, stays inside the map's width (widths measured once, again after a resize or
+      // once the fonts load), so none reaches past the edge of the page
+      l.w ??= l.el.offsetWidth;
+      x = Math.max(l.w / 2 + 2, Math.min(W - l.w / 2 - 2, x));
       l.el.style.left = `${x}px`; l.el.style.top = `${y}px`;
       l.el.style.opacity = String(o);
-      l.el.style.visibility = o < 0.02 || x < a.x0 - 10 || x > a.x1 + 10 || y < a.y0 - 40 || y > a.y1 + 20 ? "hidden" : "visible";
+      l.el.style.visibility = hide ? "hidden" : "visible";
     }
     leader.setAttribute("d", lead);
     leaderSvg.style.opacity = String(atl * s.roads);
@@ -392,6 +395,7 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
   addEventListener("resize", () => { clearTimeout(rt); rt = window.setTimeout(resize, 120); });
   setLegend(LOOKS.all!);
   credit?.classList.add("no-rates");
+  void document.fonts?.ready.then(() => { for (const l of labelEls) l.w = undefined; draw(); });
   const ready = loadBase();
   return { go, settle, ready };
 }

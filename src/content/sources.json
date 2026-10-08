@@ -794,6 +794,24 @@
       "lastVerified": "2026-09-04"
     },
     {
+      "id": "findingflock-about",
+      "kind": "independent",
+      "title": "About Finding Flock (\"an independent, continuously updated record of automated license plate readers\"; \"We write in a neutral, data-journalism voice\")",
+      "publisher": "Finding Flock",
+      "url": "https://www.findingflock.com/about",
+      "date": "2026",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "kare11-flock-2026",
+      "kind": "independent",
+      "title": "Multiple cities around Minnesota cancel contracts with Flock Safety (Flock spokesperson: \"So far in 2026, new city partnerships have outpaced nonrenewals by approximately seven to one\")",
+      "publisher": "KARE 11",
+      "url": "https://www.kare11.com/article/news/local/breaking-the-news/multiple-cities-minnesota-cancel-contracts-flock/89-bfd002b1-6830-4139-8287-cea513e602a0",
+      "date": "2026-08-11",
+      "lastVerified": "2026-10-08"
+    },
+    {
       "id": "findingflock-cancellations",
       "kind": "independent",
       "title": "Flock contract cancellations tracker",
@@ -1134,6 +1152,24 @@
       "url": "https://www.404media.co/own-the-narrative-leaked-flock-guide-shows-how-it-teaches-cops-to-promote-its-tech/",
       "date": "2025",
       "lastVerified": "2026-09-04"
+    },
+    {
+      "id": "homedepot-8k-2026",
+      "kind": "independent",
+      "title": "The Home Depot, Form 8-K: results of the May 21, 2026, annual meeting (Proposal 8, report on customer data privacy risks: 62,948,880 for, 645,876,261 against)",
+      "publisher": "U.S. Securities and Exchange Commission (EDGAR)",
+      "url": "https://www.sec.gov/Archives/edgar/data/354950/000035495026000105/hd-20260521.htm",
+      "date": "2026-05-26",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "lowes-8k-2026",
+      "kind": "independent",
+      "title": "Lowe's Companies, Form 8-K: results of the May 29, 2026, annual meeting (Proposal 6, report on risks of sharing customer data with third parties: 38,182,128 for, 380,809,009 against)",
+      "publisher": "U.S. Securities and Exchange Commission (EDGAR)",
+      "url": "https://www.sec.gov/Archives/edgar/data/60667/000006066726000091/low-20260529.htm",
+      "date": "2026-06-02",
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "prospect-retail-2026",

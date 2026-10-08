@@ -405,7 +405,7 @@ date wrong, and about 15 smaller points. All are corrected and listed in `docs/f
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
 | Commits | 40, Sept. 4 to Oct. 8, 2026 |
-| Bibliography rows | 192, tagged flock, independent, government or court |
+| Bibliography rows | 196, tagged flock, independent, government or court |
 | Content files | 14 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
