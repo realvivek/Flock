@@ -15,7 +15,7 @@ async function shot(width, height, out, step) {
   const page = await browser.newPage({ viewport: { width, height: height + 48 }, deviceScaleFactor: 1 });
   await page.goto(`${base}?poster`, { waitUntil: "commit" });
   await page.waitForFunction(() => window.__flock?.state.ready === true, null, { timeout: 60_000 });
-  await page.addStyleTag({ content: "html{scroll-behavior:auto!important}.topbar,.scrolly-steps,.totop,.map-legend{visibility:hidden!important}.scrolly-graphic{top:0!important;height:100vh!important}" });
+  await page.addStyleTag({ content: "html{scroll-behavior:auto!important}.topbar,.scrolly-steps,.totop,.map-legend,.map-credit{visibility:hidden!important}.scrolly-graphic{top:0!important;height:100vh!important}" });
   await page.evaluate(() => document.querySelector(".scrolly").scrollIntoView());
   await page.evaluate((step) => document.querySelector(`.step[data-step="${step}"] .step-card`)?.scrollIntoView({ block: "center" }), step);
   await page.waitForFunction(() => window.__flock.state.tweens === 0 && window.__flock.state.busy === 0);

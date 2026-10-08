@@ -152,7 +152,8 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
       };
       // once Flock's are highlighted, the other makes are drawn on top in a darker grey, so the one in five shows
       if (s.hi < 0.5) { layer(idxO, mix(INK, GREY, s.hi)); layer(idxF, mix(INK, AMBER, s.hi)); }
-      else { layer(idxF, mix(INK, AMBER, s.hi)); layer(idxO, mix(GREY, GREY_TOP, (s.hi - 0.5) * 2)); }
+      else { layer(idxF, mix(INK, AMBER, s.hi)); if (!posterMode) layer(idxO, mix(GREY, GREY_TOP, (s.hi - 0.5) * 2)); }
+      // (the share card, drawn in poster mode at the Flock step, shows Flock's cameras alone)
       ctx.globalAlpha = 1;
     }
     ctx.restore();
