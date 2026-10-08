@@ -45,7 +45,7 @@ export function texasFigure(width: number): string {
 <li class="is-stop"><span class="n">Aug. 27, 2026</span><span class="t">The governor orders state agencies to pause funding for Flock cameras</span></li>
 <li class="is-stop"><span class="n">900</span><span class="t">cameras or more switched off by at least 14 cities and counties by late September, The Texas Tribune counted</span></li>
 </ol>`;
-  const f1 = frame("texas", cfg("Texas paid for cameras with a $1 insurance fee, then paused the money", "How state money reached local Flock networks, as The Texas Tribune reported it", ["texastribune-abbott-2026", "texastribune-dps-2026", "texastribune-unplugged-2026"]), figCtx(), flow);
+  const f1 = frame("texas", cfg("Texas paid for cameras with a $1 insurance fee, then paused the money", "How state money reached state and local Flock networks, as The Texas Tribune reported it", ["texastribune-abbott-2026", "texastribune-dps-2026", "texastribune-unplugged-2026"]), figCtx(), flow);
   // Dallas: 684 cameras, 321 of them paid for by state grants
   const cols = width < 520 ? 24 : 38, n = 684, off = 321, s = width < 520 ? 12 : 13, gap = 2;
   let sq = "";
