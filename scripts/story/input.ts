@@ -8,7 +8,7 @@ import type { Deputy } from "../../src/story/fig/searches.ts";
 
 export const STORY_FILES = ["src/content/story.json", "src/content/timeline-2026.json", "src/content/sources.json", "src/content/overview.json", "src/content/dataflow.json", "public/data/outcomes.json", "public/data/story/stats.json", "public/data/story/meta.json", "public/data/story/states.json", "public/data/story/counties.json", "public/data/story/operators.json", "public/data/story/completeness.json"];
 /** The poster that stands in for the map until the camera file loads (or without JavaScript), if it has been made. */
-export const POSTER = "data/story/map-poster.png";
+export const POSTER = "data/story/map-poster.jpg";
 
 export function renderHome(root: string): Rendered {
   const j = (p: string) => JSON.parse(readFileSync(resolve(root, p), "utf8"));

@@ -59,7 +59,10 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
   let want = "all", anim = 0;
 
   const json = (f: string) => fetch(`${BASE}data/story/${f}`).then((r) => r.json());
+  // ?poster: the national map alone, filling the frame (scripts/story/poster.mjs captures it)
+  const posterMode = new URLSearchParams(location.search).has("poster");
   const area = () => {
+    if (posterMode) return { x0: 24, y0: 24, x1: W - 24, y1: H - 24 };
     const phone = matchMedia("(max-width: 760px)").matches;
     if (phone) return { x0: 10, y0: 46, x1: W - 10, y1: Math.max(H * 0.58, 260) };
     const gutter = 20, left = Math.max(gutter, (W - 992) / 2) + Math.min(352, W - 2 * gutter) + 28;

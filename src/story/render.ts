@@ -96,7 +96,8 @@ ${mapSection(inp, ctx)}
 function mapSection(inp: StoryInput & { poster?: string }, ctx: Ctx): string {
   const m = inp.story.map;
   const steps = m.steps.map((st, i) => `<div class="step" data-step="${escape(st.id)}" data-i="${i}"><div class="step-card"><p>${inline(st.text, ctx)}</p></div></div>`).join("");
-  const poster = inp.poster ? `<img class="map-poster" src="${escape(inp.poster)}" alt="${escape(m.alt)}" width="1600" height="992" decoding="async">` : `<p class="map-fallback">${escape(m.alt)}</p>`;
+  // Without JavaScript the poster stands in for the map; with it, the alt text holds the space until the dots draw.
+  const poster = `<p class="map-fallback">${escape(m.alt)}</p>${inp.poster ? `<noscript><img class="map-poster" src="${escape(inp.poster)}" alt="${escape(m.alt)}" width="1600" height="992"></noscript>` : ""}`;
   const credit = `<p class="map-credit">Map: license plate readers mapped on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock; Alaska and Hawaii are shown at different scales. Rates: U.S. Census Bureau 2024 estimates.</p>`;
   for (const id of ["deflock-tiles-2026", "census-pop-2024", "census-boundaries-2024"]) ctx.used.add(id);
   return `<section class="scrolly scrolly-map" id="${escape(m.id)}" data-scrolly="map" aria-label="Map of mapped license plate readers">
