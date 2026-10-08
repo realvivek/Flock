@@ -360,6 +360,8 @@ log("completeness:", completeness.map((r) => `${r.place} ${r.mapped}/${r.publish
 
 // ---- Outcomes city basemaps ------------------------------------------------------------------------------------------
 const outcomes = JSON.parse(fs.readFileSync(path.join(ROOT, "public/data/outcomes.json"), "utf8"));
+// Outcome sites in the national map's frame, for the Outcomes page's overview panel
+write(BASE, "outcome-sites.json", Object.fromEntries(outcomes.sites.filter((s) => s.lat != null).map((s) => [s.id, projection([s.lon, s.lat])?.map((v) => Math.round(v * 100) / 100) ?? null]).filter(([, xy]) => xy)));
 // The Outcomes page matches records to the July 17, 2026 snapshot (the cameras on the map while the records were
 // made); its city maps draw that same snapshot so the distances in its tables match what is drawn.
 const july = JSON.parse(fs.readFileSync(raw("cameras-us-hourly-2026-07-17.geojson"), "utf8")).features.map((f) => ({ lon: f.geometry.coordinates[0], lat: f.geometry.coordinates[1], ...f.properties, cls: f.properties.brand === "Flock Safety" ? 0 : f.properties.brand ? 1 : 2 }));

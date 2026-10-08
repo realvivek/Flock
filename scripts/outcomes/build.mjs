@@ -1,4 +1,4 @@
-// Builds public/data/outcomes.json and public/data/cameras-flock.json from the hand-entered and fetched sources
+// Builds public/data/outcomes.json from the hand-entered and fetched sources
 // under data/outcomes/. Geocoding uses Nominatim (one request a second, cached in data/outcomes/geocode-cache.json);
 // intersections are located as the closest approach of the two roads' geometries. Every located record is matched to
 // the nearest mapped camera (any vendor) and the distance is kept, so the page can say how close the match is.
@@ -138,7 +138,7 @@ const cams = geojson.features.map((f) => ({ lon: f.geometry.coordinates[0], lat:
 const flock = cams.filter((c) => c.brand === "Flock Safety");
 const newest = cams.reduce((m, c) => (c.ts > m ? c.ts : m), "");
 fs.mkdirSync(path.join(ROOT, "public/data"), { recursive: true });
-fs.writeFileSync(path.join(ROOT, "public/data/cameras-flock.json"), JSON.stringify({ count: flock.length, total: cams.length, asOf: newest, points: flock.map((c) => [+c.lon.toFixed(4), +c.lat.toFixed(4)]) }));
+// The page's maps draw cameras from public/data/story/cams.bin and public/data/basemaps (scripts/story/build.mjs).
 console.log("cameras", cams.length, "flock", flock.length, "newest", newest);
 // grid index for nearest-camera lookup
 const cell = (lon, lat) => `${Math.floor(lat * 20)}:${Math.floor(lon * 20)}`;

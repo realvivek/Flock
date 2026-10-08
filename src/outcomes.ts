@@ -7,7 +7,10 @@ import { z } from "zod";
 import { cite, escape } from "./ui/cite";
 import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
-import { drawNational, drawCity, loadCameras, type Ring } from "./outcomes-map";
+import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
+import { compact, apState } from "./viz/format";
+import { initTooltips } from "./viz/tooltip";
+import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
 
 const Values = z.object({ reads: z.number().nullable(), alerts: z.number().nullable(), falseAlerts: z.number().nullable(), stops: z.number().nullable(), recoveries: z.number().nullable(), arrests: z.number().nullable() });
 const Match = z.object({ osmId: z.number(), brand: z.string().nullable(), distanceM: z.number(), lon: z.number(), lat: z.number() }).passthrough().nullable();
@@ -117,8 +120,8 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   host.appendChild(top);
   // National map
   const nat = el("section", "source-block"); nat.id = "sites";
-  nat.innerHTML = `<div class="sec-head"><h2>By camera site</h2><p class="lede small">Six sources publish outcomes that can be placed at a camera. Rings mark them on the map of every mapped Flock camera; ring size follows the count of hits or calls, and shade follows the deepest rung the record reaches: outline for alerts only, amber for stops, ink for a recovery or arrest.</p></div>`;
-  if (!mapOff) { const fig = el("figure", "panel national"); fig.dataset.panel = "national"; fig.innerHTML = `<canvas aria-label="Every mapped Flock camera in the lower 48 states with the outcome sites marked"></canvas><figcaption class="mono"></figcaption>`; nat.appendChild(fig); }
+  nat.innerHTML = `<div class="sec-head"><h2>By camera site</h2><p class="lede small">Six sources publish outcomes that can be placed at a camera. Rings mark them on the map of every mapped Flock camera; a ring's area follows the count of hits or calls, and its shade the deepest rung the record reaches.</p></div>`;
+  if (!mapOff) { const fig = el("figure", "panel national"); fig.dataset.panel = "national"; fig.innerHTML = `<canvas aria-label="Every mapped Flock camera in the United States with the outcome sites marked"></canvas><figcaption class="mono"></figcaption>`; nat.appendChild(fig); nat.insertAdjacentHTML("beforeend", mapKey()); }
   host.appendChild(nat);
   for (const key of ["nashville", "story", "tucson", "windsor", "court", "news"]) {
     let sites = d.sites.filter((s) => s.source === key);
@@ -150,6 +153,13 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   // Agency ladders
   const ag = el("section", "source-block"); ag.id = "agencies";
   ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some rungs of the ladder for a whole programme. Rates are computed only where both rungs come from the same report. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be 'directly related' or 'assisted'; the note says which. Amber bars show each figure on a log scale against the largest figure in its row.</p><div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div></div>`;
+  const ov = el("figure", "fig ladder-ov");
+  ov.innerHTML = `<figcaption class="fig-head"><h3 class="fig-title">Every rung each audit reports, on one scale</h3><p class="fig-sub">Counts per department, on a scale where each step is ten times larger. Hollow marks: reads and alerts from different windows, or readers of several makes.</p></figcaption><div class="fig-body"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`;
+  ag.appendChild(ov);
+  const drawOv = () => { ov.querySelector(".fig-body")!.innerHTML = ladderOverview(d.ladders, Math.min(ov.clientWidth || 640, 760)); };
+  drawOv();
+  let ovW = innerWidth; addEventListener("resize", () => { if (innerWidth !== ovW) { ovW = innerWidth; drawOv(); } });
+  initTooltips(ov);
   const lw = el("div", "tablewrap"); const lt = el("table", "rung-table ladders");
   lt.innerHTML = `<thead><tr><th>Agency</th><th>Period</th><th>Reads</th><th>Alerts</th><th>Wrong alerts</th><th>Stops</th><th>Recoveries</th><th>Arrests</th></tr></thead>`;
   const ltb = el("tbody");
@@ -179,29 +189,65 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
 async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
   const panels = [...host.querySelectorAll<HTMLElement>(".panel")];
   if (!panels.length) return;
-  const ringOf = (s: SiteT, n?: number): Ring => ({ lon: s.lon!, lat: s.lat!, size: s.values.alerts ?? s.values.falseAlerts ?? 1, depth: depth(s.values), n });
+  const xy: Record<string, [number, number]> = await fetch(`${BASE}data/basemaps/outcome-sites.json`).then((r) => r.json());
+  const sizeOf = (s: SiteT) => s.values.alerts ?? s.values.falseAlerts ?? 1;
   const draw = async (fig: HTMLElement) => {
-    const cams = await loadCameras();
-    const canvas = fig.querySelector("canvas")!; const cap = fig.querySelector("figcaption")!;
+    const canvas = fig.querySelector("canvas")!, cap = fig.querySelector("figcaption")!;
     const key = fig.dataset.panel!;
-    if (key === "national") { drawNational(canvas, cams.points, d.sites.filter((s) => s.lat != null).map((s) => ringOf(s))); cap.textContent = `${cams.count.toLocaleString("en-US")} mapped Flock cameras; ${d.coverage.located} outcome locations marked`; return; }
+    if (key === "national") {
+      const rings: Ring[] = d.sites.filter((s) => xy[s.id]).map((s) => ({ x: xy[s.id]![0], y: xy[s.id]![1], size: sizeOf(s), depth: depth(s.values) }));
+      const n = await drawNational(canvas, rings);
+      cap.textContent = `${n.toLocaleString("en-US")} Flock cameras mapped as of Oct. 8, 2026, each a grey dot; ${rings.length} outcome locations as rings. Alaska and Hawaii are shown at different scales.`;
+      return;
+    }
     const sites = d.sites.filter((s) => s.source === key && s.lat != null);
     if (!sites.length) { cap.textContent = "No located sites"; return; }
     // Numbers match the table rows; Story County's one-hit locations are drawn but not numbered.
     const listed = key === "story" ? d.sites.filter((s) => s.source === key && (s.values.alerts ?? 0) >= 2) : d.sites.filter((s) => s.source === key);
     // Frame the numbered sites, padded by 12% of their spread and at least 400 m.
-    const framed = listed.filter((s) => s.lat != null); const f = framed.length ? framed : sites;
+    const framed = listed.filter((s) => s.lat != null), f = framed.length ? framed : sites;
     const lats = f.map((s) => s.lat!), lons = f.map((s) => s.lon!);
-    const k = Math.cos(((Math.min(...lats) + Math.max(...lats)) / 2) * Math.PI / 180); const minPad = 400 / 111320;
+    const k = Math.cos(((Math.min(...lats) + Math.max(...lats)) / 2) * Math.PI / 180), minPad = 400 / 111320;
     const padLat = Math.max((Math.max(...lats) - Math.min(...lats)) * 0.12, minPad), padLon = Math.max((Math.max(...lons) - Math.min(...lons)) * 0.12, minPad / k);
     const box = { s: Math.min(...lats) - padLat, n: Math.max(...lats) + padLat, w: Math.min(...lons) - padLon, e: Math.max(...lons) + padLon };
-    const n = drawCity(canvas, cams.points, sites.map((s) => { const i = listed.indexOf(s); return ringOf(s, i >= 0 ? i + 1 : undefined); }), box);
-    cap.textContent = `${n.toLocaleString("en-US")} mapped Flock cameras in view; numbers match the table`;
+    const n = await drawCity(canvas, key, sites.map((s) => { const i = listed.indexOf(s); return { lon: s.lon!, lat: s.lat!, size: sizeOf(s), depth: depth(s.values), n: i >= 0 ? i + 1 : undefined }; }), box);
+    cap.textContent = `${n.toLocaleString("en-US")} Flock cameras in view as mapped on July 17, 2026, each pointing the way it faces; numbers match the table. Streets: U.S. Census Bureau.`;
   };
   const drawn = new Set<HTMLElement>();
-  const io = new IntersectionObserver((entries) => { for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); drawn.add(e.target as HTMLElement); void draw(e.target as HTMLElement); } }, { rootMargin: "200px" });
+  const io = new IntersectionObserver((entries) => { for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); drawn.add(e.target as HTMLElement); void draw(e.target as HTMLElement); } }, { rootMargin: "300px" });
   panels.forEach((p) => io.observe(p));
   // Panels draw at their on-screen width, so redraw after the width changes (a rotated phone, a resized window).
   let lastW = innerWidth, timer = 0;
   addEventListener("resize", () => { clearTimeout(timer); timer = window.setTimeout(() => { if (innerWidth === lastW) return; lastW = innerWidth; drawn.forEach((fig) => void draw(fig)); }, 200); });
+}
+
+const ORD = ["#d9a447", "#c4851a", "#a86c10", "#87530b", "#643c07", "#432704"];
+const LADDER_RUNGS: { k: keyof V; label: string }[] = [{ k: "reads", label: "Plates read" }, { k: "alerts", label: "Alerts" }, { k: "falseAlerts", label: "Wrong alerts" }, { k: "stops", label: "Stops" }, { k: "recoveries", label: "Recoveries" }, { k: "arrests", label: "Arrests" }];
+/** One row per department, a dot per reported rung on a logarithmic scale, coloured light to dark down the ladder. */
+function ladderOverview(ladders: Data["ladders"], W: number): string {
+  const rows = ladders.filter((L) => LADDER_RUNGS.filter((r) => L.values[r.k] != null).length >= 2);
+  const narrow = W < 560, LW = narrow ? 112 : 190, R = 14, T = 30, rowH = 36;
+  const x = logScale(1, 1e9, LW + 8, W - R);
+  const dec = narrow ? [1, 100, 1e4, 1e6, 1e8] : [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
+  let out = g(dec.map((v) => line(x(v), T - 6, x(v), T + rows.length * rowH)).join(""), { class: "grid" });
+  out += g(dec.map((v) => text(x(v), T - 12, compact(v), { "text-anchor": "middle" })).join(""), { class: "axis" });
+  rows.forEach((L, i) => {
+    const y = T + i * rowH + rowH / 2, hollow = !!(L.mixedWindows || L.vendorMix);
+    out += line(0, y + rowH / 2, W, y + rowH / 2, { stroke: "var(--rule)" });
+    const who = /Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : `${L.city}, ${apState(L.state)}`;
+    out += text(LW - 4, y - 2, who, { "text-anchor": "end", "font-size": 12, "font-weight": 600, fill: "var(--ink)" });
+    out += text(LW - 4, y + 11, L.period.replace(/ \(.*\)/, ""), { "text-anchor": "end", "font-size": 10.5, fill: "var(--ink-3)" });
+    LADDER_RUNGS.forEach((r, k) => {
+      const v = L.values[r.k];
+      if (v == null) return;
+      const mark = circle(x(v), y, 5.5, hollow ? { fill: "#fff", stroke: ORD[k], "stroke-width": 2.5 } : { fill: ORD[k], stroke: "#fff", "stroke-width": 1.5 });
+      out += tip(rect(x(v) - 9, y - 9, 18, 18, { fill: "transparent" }) + mark, v.toLocaleString("en-US"), `${L.agency}, ${L.period}: ${r.label.toLowerCase()}`);
+    });
+  });
+  return svg(W, T + rows.length * rowH + 4, out, { label: "Dot chart of the counts each department's audit reports, from plates read to arrests, on a logarithmic scale." });
+}
+
+/** The key under the maps: what a ring's size and shade mean, and the camera symbols. */
+export function mapKey(): string {
+  return `<div class="map-key"><span class="mk-item"><i class="mk-ring d1"></i>${DEPTH_LABEL[1]}</span><span class="mk-item"><i class="mk-ring d2"></i>${DEPTH_LABEL[2]}</span><span class="mk-item"><i class="mk-ring d3"></i>${DEPTH_LABEL[3]}</span><span class="mk-item"><i class="mk-wedge"></i>Flock camera, facing</span><span class="mk-item"><i class="mk-dot"></i>Other make</span><span class="mk-note">Ring area follows the number of hits, alerts or calls at the site.</span></div>`;
 }

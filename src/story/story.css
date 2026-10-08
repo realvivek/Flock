@@ -37,13 +37,6 @@
 .fig-note { margin: 0; }
 .fig-src a { color: var(--ink-3); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: .15em; }
 .fig-src a:hover { color: var(--ink); }
-/* chart marks */
-.c-hi { fill: var(--amber-mark); } .c-hi2 { fill: var(--amber); } .c-ink { fill: var(--ink); } .c-ink3 { fill: #8a8a8a; }
-.c-ctx { fill: #c4c4c1; } .c-ctx2 { fill: #e6e6e3; } .c-ctx3 { fill: #dededa; } .c-wash { fill: var(--amber-wash); } .c-wash2 { fill: #f2dab0; }
-.sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: none; }
-.sw.c-hi2 { background: var(--amber); } .sw.sw-none { background: none; } .sw.c-ctx { background: #c4c4c1; } .sw.c-ctx3 { background: #dededa; }
-.viz .row:hover .mark, .viz [data-tip]:hover .mark { filter: brightness(.92); }
-.viz .axis-title { font-size: 11px; }
 
 /* ---- The opening map: sticky graphic, step cards scrolling over it ------------------------------------------- */
 .scrolly { position: relative; margin: 2.5rem 0 0; }

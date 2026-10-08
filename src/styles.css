@@ -93,7 +93,7 @@ p { margin: 0; }
 .sections a { font: 500 .8125rem/1 var(--sans); color: var(--ink-3); text-decoration: none; padding: .55rem .5rem .45rem; border-bottom: 2px solid transparent; white-space: nowrap; }
 .sections a:hover { color: var(--ink); }
 .sections a.is-active { color: var(--ink); border-bottom-color: var(--ink); }
-.status { display: none; }
+.topbar .status { display: none; }
 @media (max-width: 1080px) { .topbar .brand-text { display: none; } .topbar { gap: .75rem; } }
 @media (max-width: 800px) and (min-width: 641px) { .sections a { padding-inline: .4rem; font-size: .78rem; } }
 @media (max-width: 640px) {
@@ -196,6 +196,15 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 .viz [data-tip] { cursor: default; }
 .viz [data-tip]:focus { outline: none; }
 .viz [data-tip]:focus-visible .mark, .viz [data-tip].is-hot .mark { stroke: var(--ink); stroke-width: 1.5; }
+
+/* Chart marks: one accent, the rest grey */
+.c-hi { fill: var(--amber-mark); } .c-hi2 { fill: var(--amber); } .c-ink { fill: var(--ink); } .c-ink3 { fill: #8a8a8a; }
+.c-ctx { fill: #c4c4c1; } .c-ctx2 { fill: #e6e6e3; } .c-ctx3 { fill: #dededa; } .c-wash { fill: var(--amber-wash); } .c-wash2 { fill: #f2dab0; }
+.c-hi-bg { background: var(--amber-mark); } .c-ctx2-bg { background: #e6e6e3; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.sw.c-hi2 { background: var(--amber); } .sw.sw-none { background: none; } .sw.c-ctx { background: #c4c4c1; } .sw.c-ctx3 { background: #dededa; }
+.viz [data-tip]:hover .mark { filter: brightness(.92); }
+.viz .axis-title { font-size: 11px; }
 
 /* Tooltip shared by every chart: value first, label second; follows focus as well as the pointer */
 .tip { position: fixed; z-index: 40; pointer-events: none; max-width: 17rem; padding: .5rem .65rem; background: #fff; border: 1px solid var(--rule-2); border-radius: 3px; box-shadow: 0 2px 10px rgba(0, 0, 0, .1); font: 400 .8125rem/1.35 var(--sans); color: var(--ink-2); opacity: 0; transform: translateY(2px); transition: opacity .12s, transform .12s; }

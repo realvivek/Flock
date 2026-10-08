@@ -9,7 +9,7 @@
  * --at f       start at this fraction of the page height
  * --full       one full-page image per page and width instead of frames
  * --reduced    emulate prefers-reduced-motion
- * --figures    on the home page: each map step once its transition has settled, then every figure as its own image
+ * --figures    each scroll step once its transition has settled, then every figure and map panel as its own image
  */
 import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
@@ -51,11 +51,13 @@ for (const w of widths) {
         await page.waitForTimeout(150);
         await page.screenshot({ path: name(`step${k}`) });
       }
-      const figs = await page.locator(".story .fig, .story .preview, #summary-cards").all();
+      const figs = await page.locator("main .fig, main .panel, .story .preview, #summary-cards").all();
       for (const [k, f] of figs.entries()) {
         await f.scrollIntoViewIfNeeded();
         await page.waitForTimeout(200);
-        const id = (await f.getAttribute("id")) ?? `item${k}`;
+        await page.waitForFunction(() => window.__flock.state.busy === 0, null, { timeout: 15_000 }).catch(() => {});
+        await page.waitForTimeout(250);
+        const id = (await f.getAttribute("id")) ?? (await f.getAttribute("data-panel")) ?? `item${k}`;
         await f.screenshot({ path: name(id) });
       }
     } else if (flag("full")) {
