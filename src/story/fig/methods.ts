@@ -12,7 +12,8 @@ export function completenessFigure(cfg: FigureCfg, ctx: Ctx, rows: CompletenessR
     const x = logScale(20, 5000, L + 8, W - R);
     const ticks = [20, 50, 100, 200, 500, 1000, 2000, 5000];
     let out = g(ticks.map((t) => line(x(t), T - 6, x(t), T + list.length * rowH)).join(""), { class: "grid" });
-    out += g(ticks.filter((t) => !narrow || t !== 2000).map((t) => text(x(t), T - 12, int(t), { "text-anchor": "middle" })).join(""), { class: "axis" });
+    const shown = narrow ? [20, 50, 100, 200, 1000, 5000] : ticks;
+    out += g(shown.map((t, i) => text(x(t), T - 12, int(t), { "text-anchor": narrow && i === shown.length - 1 ? "end" : "middle" })).join(""), { class: "axis" });
     // legend
     const lx = narrow ? 7 : L + 8;
     out += circle(lx, 10, 5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 2 }) + text(lx + 10, 14, "Published count", { "font-size": 12 });

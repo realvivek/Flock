@@ -139,3 +139,15 @@ test("on a phone the map stays under the header while the steps scroll, and noth
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await ctx.close();
 });
+
+test("no page is wider than a phone screen", async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 360, height: 780 }, isMobile: true, hasTouch: true });
+  const page = await ctx.newPage();
+  for (const p of ["/", "/deployments/", "/components/", "/data/", "/journey/", "/outcomes/", "/claims/", "/economics/", "/sources/"]) {
+    await page.goto(p, { waitUntil: "commit" });
+    await ready(page);
+    // a page wider than the screen makes a phone zoom out, so the layout viewport grows past the device width
+    expect(await page.evaluate(() => ({ w: innerWidth, sw: document.documentElement.scrollWidth })), p).toEqual({ w: 360, sw: 360 });
+  }
+  await ctx.close();
+});

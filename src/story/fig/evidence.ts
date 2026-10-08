@@ -31,8 +31,9 @@ function draw(W: number, narrow: boolean): string {
   ESTIMATES.forEach((e, i) => {
     const y0 = T + i * rowH, cy = narrow ? y0 + 64 : y0 + rowH / 2;
     const color = e.main ? "var(--amber-mark)" : "var(--ink)";
-    const name = text(narrow ? 0 : L - 14, narrow ? y0 + 16 : cy - 3, e.label, { "text-anchor": narrow ? "start" : "end", "font-size": 13, "font-weight": e.main ? 700 : 600, fill: "var(--ink)" })
-      + text(narrow ? 0 : L - 14, narrow ? y0 + 31 : cy + 13, e.sub, { "text-anchor": narrow ? "start" : "end", "font-size": 12, fill: "var(--ink-3)" });
+    // on a phone the names run across the plot, so they carry a white halo over the grid and the zero line
+    const name = label(narrow ? 0 : L - 14, narrow ? y0 + 16 : cy - 3, e.label, { "text-anchor": narrow ? "start" : "end", "font-size": 13, "font-weight": e.main ? 700 : 600, fill: "var(--ink)" })
+      + label(narrow ? 0 : L - 14, narrow ? y0 + 31 : cy + 13, e.sub, { "text-anchor": narrow ? "start" : "end", "font-size": 12, fill: "var(--ink-3)" });
     const ci = line(x(e.lo), cy, x(e.hi), cy, { stroke: color, "stroke-width": e.main ? 3 : 2, "stroke-linecap": "round" })
       + line(x(e.lo), cy - 5, x(e.lo), cy + 5, { stroke: color, "stroke-width": 1.5 }) + line(x(e.hi), cy - 5, x(e.hi), cy + 5, { stroke: color, "stroke-width": 1.5 });
     // the value sits above its dot, clear of the interval

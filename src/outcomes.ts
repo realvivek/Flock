@@ -8,7 +8,7 @@ import { cite, escape } from "./ui/cite";
 import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
 import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
-import { tickWords, apState } from "./viz/format";
+import { tickWords, apState, apDate } from "./viz/format";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
 
@@ -116,7 +116,7 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   const mapOff = new URLSearchParams(location.search).get("map") === "off";
   // Summary line
   const top = el("div", "coverage-strip sheet");
-  top.innerHTML = `<div><span class="big">${d.cameras.flock.toLocaleString("en-US")}</span><span class="mono">Flock cameras mapped by OpenStreetMap contributors (${d.cameras.total.toLocaleString("en-US")} readers of all makes, as of ${d.cameras.asOf.slice(0, 10)})</span></div><div><span class="big">${d.coverage.sites}</span><span class="mono">locations with a published outcome record</span></div><div><span class="big">${d.coverage.matched}</span><span class="mono">of ${d.coverage.located} located sites within 150 m of a mapped camera</span></div>`;
+  top.innerHTML = `<div><span class="big">${d.cameras.flock.toLocaleString("en-US")}</span><span class="mono">Flock cameras mapped by OpenStreetMap contributors on ${apDate(d.cameras.asOf.slice(0, 10))}, the snapshot the records were matched against (${d.cameras.total.toLocaleString("en-US")} readers of all makes)</span></div><div><span class="big">${d.coverage.sites}</span><span class="mono">locations with a published outcome record</span></div><div><span class="big">${d.coverage.matched}</span><span class="mono">of ${d.coverage.located} located sites within 150 m of a mapped camera</span></div>`;
   host.appendChild(top);
   // National map
   const nat = el("section", "source-block"); nat.id = "sites";
@@ -179,7 +179,7 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   // Coverage
   const cv = el("section", "source-block"); cv.id = "coverage";
   const by = Object.entries(d.coverage.bySource).map(([k, v]) => `<tr><td>${escape(SOURCE_META[k]?.title.split(":")[0] ?? k)}</td><td class="mono">${v.sites}</td><td class="mono">${v.located}</td><td class="mono">${v.matched}</td></tr>`).join("");
-  cv.innerHTML = `<div class="sec-head"><h2>Coverage</h2><p class="lede small">What this page can and cannot say. ${d.cameras.flock.toLocaleString("en-US")} Flock cameras are mapped; ${d.coverage.sites} locations have a published outcome record, ${d.coverage.matched} of them within 150 m of a mapped camera. Every other camera on the map has no public outcome record at all.</p></div><div class="tablewrap"><table class="rung-table"><thead><tr><th>Source</th><th>Locations</th><th>Located</th><th>Matched to a mapped camera</th></tr></thead><tbody>${by}</tbody></table></div><p class="small">What would extend it: Flock's software exports a hot-list alert report with the camera name, timestamp, plate and list, and since September 2022 an outcome field ('Apprehended' or 'Not Apprehended') officers can set on alerts and searches. Agencies release these under public-records law; Story County's export above is one. A request for the alert report and the outcome field, plus the agency's camera inventory, gives the per-camera ladder for any agency.</p><p class="fine">Camera positions: OpenStreetMap contributors via the deflock-data export, ODbL. Built ${escape(d.generated)}.</p>`;
+  cv.innerHTML = `<div class="sec-head"><h2>Coverage</h2><p class="lede small">What this page can and cannot say. ${d.cameras.flock.toLocaleString("en-US")} Flock cameras were mapped when the records were matched; ${d.coverage.sites} locations have a published outcome record, ${d.coverage.matched} of them within 150 m of a mapped camera. Every other camera on the map has no public outcome record at all.</p></div><div class="tablewrap"><table class="rung-table"><thead><tr><th>Source</th><th>Locations</th><th>Located</th><th>Matched to a mapped camera</th></tr></thead><tbody>${by}</tbody></table></div><p class="small">What would extend it: Flock's software exports a hot-list alert report with the camera name, timestamp, plate and list, and since September 2022 an outcome field ('Apprehended' or 'Not Apprehended') officers can set on alerts and searches. Agencies release these under public-records law; Story County's export above is one. A request for the alert report and the outcome field, plus the agency's camera inventory, gives the per-camera ladder for any agency.</p><p class="fine">Camera positions: OpenStreetMap contributors via the deflock-data export, ODbL. Built ${escape(d.generated)}.</p>`;
   cv.appendChild(cite(["deflock-data"], 2));
   host.appendChild(cv);
   initTableWraps();
@@ -197,7 +197,7 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
     if (key === "national") {
       const rings: Ring[] = d.sites.filter((s) => xy[s.id]).map((s) => ({ x: xy[s.id]![0], y: xy[s.id]![1], size: sizeOf(s), depth: depth(s.values) }));
       const n = await drawNational(canvas, rings);
-      cap.textContent = `${n.toLocaleString("en-US")} Flock cameras mapped as of Oct. 8, 2026, each a grey dot; ${rings.length} outcome locations as rings. Alaska and Hawaii are shown at different scales.`;
+      cap.textContent = `${n.toLocaleString("en-US")} Flock cameras mapped as of Oct. 8, 2026, each a gray dot; ${rings.length} outcome locations as rings. Alaska and Hawaii are shown at different scales.`;
       return;
     }
     const sites = d.sites.filter((s) => s.source === key && s.lat != null);

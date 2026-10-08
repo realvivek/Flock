@@ -38,7 +38,7 @@
       "nuance": "Flock's data sheet lists reading paper and temporary plates, and distinguishing them from permanent plates, as a feature.",
       "sources": ["flock-flex-datasheet"] },
     { "id": "platesonly", "claim": "It reads plates and nothing else.", "verdict": "false", "part": "som", "hop": "hop-2",
-      "nuance": "Flock's sales material lists make, type, color, missing or covered plates, roof racks, back racks, bumper stickers and decals as recorded attributes, and The Texas Tribune reports that the cameras also record dents. Investigators can search those descriptions in natural language.",
+      "nuance": "Flock's own materials list make, type, color, missing or covered plates, roof racks, back racks, trailer hitches, aftermarket wheels, bumper stickers and decals as recorded attributes, and The Texas Tribune reports that the cameras also record dents. Investigators can search those descriptions in natural language.",
       "sources": ["flock-wing-2020", "flock-lpr-policy", "flock-platform", "flock-deck-2023", "texastribune-unplugged-2026"] },
     { "id": "cityowns", "claim": "The city owns the cameras.", "verdict": "false", "part": "rear",
       "nuance": "Flock owns the hardware and leases it at $3,000 per camera per year list price; the agreement requires removal after a contract ends. In Cambridge, Evanston and Verona, cameras were reported installed or operating after cancellation. Cameras on private property or HOA contracts are not covered by a city's decision.",

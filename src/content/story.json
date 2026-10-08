@@ -154,7 +154,7 @@
     },
     "states": {
       "title": "Georgia has the most mapped Flock cameras per resident",
-      "sub": "Mapped Flock cameras for every 100,000 residents, by state",
+      "sub": "Mapped Flock cameras for every 100,000 residents in the 10 highest and five lowest states",
       "notes": ["Population estimates for July 1, 2024. Rates cover the 50 states and D.C.; the national total also counts {{outsideStates}} cameras in Puerto Rico and elsewhere."],
       "sources": ["deflock-tiles-2026", "census-pop-2024"]
     },
@@ -173,14 +173,14 @@
     "read": {
       "title": "What one read records",
       "sub": "Fields Flock’s cameras produce for a passing vehicle, as the company describes them",
-      "notes": ["Illustration. The vehicle details are those in a 2023 Flock sales presentation and quoted in a 2022 A.C.L.U. report; The Texas Tribune reported that the cameras also record dents."],
-      "sources": ["flock-deck-2023", "aclu-2022", "flock-lpr-policy", "texastribune-unplugged-2026"]
+      "notes": ["Illustration. The vehicle details are those Flock lists in a 2020 announcement and a 2023 sales presentation; The Texas Tribune reported that the cameras also record dents."],
+      "sources": ["flock-wing-2020", "flock-deck-2023", "aclu-2022", "flock-lpr-policy", "texastribune-unplugged-2026"]
     },
     "ruler": {
       "title": "Seconds to an alert, days to deletion",
       "sub": "Time from the moment a plate is read, on a logarithmic scale",
-      "notes": ["No figure is published for the upload. Seven days is Flock’s default for new customers; existing customers keep the periods they set. The state limits allow longer retention for data needed in an investigation."],
-      "sources": ["flock-flex-datasheet", "flock-guardrails-2026", "va-code-2-2-5517", "wa-sb6002-2026", "ca-sb34", "aclu-guardrails"]
+      "notes": ["No figure is published for the upload. Seven days is Flock’s default for new customers; existing customers keep the periods they set. As of Oct. 8, 2026, Flock’s Myths and Facts page still gives 30 days as the default. The state limits allow longer retention for data needed in an investigation."],
+      "sources": ["flock-flex-datasheet", "flock-guardrails-2026", "flock-myths", "va-code-2-2-5517", "wa-sb6002-2026", "ca-sb34", "aclu-guardrails"]
     },
     "audit": {
       "title": "One search, 83,345 cameras",

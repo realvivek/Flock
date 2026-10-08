@@ -89,8 +89,10 @@
         },
         {
           "k": "Install fee",
-          "v": "$1,000 standard; relocation $750 on a Flock pole",
+          "v": "$250 to $350 a camera in 2021–23 contracts; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $750 to move a camera on a Flock pole",
           "sources": [
+            "richland-agreement-2023",
+            "contrary-flock",
             "flock-fee-schedule"
           ]
         }
@@ -129,8 +131,10 @@
         },
         {
           "k": "Install fee",
-          "v": "$1,000; relocation $350 on an existing pole",
+          "v": "$250 to $350 a camera in 2021–23 contracts; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $350 to move a camera on an existing pole",
           "sources": [
+            "richland-agreement-2023",
+            "contrary-flock",
             "flock-fee-schedule"
           ]
         }
@@ -456,7 +460,7 @@
         },
         {
           "k": "What Wing extracts",
-          "v": "Plate, state, make, type, color, roof racks, bumper stickers, aftermarket wheels, trailer hitch, window decals, body damage",
+          "v": "Plate and state, or a missing plate; make, type and color; and features such as aftermarket wheels, a roof rack or a trailer hitch",
           "sources": [
             "flock-wing-2020"
           ]

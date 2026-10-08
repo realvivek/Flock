@@ -286,7 +286,7 @@ export function renderSources(host: HTMLElement): void {
     row.innerHTML = `
       <span class="id">${escape(s.id)}</span>
       <a class="src-link" href="${escape(s.url)}" rel="noopener noreferrer" target="_blank"><span class="t">${escape(s.title)}</span><span class="pub">${escape(s.publisher)}</span></a>
-      <span class="date">${escape(s.date)}<br />checked ${escape(s.lastVerified)}</span>`;
+      <span class="date">${escape(/^\d{4}(-\d{2}){0,2}$/.test(s.date) ? apDate(s.date) : s.date)}<br />checked ${escape(apDate(s.lastVerified))}</span>`;
     list.appendChild(row);
   }
   host.appendChild(list);
