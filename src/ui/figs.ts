@@ -72,7 +72,8 @@ export function feesFigure(fees: Fee[], width: number): string {
   rows.forEach(({ f, v }, i) => {
     const y = T + i * rowH, by = narrow ? y + 20 : y + (rowH - barH) / 2, hi = i === 0;
     const plan = f.now.includes("$0 with") ? ", or $0 with the protection plan" : "";
-    const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, f.item, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
+    const short = f.item.replace(" after vandalism, theft or damage", "").replace(" or existing infrastructure", "");
+    const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, short, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
     out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(v) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(v) + 6, by + barH - 1, `$${int(v)}${plan ? "*" : ""}`, { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `$${int(v)}${plan}`, f.item);
   });
   out += line(x(0), T - 4, x(0), T + rows.length * rowH, { class: "baseline" });

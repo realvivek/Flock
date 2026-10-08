@@ -1,8 +1,9 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
 // Viewport sweep of every page at six desktop sizes and four phones (one held sideways), measuring what a reader would notice:
-// horizontal overflow, elements wider than the viewport, images that failed, clipped text, the header links with
-// the current page marked, the pager, the Top button, and on the components page the record and the locator.
+// horizontal overflow, elements wider than the viewport, figures wider than their column, images that failed, clipped
+// text, the header links with the current page marked, the pager, the Top button; on the home page the map pinned
+// under the header at every step with its card on screen; and on the components page the record and the locator.
 // Usage: node scripts/qa.mjs <outDir> [url]
 const Q = process.argv[2] || "test-results/qa";
 const URL = process.argv[3] || "http://127.0.0.1:4173";
@@ -28,7 +29,8 @@ const pageChecks = () => {
   // Each link must sit inside the menu's own visible box (the menu clips anything that overflows it), and the menu must not scroll.
   const navEl = document.querySelector(".sections"); const nb = navEl.getBoundingClientRect();
   out.allChipsInView = navEl.scrollWidth <= navEl.clientWidth + 1 && [...document.querySelectorAll(".sections a")].every((a) => { const r = a.getBoundingClientRect(); return r.left >= Math.max(-1, nb.left - 1) && r.right <= Math.min(innerWidth, nb.right) + 1 && r.top >= tb.top - 1 && r.bottom <= tb.bottom + 1; });
-  const h1 = document.querySelector(".page-head h1, .hero h1");
+  out.figWide = [...document.querySelectorAll("main .fig")].filter((f) => { const r = f.getBoundingClientRect(); return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1); }).slice(0, 3).map((f) => f.id || f.className);
+  const h1 = document.querySelector(".page-head h1, .hero h1, .story-head h1");
   out.h1UnderHeader = !!h1 && scrollY === 0 && h1.getBoundingClientRect().top < tb.bottom;
   out.pager = document.getElementById("pager") ? document.querySelectorAll("#pager a").length : -1;
   out.height = document.documentElement.scrollHeight;
@@ -60,10 +62,22 @@ for (const [w, h, phone] of sizes) {
     if (!g.allChipsInView) F(vp, name, "a header link is outside the header or the viewport");
     if (g.h1UnderHeader) F(vp, name, "the page title sits under the fixed header");
     if (id && g.pager < 2) F(vp, name, `pager has ${g.pager} links`);
-    if (!id && g.height > 3200) F(vp, name, `home is ${g.height} px tall`);
+    if (g.figWide.length) F(vp, name, "figure wider than the screen: " + g.figWide.join(", "));
     if (g.totopAtTop) F(vp, name, "Top button shown at the top");
     if (!phone && id === "components" && g.mode !== "3d") F(vp, name, "no 3D on desktop");
     await page.screenshot({ path: `${Q}/${vp}-${name}.png` });
+    if (!id) {
+      // the map stays pinned under the header while each step's card is read, and the card fits the screen
+      const steps = await page.evaluate(() => [...document.querySelectorAll(".scrolly-map .step")].map((s) => s.dataset.step));
+      for (const st of steps) {
+        await page.evaluate((st) => { const c = document.querySelector(`.step[data-step="${st}"] .step-card`); scrollTo(0, scrollY + c.getBoundingClientRect().top - innerHeight * 0.4); }, st);
+        await page.waitForFunction((st) => window.__flock.state.step === `map:${st}`, st, { timeout: 8000 }).catch(() => F(vp, name, `map step ${st} never became active`));
+        const m = await page.evaluate((st) => { const tb = document.querySelector(".topbar").getBoundingClientRect(), gr = document.querySelector(".scrolly-graphic").getBoundingClientRect(), c = document.querySelector(`.step[data-step="${st}"] .step-card`).getBoundingClientRect(); return { pinned: Math.abs(gr.top - tb.bottom) <= 1, cardIn: c.left >= -1 && c.right <= innerWidth + 1 }; }, st);
+        if (!m.pinned) F(vp, name, `map not pinned under the header at step ${st}`);
+        if (!m.cardIn) F(vp, name, `step ${st} card wider than the screen`);
+      }
+      await page.evaluate(() => scrollTo(0, 0));
+    }
     if (id) {
       await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
       await page.waitForTimeout(250);

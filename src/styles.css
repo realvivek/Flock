@@ -126,16 +126,16 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 .tag-both { color: var(--ink-2); background: linear-gradient(90deg, var(--amber-wash) 50%, var(--bg-3) 50%); }
 .tag-unknown { color: var(--ink-3); background: transparent; box-shadow: inset 0 0 0 1px var(--rule); }
 .cite { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; font: 400 .75rem/1.45 var(--sans); color: var(--ink-3); }
-.cite a { color: var(--ink-3); text-decoration: none; display: inline-flex; align-items: baseline; gap: .35rem; }
+.cite a { color: var(--ink-3); text-decoration: none; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .35rem; min-width: 0; }
 .cite a .p { text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: .15em; }
 .cite a:hover .p { color: var(--ink); text-decoration-color: currentColor; }
 .cite button { font: 500 .75rem/1.3 var(--sans); color: var(--ink-3); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--rule-2); }
 .cite button:hover { color: var(--ink); }
 
 /* ---- Key-value lists and fact rows --------------------------------------------------------------------------- */
-.kv { display: grid; grid-template-columns: 8.5rem 1fr; gap: .35rem 1rem; margin: 0; font: 400 .875rem/1.45 var(--sans); }
+.kv { display: grid; grid-template-columns: minmax(5.5rem, min(8.5rem, 40%)) minmax(0, 1fr); gap: .35rem 1rem; margin: 0; font: 400 .875rem/1.45 var(--sans); }
 .kv dt { font: 700 .6875rem/1.4 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding-top: .1rem; }
-.kv dd { margin: 0; color: var(--ink-2); }
+.kv dd { margin: 0; color: var(--ink-2); min-width: 0; overflow-wrap: anywhere; }
 .kv dd .cite { margin-top: .2rem; }
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .5rem 1rem; font-size: .8125rem; }
 .rows { display: grid; gap: 0; border-top: 1px solid var(--rule); }

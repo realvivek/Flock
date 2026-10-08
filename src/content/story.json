@@ -90,7 +90,7 @@
       "id": "whether-they-reduce-crime",
       "title": "Whether the cameras reduce crime",
       "blocks": [
-        { "p": "Flock says its technology [supported about a million investigations](src:flock-impact-2026) in 2025, a figure drawn from a survey of about 700 agencies that the company calls “directional estimates rather than audited totals.”" },
+        { "p": "Flock says its technology [supported about a million investigations](src:flock-impact-2026) in 2025. The figure comes from a survey of about 700 agencies, and the company calls its results “directional estimates rather than audited totals.”" },
         { "p": "The most detailed independent test so far is a working paper by two University of South Carolina criminologists, Scott M. Mourtgos and Ian T. Adams, who used deployment records that [Flock supplied](src:flock-study-2026); the company says it did not fund the work. Comparing 216 agencies that adopted the cameras with 3,108 that did not, they estimated that reported vehicle thefts [fell 11 percent](src:mourtgos-adams-2026) in the year after an agency’s first camera went live. The share of thefts cleared by an arrest rose about 16 percent, though the authors note that the rise began in the three months before the cameras went live." },
         { "fig": "evidence" },
         { "p": "The 11 percent estimate gives more weight to agencies that had more thefts before the cameras arrived. Weighted by population, or with each agency counted equally, the paper’s appendix shows no change that can be told apart from zero, a point the Institute for Justice, a libertarian law firm that [sued Norfolk, Va., over its Flock cameras](src:ij-norfolk), [made in September](src:reason-flock-study-2026). The authors say their main estimate describes the places that carry most of the thefts rather than a uniform effect. The paper has not been published in a peer-reviewed journal." }
@@ -138,7 +138,7 @@
       "kind": "methods",
       "title": "How this was made",
       "blocks": [
-        { "p": "Camera locations are OpenStreetMap nodes tagged as license plate readers, as served by [DeFlock’s hourly map tiles](src:deflock-tiles-2026), read on {{snapshot|date}} and pinned with a checksum. Each was assigned to a county with the Census Bureau’s [2024 boundary files](src:census-boundaries-2024) and compared with [Vintage 2024 population estimates](src:census-pop-2024). Rates cover the 50 states and the District of Columbia; the national total of {{mappedFlock}} Flock cameras also includes {{outsideStates}} in Puerto Rico and elsewhere." },
+        { "p": "Camera locations are OpenStreetMap nodes tagged as license plate readers, as served by [DeFlock’s hourly map tiles](src:deflock-tiles-2026), read on {{snapshot|date}}, and pinned with a checksum. Each was assigned to a county with the Census Bureau’s [2024 boundary files](src:census-boundaries-2024) and compared with [Vintage 2024 population estimates](src:census-pop-2024). Rates cover the 50 states and the District of Columbia; the national total of {{mappedFlock}} Flock cameras also includes {{outsideStates}} in Puerto Rico and elsewhere." },
         { "p": "“Mapped” means recorded by volunteers. A camera nobody has tagged is missing, a removed camera can remain until someone deletes it, and a make or operator is known only when a mapper added it. DeFlock, whose copy of the map is used here, campaigns against the cameras; the records themselves are on OpenStreetMap, where anyone can check or correct them." },
         { "p": "Outcome figures come from the agencies’ own reports and audits, quoted with their definitions and periods; they are not combined across agencies. Every number on this page is listed with its source in the project’s [fact-check ledger](https://github.com/realvivek/Flock/blob/main/docs/fact-check.md), and the counts are available as files: [cameras by state](data/story/cameras-by-state.csv), [by county](data/story/cameras-by-county.csv) and the [operator classes](data/story/operator-classes.csv)." },
         { "p": "Camera positions © OpenStreetMap contributors, available under the Open Database License. Population and boundaries: U.S. Census Bureau. This page does not describe ways to avoid or disable the cameras." }
@@ -215,7 +215,7 @@
     "price": {
       "title": "The list price of a camera rose $500 in 2024",
       "sub": "Annual price per standard camera in contracts and price lists",
-      "notes": ["Greenville, S.C.’s 2019 pilot was 11 cameras for $2,000 a year in all, according to city contracts published by DeFlock SC, a group that opposes the cameras."],
+      "notes": ["In 2019, a pilot in Greenville, S.C., paid $2,000 a year in all for 11 cameras, according to city contracts published by DeFlock SC, a group that opposes the cameras."],
       "sources": ["richland-agreement-2023", "indio-2023", "grafton-2024", "flock-catalog-2024", "parkridge-2025", "deflocksc-greenville"]
     },
     "contracts": {

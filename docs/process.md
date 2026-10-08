@@ -1,7 +1,7 @@
 # How this site was built
 
-A working record of the project from the first commit on 4 September 2026 to the outcomes page on
-23 September 2026: what each page shows, how it was made, what went wrong, and what was learned.
+A working record of the project from the first commit on 4 September 2026 to the data story on the home
+page on 8 October 2026: what each page shows, how it was made, what went wrong, and what was learned.
 It is written as reference material for a later article. Figures come from the repository itself
 (commit history, content files, scripts) and from the research notes gathered during the work.
 
@@ -20,11 +20,13 @@ them apart, and where the two disagree, both are cited.
 **Neutral copy.** No adjectives that judge. A camera that reads a plate "reads a plate"; an audit that found
 71% of alerts wrong is reported with the denominator and the agency's own explanation.
 
-**Nothing ships unverified.** Before each push: TypeScript typecheck, a production build, the Playwright
-suite (five tests that exercise every page, the citation chips, the 3D locator, phones and the no-3D
-fallback), a viewport sweep (`scripts/qa.mjs`) of every page at five desktop and three phone sizes that
-reports horizontal overflow, cut-off text, failed images, header and pager problems, and screenshots read by
-eye at desktop and phone widths. The sweep produced findings at almost every stage; the rule was zero
+**Nothing ships unverified.** Before each push: TypeScript typecheck, a production build (which first runs
+the source checks), the Playwright suite (18 tests by October: every page, the citation chips, the 3D locator,
+phones, the story's map steps, the page without JavaScript, reduced motion, no requests to other sites, no
+page wider than a phone, and invariants of the story data), a viewport sweep (`scripts/qa.mjs`) of every page
+at six desktop and four phone sizes that reports horizontal overflow, figures wider than the screen, cut-off
+text, failed images, header and pager problems and, on the home page, whether the map stays pinned at every
+step, and screenshots read by eye at desktop and phone widths. The sweep produced findings at almost every stage; the rule was zero
 findings before a push.
 
 **The owner is the author.** Every commit is authored by the owner. No tool or model is named as an author
@@ -54,6 +56,13 @@ without changing the live site.
 | 2026-09-18 | `2e673f8` | Pole and power move onto the components page; eight header links |
 | 2026-09-22 | `9165de2` | Outcomes page: public records tied to mapped cameras |
 | 2026-09-23 | `5824df2` | Outcomes data geocoded from caches; offline build; rate units |
+| 2026-09-28 | `48a630f` | Visual QA: tables scroll in their own container; legible stage diagrams |
+| 2026-09-29 | `c359d0d` | Second visual QA: header at every width, readable Outcomes maps, contrast |
+| 2026-10-08 | `d2d940f` | Fact-check pass before any chart: LAPD, Story County, the Texas search, Roseville, Oakland, Columbia |
+| 2026-10-08 | `31ca8f7` | Story data: pinned camera snapshot, Census joins, packed national map, city basemaps |
+| 2026-10-08 | `a0348ba` | The home page becomes a data story; editorial design across the site |
+| 2026-10-08 | `5517ca4` | Reference pages rebuilt to the story's graphics standard |
+| 2026-10-08 | `b9277d8` | Graphics review and second fact-check applied |
 
 ## 3. The 3D pipeline and the stills
 
@@ -77,10 +86,9 @@ pages they advertise.
 
 ### Home
 
-The home page went through four forms: the top of one long scroll, a splash of cards above tabs, the head of
-one scrolling document with a preview image, and finally a summary page. In its final form it carries the
-title and lede, a preview of the components grid and a preview of the journey page, each a link, and one
-numbered card per page from `overview.json`. Older links to the single-page site (`#act-4`,
+The home page went through five forms: the top of one long scroll, a splash of cards above tabs, the head of
+one scrolling document with a preview image, a summary page, and finally, in October, a data story (section 7).
+The page cards from `overview.json` now close the story under "Go deeper". Older links to the single-page site (`#act-4`,
 `#/hardware/inside/13`, `?s=data/9`, `#src-<id>`) are recognised on arrival and redirected to the page, part,
 stage or row they named, so nothing shared earlier broke.
 
@@ -123,8 +131,9 @@ stands; the citation was replaced.
 One detection traced through twelve stages from capture to deletion, each with the processing location,
 transport, storage, retention and payload, and the unknowns the public record does not fill. Retention
 presets (7 days, 21, 30, 60, Evidence Mode) with the statute or document behind each, and a network search
-example reproducing the counts from one documented query: a Texas deputy's April 2025 search that reached
-83,345 cameras in 6,809 networks.
+example reproducing the counts from one documented query: the Johnson County, Texas, sheriff's office's
+searches of May 9, 2025, the second of which reached 83,345 cameras in 6,809 networks (first recorded here as
+an April search with no case number; both were wrong, and corrected in October).
 
 ### Journey
 
@@ -147,9 +156,9 @@ fraction, and forces the last stop at the end of the page. It was checked at eig
 ### Claims, Economics, Sources
 
 Twenty-one common claims checked against the record, each with a verdict and sources; the product line as a
-table. Economics: list prices, what the annual fee includes and excludes, fee schedules then and now, price
-history from $182 per camera in 2019 to $3,000, installation workflow, permitting, contract terms, scale and
-public funding, with a priced-pole figure. Sources: every row grouped by origin with the date last checked.
+table. Economics: list prices, what the annual fee includes and excludes, the 2026 schedule of fees for changes
+after installation, price history from Greenville's 2019 pilot to the $3,000 list price, installation
+workflow, permitting, contract terms, scale and public funding, with a priced-pole figure. Sources: every row grouped by origin with the date last checked.
 
 Citation chips anywhere open the Sources page at the cited row, which is marked. The marker stopped
 appearing after cross-page navigation for a while; the cause was in the tests, not the site: the URL waits
@@ -283,8 +292,8 @@ agency. The page says so in its coverage block.
   commit rather than the load.
 - **Nested pages and asset paths.** Once pages moved into folders, relative model and still paths broke;
   a small root-aware module resolves the asset prefix per page.
-- **Fonts and privacy.** The pages still load fonts from a third party; self-hosting them is listed as an
-  improvement.
+- **Fonts and privacy.** The pages loaded fonts from a third party until October; they are now self-hosted
+  and a test fails if any page requests anything from another site.
 - **Background work and restarts.** Long runs were pushed to the background with logs; the caches they wrote
   were the only thing that survived a container restart, and they were enough.
 - **Approval gates.** Larger changes were planned in a plan file first and approved before implementation;
@@ -301,18 +310,100 @@ agency. The page says so in its coverage block.
   sweep now judges header links against the menu's own box and runs ten sizes, and a smoke test covers the
   in-between widths.
 
-## 7. Numbers for the article
+## 7. October: the home page becomes a data story
 
+### The brief
+
+The owner asked for the site to be raised to the standard of a newspaper graphics desk, in the storytelling
+and in the graphics themselves, with no limit on effort. Three choices came first: the work would cover every
+page, not only one; the look would be editorial (serif headlines and text on a plain white page, a sans for
+charts, one amber accent) in place of the blueprint ground; and a long-form story would become the home page,
+with the page cards moved to its end.
+
+### Fact-checking before charting
+
+Before any chart was drawn, every figure the story would use was traced to its source, and seven changed:
+the Los Angeles audit (a constructed "498 alerts, 32 percent wrong" withdrawn), Story County's export (Axon
+in-car readers, not Flock cameras), the Texas search (two searches on May 9, 2025, with a case number),
+Roseville, Oakland, Columbia and the outcomes coverage. Two later passes found more. A full check of about
+200 claims found three errors and four claims cited to the wrong document: Oakland's report counts 290 cameras,
+not 293; Grafton is in Wisconsin; and the 2026 fee schedule applies to reinstalls a customer requests, so it
+can no longer be compared with the installation fees in earlier contracts. Every number in the story is
+listed in [fact-check.md](fact-check.md) with the place in its source where it appears.
+
+### The data
+
+- **Cameras**: DeFlock's hourly vector-tile archive of OpenStreetMap plate readers, pinned on Oct. 8, 2026,
+  with a manifest of URL, size, SHA-256 and ETag: 143,929 readers, 115,437 of them Flock's. The tiles were
+  current where the downloadable GeoJSON was weeks old.
+- **Places**: each camera assigned to a county by point in polygon on the Census Bureau's 2024 boundaries
+  (Connecticut as its planning regions), with a counted nearest-county fallback, and joined to the Vintage
+  2024 population estimates. Rates cover the 50 states and D.C.
+- **Operators**: every operator name with 10 or more cameras classified by hand, the rest by keyword; the
+  classes are published as a CSV.
+- **Every number in the prose** is written to `stats.json` with its source ids, and the text refers to it by
+  key, so a rebuild with a new snapshot updates the story.
+- **The map**: points projected in advance (Albers USA, a 1000 by 620 frame), stored as delta-encoded 16-bit
+  coordinates and a class byte, gzipped: 278 KB for 143,595 points, unpacked in the browser with the
+  built-in `DecompressionStream`.
+
+### The story
+
+Twelve sections. The opening map is a scroll-driven graphic pinned under the header, with five steps: every
+reader; Flock's highlighted, the other makes drawn on top; county rates, with thinly populated counties
+drawn lighter so empty land does not outweigh people; Georgia, its neighbors faded; and Fulton County with
+Atlanta's interstates, the highest rate of any county of a million people. Every other figure is static,
+with a title that states its finding, notes, a source line and a "Show the data" table: a county lookup,
+a diagram of what one read records, a logarithmic time scale from the read to deletion, the audit-log record
+of the Johnson County searches beside three accounts of them, Oakland's reads and alerts as areas, three
+departments' counts on one scale, the crime-effect estimates, three ways an alert can be wrong, prices,
+contracts, a 2026 timeline and a comparison of mapped and published counts.
+
+The story is rendered into `index.html` at build time by a Vite plugin from pure string renderers, so the
+text, figures and tables are there without JavaScript (a poster stands in for the map); the client adds the
+map, the county search and tooltips. Each SVG chart is drawn twice, at 600 and 360 pixels, so the phone
+version is laid out for a phone rather than shrunk.
+
+### Decisions
+
+- **Neutral by construction.** Each source is introduced with what it is: DeFlock, "an anti-surveillance
+  group"; the Electronic Frontier Foundation, "a digital rights group"; the Institute for Justice, "a
+  libertarian law firm" that sued Norfolk, Va., over its cameras; Sacra, "a firm that estimates private
+  companies' revenue." The company's figures sit beside independent ones. The crime-effect working paper is
+  shown with the two alternative weightings in its own appendix, under which its 11 percent drop cannot be
+  told apart from zero, and with the authors' explanation that the weightings answer different questions.
+- **Selection rules in writing.** The timeline states how its events were chosen and includes contracts added
+  and kept as well as those ended; the outcomes ladder shows each department's counts from its own report or
+  audit and computes no rates across departments.
+- **Dates move.** Dallas said in September it would switch off its 321 grant-funded cameras, did so, and in
+  October kept them on after Flock paused its payments; the story reports the state on its date.
+- **Phones** keep the two-row header, so all nine links stay visible; the map takes the top of the screen and
+  the step cards the bottom; the preview images have phone versions without small print.
+- **No outside requests.** Fonts are self-hosted; the map draws from local files.
+
+### Reviews
+
+Two independent reviews read the finished story: a graphics editor's critique of contact sheets at 1,440
+and 390 pixels against a newsroom rubric, and a number-by-number fact-check. The critique asked for the
+identity of every source, a figure for the crime-effect evidence, a balanced timeline, a Georgia step and a
+Fulton step in place of one Atlanta zoom, the map's source on screen, an honest retention scale (no invented
+upload time; Evidence Mode past a break), a share of cameras with any operator recorded before the breakdown
+by type, and about 20 style and phone fixes. All are in. A further pass over the reference pages found the
+Claims page widening a phone's layout to 648 pixels; a test now checks every page at 360 pixels.
+
+## 8. Numbers for the article
 | What | Figure |
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
-| Commits | 32, 4 to 29 September 2026 |
-| Bibliography rows | 177, tagged flock, independent, government or court |
-| Content files | 12 JSON files validated by schema at build |
+| Commits | 40, Sept. 4 to Oct. 8, 2026 |
+| Bibliography rows | 190, tagged flock, independent, government or court |
+| Content files | 14 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
-| Playwright tests | 6, covering every page, citations, the locator, phones, in-between header widths and the no-3D fallback |
+| Playwright tests | 18 |
 | Sweep | 9 pages at 10 sizes (6 desktop, 4 phone including one held sideways), zero findings at each push |
-| Mapped cameras | 116,723 readers, 96,484 tagged Flock |
-| Outcome locations | 239 with a published record; 220 placed; 32 within 150 m of a mapped camera |
-| Research behind the outcomes page | 3 surveys, about 300 searches and fetches, about 45 papers and reports reviewed |
+| Mapped cameras, story | 143,929 readers, 115,437 Flock (Oct. 8, 2026) |
+| Mapped cameras, outcomes | 116,723 readers, 96,484 Flock (July 17, 2026, the snapshot the records were matched against) |
+| Outcome locations | 74 tied to fixed cameras, 55 placed, 21 within 150 m of a mapped camera |
+| Claims checked in the October fact-check | about 200 |
+| Home page weight before the first scroll | about 480 KB compressed, of which 13 KB JavaScript and 278 KB the map's camera file (`scripts/budget.mjs`) |
