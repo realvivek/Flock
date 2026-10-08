@@ -15,7 +15,14 @@ export interface State {
   reducedMotion: boolean;
   /** "3d" when the locator renders, "stills" otherwise */
   mode: "3d" | "stills";
+  /** The page has built its content (async data included) */
   ready: boolean;
+  /** Active scrolly step on the home story ("section:step"), or null */
+  step: string | null;
+  /** Data files or drawings still loading on the page */
+  busy: number;
+  /** Story transitions in flight (map zooms, chart changes) */
+  tweens: number;
 }
 
 type Listener = (s: State, changed: Set<keyof State>) => void;
@@ -30,6 +37,9 @@ export const state: State = {
   reducedMotion: false,
   mode: "stills",
   ready: false,
+  step: null,
+  busy: 0,
+  tweens: 0,
 };
 
 const listeners = new Set<Listener>();

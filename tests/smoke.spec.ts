@@ -61,7 +61,7 @@ test("home: summary of every page, the components preview, older links redirect"
     await page.waitForURL(to, { waitUntil: "commit" });
   }
   await ready(page);
-  const src = await page.evaluate(() => { const a = document.querySelector<HTMLAnchorElement>("#page-body .cite a"); return a ? a.getAttribute("href")!.slice(1) : ""; });
+  const src = await page.evaluate(() => { const a = document.querySelector<HTMLAnchorElement>("#page-body .cite a"); return a ? new URL(a.href).hash.slice(1) : ""; });
   expect(src).toMatch(/^src-/);
   await go(page, "/#" + src);
   await page.waitForURL(new RegExp(`/sources/#${src}$`), { waitUntil: "commit" });
@@ -139,7 +139,7 @@ test("every content page loads with its content, the pager and citations that re
   await go(page, "/deployments/");
   await ready(page);
   const chip = page.locator("#page-body .cite a").first();
-  const href = (await chip.getAttribute("href"))!;
+  const href = await chip.evaluate((a: HTMLAnchorElement) => new URL(a.href).hash);
   await chip.click();
   await page.waitForURL(new RegExp(`/sources/${href}$`), { waitUntil: "commit" });
   await ready(page);
@@ -147,7 +147,7 @@ test("every content page loads with its content, the pager and citations that re
   await expect.poll(() => inView(page, href)).toBe(true);
   const missing = await page.evaluate(() => {
     const ids = new Set([...document.querySelectorAll(".source")].map((r) => r.id));
-    return [...document.querySelectorAll<HTMLAnchorElement>(".cite a")].map((a) => a.getAttribute("href")!.slice(1)).filter((h) => !ids.has(h));
+    return [...document.querySelectorAll<HTMLAnchorElement>(".cite a")].map((a) => new URL(a.href).hash.slice(1)).filter((h) => !ids.has(h));
   });
   expect(missing).toEqual([]);
   // Top button
@@ -201,7 +201,7 @@ test("components page: knolling grid in five groups with a 3D locator on desktop
   // A citation chip goes to the source row on the Sources page
   await page.locator(".cell[data-part=lens]").click();
   const chip = page.locator("#part-detail .cite a").first();
-  const src = (await chip.getAttribute("href"))!.slice(1);
+  const src = await chip.evaluate((a: HTMLAnchorElement) => new URL(a.href).hash.slice(1));
   await chip.click();
   await page.waitForURL(new RegExp(`/sources/#${src}$`), { waitUntil: "commit" });
   await ready(page);
@@ -247,7 +247,7 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await ready(page);
   await expect(page.locator("#page-body .claim")).toHaveCount(21);
   const mchip = page.locator("#page-body .cite a").first();
-  const mhref = (await mchip.getAttribute("href"))!;
+  const mhref = await mchip.evaluate((a: HTMLAnchorElement) => new URL(a.href).hash);
   await mchip.click();
   await page.waitForURL(new RegExp(`/sources/${mhref}$`), { waitUntil: "commit" });
   await ready(page);

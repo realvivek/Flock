@@ -1,13 +1,15 @@
 import { sourceById } from "../content";
+import { escape } from "../lib/escape";
+import { ROOT, PAGE } from "../lib/base";
+export { escape };
 
 const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
 const kindLabel: Record<string, string> = { flock: "Flock", independent: "Independent", government: "Government", court: "Court" };
 
-let onCite: ((id: string) => void) | null = null;
-/** Route citation chip clicks (desktop scrolls to the row; the stepper opens the Sources page at it). */
-export function setCiteHandler(fn: (id: string) => void): void { onCite = fn; }
+/** Link to a source's row in the bibliography: an in-page anchor on the Sources page, the Sources page elsewhere. */
+export const sourceHref = (id: string): string => (PAGE === "sources" ? `#src-${id}` : `${ROOT}sources/#src-${id}`);
 
-/** Citation chips linking to the bibliography, labelled by the source's origin. */
+/** A quiet source line: each source's origin, publisher and year, linked to its row in the bibliography. */
 export function cite(ids: readonly string[], max = 2): HTMLElement {
   const el = document.createElement("div");
   el.className = "cite";
@@ -16,11 +18,10 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
     const s = sourceById.get(id);
     if (!s) continue;
     const a = document.createElement("a");
-    a.href = `#src-${s.id}`;
+    a.href = sourceHref(s.id);
     a.dataset.src = s.id;
-    a.addEventListener("click", (e) => { if (onCite) { e.preventDefault(); onCite(s.id); } });
     a.title = `${s.title} (${s.publisher}, ${s.date})`;
-    a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span>${escape(short(s.publisher))} · ${escape(s.date.slice(0, 4))}`;
+    a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span><span class="p">${escape(short(s.publisher))}, ${escape(s.date.slice(0, 4))}</span>`;
     el.appendChild(a);
   }
   if (ids.length > max) {
@@ -41,7 +42,4 @@ export function tag(kind: "flock" | "independent" | "both" | "unknown"): string 
 
 function short(p: string): string {
   return p.replace(/\s*\(.*?\)\s*/g, "").split(/ via | on GitHub/)[0]!.trim();
-}
-export function escape(s: string): string {
-  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 }
