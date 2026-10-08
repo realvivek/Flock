@@ -29,7 +29,7 @@
       "city": "Oakland",
       "state": "CA",
       "period": "2025",
-      "cameras": "293 Flock cameras",
+      "cameras": "290 Flock cameras",
       "values": {
         "reads": 638747333,
         "alerts": 1099837,
@@ -38,10 +38,9 @@
         "recoveries": 174,
         "arrests": 162
       },
-      "note": "Alerts include 620,331 for stolen plates; the department kept stolen-plate and stolen-vehicle notifications switched off for lack of staff to respond. Officers logged 425 'success stories' in the software's outcome feature, which the report summarises as 162 arrests, 174 vehicles and 51 guns recovered. Outside agencies do not report their outcomes to Oakland.",
+      "note": "Alerts include 620,331 for stolen plates; the department kept stolen-plate and stolen-vehicle notifications switched off for lack of staff to respond. Officers logged 425 'success stories' in the software's outcome feature, which the report summarizes as 162 arrests, 174 vehicles and 51 guns recovered; its table of the same outcomes by offense totals 162 arrests, 25 vehicles and 50 guns. Outside agencies do not always report their outcomes to Oakland, and the department cannot see their records.",
       "sources": [
-        "oakland-pac-2026",
-        "oaklandside-2026"
+        "oakland-pac-2026"
       ]
     },
     {

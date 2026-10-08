@@ -2,6 +2,7 @@
  *  entry from another state (Story County), and a list that was out of date (Los Angeles). */
 import { g, rect, svg, text } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
+import { int } from "../../viz/format.ts";
 import type { FigureCfg } from "../schema.ts";
 
 const ROSE = { wrong: 1011, total: 1427 }, STORY = { wrongState: 165, total: 214 }, LA = { stale: 161, alerts: 50183 };
@@ -34,11 +35,11 @@ function listEntry(): string {
 export function errorsFigure(cfg: FigureCfg, ctx: Ctx): string {
   const pct = (a: number, b: number) => Math.round(a / b * 100);
   const cards = [
-    { k: "The camera misreads the plate", g: waffle(pct(ROSE.wrong, ROSE.total)), n: `${pct(ROSE.wrong, ROSE.total)}%`, t: `of 1,427 stolen-vehicle and felony alerts in Roseville, Calif., in 2023 and 2024 involved a misread plate: 1,011 alerts. A police lieutenant said none led to a contact or an arrest. Flock called the figure a mischaracterization and said the city’s older cameras were mounted unusually high.` },
-    { k: "The plate matches, the state does not", g: plates(), n: `${STORY.wrongState} of ${STORY.total}`, t: `hits flagged in a month by the Story County, Iowa, sheriff’s in-car readers matched a list entry from another state, 77 percent.` },
-    { k: "The list is out of date", g: listEntry(), n: String(LA.stale), t: `alerts in two months in Los Angeles were accurate reads of plates on cars that, it turned out, were not stolen. The inspector general pointed to records that were not updated in time.` },
+    { k: "The camera misreads the plate", m: "Roseville, Calif. · Flock cameras", g: waffle(pct(ROSE.wrong, ROSE.total)), n: `${int(ROSE.wrong)} of ${int(ROSE.total)}`, t: `stolen-vehicle and felony alerts in 2023 and 2024, ${pct(ROSE.wrong, ROSE.total)} percent, involved a misread plate. A police lieutenant said none led to a contact or an arrest. Flock called the figure a mischaracterization and said the city’s older cameras were mounted unusually high.` },
+    { k: "The plate matches, the state does not", m: "Story County, Iowa · Axon in-car readers", g: plates(), n: `${STORY.wrongState} of ${STORY.total}`, t: `hits flagged in a month by the sheriff’s in-car readers, ${pct(STORY.wrongState, STORY.total)} percent, matched a list entry from another state.` },
+    { k: "The list is out of date", m: "Los Angeles · Axon readers in patrol cars", g: listEntry(), n: `${LA.stale} of ${int(LA.alerts)}`, t: `in-car alerts in two months were accurate reads of plates on cars that, it turned out, were not stolen. The inspector general pointed to records that were not updated in time.` },
   ];
-  const body = `<div class="errors">${cards.map((c) => `<div class="err"><p class="err-k">${c.k}</p><div class="err-g">${c.g}</div><p class="err-n">${c.n}</p><p class="err-t">${c.t}</p></div>`).join("")}</div>`;
-  const table = dataTable(["Kind of error", "Count", "Of", "Where and when"], [["Misread plate", ROSE.wrong, ROSE.total, "Roseville, Calif., stolen-vehicle and felony alerts, 2023–24"], ["Plate from another state", STORY.wrongState, STORY.total, "Story County, Iowa, hits reviewed, Sept. 9 to Oct. 9, 2025"], ["Accurate read, vehicle not stolen", LA.stale, LA.alerts, "Los Angeles, in-car alerts, Aug.–Sept. 2025"]], { text: [3] });
+  const body = `<div class="errors">${cards.map((c) => `<div class="err"><p class="err-k">${c.k}</p><p class="err-m">${c.m}</p><div class="err-g">${c.g}</div><p class="err-n">${c.n}</p><p class="err-t">${c.t}</p></div>`).join("")}</div>`;
+  const table = dataTable(["Kind of error", "Count", "Of", "Where and when"], [["Misread plate", ROSE.wrong, ROSE.total, "Roseville, Calif., stolen-vehicle and felony alerts, 2023–24"], ["Plate from another state", STORY.wrongState, STORY.total, "Story County, Iowa, hits reviewed, Sept. 9 to Oct. 9, 2025"], ["Accurate read, vehicle not stolen", LA.stale, LA.alerts, "Los Angeles, in-car alerts, August–September 2025"]], { text: [3] });
   return frame("errors", cfg, ctx, body, { width: "wide", table });
 }

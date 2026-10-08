@@ -1,12 +1,14 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
-// Renders the home page's preview image of the journey page: the seven stops as a strip of cards with the parcel slip.
-// Usage: node scripts/journey.mjs [url] [out]   (default http://127.0.0.1:4173/journey/, public/img/journey.jpg)
-const url = process.argv[2] || "http://127.0.0.1:4173/journey/";
-const out = process.argv[3] || "public/img/journey.jpg";
+// Renders the home page's preview image of the journey page: the seven stops as a strip of cards with the parcel slip;
+// with --phone, a 4:3 image of the slip and the first three stops, titles only, at a size that reads on a phone.
+// Usage: node scripts/journey.mjs [url] [out] [--phone]   (default http://127.0.0.1:4173/journey/, public/img/journey.jpg)
+const argv = process.argv.slice(2).filter((a) => !a.startsWith("--")), phone = process.argv.includes("--phone");
+const url = argv[0] || "http://127.0.0.1:4173/journey/";
+const out = argv[1] || (phone ? "public/img/journey-phone.jpg" : "public/img/journey.jpg");
 fs.mkdirSync(out.replace(/\/[^/]+$/, ""), { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || "/opt/pw-browsers/chromium" });
-const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1.5 });
+const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: phone ? 2 : 1.5 });
 await page.goto(url, { waitUntil: "commit", timeout: 60000 });
 await page.waitForFunction(() => window.__flock?.state.ready === true && document.querySelectorAll(".stop").length === 7, null, { timeout: 30000 });
 await page.addStyleTag({ content: `
@@ -26,6 +28,16 @@ await page.addStyleTag({ content: `
   .stop-body .opens, .stop-body .more { display: none !important; }
   .stop-head { flex-direction: column; align-items: flex-start; gap: .1rem; }
   .stop-head .status { color: var(--amber); }
+` });
+if (phone) await page.addStyleTag({ content: `
+  #page-body { width: 560px; height: 420px; overflow: hidden; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; }
+  .stop:nth-of-type(n+4) { display: none !important; }
+  .stop-body .line, .stop-body .where, .stop-head .when, .slip-meta { display: none !important; }
+  .marker .ring { width: 36px !important; height: 36px !important; }
+  .stop-body { padding: .5rem .6rem .6rem !important; }
+  .stop-body h2 { font-size: 1.3rem; line-height: 1.18; }
+  .stop-head .status { font-size: .9rem; }
+  .slip-status strong { font-size: 1.4rem; }
 ` });
 await page.evaluate(() => { document.querySelectorAll(".stop, .slip-route li").forEach((e) => e.classList.add("is-reached")); document.getElementById("slip-count").textContent = "Stop 7 of 7"; document.getElementById("slip-status").textContent = "Disposed"; document.getElementById("slip-where").textContent = "Object storage lifecycle"; });
 await page.waitForTimeout(300);

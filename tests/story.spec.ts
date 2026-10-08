@@ -28,18 +28,26 @@ test("the map follows the steps in both directions and draws each look", async (
   await expect(page.locator(".map-canvas")).toBeVisible();
   await expect(page.locator(".map-fallback")).toBeHidden();
   await page.locator(".scrolly").scrollIntoViewIfNeeded();
-  for (const id of ["all", "flock", "atlanta", "rate"]) {
+  for (const id of ["all", "flock", "rate", "georgia", "fulton"]) {
     await toStep(page, id);
     await expect.poll(() => state(page, "step")).toBe(`map:${id}`);
     await settled(page);
     expect(await inked(page), id).toBeGreaterThan(0.01);
+    // the credit is part of the pinned graphic, on screen at every step
+    await expect(page.locator(".scrolly-graphic .map-credit"), id).toBeInViewport();
   }
+  // the Georgia label belongs to the Georgia step, the Atlanta labels to the Fulton step
+  await toStep(page, "georgia");
+  await expect.poll(() => state(page, "step")).toBe("map:georgia");
+  await settled(page);
   await expect(page.locator(".map-legend")).toContainText("per 100,000 residents");
-  // the Atlanta labels show only while the map is on Atlanta
-  await toStep(page, "atlanta");
-  await expect.poll(() => state(page, "step")).toBe("map:atlanta");
+  await expect(page.locator(".mlabel.state")).toBeVisible();
+  await expect(page.locator(".mlabel.road").first()).toBeHidden();
+  await toStep(page, "fulton");
+  await expect.poll(() => state(page, "step")).toBe("map:fulton");
   await settled(page);
   await expect(page.locator(".mlabel.road").first()).toBeVisible();
+  await expect(page.locator(".mlabel.state")).toBeHidden();
   await toStep(page, "all");
   await expect.poll(() => state(page, "step")).toBe("map:all");
   await settled(page);
@@ -70,7 +78,7 @@ test("the story reads without JavaScript", async ({ browser }) => {
   const page = await ctx.newPage();
   await page.goto("/");
   await expect(page.locator(".story-head h1")).toHaveText("Inside the Network of Cameras Reading America’s License Plates");
-  await expect(page.locator(".story .chapter-title")).toHaveCount(11);
+  await expect(page.locator(".story .chapter-title")).toHaveCount(12);
   await expect(page.locator(".story figure.fig")).toHaveCount(14);
   await expect(page.locator(".story .fig-src").first()).toContainText("Source");
   await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
@@ -95,8 +103,8 @@ test("with reduced motion the map changes without animating", async ({ browser }
   await page.goto("/", { waitUntil: "commit" });
   await ready(page);
   await page.locator(".scrolly").scrollIntoViewIfNeeded();
-  await toStep(page, "atlanta");
-  await expect.poll(() => state(page, "step")).toBe("map:atlanta");
+  await toStep(page, "fulton");
+  await expect.poll(() => state(page, "step")).toBe("map:fulton");
   // no transition is ever in flight
   expect(await state(page, "tweens")).toBe(0);
   await settled(page);
@@ -122,7 +130,7 @@ test("on a phone the map stays under the header while the steps scroll, and noth
   await ready(page);
   await page.addStyleTag({ content: "html { scroll-behavior: auto !important; }" });
   await page.locator(".scrolly").scrollIntoViewIfNeeded();
-  for (const id of ["flock", "atlanta"]) {
+  for (const id of ["flock", "fulton"]) {
     await toStep(page, id);
     await expect.poll(() => state(page, "step")).toBe(`map:${id}`);
     const pos = await page.evaluate(() => ({ graphic: document.querySelector(".scrolly-graphic")!.getBoundingClientRect().top, header: document.querySelector(".topbar")!.getBoundingClientRect().bottom }));

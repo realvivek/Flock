@@ -49,7 +49,6 @@ for (const p of products) need(`product ${p.id}`, p.sources);
 
 const dep = DeploymentsFile.parse(read("deployments.json"));
 need("deployments.intro", dep.intro.sources);
-need("deployments.cities", dep.citiesSources);
 for (const key of ["records", "contracts", "funding", "unknowns"] as const) {
   (dep[key] as { sources: string[] }[]).forEach((row, i) => need(`deployments.${key}[${i}]`, row.sources));
 }

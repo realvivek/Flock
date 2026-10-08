@@ -4,7 +4,7 @@
  * map, the county search and tooltips. Pure functions: no DOM, no file access.
  */
 import { escape } from "../lib/escape.ts";
-import { apDate } from "../viz/format.ts";
+import { apDate, int } from "../viz/format.ts";
 import { inline, type Ctx } from "./frame.ts";
 import type { StoryInput } from "./types.ts";
 import { statesFigure, lookupFigure } from "./fig/places.ts";
@@ -13,10 +13,11 @@ import { rulerFigure } from "./fig/ruler.ts";
 import { auditFigure, type Deputy } from "./fig/searches.ts";
 import { oaklandFigure, ladderFigure } from "./fig/outcomes.ts";
 import { errorsFigure } from "./fig/errors.ts";
-import { makesFigure, operatorsFigure } from "./fig/makers.ts";
+import { operatorsFigure } from "./fig/makers.ts";
 import { priceFigure, contractsFigure } from "./fig/money.ts";
 import { timelineFigure } from "./fig/timeline.ts";
 import { completenessFigure } from "./fig/methods.ts";
+import { evidenceFigure } from "./fig/evidence.ts";
 
 const PAGES: { id: string; label: string; section: string }[] = [
   { id: "deployments", label: "Deployments", section: "deployments" },
@@ -44,8 +45,8 @@ export function renderStory(inp: StoryInput & { deputy: Deputy; timelineRule: st
       case "audit": return auditFigure(cfg(id), ctx, inp.deputy);
       case "oakland": return oaklandFigure(cfg(id), ctx);
       case "ladder": return ladderFigure(cfg(id), ctx, inp.ladders);
+      case "evidence": return evidenceFigure(cfg(id), ctx);
       case "errors": return errorsFigure(cfg(id), ctx);
-      case "makes": return makesFigure(cfg(id), ctx, inp.operators);
       case "operators": return operatorsFigure(cfg(id), ctx, inp.operators);
       case "price": return priceFigure(cfg(id), ctx);
       case "contracts": return contractsFigure(cfg(id), ctx);
@@ -55,8 +56,8 @@ export function renderStory(inp: StoryInput & { deputy: Deputy; timelineRule: st
     }
   };
   const preview = (k: "components" | "journey") => k === "components"
-    ? `<a class="preview" href="components/" id="preview"><img id="preview-img" src="img/knolling.jpg" alt="The fourteen components of a Falcon camera laid out in a grid: shell, optics, compute, radios and mount" loading="lazy" decoding="async" width="1600" height="900"><span class="cap"><span class="kicker">Inside the camera</span><span class="t">Fourteen components in five groups, from the lens to the LTE modem</span><span class="go">See the components</span></span></a>`
-    : `<a class="preview" href="journey/" id="preview-journey"><img id="preview-journey-img" src="img/journey.jpg" alt="One photograph tracked like a parcel through seven stops: the pole, the carrier network, Amazon’s cloud, the hot lists, an officer’s phone, a network search, and deletion" loading="lazy" decoding="async" width="1600" height="900"><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
+    ? `<a class="preview" href="components/" id="preview"><picture><source media="(max-width: 640px)" srcset="img/knolling-phone.jpg" width="1120" height="840"><img id="preview-img" src="img/knolling.jpg" alt="The fourteen components of a Falcon camera laid out in a grid: shell, optics, compute, radios and mount" loading="lazy" decoding="async" width="1600" height="900"></picture><span class="cap"><span class="kicker">Inside the camera</span><span class="t">Fourteen components in five groups, from the lens to the LTE modem</span><span class="go">See the components</span></span></a>`
+    : `<a class="preview" href="journey/" id="preview-journey"><picture><source media="(max-width: 640px)" srcset="img/journey-phone.jpg" width="1120" height="840"><img id="preview-journey-img" src="img/journey.jpg" alt="One photograph tracked like a parcel through seven stops: the pole, the carrier network, Amazon’s cloud, the hot lists, an officer’s phone, a network search, and deletion" loading="lazy" decoding="async" width="1600" height="900"></picture><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
   const cards = () => `<div id="summary-cards" class="summary">${PAGES.map((pg, i) => {
     const sec = inp.overview.sections.find((x) => x.id === pg.section);
     return `<a class="summary-card" href="${pg.id}/"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${escape(sec?.title ?? pg.label)}</span><span class="b">${escape(sec?.blurb ?? "")}</span><span class="go">${escape(pg.label)} →</span></a>`;
@@ -98,11 +99,12 @@ function mapSection(inp: StoryInput & { poster?: string }, ctx: Ctx): string {
   const steps = m.steps.map((st, i) => `<div class="step" data-step="${escape(st.id)}" data-i="${i}"><div class="step-card"><p>${inline(st.text, ctx)}</p></div></div>`).join("");
   // Without JavaScript the poster stands in for the map; with it, the alt text holds the space until the dots draw.
   const poster = `<p class="map-fallback">${escape(m.alt)}</p>${inp.poster ? `<noscript><img class="map-poster" src="${escape(inp.poster)}" alt="${escape(m.alt)}" width="1600" height="992"></noscript>` : ""}`;
-  const credit = `<p class="map-credit">Map: license plate readers mapped on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock; Alaska and Hawaii are shown at different scales. Rates: U.S. Census Bureau 2024 estimates.</p>`;
+  // The credit sits inside the sticky graphic, so it is on screen with every step of the map.
+  const off = Number(inp.meta.cameras.offMap);
+  const credit = `<p class="map-credit">Map: license plate readers on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock. Alaska and Hawaii are shown at different scales; ${escape(int(off))} readers in Puerto Rico and elsewhere are outside the frame. County rates: U.S. Census Bureau 2024 estimates.</p>`;
   for (const id of ["deflock-tiles-2026", "census-pop-2024", "census-boundaries-2024"]) ctx.used.add(id);
   return `<section class="scrolly scrolly-map" id="${escape(m.id)}" data-scrolly="map" aria-label="Map of mapped license plate readers">
-<div class="scrolly-graphic"><figure class="map" role="img" aria-label="${escape(m.alt)}">${poster}<canvas class="map-canvas" hidden></canvas><div class="map-labels" aria-hidden="true"></div><div class="map-legend" aria-hidden="true"></div></figure></div>
+<div class="scrolly-graphic"><figure class="map" role="img" aria-label="${escape(m.alt)}">${poster}<canvas class="map-canvas" hidden></canvas><div class="map-labels" aria-hidden="true"></div><div class="map-legend" aria-hidden="true"></div></figure>${credit}</div>
 <div class="scrolly-steps">${steps}</div>
-${credit}
 </section>`;
 }

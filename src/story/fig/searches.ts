@@ -1,6 +1,6 @@
 /** Who can search: the audit-log entries of the Johnson County, Texas, searches of May 9, 2025, and three accounts. */
 import { escape } from "../../lib/escape.ts";
-import { int } from "../../viz/format.ts";
+import { int, smart } from "../../viz/format.ts";
 import { frame, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 
@@ -21,7 +21,7 @@ export function auditFigure(cfg: FigureCfg, ctx: Ctx, d: Deputy): string {
   // The sheriff's and Flock's words are quotations; EFF's entry summarizes the records it obtained.
   const acc = (d.accounts ?? []).map((a, i) => {
     const quoted = i < 2;
-    return `<blockquote class="acct${quoted ? "" : " is-summary"}"><p>${quoted ? `“${escape(a.text)}”` : escape(a.text)}</p><footer>${escape(a.who)}</footer></blockquote>`;
+    return `<blockquote class="acct${quoted ? "" : " is-summary"}"><p>${quoted ? `“${escape(smart(a.text))}”` : escape(smart(a.text))}</p><footer>${escape(smart(a.who))}</footer></blockquote>`;
   }).join("");
   return frame("audit", cfg, ctx, `<div class="audit">${log}<div class="accounts"><p class="accounts-k">Three accounts of the search</p>${acc}</div></div>`, { width: "wide" });
 }

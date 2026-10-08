@@ -11,7 +11,7 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
   const rows = states.rows.filter((r) => r.usps !== "PR" && r.per100k != null).sort((a, b) => b.per100k! - a.per100k!);
   const max = 90, ticks = [0, 20, 40, 60, 80];
   const draw = (W: number, narrow: boolean) => {
-    const L = narrow ? 96 : 132, R = narrow ? 30 : 44, T = 36, rowH = narrow ? 12.5 : 13, barH = narrow ? 7 : 8, fs = narrow ? 11 : 11.5;
+    const L = narrow ? 104 : 132, R = narrow ? 34 : 44, T = 56, rowH = narrow ? 14 : 13, barH = narrow ? 7 : 8, fs = narrow ? 12 : 11.5;
     const H = T + rows.length * rowH + 6;
     const x = linScale(0, max, L, W - R);
     let out = "";
@@ -26,12 +26,10 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
         + (hi || lo ? label(x(r.per100k!) + 5, y + rowH / 2 + fs * 0.35, dec1(r.per100k!), { "font-size": fs, "font-weight": 700, fill: "var(--ink)" }) : "");
       out += tip(body, `${dec1(r.per100k!)} per 100,000`, `${r.name}: ${int(r.flock)} mapped Flock cameras`, { class: "row" });
     });
-    // U.S. reference
+    // U.S. reference: a hairline from the top label down through the bars
     const ux = x(states.usRate);
-    out += line(ux, T - 4, ux, H - 4, { stroke: "var(--ink)", "stroke-width": 1 });
-    // the label sits where the bars are shorter than the U.S. rate, so it never covers one
-    const free = rows.findIndex((r) => r.per100k! < states.usRate * 0.7);
-    out += label(ux + 5, T + (free + 1) * rowH + fs * 0.35, `U.S. rate, ${dec1(states.usRate)}`, { "font-size": fs, "font-weight": 600, fill: "var(--ink)" });
+    out += line(ux, T - 40, ux, H - 4, { stroke: "var(--ink)", "stroke-width": 1 });
+    out += text(ux + 5, T - 32, `U.S. rate, ${dec1(states.usRate)}`, { "font-size": fs, "font-weight": 600, fill: "var(--ink)" });
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of mapped Flock cameras per 100,000 residents by state. Georgia is highest at ${dec1(rows[0]!.per100k!)}; New Hampshire lowest at ${dec1(rows[rows.length - 1]!.per100k!)}; the U.S. rate is ${dec1(states.usRate)}.` });
   };
   const table = dataTable(["State", "Mapped Flock cameras", "Per 100,000 residents", "All mapped readers", "Population, 2024"], rows.map((r) => [r.name, r.flock, r.per100k, r.all, r.pop]), { caption: cfg.title });
@@ -67,13 +65,15 @@ export function lookupCard(c: CountyRow, states: StatesFile, counties: CountyRow
 }
 /** The histogram of county rates; the selected county is marked by the client (and for the default at build time). */
 export function histogram(bins: { lo: number; hi: number; n: number }[], W: number, narrow: boolean, mark: number | null, markName = ""): string {
-  const L = 4, R = 8, T = 22, B = 30, H = narrow ? 150 : 160;
+  const L = narrow ? 30 : 34, R = 8, T = 24, B = 30, H = narrow ? 160 : 170;
   const n = bins.length, gapNone = 10;
   const bw = (W - L - R - gapNone) / n;
   const maxN = Math.max(...bins.map((b) => b.n));
   const y = linScale(0, maxN, H - B, T);
   const xOf = (i: number) => L + i * bw + (i > 0 ? gapNone : 0);
-  let out = line(L, H - B + 0.5, W - R, H - B + 0.5, { class: "baseline" });
+  const yt = [0, 200, 400, 600, 800].filter((v) => v <= maxN);
+  let out = g(yt.map((v) => line(L, y(v), W - R, y(v))).join(""), { class: "grid" }) + g(yt.map((v) => text(L - 5, y(v) + 4, String(v), { "text-anchor": "end" })).join(""), { class: "axis" });
+  out += line(L, H - B + 0.5, W - R, H - B + 0.5, { class: "baseline" });
   bins.forEach((b, i) => {
     const h = H - B - y(b.n);
     const lbl = i === 0 ? "No cameras mapped" : b.hi === Infinity ? `${b.lo} or more per 100,000` : `${b.lo} to ${b.hi} per 100,000`;

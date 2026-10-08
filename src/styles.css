@@ -86,7 +86,7 @@ strong, b { font-weight: 650; }
 p { margin: 0; }
 
 /* ---- Header ---------------------------------------------------------------------------------------------------- */
-.topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 30; display: flex; align-items: center; gap: 1.25rem; padding: 0 var(--gutter); background: rgba(255, 255, 255, .97); border-bottom: 1px solid var(--rule); font-family: var(--sans); }
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 30; display: flex; align-items: center; gap: 1.25rem; padding: 0 var(--gutter); background: #fff; border-bottom: 1px solid var(--rule); font-family: var(--sans); }
 .brand { display: flex; align-items: center; gap: .55rem; font: 600 1.0625rem/1 var(--serif); letter-spacing: -.005em; color: var(--ink); text-decoration: none; white-space: nowrap; }
 .brand-mark { width: 9px; height: 9px; border-radius: 50%; background: var(--amber); flex: none; }
 .sections { display: flex; gap: .1rem; margin-left: auto; }

@@ -104,14 +104,10 @@ export function renderProducts(host: HTMLElement): void {
 
 /** Twenty-one claims as a running list: claim, documented position, related component or stage, sources. */
 export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
-  const ph = el("h3", undefined, "Product line");
-  ph.id = "products";
-  host.appendChild(ph);
-  renderProducts(host);
   const ch = el("h3", undefined, "Claims");
   ch.id = "claims";
   host.appendChild(ch);
-  host.appendChild(el("p", undefined, "Each entry states a claim, the documented position, the product or setting it applies to, and the sources. Entries link to the related component or data stage."));
+  host.appendChild(el("p", undefined, "Each entry states a claim, the documented position, the product or setting it applies to, and the sources. Entries link to the related component or data stage. Several depend on which Flock product is on the pole; the product line follows the claims."));
   host.insertAdjacentHTML("beforeend", verdictIndex(myths));
   const list = el("div", "claims");
   myths.forEach((m, i) => {
@@ -137,6 +133,10 @@ export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
     list.appendChild(art);
   });
   host.appendChild(list);
+  const ph = el("h3", undefined, "Product line");
+  ph.id = "products";
+  host.appendChild(ph);
+  renderProducts(host);
 }
 
 /** Pricing, fee schedules, workflow, workforce, permitting, contract terms and scale, in order. */
@@ -176,8 +176,8 @@ export function renderEconomics(host: HTMLElement): void {
       }
       h.appendChild(tl);
     } },
-    { id: "econ-fees", title: "Installation and service fees, 2021 guide and 2026 schedule", fine: "Flock's 2021 implementation guide and its 2026 published fee schedule.",
-      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, Math.min(host.clientWidth || 680, 680))); table(h, ["Fee", "2019 to 2023", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.then, f.now], num: [1, 2], sources: f.sources }))); } },
+    { id: "econ-fees", title: "Fees for changes after installation, 2026 schedule", fine: "Flock's Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts from 2021 to 2023 list a one-time installation fee of $250 to $350.",
+      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, Math.min(host.clientWidth || 680, 680))); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
     { id: "econ-workflow", title: "Installation workflow and responsibilities",
       render: (h) => table(h, ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources }))) },
     { id: "econ-workforce", title: "Installation workforce", render: (h) => rows(h, e.workforce) },

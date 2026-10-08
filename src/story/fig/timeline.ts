@@ -5,7 +5,7 @@ import { frame, sourceLine, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 import type { TimelineEvent } from "../types.ts";
 
-const KIND: Record<TimelineEvent["kind"], string> = { added: "Added or renewed", ended: "Ended or switched off", restricted: "Restricted by law or order", flock: "Changed by Flock" };
+const KIND: Record<TimelineEvent["kind"], string> = { added: "Added, renewed or kept", ended: "Ended or switched off", restricted: "Restricted by law or order", flock: "Changed by Flock" };
 
 export function timelineFigure(cfg: FigureCfg, ctx: Ctx, events: TimelineEvent[], rule: string): string {
   const legend = `<ul class="tml-legend">${(Object.keys(KIND) as TimelineEvent["kind"][]).map((k) => `<li><span class="tml-m k-${k}"></span>${KIND[k]}</li>`).join("")}</ul>`;

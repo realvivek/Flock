@@ -8,7 +8,7 @@ import { cite, escape } from "./ui/cite";
 import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
 import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
-import { compact, apState } from "./viz/format";
+import { tickWords, apState } from "./viz/format";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
 
@@ -152,9 +152,9 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   host.appendChild(ds);
   // Agency ladders
   const ag = el("section", "source-block"); ag.id = "agencies";
-  ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some rungs of the ladder for a whole programme. Rates are computed only where both rungs come from the same report. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be 'directly related' or 'assisted'; the note says which. Amber bars show each figure on a log scale against the largest figure in its row.</p><div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div></div>`;
+  ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some rungs of the ladder for a whole program. Rates are computed only where both rungs come from the same report. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be 'directly related' or 'assisted'; the note says which. Amber bars show each figure on a log scale against the largest figure in its row.</p><div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div></div>`;
   const ov = el("figure", "fig ladder-ov");
-  ov.innerHTML = `<figcaption class="fig-head"><h3 class="fig-title">Every rung each audit reports, on one scale</h3><p class="fig-sub">Counts per department, on a scale where each step is ten times larger. Hollow marks: reads and alerts from different windows, or readers of several makes.</p></figcaption><div class="fig-body"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`;
+  ov.innerHTML = `<figcaption class="fig-head"><h3 class="fig-title">Every rung each audit reports, on one scale</h3><p class="fig-sub">Counts per department, on a logarithmic scale. Hollow marks: reads and alerts from different windows, or readers of several makes.</p></figcaption><div class="fig-body"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`;
   ag.appendChild(ov);
   const drawOv = () => { ov.querySelector(".fig-body")!.innerHTML = ladderOverview(d.ladders, Math.min(ov.clientWidth || 640, 760)); };
   drawOv();
@@ -222,15 +222,16 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
 }
 
 const ORD = ["#d9a447", "#c4851a", "#a86c10", "#87530b", "#643c07", "#432704"];
-const LADDER_RUNGS: { k: keyof V; label: string }[] = [{ k: "reads", label: "Plates read" }, { k: "alerts", label: "Alerts" }, { k: "falseAlerts", label: "Wrong alerts" }, { k: "stops", label: "Stops" }, { k: "recoveries", label: "Recoveries" }, { k: "arrests", label: "Arrests" }];
+const LADDER_RUNGS: { k: keyof V; label: string }[] = [{ k: "reads", label: "Plate reads" }, { k: "alerts", label: "Alerts" }, { k: "falseAlerts", label: "Wrong alerts" }, { k: "stops", label: "Stops" }, { k: "recoveries", label: "Recoveries" }, { k: "arrests", label: "Arrests" }];
 /** One row per department, a dot per reported rung on a logarithmic scale, coloured light to dark down the ladder. */
 function ladderOverview(ladders: Data["ladders"], W: number): string {
   const rows = ladders.filter((L) => LADDER_RUNGS.filter((r) => L.values[r.k] != null).length >= 2);
   const narrow = W < 560, LW = narrow ? 112 : 190, R = 14, T = 30, rowH = 36;
   const x = logScale(1, 1e9, LW + 8, W - R);
-  const dec = narrow ? [1, 100, 1e4, 1e6, 1e8] : [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
+  const dec = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
   let out = g(dec.map((v) => line(x(v), T - 6, x(v), T + rows.length * rowH)).join(""), { class: "grid" });
-  out += g(dec.map((v) => text(x(v), T - 12, compact(v), { "text-anchor": "middle" })).join(""), { class: "axis" });
+  // every power of 10 has a grid line; labels skip as many as the width needs
+  out += g(dec.filter((_, i) => i % (narrow ? 3 : 2) === 0).map((v) => text(x(v), T - 12, tickWords(v), { "text-anchor": "middle" })).join(""), { class: "axis" });
   rows.forEach((L, i) => {
     const y = T + i * rowH + rowH / 2, hollow = !!(L.mixedWindows || L.vendorMix);
     out += line(0, y + rowH / 2, W, y + rowH / 2, { stroke: "var(--rule)" });
@@ -244,7 +245,7 @@ function ladderOverview(ladders: Data["ladders"], W: number): string {
       out += tip(rect(x(v) - 9, y - 9, 18, 18, { fill: "transparent" }) + mark, v.toLocaleString("en-US"), `${L.agency}, ${L.period}: ${r.label.toLowerCase()}`);
     });
   });
-  return svg(W, T + rows.length * rowH + 4, out, { label: "Dot chart of the counts each department's audit reports, from plates read to arrests, on a logarithmic scale." });
+  return svg(W, T + rows.length * rowH + 4, out, { label: "Dot chart of the counts each department's audit reports, from plate reads to arrests, on a logarithmic scale." });
 }
 
 /** The key under the maps: what a ring's size and shade mean, and the camera symbols. */

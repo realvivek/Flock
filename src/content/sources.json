@@ -13,7 +13,7 @@
     {
       "id": "flock-flex-datasheet",
       "kind": "flock",
-      "title": "Falcon Flex datasheet (camera specifications and performance)",
+      "title": "Falcon Flex datasheet (passive infrared motion detection, 850 nm infrared array, notifications in an average of 10 to 15 seconds)",
       "publisher": "Flock Safety via a state vendor portal",
       "url": "https://www.myvendorlink.com/external/vfile?d=vrf&s=137266&v=76605&sv=0&i=4&ft=b",
       "date": "2022",
@@ -40,11 +40,11 @@
     {
       "id": "flock-fee-schedule",
       "kind": "flock",
-      "title": "Reinstall and Relocation Fee Schedule",
+      "title": "Reinstall and Relocation Fee Schedule 2026: fees for changes a customer requests after the deployment plan is agreed (installation $1,000 to $1,250; relocation $350 to $5,000; replacements)",
       "publisher": "Flock Safety",
       "url": "https://www.flocksafety.com/reinstall-fee-schedule",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2026",
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "flock-arch-2024",
@@ -63,6 +63,15 @@
       "url": "https://www.flocksafety.com/legal/lpr-policy",
       "date": "2025",
       "lastVerified": "2026-09-04"
+    },
+    {
+      "id": "flock-deck-2023",
+      "kind": "flock",
+      "title": "Flock Safety presentation: Vehicle Fingerprint technology captures type, make, color, state, missing or covered plates, bumper stickers, decals, roof racks and back racks",
+      "publisher": "Flock Safety (slides posted by International Drive, Orlando)",
+      "url": "https://www.internationaldriveorlando.com/editorFiles/Presentations/20230726%20DAB%20Flock%20Safety%20PP.pdf",
+      "date": "2023-07-26",
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "flock-data-privacy",
@@ -598,7 +607,7 @@
     {
       "id": "jalopnik-speed",
       "kind": "independent",
-      "title": "Do Flock cameras have speed sensors? (6 to 12 frames per vehicle)",
+      "title": "Do Flock cameras have speed sensors? (6 to 12 pictures of each passing vehicle)",
       "publisher": "Jalopnik",
       "url": "https://www.jalopnik.com/2208478/do-flock-cameras-have-speed-sensors/",
       "date": "2025",
@@ -814,7 +823,7 @@
     {
       "id": "ca-sb34",
       "kind": "government",
-      "title": "California SB 34 (2015): ALPR usage and privacy policy; CHP 60-day retention",
+      "title": "California SB 34 (2015): ALPR usage and privacy policies; its digest summarizes existing law limiting the Highway Patrol to 60 days of retention",
       "publisher": "California Legislature",
       "url": "https://leginfo.public.ca.gov/pub/15-16/bill/sen/sb_0001-0050/sb_34_bill_20150908_enrolled.pdf",
       "date": "2015-10",
@@ -1199,6 +1208,24 @@
       "lastVerified": "2026-09-06"
     },
     {
+      "id": "texastribune-unplugged-2026",
+      "kind": "independent",
+      "title": "At least 900 Flock cameras have been unplugged in Texas since state funding was cut (at least 14 cities and counties; Dallas and Houston shut off grant-funded cameras; the cameras record make, model, paint color, dents and bumper stickers)",
+      "publisher": "The Texas Tribune",
+      "url": "https://www.texastribune.org/2026/09/24/texas-flock-cameras-state-funding-local-cities-counties-reaction/",
+      "date": "2026-09-24",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "texastribune-reprieve-2026",
+      "kind": "independent",
+      "title": "Betting that Abbott will soon restore funding, some Texas agencies accept Flock's offer to keep cameras on (90-day payment pause; Dallas keeps more than 300 grant-funded cameras)",
+      "publisher": "The Texas Tribune",
+      "url": "https://www.texastribune.org/2026/10/02/texas-flock-camera-reinstatement-state-funding/",
+      "date": "2026-10-02",
+      "lastVerified": "2026-10-08"
+    },
+    {
       "id": "texastribune-abbott-2026",
       "kind": "independent",
       "title": "Abbott blocks state agencies from spending money on Flock cameras",
@@ -1543,11 +1570,20 @@
     {
       "id": "mourtgos-adams-2026",
       "kind": "independent",
-      "title": "Working paper: automated license plate readers, vehicle theft, and clearance",
-      "publisher": "CrimRxiv (Mourtgos and Adams)",
+      "title": "Working paper: Automated License Plate Readers, Vehicle Theft, and Clearance (Scott M. Mourtgos and Ian T. Adams, University of South Carolina; 216 adopting agencies, 2017 to 2023; Table 2 and Table S7)",
+      "publisher": "CrimRxiv",
       "url": "https://www.crimrxiv.com/pub/zleg04q3/release/1",
-      "date": "2026-08-14",
-      "lastVerified": "2026-09-18"
+      "date": "2026-08-16",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "flock-study-2026",
+      "kind": "flock",
+      "title": "Independent Study: Vehicle Thefts Fell 11% After Flock Cameras Went Live (Flock says it provided the deployment data and did not fund the study)",
+      "publisher": "Flock Safety blog",
+      "url": "https://www.flocksafety.com/blog/independent-study-vehicle-thefts-fell-11-after-flock-cameras-went-live",
+      "date": "2026-08-24",
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "ij-abuse-2026",
@@ -1619,6 +1655,15 @@
       "publisher": "Washington State Standard (via KUOW)",
       "url": "https://www.kuow.org/stories/washington-adds-safeguards-for-flock-cameras",
       "date": "2026-03-31",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "va-code-2-2-5517",
+      "kind": "government",
+      "title": "Code of Virginia § 2.2-5517: use of automatic license plate recognition systems (system data purged after 21 days unless part of an investigation, prosecution or civil action)",
+      "publisher": "Virginia General Assembly",
+      "url": "https://law.lis.virginia.gov/vacode/title2.2/chapter55.5/section2.2-5517/",
+      "date": "2025",
       "lastVerified": "2026-10-08"
     },
     {

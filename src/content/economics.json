@@ -2,12 +2,13 @@
   "$comment": "Pricing, fee schedules, installation workflow, workforce, permitting, contract terms and company scale for a Flock deployment. Every row cites sources.json. Prices are per unit per year unless stated.",
   "intro": {
     "headline": "Pricing and cost structure",
-    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage, software and installation labour. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on 1 January 2024. The installation fee is $1,000 to $1,250 on the 2026 schedule; contracts from 2019 to 2023 list $250 to $350.",
+    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage, software and installation labor. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts from 2021 to 2023 list a one-time installation fee of $250 to $350 a camera. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
     "sources": [
       "flock-catalog-2024",
       "parkridge-2025",
       "indio-2023",
-      "flock-fee-schedule"
+      "flock-fee-schedule",
+      "richland-agreement-2023"
     ]
   },
   "priceList": [
@@ -157,7 +158,7 @@
     },
     {
       "k": "Site work",
-      "v": "Site surveys, 811 locate scheduling, installation labour",
+      "v": "Site surveys, 811 locate scheduling, installation labor",
       "sources": [
         "flock-impl-guide"
       ]
@@ -174,8 +175,10 @@
   "extra": [
     {
       "k": "Installation fee",
-      "v": "One-time per camera: $1,000 standard or existing infrastructure, $1,250 advanced (2026 schedule)",
+      "v": "One-time per camera: $250 to $350 in contracts from 2021 to 2023. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan",
       "sources": [
+        "richland-agreement-2023",
+        "contrary-flock",
         "flock-fee-schedule"
       ]
     },
@@ -229,18 +232,14 @@
   ],
   "fees": [
     {
-      "item": "Initial install, standard",
-      "then": "$250 to $350 (2019 to 2023)",
+      "item": "Installation, standard or existing infrastructure",
       "now": "$1,000",
       "sources": [
-        "richland-agreement-2023",
-        "indio-2023",
         "flock-fee-schedule"
       ]
     },
     {
-      "item": "Initial install, advanced pole",
-      "then": "not listed",
+      "item": "Installation, advanced",
       "now": "$1,250",
       "sources": [
         "flock-fee-schedule"
@@ -248,7 +247,6 @@
     },
     {
       "item": "Relocation, existing pole",
-      "then": "$150 (2021)",
       "now": "$350",
       "sources": [
         "flock-fee-schedule"
@@ -256,7 +254,6 @@
     },
     {
       "item": "Relocation, Flock pole",
-      "then": "not listed",
       "now": "$750",
       "sources": [
         "flock-fee-schedule"
@@ -264,7 +261,6 @@
     },
     {
       "item": "Relocation, advanced or DOT pole",
-      "then": "not listed",
       "now": "$5,000",
       "sources": [
         "flock-fee-schedule"
@@ -272,7 +268,6 @@
     },
     {
       "item": "Camera replacement after vandalism, theft or damage",
-      "then": "$500 (2021)",
       "now": "$800, or $0 with Camera Protection Plan",
       "sources": [
         "flock-fee-schedule"
@@ -280,7 +275,6 @@
     },
     {
       "item": "Flock pole replacement",
-      "then": "$150 (2021)",
       "now": "$500, or $0 with plan",
       "sources": [
         "flock-fee-schedule"
@@ -288,7 +282,6 @@
     },
     {
       "item": "Solar panel replacement",
-      "then": "not listed",
       "now": "$350, or $0 with plan",
       "sources": [
         "flock-fee-schedule"
@@ -296,7 +289,6 @@
     },
     {
       "item": "Technician visit without reinstall",
-      "then": "$150 (2021)",
       "now": "$350",
       "sources": [
         "flock-fee-schedule"
@@ -304,7 +296,6 @@
     },
     {
       "item": "Flex parts: camera / battery / panel / power kit / cables",
-      "then": "not listed",
       "now": "$800 / $750 / $500 / $150 / $50",
       "sources": [
         "flock-fee-schedule"
@@ -313,9 +304,9 @@
   ],
   "history": [
     {
-      "date": "Dec 2019",
+      "date": "December 2019",
       "price": "$182 per camera",
-      "note": "Greenville, SC: 11 cameras for $2,000 a year in total, no install fee, paid from asset forfeiture funds",
+      "note": "Greenville, S.C.: 11 cameras for $2,000 a year in total, no install fee, paid from asset forfeiture funds",
       "sources": [
         "deflocksc-greenville"
       ]
@@ -330,23 +321,23 @@
       ]
     },
     {
-      "date": "Oct 2023",
+      "date": "October 2023",
       "price": "$2,500, rising to $3,000",
-      "note": "Indio, CA staff report: Flock notified the city of the increase and offered $2,500 for a five-year term",
+      "note": "Indio, Calif. staff report: Flock notified the city of the increase and offered $2,500 for a five-year term",
       "sources": [
         "indio-2023"
       ]
     },
     {
-      "date": "1 Jan 2024",
+      "date": "Jan. 1, 2024",
       "price": "+$500 per camera per year",
-      "note": "Grafton, MA staff report: existing customers could retain $2,500 by signing a five-year term",
+      "note": "Grafton, Wis. staff report: existing customers could retain $2,500 by signing a five-year term",
       "sources": [
         "grafton-2024"
       ]
     },
     {
-      "date": "Apr 2024",
+      "date": "April 2024",
       "price": "$2,500, termination fee $500",
       "note": "Greenville renewal, 50 cameras; the termination fee was $200 in 2019",
       "sources": [
@@ -362,17 +353,17 @@
       ]
     },
     {
-      "date": "Jun 2025",
+      "date": "June 2025",
       "price": "$3,000",
-      "note": "Park Ridge, IL invoice; product names changed on 1 February 2025, 'Falcon' to 'Flock Safety LPR'",
+      "note": "Park Ridge, Ill. invoice; product names changed on Feb. 1, 2025, 'Falcon' to 'Flock Safety LPR'",
       "sources": [
         "parkridge-2025"
       ]
     },
     {
       "date": "2026",
-      "price": "$1,000 to $1,250 install",
-      "note": "Flock's published fee schedule; secondary sources from 2021 to 2024 list $250",
+      "price": "$1,000 to $1,250 to install",
+      "note": "Flock's 2026 fee schedule, for installs the customer requests after the deployment plan is agreed; contracts from 2021 to 2023 list a one-time install fee of $250 to $350",
       "sources": [
         "flock-fee-schedule"
       ]
@@ -391,7 +382,7 @@
     },
     {
       "step": "Contract",
-      "flock": "Proceeds on non-permit sites; historically a ten-location minimum for a partial install",
+      "flock": "Proceeds on non-permit sites; historically a 10-location minimum for a partial install",
       "customer": "Signs; starts permit applications; gets an electrician quote for AC sites",
       "other": "",
       "sources": [
@@ -420,7 +411,7 @@
     },
     {
       "step": "811 locate",
-      "flock": "Coordinates the call; a ten-foot radius is marked",
+      "flock": "Coordinates the call; a 10-foot radius is marked",
       "customer": "",
       "other": "Member utilities mark their lines",
       "sources": [
@@ -479,7 +470,7 @@
   "workforce": [
     {
       "k": "In-house",
-      "v": "A Field Operations team of travelling technicians, organised in at least three regions, doing new installs and maintenance about half and half; postings list $55,000 to $65,000",
+      "v": "A Field Operations team of traveling technicians, organized in at least three regions, doing new installs and maintenance about half and half; postings list $55,000 to $65,000",
       "sources": [
         "flock-impl-guide",
         "flock-field-tech-job"
@@ -487,7 +478,7 @@
     },
     {
       "k": "Contractors",
-      "v": "The agreement allows third-party labour and Flock's installer app is restricted to its technicians 'and approved third party technicians'; Gadget Review reported DISH's OnTech unit as one such installer; the split between in-house and contract work is not published",
+      "v": "The agreement allows third-party labor and Flock's installer app is restricted to its technicians 'and approved third party technicians'; Gadget Review reported DISH's OnTech unit as one such installer; the split between in-house and contract work is not published",
       "sources": [
         "richland-agreement-2023",
         "flock-installer-app",
@@ -532,7 +523,7 @@
       "scenario": "State highway right of way",
       "permit": "State DOT permit",
       "who": "Customer under the agreement; Flock works with some DOTs directly",
-      "note": "Cameras were installed without state approval in Florida, Illinois and South Carolina; South Carolina DOT identified 200 or more and paused new installations in 2023. Florida DOT revoked all state right-of-way permits on 31 August 2026 with 30 days for removal.",
+      "note": "Cameras were installed without state approval in Florida, Illinois and South Carolina; South Carolina DOT identified 200 or more and paused new installations in 2023. Florida DOT revoked all state right-of-way permits on Aug. 31, 2026, with 30 days for removal.",
       "sources": [
         "forbes-statelaw-2024",
         "wusf-fdot-2026",
@@ -572,7 +563,7 @@
       "scenario": "Approved location list",
       "permit": "Council-approved location list",
       "who": "Customer supplies it",
-      "note": "Roanoke, VA: 30 of 41 Raven audio sensors were installed at locations not on the approved list after a city data-entry error; the city later cancelled the program",
+      "note": "Roanoke, Va.: 30 of 41 Raven audio sensors were installed at locations not on the approved list after a city data-entry error; the city later cancelled the program",
       "sources": [
         "cardinal-roanoke-2026"
       ]
@@ -599,7 +590,7 @@
     },
     {
       "k": "Term and renewal",
-      "v": "One, two, five and ten-year terms exist; renewals roll automatically unless notice is given 30 days before the end",
+      "v": "One, two, five and 10-year terms exist; renewals roll automatically unless notice is given 30 days before the end",
       "sources": [
         "richland-agreement-2023",
         "johnsoncity-2025",
@@ -622,7 +613,7 @@
     },
     {
       "k": "February 2026 changes",
-      "v": "The 'Flock does not own and shall not sell Customer Data' sentence was deleted, the data licence became perpetual and product-improvement scoped, disputes moved to Georgia arbitration, the gross-negligence carve-out left the liability cap, and the non-appropriation exit was narrowed",
+      "v": "The 'Flock does not own and shall not sell Customer Data' sentence was deleted, the data license became perpetual and product-improvement scoped, disputes moved to Georgia arbitration, the gross-negligence carve-out left the liability cap, and the non-appropriation exit was narrowed",
       "sources": [
         "footnote4a-terms-2026",
         "aclu-terms",
@@ -642,7 +633,7 @@
   "scale": [
     {
       "k": "Cameras",
-      "v": "115,437 Flock cameras mapped by OpenStreetMap contributors as of 8 October 2026; Flock says it operates in more than 6,000 communities in 49 states (July 2026)",
+      "v": "115,437 Flock cameras mapped by OpenStreetMap contributors as of Oct. 8, 2026; Flock says it operates in more than 6,000 communities in 49 states (July 2026)",
       "sources": [
         "wikipedia-flock",
         "deflock-tiles-2026"
@@ -722,7 +713,7 @@
       ]
     },
     {
-      "v": "Number of Florida right-of-way cameras removed by the 30 September 2026 deadline",
+      "v": "Number of Florida right-of-way cameras removed by the Sept. 30, 2026, deadline",
       "sources": [
         "wusf-fdot-2026"
       ]
@@ -752,11 +743,12 @@
         0.1
       ],
       "k": "installation fee, one-time",
-      "v": "$1,000 standard · $1,250 advanced",
+      "v": "$250 to $350 in 2021–23 contracts",
       "dx": 235,
       "dy": -44,
       "sources": [
-        "flock-fee-schedule"
+        "richland-agreement-2023",
+        "contrary-flock"
       ]
     },
     {

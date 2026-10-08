@@ -62,7 +62,7 @@ export const EconomicsFile = z.object({
   priceList: z.array(z.object({ item: z.string(), sku: z.string(), price: z.string(), term: z.string(), sources: ids })),
   included: z.array(Row),
   extra: z.array(Row),
-  fees: z.array(z.object({ item: z.string(), then: z.string(), now: z.string(), sources: ids })),
+  fees: z.array(z.object({ item: z.string(), now: z.string(), sources: ids })),
   history: z.array(z.object({ date: z.string(), price: z.string(), note: z.string(), sources: ids })),
   workflow: z.array(z.object({ step: z.string(), flock: z.string(), customer: z.string(), other: z.string(), sources: ids })),
   workforce: z.array(Row),
@@ -77,9 +77,6 @@ export const DeploymentsFile = z.object({
   records: z.array(Row),
   contracts: z.array(z.object({ agency: z.string(), level: z.string(), state: z.string(), cameras: z.string(), value: z.string(), term: z.string(), note: z.string(), sources: ids })),
   funding: z.array(Row),
-  cities: z.array(z.object({ name: z.string(), state: z.string(), cameras: z.number().int().nonnegative() })),
-  citiesNote: z.string(),
-  citiesSources: ids,
   unknowns: z.array(z.object({ v: z.string(), sources: ids })),
 }).passthrough();
 

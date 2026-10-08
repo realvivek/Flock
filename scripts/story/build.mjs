@@ -308,10 +308,15 @@ write(OUT, "atlanta.topo.json", await toTopo(atlFc, "atlanta", 10000));
     cities: [["Seattle", -122.33, 47.61], ["Los Angeles", -118.24, 34.05], ["Denver", -104.99, 39.74], ["Dallas", -96.8, 32.78], ["Houston", -95.37, 29.76], ["Chicago", -87.63, 41.88], ["Atlanta", -84.39, 33.75], ["Miami", -80.19, 25.76], ["New York", -74.01, 40.71]].map(([name, lon, lat]) => ({ name, xy: pt(lon, lat) })),
     atlanta: {
       bbox: [Math.min(...corners.map((c) => c[0])), Math.min(...corners.map((c) => c[1])), Math.max(...corners.map((c) => c[0])), Math.max(...corners.map((c) => c[1]))].map((v) => Math.round(v * 100) / 100),
-      places: [{ name: "Atlanta", kind: "city", xy: pt(-84.39, 33.75) }, { name: "Fulton County", kind: "area", xy: pt(-84.36, 34.03) }],
+      places: [{ name: "Atlanta", kind: "city", xy: pt(-84.39, 33.75) }, { name: "Fulton County", kind: "area", xy: pt(-84.36, 34.03), sub: (() => { const f = countyRows.find((r) => r.fips === "13121"); return `${f.flock.toLocaleString("en-US")} cameras · ${Math.round(f.per100k)} per 100,000`; })() }],
       roads: [["75", "I- 75", -84.56, 34.0], ["85", "I- 85", -84.2, 33.93], ["20", "I- 20", -84.17, 33.72], ["285", "I- 285", -84.36, 33.92], ["75", "I- 75", -84.33, 33.5], ["85", "I- 85", -84.6, 33.5]].map(([name, road, lon, lat]) => ({ name, xy: snap(road, lon, lat) })),
     },
   };
+  // Georgia: the frame of the state's zoom and the point for its label
+  const ga = statesProj.features.find((f) => f.properties.STATEFP === "13");
+  const gaPts = (ga.geometry.type === "Polygon" ? [ga.geometry.coordinates] : ga.geometry.coordinates).flat(2);
+  const gaRow = s51.find((r) => r.fips === "13");
+  labels.georgia = { bbox: [Math.min(...gaPts.map((p) => p[0])), Math.min(...gaPts.map((p) => p[1])), Math.max(...gaPts.map((p) => p[0])), Math.max(...gaPts.map((p) => p[1]))].map((v) => Math.round(v * 100) / 100), xy: pt(-83.45, 32.65), name: "Georgia", sub: `${gaRow.per100k} per 100,000` };
   write(OUT, "labels.json", labels);
 }
 
@@ -319,13 +324,13 @@ write(OUT, "atlanta.topo.json", await toTopo(atlFc, "atlanta", 10000));
 const places = await shapes("cb_2024_us_place_500k.zip", "-filter-fields GEOID,NAME,STUSPS");
 const placeIdx = polygonIndex(places.features, (f) => f.properties.GEOID);
 const WANT = [
-  { name: "Oakland", usps: "CA", published: 293, when: "2025", what: "Flock cameras in the 2025 annual report", sources: ["oaklandside-2026", "oakland-pac-2026"] },
+  { name: "Oakland", usps: "CA", published: 290, when: "2025", what: "Flock cameras funded and deployed, in the Police Department's 2025 annual report", sources: ["oakland-pac-2026"] },
   { name: "Denver", usps: "CO", published: 111, when: "2024–25", what: "Flock cameras at about 70 sites", sources: ["denverite-2025"] },
-  { name: "Lexington-Fayette", usps: "KY", published: 125, when: "Dec. 2025", what: "cameras by council district", sources: ["lexington-lpr-locations"] },
+  { name: "Lexington-Fayette", usps: "KY", published: 125, when: "December 2025", what: "cameras by council district", sources: ["lexington-lpr-locations"] },
   { name: "Berkeley", usps: "CA", published: 52, when: "2025", what: "Flock cameras", sources: ["berkeleyside-2025"] },
   { name: "Piedmont", usps: "CA", published: 48, when: "2025", what: "cameras", sources: ["piedmont-2025"] },
   { name: "Lafayette", usps: "CO", published: 30, when: "2024–25", what: "Flock cameras", sources: ["lafayette-co-alpr"] },
-  { name: "Dallas", usps: "TX", published: 684, when: "Sept. 2026", what: "cameras on the department's transparency portal, before 321 were to be switched off", sources: ["govtech-dallas-2026"] },
+  { name: "Dallas", usps: "TX", published: 684, when: "September 2026", what: "cameras on the department's transparency portal, 321 of them paid for by state grants", sources: ["govtech-dallas-2026"] },
   { name: "Houston", usps: "TX", published: 3800, when: "2024", what: "cameras operating citywide, police and private, per city officials", sources: ["houstonchronicle-flock-2025"] },
 ];
 const placeById = new Map(places.features.map((f) => [f.properties.GEOID, f.properties]));
@@ -438,7 +443,7 @@ const stats = {
   flockShareAll: st(Math.round(flockTotal / cams.length * 100), CAM, "Percent of all mapped plate readers"),
   flockShareBranded: st(Math.round(flockTotal / branded * 100), CAM, "Percent of mapped readers with a make tagged"),
   neverEdited: st(Math.round(versions.v1 / cams.length * 100), CAM, "Percent never edited since first mapped"),
-  usFlock: st(usFlock, POP, "50 states and D.C."), usRate: st(usRate, POP, "Flock cameras per 100,000 residents, 50 states and D.C."),
+  usFlock: st(usFlock, POP, "50 states and D.C."), outsideStates: st(flockTotal - usFlock, POP, "Mapped Flock cameras outside the 50 states and D.C., most of them in Puerto Rico"), usRate: st(usRate, POP, "Flock cameras per 100,000 residents, 50 states and D.C."),
   topState: st({ name: rank51[0].name, rate: rank51[0].per100k, flock: rank51[0].flock, ratio: Math.round(rank51[0].per100k / usRate * 10) / 10 }, POP),
   bottomStates: st(rank51.slice(-5).reverse().map((r) => ({ name: r.name, rate: r.per100k, flock: r.flock })), POP),
   mostStates: st(s51.slice().sort((a, b) => b.flock - a.flock).slice(0, 2).map((r) => ({ name: r.name, flock: r.flock })), POP),
@@ -451,6 +456,9 @@ const stats = {
   operatorsRetail: st({ count: retail, share: Math.round(retail / opNamed * 100) }, CAM, "Retailers and shopping centers, among named operators"),
   operatorsPolice: st({ count: police, share: Math.round(police / opNamed * 100) }, CAM, "Police and sheriffs, among named operators"),
   topOperators: st(topNamed.slice(0, 3), CAM),
+  // Readers first mapped in the week before the snapshot. A node's timestamp is its creation only while it is at
+  // version 1, so this counts new nodes not yet edited: a floor, not a total.
+  addedLastWeek: st((() => { const since = new Date(Date.parse(snapshot) - 7 * 86400e3).toISOString(); const v1 = cams.filter((c) => c.osmVersion === 1 && c.osmTimestamp >= since); return { count: v1.length, flock: v1.filter((c) => c.cls === 0).length, since: since.slice(0, 10) }; })(), CAM, "Readers first mapped in the seven days before the snapshot and not edited since; a floor"),
 };
 write(OUT, "stats.json", stats);
 log(`done in ${((Date.now() - t0) / 1000).toFixed(0)} s`);

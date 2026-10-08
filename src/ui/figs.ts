@@ -7,7 +7,7 @@ import { sources } from "../content";
 import { ROOT } from "../lib/base";
 import { escape } from "../lib/escape";
 import { apState, int } from "../viz/format";
-import { g, line, rect, svg, text, label, hbar, tip, linScale, niceTicks, circle } from "../viz/svg";
+import { g, line, rect, svg, text, label, hbar, tip, linScale, niceTicks } from "../viz/svg";
 import { frame, type Ctx } from "../story/frame";
 import type { FigureCfg } from "../story/schema";
 
@@ -36,50 +36,49 @@ export function citiesFigure(rows: City[], snapshot: string, width: number): str
   return frame("cities", cfg(`${list[0]!.name} has the most mapped Flock cameras of any city`, `Flock cameras mapped inside city limits as of ${snapshot}, the 15 largest counts`, ["deflock-tiles-2026", "census-boundaries-2024"], ["Inside each city’s 2024 Census boundary. Mapped counts include cameras run by businesses, homeowner groups and state police inside city limits, and miss any camera no volunteer has tagged."]), figCtx(), body);
 }
 
-/** Texas: the $1 fee, the grants, the cameras and the governor's order; Dallas's planned switch-off as 684 squares. */
+/** Texas: the $1 fee, the grants, the cameras, the governor's order and the switch-offs; Dallas's 684 cameras as squares. */
 export function texasFigure(width: number): string {
   const flow = `<ol class="flow">
 <li><span class="n">$1</span><span class="t">added to each Texas auto insurance policy by a 2023 law, for the state’s Motor Vehicle Crime Prevention Authority</span></li>
 <li><span class="n">$30 million</span><span class="t">or more in the authority’s grants for Flock cameras</span></li>
 <li><span class="n">3,200</span><span class="t">Flock cameras or more installed with its help since 2023</span></li>
-<li class="is-stop"><span class="n">Aug. 27, 2026</span><span class="t">The governor orders state agencies to stop paying for Flock cameras</span></li>
+<li class="is-stop"><span class="n">Aug. 27, 2026</span><span class="t">The governor orders state agencies to pause funding for Flock cameras</span></li>
+<li class="is-stop"><span class="n">900</span><span class="t">cameras or more switched off by at least 14 cities and counties by late September</span></li>
 </ol>`;
-  const f1 = frame("texas", cfg("Texas paid for cameras with a $1 insurance fee, then stopped", "How state money reached local Flock networks, as The Texas Tribune reported it", ["texastribune-abbott-2026", "texastribune-dps-2026"]), figCtx(), flow);
-  // Dallas: 684 cameras, 321 to be switched off
+  const f1 = frame("texas", cfg("Texas paid for cameras with a $1 insurance fee, then paused the money", "How state money reached local Flock networks, as The Texas Tribune reported it", ["texastribune-abbott-2026", "texastribune-dps-2026", "texastribune-unplugged-2026"]), figCtx(), flow);
+  // Dallas: 684 cameras, 321 of them paid for by state grants
   const cols = width < 520 ? 24 : 38, n = 684, off = 321, s = width < 520 ? 12 : 13, gap = 2;
   let sq = "";
   for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols); sq += rect(c * (s + gap), r * (s + gap), s, s, { rx: 1.5, class: i < off ? "c-hi" : "c-ctx2" }); }
   const rows = Math.ceil(n / cols), W = cols * (s + gap) - gap, H = rows * (s + gap) - gap;
-  const unit = svg(W, H, sq, { cls: "unit", label: "684 squares, one per Dallas camera; 321 of them are marked as the cameras the department said it would switch off." });
-  const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 to be switched off Sept. 15, 2026</span><span><i class="c-ctx2-bg"></i>363 to stay in operation</span></div>`;
-  const f2 = frame("dallas", cfg("Dallas said it would switch off 321 of its 684 cameras", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2026"], ["After the governor’s order. Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant; the report does not say which cameras that money paid for."]), figCtx(), unit + key);
+  const unit = svg(W, H, sq, { cls: "unit", label: "684 squares, one per Dallas camera; 321 of them are marked as the cameras paid for by state grants, which the department switched off in September and kept on from October." });
+  const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 paid for by state grants: switched off in September, kept on from October</span><span><i class="c-ctx2-bg"></i>363 others</span></div>`;
+  const f2 = frame("dallas", cfg("Dallas switched off its 321 grant-funded cameras, then kept them on", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2026", "texastribune-unplugged-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. In early October, The Texas Tribune reported that Dallas would keep the grant-funded cameras on after Flock paused its payments for 90 days."]), figCtx(), unit + key);
   return f1 + f2;
 }
 
-interface Fee { item: string; then: string; now: string; sources: string[] }
-const money = (s: string) => { const m = s.replace(/,/g, "").match(/\$(\d+)/g); return m ? m.map((v) => Number(v.slice(1))) : []; };
-/** Each fee with a dollar figure both then and now, as a dot pair: the earlier figure hollow, the 2026 one filled. */
+interface Fee { item: string; now: string; sources: string[] }
+const dollars = (v: string) => { const m = v.replace(/,/g, "").match(/\$(\d+)/); return m ? Number(m[1]) : null; };
+/** Flock's 2026 schedule of fees for changes after installation, largest first. Rows priced per part (Flex) stay in
+ *  the table. */
 export function feesFigure(fees: Fee[], width: number): string {
-  const rows = fees.map((f) => ({ f, a: money(f.then), b: money(f.now) })).filter((r) => r.a.length && r.b.length);
+  const rows = fees.map((f) => ({ f, v: dollars(f.now) })).filter((r) => r.v != null && !r.f.now.includes("/")).sort((a, b) => b.v! - a.v!) as { f: Fee; v: number }[];
   const W = Math.max(300, Math.min(width, 680)), narrow = W < 520;
-  const L = narrow ? 128 : 220, R = 70, T = 26, rowH = narrow ? 34 : 28;
-  const max = 1250, x = linScale(0, max, L, W - R);
-  let out = g([0, 250, 500, 750, 1000, 1250].map((t) => line(x(t), T - 4, x(t), T + rows.length * rowH)).join(""), { class: "grid" });
-  out += g([0, 500, 1000].map((t) => text(x(t), T - 10, `$${int(t)}`, { "text-anchor": "middle" })).join(""), { class: "axis" });
-  rows.forEach(({ f, a, b }, i) => {
-    const y = T + i * rowH + rowH / 2, a0 = Math.min(...a), a1 = Math.max(...a), b0 = b[0]!;
-    const name = f.item.replace(", standard", "").replace(" after vandalism, theft or damage", "");
-    const nameLines = narrow && name.length > 20 ? [name.slice(0, name.lastIndexOf(" ", 20)), name.slice(name.lastIndexOf(" ", 20) + 1)] : [name];
-    let lab = "";
-    nameLines.forEach((t, k) => { lab += text(L - 10, y + 4 + (k - (nameLines.length - 1) / 2) * 13, t, { "text-anchor": "end", "font-size": 12, fill: "var(--ink-2)" }); });
-    const range = a1 > a0 ? line(x(a0), y, x(a1), y, { stroke: "var(--ink)", "stroke-width": 3, "stroke-linecap": "round" }) : "";
-    out += tip(rect(0, y - rowH / 2, W, rowH, { fill: "transparent" }) + lab + line(x(a1), y, x(b0), y, { stroke: "var(--rule-2)", "stroke-width": 2 }) + range + circle(x(a0), y, 5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 2 }) + (a1 > a0 ? circle(x(a1), y, 5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 2 }) : "") + circle(x(b0), y, 5.5, { class: "mark c-hi", stroke: "#fff", "stroke-width": 1.5 }) + label(x(b0) + 9, y + 4, `$${int(b0)}`, { "font-size": 12, "font-weight": 700, fill: "var(--ink)" }), `${f.then} → ${f.now}`, f.item);
+  const L = narrow ? 0 : 250, R = narrow ? 8 : 70, T = 22, rowH = narrow ? 44 : 26, barH = 11;
+  const x = linScale(0, 5000, L, W - R - (narrow ? 64 : 0));
+  const ticks = [0, 1000, 2000, 3000, 4000, 5000];
+  let out = g(ticks.map((t) => line(x(t), T - 4, x(t), T + rows.length * rowH)).join(""), { class: "grid" });
+  out += g(ticks.filter((t) => !narrow || t % 2000 === 0 || t === 5000).map((t) => text(x(t), T - 9, `$${int(t)}`, { "text-anchor": "middle" })).join(""), { class: "axis" });
+  rows.forEach(({ f, v }, i) => {
+    const y = T + i * rowH, by = narrow ? y + 20 : y + (rowH - barH) / 2, hi = i === 0;
+    const plan = f.now.includes("$0 with") ? ", or $0 with the protection plan" : "";
+    const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, f.item, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
+    out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(v) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(v) + 6, by + barH - 1, `$${int(v)}${plan ? "*" : ""}`, { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `$${int(v)}${plan}`, f.item);
   });
-  const lg = T + rows.length * rowH + 18;
-  out += circle(L + 4, lg - 4, 5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 2 }) + text(L + 14, lg, "2019–23 contracts", { "font-size": 12 }) + circle(L + 140, lg - 4, 5.5, { class: "c-hi" }) + text(L + 150, lg, "2026 fee schedule", { "font-size": 12 });
-  const body = svg(W, lg + 8, out, { label: "Dot pairs comparing installation and service fees in 2019 to 2023 contracts with Flock's 2026 fee schedule; each rose, the standard installation fee from $250 to $350 to $1,000." });
+  out += line(x(0), T - 4, x(0), T + rows.length * rowH, { class: "baseline" });
+  const body = svg(W, T + rows.length * rowH + 6, out, { label: `Bar chart of Flock's 2026 fees for changes after installation: moving a camera onto an advanced or DOT pole costs $5,000, the most; installing a camera at the customer's request costs $1,000 to $1,250.` });
   const srcs = [...new Set(rows.flatMap((r) => r.f.sources))];
-  return frame("fees", cfg("Installation and service fees rose under the 2026 schedule", "Fees per camera in 2019–23 contracts and Flock’s 2026 schedule", srcs, ["Where an earlier contract gave a range, the line spans it. Fees without an earlier figure are in the table below."]), figCtx(), body);
+  return frame("fees", cfg("Moving a camera onto a highway pole costs the most", "Flock’s 2026 fees per camera for changes a customer requests after the deployment plan is agreed, and for replacements", srcs, ["* $0 for customers with Flock’s Camera Protection Plan, whose price is not published."]), figCtx(), body);
 }
 
 interface Myth { id: string; claim: string; verdict: "false" | "true" | "nuanced" }

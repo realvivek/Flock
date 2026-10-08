@@ -37,7 +37,7 @@ test("home: the story, a card for every page, the previews, older links redirect
   await instant(page);
   await nav(page, "Home");
   await expect(page.locator(".story-head h1")).toHaveText("Inside the Network of Cameras Reading America’s License Plates");
-  await expect(page.locator(".story .chapter-title")).toHaveCount(11);
+  await expect(page.locator(".story .chapter-title")).toHaveCount(12);
   await loaded(page, "#preview-img");
   await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
   await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Data path", "Where the picture goes", "What the reads produce", "Common claims", "Economics", "Sources"]);

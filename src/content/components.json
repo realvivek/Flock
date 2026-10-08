@@ -29,7 +29,7 @@
     {
       "id": "ircut", "node": "falcon.ircut", "order": 4, "group": "optics",
       "name": "Mechanical IR-cut filter",
-      "function": "A solenoid moves an infrared-blocking filter out of the optical path at night, so the sensor receives the illuminator's light, and back in by day for colour accuracy.",
+      "function": "A solenoid moves an infrared-blocking filter out of the optical path at night, so the sensor receives the illuminator's light, and back in by day for color accuracy.",
       "spec": { "Actuator": "Solenoid on its own 2-wire lead", "Modes": "Day (filter in) / Night (filter out)" },
       "dims": { "w": 0.9, "h": 0.9, "d": 0.15 }, "explode": [0, 0, 0.14], "hop": "hop-1",
       "confidence": "measured", "sources": ["flockcamre"]
@@ -37,7 +37,7 @@
     {
       "id": "sensor", "node": "falcon.sensor", "order": 5, "group": "optics",
       "name": "Camera module", "partNumber": "ISB-IMX477C-C02",
-      "function": "About five megapixels, half-inch format, infrared-optimised. It captures six to twelve still frames per passing vehicle; it does not record continuous video.",
+      "function": "About five megapixels, half-inch format, infrared-optimized. It captures six to 12 still frames per passing vehicle; it does not record continuous video.",
       "spec": { "Resolution": "~5 MP", "Format": "1/2 in", "Interface": "Fine-pitch flex cable to the mainboard, CAM_3V3 rail", "Note": "The IMX477 marking may not be a genuine Sony part; resolution does not match a real IMX477" },
       "dims": { "w": 1.0, "h": 1.0, "d": 0.2 }, "explode": [0, 0, 0.09], "hop": "hop-1",
       "confidence": "disputed", "sources": ["flockcamre", "cehrp-dissection", "jalopnik-speed"]

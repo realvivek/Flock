@@ -1,5 +1,5 @@
 {
-  "$comment": "Camera rail. World keys are metres: pole base at the origin, Y up, road toward +Z (near edge z=3), traffic toward +X. frame:'falcon' keys are in the Falcon body's local frame (x right, y up, z toward the lens, origin at the body centre). t is a position on the rail in eighths (act i owns [i/8, (i+1)/8]); 'views' names the preset t for each tab state.",
+  "$comment": "Camera rail. World keys are metres: pole base at the origin, Y up, road toward +Z (near edge z=3), traffic toward +X. frame:'falcon' keys are in the Falcon body's local frame (x right, y up, z toward the lens, origin at the body center). t is a position on the rail in eighths (act i owns [i/8, (i+1)/8]); 'views' names the preset t for each tab state.",
   "camera": [
     {
       "t": 0.0,
