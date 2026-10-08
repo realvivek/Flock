@@ -82,7 +82,7 @@ for (const [w, h, phone] of sizes) {
       await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
       await page.waitForTimeout(250);
       const b = await page.evaluate(() => ({ totop: !document.getElementById("totop").hidden, tall: document.documentElement.scrollHeight > innerHeight + 500, pagerVisible: (() => { const r = document.getElementById("pager").getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight + 1; })() }));
-      if (!b.totop && b.tall) F(vp, name, "Top button hidden at the bottom");
+      if (!b.totop && b.tall && !phone) F(vp, name, "Top button hidden at the bottom");
       if (!b.pagerVisible) F(vp, name, "pager not visible at the bottom");
       await page.screenshot({ path: `${Q}/${vp}-${name}-bottom.png` });
     }

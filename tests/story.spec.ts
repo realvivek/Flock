@@ -68,7 +68,7 @@ test("the county search finds a county and moves its marker", async ({ page }) =
   await input.pressSequentially(`${most.name.replace(" County", "")} texas`);
   await expect(page.locator("#county-list li").first()).toContainText(most.name);
   await input.press("Enter");
-  await expect(page.locator(".lk-card .lk-name")).toHaveText(`${most.name}, Texas`);
+  await expect(page.locator(".lk-card .lk-name")).toHaveText(`${most.name}, Tex.`);
   await expect(page.locator(".lk-card .lk-big .n")).toHaveText(most.flock.toLocaleString("en-US"));
   expect(await page.locator(".lk-mark").first().getAttribute("transform")).not.toBe(before);
 });

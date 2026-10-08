@@ -6,7 +6,7 @@
 import { sources } from "../content";
 import { ROOT } from "../lib/base";
 import { escape } from "../lib/escape";
-import { apState, int } from "../viz/format";
+import { int, placeName } from "../viz/format";
 import { g, line, rect, svg, text, label, hbar, tip, linScale, niceTicks } from "../viz/svg";
 import { frame, type Ctx } from "../story/frame";
 import type { FigureCfg } from "../story/schema";
@@ -29,7 +29,7 @@ export function citiesFigure(rows: City[], snapshot: string, width: number): str
   out += g(ticks.map((t) => text(x(t), T - 9, int(t), { "text-anchor": "middle" })).join(""), { class: "axis" });
   list.forEach((c, i) => {
     const y = T + i * rowH, hi = i === 0;
-    out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + text(L - 8, y + rowH / 2 + 4, `${c.name}, ${apState(c.usps)}`, { "text-anchor": "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" }) + hbar(x(0), y + (rowH - barH) / 2, x(c.flock) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(c.flock) + 5, y + rowH / 2 + 4, int(c.flock), { "font-size": 12, "font-weight": hi ? 700 : 500, fill: "var(--ink)" }), `${int(c.flock)} mapped Flock cameras`, `${c.name}, ${apState(c.usps)}`);
+    out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + text(L - 8, y + rowH / 2 + 4, placeName(c.name, c.usps), { "text-anchor": "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" }) + hbar(x(0), y + (rowH - barH) / 2, x(c.flock) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(c.flock) + 5, y + rowH / 2 + 4, int(c.flock), { "font-size": 12, "font-weight": hi ? 700 : 500, fill: "var(--ink)" }), `${int(c.flock)} mapped Flock cameras`, placeName(c.name, c.usps));
   });
   out += line(x(0), T - 4, x(0), T + list.length * rowH, { class: "baseline" });
   const body = svg(W, T + list.length * rowH + 4, out, { label: `Bar chart of mapped Flock cameras inside city limits: ${list[0]!.name} has the most, ${int(max)}.` });

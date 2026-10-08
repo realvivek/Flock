@@ -20,7 +20,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Flock says its cameras make more than 20 billion scans a month | 20 billion | `nbc-flock-2025` | quotes Flock's website ("over 20 billion scans a month") |
 | Flock is an Atlanta company | | `wikipedia-flock` | infobox; The Texas Tribune also writes "Atlanta-based Flock Safety" (`texastribune-2026`) |
 | DeFlock is an anti-surveillance group that tracks the company's cameras | | `texastribune-2026` | "DeFlock, an anti-surveillance group monitoring the company"; EFF calls it an "anti-surveillance mapmaker" (`eff-deflock-2025`) |
-| Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; 143,595 are inside the map's frame and 334 outside it, 255 of those in Puerto Rico (`meta.json`, `states.json`), as the map credit says |
+| Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; 143,595 are inside the map's frame and 334 outside it, 183 of them Flock's and 255 in Puerto Rico (`meta.json`: `offMap`, `offMapFlock`; `states.json`), as the map credit says. The 188 Flock cameras outside the 50 states and D.C. are those 183 and five drawn on the map just across a border |
 | Flock made about four in five | 80 percent | computed | 115,437 / 143,929 |
 | The rest come from companies including Motorola Solutions, Genetec and Axis Communications | 7,509; 3,647; 2,445 | computed | the three largest other makes, `operators.json` |
 | Most common in the South, 41.3 for every 100,000 residents; least common in the Northeast, 11.6 | 41.3; 11.6 (Midwest 39.0, West 33.3) | computed | `regions`, Census regions |
@@ -56,7 +56,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 |---|---|---|---|
 | An operator is recorded for 16,500 mapped Flock cameras, 14 percent | 16,500; 14 percent | computed | `operatorsNamed` |
 | Of those, 62 percent police or sheriffs, 20 percent retailers and shopping centers | 10,222; 3,237 | computed | `operatorsPolice`, `operatorsRetail` |
-| Lowe's 1,767; The Home Depot 1,162 | | computed | `topOperators`, with spelling variants grouped (`canonical` in `data/story/operator-classes.json`) |
+| Lowe's 1,767; Home Depot 1,162 | | computed | `topOperators`, with spelling variants grouped (`canonical` in `data/story/operator-classes.json`) |
 | Shareholder proposals asked both to report on privacy risks; both boards recommended voting no | | `prospect-retail-2026` | |
 | The proposals won 8.9 percent of the votes cast at The Home Depot (May 21) and 9.1 percent at Lowe's (May 29) | 62,948,880 for, 645,876,261 against; 38,182,128 for, 380,809,009 against | `homedepot-8k-2026`; `lowes-8k-2026` | Form 8-K vote tables; percent of for plus against, the "votes cast" both proxies use; abstentions and broker non-votes excluded |
 

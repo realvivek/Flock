@@ -42,7 +42,7 @@
       "blocks": [
         { "p": "Police departments are not the only customers. Volunteers have recorded who runs {{operatorsNamed.count}} of the mapped Flock cameras, {{operatorsNamed.share}} percent of them. Of those, {{operatorsPolice.share}} percent are listed as run by police or sheriffs and {{operatorsRetail.share}} percent by retailers and shopping centers." },
         { "fig": "operators" },
-        { "p": "The largest named operators are Lowe’s, with {{topOperators.0.count}} mapped cameras, and The Home Depot, with {{topOperators.1.count}}. This year, shareholder proposals asked both companies to report on the privacy risks of sharing customer data, including images from the cameras in their parking lots. Both boards [recommended voting no](src:prospect-retail-2026). At the annual meetings in May, the proposals won 8.9 percent of the votes cast at [The Home Depot](src:homedepot-8k-2026) and 9.1 percent at [Lowe’s](src:lowes-8k-2026)." }
+        { "p": "The largest named operators are Lowe’s, with {{topOperators.0.count}} mapped cameras, and Home Depot, with {{topOperators.1.count}}. This year, shareholder proposals asked both companies to report on the privacy risks of sharing customer data, including images from the cameras in their parking lots. Both boards [recommended voting no](src:prospect-retail-2026). At the annual meetings in May, the proposals won 8.9 percent of the votes cast at [Home Depot](src:homedepot-8k-2026) and 9.1 percent at [Lowe’s](src:lowes-8k-2026)." }
       ]
     },
     {

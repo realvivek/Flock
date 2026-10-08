@@ -8,7 +8,7 @@ const S = 1, MIN = 60, HR = 3600, DAY = 86400, YR = 365 * DAY;
 interface Keep { days: number; title: string; sub?: string; hi?: boolean }
 const ALERT = { t0: 10, t1: 15, title: "Alert to officers", sub: "10 to 15 seconds on average" };
 const KEEP: Keep[] = [
-  { days: 7, title: "Flock’s default for new customers,", sub: "announced Aug. 13, 2026", hi: true },
+  { days: 7, title: "Flock’s default for new customers", sub: "since Aug. 13", hi: true },
   { days: 21, title: "Virginia and Washington limits" },
   { days: 30, title: "Flock’s earlier default;", sub: "existing customers keep their settings" },
   { days: 60, title: "California Highway Patrol limit" },

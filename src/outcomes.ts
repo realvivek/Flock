@@ -8,7 +8,7 @@ import { cite, escape } from "./ui/cite";
 import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
 import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
-import { tickWords, apState, apDate, apPeriod } from "./viz/format";
+import { tickWords, apState, apDate, apPeriod, placeName } from "./viz/format";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
 
@@ -237,7 +237,7 @@ function ladderOverview(ladders: Data["ladders"], W: number): string {
   rows.forEach((L, i) => {
     const y = T + i * rowH + rowH / 2, hollow = !!(L.mixedWindows || L.vendorMix);
     out += line(0, y + rowH / 2, W, y + rowH / 2, { stroke: "var(--rule)" });
-    const who = /Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : `${L.city}, ${apState(L.state)}`;
+    const who = /Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : placeName(L.city, L.state);
     out += text(LW - 4, y - 2, who, { "text-anchor": "end", "font-size": 12, "font-weight": 600, fill: "var(--ink)" });
     out += text(LW - 4, y + 11, apPeriod(L.period.replace(/ \(.*\)/, "")), { "text-anchor": "end", "font-size": 10.5, fill: "var(--ink-3)" });
     LADDER_RUNGS.forEach((r, k) => {

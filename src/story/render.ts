@@ -55,10 +55,10 @@ export function renderStory(inp: StoryInput & { deputy: Deputy; timelineRule: st
       default: throw new Error(`story: unknown figure ${id}`);
     }
   };
-  // one 4:3 image per preview, whole tiles with no small print, so it reads at every width
+  // 4:3 images of whole tiles with no small print; the journey has its own phone image with larger type
   const preview = (k: "components" | "journey") => k === "components"
     ? `<a class="preview" href="components/" id="preview"><img id="preview-img" src="img/knolling.jpg" alt="Six of the camera’s fourteen components, each rendered on its own tile: the front bezel, the infrared illuminator board, the infrared-cut filter, the camera module, the system on module and the GPS antenna" loading="lazy" decoding="async" width="1120" height="840"><span class="cap"><span class="kicker">Inside the camera</span><span class="t">Fourteen components in five groups, from the bezel to the clamps</span><span class="go">See the components</span></span></a>`
-    : `<a class="preview" href="journey/" id="preview-journey"><img id="preview-journey-img" src="img/journey.jpg" alt="One photograph tracked like a parcel: a slip reading stop 1 of 7, picked up on the pole, beside the first three stops, the pole, the carrier network and Amazon’s cloud" loading="lazy" decoding="async" width="1120" height="840"><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
+    : `<a class="preview" href="journey/" id="preview-journey"><picture><source media="(max-width: 640px)" srcset="img/journey-phone.jpg" width="1120" height="840"><img id="preview-journey-img" src="img/journey.jpg" alt="The first stops of one photograph’s journey, tracked like a parcel: picked up on the pole, in transit on the carrier network, arrived at Amazon’s cloud" loading="lazy" decoding="async" width="1120" height="840"></picture><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
   const cards = () => `<div id="summary-cards" class="summary">${PAGES.map((pg, i) => {
     const sec = inp.overview.sections.find((x) => x.id === pg.section);
     return `<a class="summary-card" href="${pg.id}/"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${escape(sec?.title ?? pg.label)}</span><span class="b">${escape(sec?.blurb ?? "")}</span><span class="go">${escape(pg.label)} →</span></a>`;
@@ -101,9 +101,9 @@ function mapSection(inp: StoryInput & { poster?: string }, ctx: Ctx): string {
   // Without JavaScript the poster stands in for the map; with it, the alt text holds the space until the dots draw.
   const poster = `<p class="map-fallback">${escape(m.alt)}</p>${inp.poster ? `<noscript><img class="map-poster" src="${escape(inp.poster)}" alt="${escape(m.alt)}" width="1600" height="992"></noscript>` : ""}`;
   // The credit sits inside the sticky graphic, so it is on screen with every step of the map.
-  const off = Number(inp.meta.cameras.offMap);
+  const off = Number(inp.meta.cameras.offMap), offFlock = Number(inp.meta.cameras.offMapFlock);
   // the population line shows only on the steps that use population (the script hides it on the others)
-  const credit = `<p class="map-credit">Map: license plate readers on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock. Alaska and Hawaii are shown at different scales; ${escape(int(off))} readers outside the frame, most of them in Puerto Rico, are not shown.<span class="cr-rates"> Rates: U.S. Census Bureau 2024 population estimates.</span></p>`;
+  const credit = `<p class="map-credit">Map: license plate readers on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock. Alaska and Hawaii are shown at different scales; ${escape(int(off))} readers outside the frame, ${escape(int(offFlock))} of them Flock’s, are not shown, most of them in Puerto Rico.<span class="cr-rates"> Rates: U.S. Census Bureau 2024 population estimates.</span></p>`;
   for (const id of ["deflock-tiles-2026", "census-pop-2024", "census-boundaries-2024"]) ctx.used.add(id);
   return `<section class="scrolly scrolly-map" id="${escape(m.id)}" data-scrolly="map" aria-label="Map of mapped license plate readers">
 <div class="scrolly-graphic"><figure class="map" role="img" aria-label="${escape(m.alt)}">${poster}<canvas class="map-canvas" hidden></canvas><div class="map-labels" aria-hidden="true"></div><div class="map-legend" aria-hidden="true"></div></figure>${credit}</div>

@@ -1,11 +1,12 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
-// Renders the home page's preview image of the journey page: a 4:3 image of the parcel slip at its first stop and the
-// first three stops, titles only, at a size that reads at any width.
-// Usage: node scripts/journey.mjs [url] [out]   (default http://127.0.0.1:4173/journey/, public/img/journey.jpg)
-const argv = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+// Renders the home page's preview images of the journey page, 4:3, no text smaller than about 12 px as shown:
+// the parcel card (its picture only) beside the first three stops; with --phone, the first four stops, larger.
+// Usage: node scripts/journey.mjs [url] [out] [--phone]
+//   (default http://127.0.0.1:4173/journey/, public/img/journey.jpg or public/img/journey-phone.jpg)
+const argv = process.argv.slice(2).filter((a) => !a.startsWith("--")), phone = process.argv.includes("--phone");
 const url = argv[0] || "http://127.0.0.1:4173/journey/";
-const out = argv[1] || "public/img/journey.jpg";
+const out = argv[1] || (phone ? "public/img/journey-phone.jpg" : "public/img/journey.jpg");
 fs.mkdirSync(out.replace(/\/[^/]+$/, ""), { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || "/opt/pw-browsers/chromium" });
 const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 2 });
@@ -31,15 +32,26 @@ await page.addStyleTag({ content: `
 ` });
 await page.addStyleTag({ content: `
   #page-body { width: 560px; height: 420px; overflow: hidden; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; }
-  .stop:nth-of-type(n+4) { display: none !important; }
   .stop-body .line, .stop-body .where, .stop-head .when, .slip-meta { display: none !important; }
+  /* the parcel card is a picture here: the stop it would name is the tile beside it */
+  .slip-status { display: none !important; }
+  .slip { justify-content: center; }
   .marker .ring { width: 36px !important; height: 36px !important; }
   .stop-body { padding: .5rem .6rem .6rem !important; }
   .stop-body h2 { font-size: 1.3rem; line-height: 1.18; }
   .stop-head .status { font-size: .9rem; }
-  .slip-status strong { font-size: 1.4rem; }
 ` });
-await page.evaluate(() => { document.querySelectorAll(".stop:first-of-type, .slip-route li:first-child").forEach((e) => e.classList.add("is-reached")); document.getElementById("slip-count").textContent = "Stop 1 of 7"; document.getElementById("slip-status").textContent = "Picked up"; document.getElementById("slip-where").textContent = "On the pole"; });
+// on a phone the image is shown at about 360 px: four stops, no parcel, every word large enough to read there
+if (phone) await page.addStyleTag({ content: `
+  .slip { display: none !important; }
+  .stop:nth-of-type(n+4) { display: grid !important; }
+  .stop:nth-of-type(n+5) { display: none !important; }
+  .marker .ring { width: 46px !important; height: 46px !important; }
+  .stop-body h2 { font-size: 1.55rem; line-height: 1.15; }
+  .stop-head .status { font-size: 1.35rem; letter-spacing: .03em; }
+` });
+else await page.addStyleTag({ content: ".stop:nth-of-type(n+4) { display: none !important; }" });
+await page.evaluate(() => { document.querySelectorAll(".stop").forEach((e) => e.classList.add("is-reached")); });
 await page.waitForTimeout(300);
 await page.locator("#page-body").screenshot({ path: out, type: "jpeg", quality: 86 });
 console.log("wrote", out);

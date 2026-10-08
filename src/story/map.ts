@@ -31,12 +31,18 @@ export const RATE_COLORS = ["#dcab55", "#c4851a", "#9e6510", "#6f4508", "#3f2504
 /** Counties with fewer residents than this are hatched. */
 export const SMALL_POP = 10_000;
 const NONE = "#ecece9";
-/** Reserved at the top of the phone graphic for the legend, so the map below it never moves between steps */
-const PHONE_LEGEND = 84;
+/** Reserved at the top of the phone graphic for the legend on the zoomed steps, so it never sits on the map */
+const PHONE_LEGEND = 96;
+/** On phones the map ends this far up the screen (a share of its height), above where the step cards are read */
+const PHONE_MAP_BOTTOM = 0.6;
 interface Place { name: string; kind: string; xy: [number, number]; sub?: string }
 interface Labels { cities: { name: string; xy: [number, number] }[]; atlanta: { bbox: [number, number, number, number]; places: Place[]; roads: { name: string; xy: [number, number] }[] }; georgia: { bbox: [number, number, number, number]; xy: [number, number]; name: string; sub: string } }
 
 const INK = [18, 18, 18], AMBER = [196, 125, 14], GREY = [189, 189, 186], GREY_TOP = [128, 128, 125], GREY_STREET = [74, 74, 72];
+const rgbOf = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+/** The grey of the same lightness (Rec. 601 luma) */
+const grayOf = (hex: string) => { const [r, g, b] = rgbOf(hex); const v = Math.round(0.299 * r! + 0.587 * g! + 0.114 * b!).toString(16).padStart(2, "0"); return `#${v}${v}${v}`; };
+const mixHex = (a: string, b: string, t: number) => mix(rgbOf(a), rgbOf(b), t);
 const mix = (a: number[], b: number[], t: number) => `rgb(${a.map((v, i) => Math.round(v + (b[i]! - v) * t)).join(",")})`;
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
@@ -86,7 +92,7 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
   /** Alaska and Hawaii's insets, faded out once the view leaves the whole country */
   let insets: [number, number, number, number][] = [];
   /** county shading: one path per rate class; the small-population counties; county lines for the zoomed views */
-  let choro: { color: string; p: Path2D }[] | null = null, small: Path2D | null = null, countyLines: Path2D | null = null;
+  let choro: { color: string; gray: string; p: Path2D }[] | null = null, small: Path2D | null = null, countyLines: Path2D | null = null;
   let hatch: CanvasPattern | null = null, hatchDpr = 0;
   /** the top of Fulton County's outline, where its label's leader points */
   let fultonTip: [number, number] | null = null;
@@ -101,8 +107,8 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
   let creditH = 0;
   const area = () => {
     if (posterMode) return { x0: 24, y0: 24, x1: W - 24, y1: H - 24 };
-    // on phones the map sits in the upper four-fifths, so a card being read covers little of it
-    if (phone()) return { x0: 8, y0: PHONE_LEGEND, x1: W - 8, y1: Math.max(PHONE_LEGEND + 220, Math.min(H - creditH - 12, H * 0.8)) };
+    // on phones the map sits between the legend and the cards' reading zone, so a card being read covers none of it
+    if (phone()) return { x0: 8, y0: PHONE_LEGEND, x1: W - 8, y1: Math.max(PHONE_LEGEND + 220, H - (1 - PHONE_MAP_BOTTOM) * innerHeight) };
     const gutter = 20, left = Math.max(gutter, (W - 992) / 2) + Math.min(352, W - 2 * gutter) + 28;
     return { x0: Math.min(left, W * 0.42), y0: 76, x1: W - 24, y1: H - Math.max(24, creditH + 14) };
   };
@@ -138,13 +144,15 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     const ox = (a.x0 + a.x1) / 2 - s.cx * k, oy = (a.y0 + a.y1) / 2 - s.cy * k;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // clip to the map's panel (a little wider on phones, where nothing sits beside it)
+    // clip to the map's panel, so nothing runs under the legend, the credit or the cards
     ctx.save();
-    ctx.beginPath(); ctx.rect(dpr * (a.x0 - (phone() ? 8 : 6)), dpr * (a.y0 - 30), dpr * (a.x1 - a.x0 + (phone() ? 16 : 30)), dpr * (a.y1 - a.y0 + 54)); ctx.clip();
+    ctx.beginPath(); ctx.rect(dpr * (a.x0 - 1), dpr * (a.y0 - 1), dpr * (a.x1 - a.x0 + 2), dpr * (a.y1 - a.y0 + 2)); ctx.clip();
     ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * ox, dpr * oy);
     if (choro && s.choro > 0.01) {
       ctx.globalAlpha = s.choro;
-      for (const c of choro) { ctx.fillStyle = c.color; ctx.fill(c.p); }
+      // zoomed on Georgia, the other states turn grey (same lightness), so only Georgia carries the colour key
+      for (const c of choro) { ctx.fillStyle = s.ga > 0.01 ? mixHex(c.color, c.gray, s.ga) : c.color; ctx.fill(c.p); }
+      if (georgia && s.ga > 0.01) { ctx.save(); ctx.clip(georgia); for (const c of choro) { ctx.fillStyle = c.color; ctx.fill(c.p); } ctx.restore(); }
       // zoomed in, thin white county lines keep neighbouring counties of one class apart
       const zoomed = clamp01((700 - s.w) / 400);
       if (countyLines && zoomed > 0) { ctx.globalAlpha = s.choro * zoomed; ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 0.7 / k; ctx.stroke(countyLines); }
@@ -229,7 +237,8 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     };
     for (const c of labels.cities) mk(c.name, "small", c.xy, "cities");
     // the county's name and counts go in a box above it, with a leader into the county
-    for (const p of labels.atlanta.places) mk(p.name, p.kind === "city" ? "city" : "area callout", p.xy, "atl", p.sub);
+    // Atlanta: a point at the city, the name to its left, clear of Fulton County's eastern line
+    for (const p of labels.atlanta.places) mk(p.name, p.kind === "city" ? "city pt-left" : "area callout", p.xy, "atl", p.sub);
     for (const r of labels.atlanta.roads) mk(r.name, "road", r.xy, "atl");
     mk(labels.georgia.name, "state", labels.georgia.xy, "ga", labels.georgia.sub);
   }
@@ -239,7 +248,8 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     let lead = "";
     for (const l of labelEls) {
       let [x, y] = project(s, l.xy[0], l.xy[1]);
-      const o = l.group === "atl" ? atl * s.roads : l.group === "ga" ? s.ga : (1 - Math.max(atl, s.ga)) * (1 - s.choro * 0.35);
+      // the national names leave in the first part of a zoom; Georgia's name arrives in the last
+      const o = l.group === "atl" ? atl * s.roads : l.group === "ga" ? clamp01((s.ga - 0.6) / 0.4) : clamp01(1 - 2.5 * Math.max(atl, s.ga)) * (1 - s.choro * 0.35);
       if (l.callout && fultonTip) {
         // the box's bottom edge sits a little above the county's northern edge; the leader runs into the county
         const [tx, ty] = project(s, fultonTip[0], fultonTip[1]);
@@ -261,7 +271,7 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
   function setLegend(look: Look): void {
     if (look.choro) {
       const names = ["None", "Under 10", "10–25", "25–50", "50–100", "100+"];
-      legend.innerHTML = `<div class="legend-ramp"><span class="legend-t">Mapped Flock cameras per 100,000 residents</span><div class="ramp">${[NONE, ...RATE_COLORS].map((c, i) => `<span><i style="background:${c}"></i>${names[i]}</span>`).join("")}</div><span class="legend-hatch"><i style="background-color:${RATE_COLORS[2]}"></i>Hatched: fewer than ${SMALL_POP.toLocaleString("en-US")} residents</span></div>`;
+      legend.innerHTML = `<div class="legend-ramp"><span class="legend-t">Mapped Flock cameras per 100,000 residents</span><div class="ramp">${[NONE, ...RATE_COLORS].map((c, i) => `<span><i style="background:${c}"></i>${names[i]}</span>`).join("")}</div><span class="legend-hatch"><i></i>Hatched: fewer than ${SMALL_POP.toLocaleString("en-US")} residents, where a few cameras swing the rate</span></div>`;
     } else if (look.hi) {
       legend.innerHTML = `<div class="legend-key"><span><i style="background:rgb(${AMBER})"></i>Flock Safety</span><span><i style="background:rgb(${look.roads ? GREY_STREET : GREY_TOP})"></i>Other makes</span></div>`;
     } else legend.innerHTML = `<div class="legend-key"><span><i style="background:rgb(${INK})"></i>One mapped plate reader</span></div>`;
@@ -273,8 +283,14 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
    *  bottom left, over the faded Gulf and Alabama rather than the state's northern counties. */
   function placeLegend(): void {
     if (!W) return;
-    if (phone()) { legend.style.left = legend.style.top = ""; return; }
     const a = area();
+    if (phone()) {
+      legend.style.left = "";
+      if (LOOKS[want]!.view !== "us") { legend.style.top = ""; return; }
+      const us = viewFor("us"), [, ly] = project({ cx: us[0], cy: us[1], w: us[2] }, 0, 0);
+      legend.style.top = `${Math.round(Math.max(6, ly - legend.offsetHeight - 4))}px`;
+      return;
+    }
     if (LOOKS[want]!.view === "ga") {
       legend.style.left = `${Math.round(a.x0)}px`;
       legend.style.top = `${Math.round(a.y1 - legend.offsetHeight - 8)}px`;
@@ -342,7 +358,7 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
         groups.set(cls, [...(groups.get(cls) ?? []), f.geometry]);
         if ((r?.[5] ?? 0) < SMALL_POP) smallGeoms.push(f.geometry);
       }
-      choro = [...groups.entries()].sort((a2, b) => a2[0] - b[0]).map(([cls, g]) => ({ color: cls === 0 ? NONE : RATE_COLORS[cls - 1]!, p: pathOf(g, true) }));
+      choro = [...groups.entries()].sort((a2, b) => a2[0] - b[0]).map(([cls, g]) => { const color = cls === 0 ? NONE : RATE_COLORS[cls - 1]!; return { color, gray: grayOf(color), p: pathOf(g, true) }; });
       small = pathOf(smallGeoms, true);
       countyLines = pathOf([mesh(t, obj, (a2, b) => a2 !== b)], false);
       draw();
@@ -355,12 +371,13 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     want = step;
     if (step === "flock" || look.choro) void loadChoro();
     if (look.view !== "us" || look.roads) void loadRoads();
-    setLegend(look);
-    credit?.classList.toggle("no-rates", !look.rates);
+    // the legend and the credit's population line change when the new look takes over, halfway through
+    let keyed = false;
+    const key = () => { if (keyed) return; keyed = true; setLegend(look); credit?.classList.toggle("no-rates", !look.rates); };
     const to = viewFor(look.view), from: View = [s.cx, s.cy, s.w];
     const start = { hi: s.hi, choro: s.choro, roads: s.roads, dots: s.dots, ga: s.ga };
     cancelAnimationFrame(anim);
-    const finish = () => { s.cx = to[0]; s.cy = to[1]; s.w = to[2]; Object.assign(s, { hi: look.hi, choro: look.choro, roads: look.roads, dots: look.dots, ga: look.ga }); draw(); };
+    const finish = () => { key(); s.cx = to[0]; s.cy = to[1]; s.w = to[2]; Object.assign(s, { hi: look.hi, choro: look.choro, roads: look.roads, dots: look.dots, ga: look.ga }); draw(); };
     if (reduced() || !cams) { if (anim) { anim = 0; finishing = null; hooks.tween(-1); } finish(); return; }
     const zi = interpolateZoom(from, to);
     const moves = Math.abs(from[2] - to[2]) > 1 || Math.hypot(from[0] - to[0], from[1] - to[1]) > 1;
@@ -378,6 +395,7 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
       s.choro = start.choro + (look.choro - start.choro) * (look.choro > start.choro ? late(e, 0.35) : e);
       s.dots = start.dots + (look.dots - start.dots) * (look.dots > start.dots ? late(e, 0.45) : e);
       s.ga = start.ga + (look.ga - start.ga) * e;
+      if (e >= 0.5) key();
       draw();
       if (t < 1) anim = requestAnimationFrame(frame); else { anim = 0; finishing = null; finish(); hooks.tween(-1); }
     };

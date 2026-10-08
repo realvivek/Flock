@@ -398,7 +398,10 @@ A second round of both followed. The critique found county colours the legend di
 drawn in their exact class colour, with the least populated hatched), a ladder title the data contradicted,
 an errors figure that gave a chart only to the Flock case, map labels and legends colliding with the map,
 and see-through phone cards; the fact-check found the installation fees, Dallas's switch-off and a timeline
-date wrong, and about 15 smaller points. All are corrected and listed in `docs/fact-check.md`.
+date wrong, and about 15 smaller points. All are corrected and listed in `docs/fact-check.md`. A third
+critique found all but one of its earlier items resolved and asked for the phone map to sit wholly above the
+cards, larger type in the phone teaser, state names on the phone completeness chart, dots clipped to the map's
+panel, grey states around Georgia and Times place names ("Houston", "Oakland, Calif."); those are in too.
 
 ## 8. Numbers for the article
 | What | Figure |

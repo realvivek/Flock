@@ -67,11 +67,14 @@
 .mlabel.area { font: 700 .75rem/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
 .mlabel.city { font-weight: 700; }
 .mlabel small { display: block; margin-top: .2rem; font: 500 .6875rem/1.2 var(--sans); letter-spacing: 0; text-transform: none; color: var(--ink-2); text-align: center; }
-.mlabel.state { font: 700 .9375rem/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; text-align: center; }
+.mlabel.state { font: 700 .9375rem/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; text-align: center; padding: .35rem .5rem .4rem; background: #fff; border: 1px solid var(--rule-2); -webkit-text-stroke: 0; }
 .mlabel.state small { font-size: .75rem; letter-spacing: 0; }
 .mlabel.city small, .mlabel.area small { font-weight: 600; }
 .mlabel.callout { transform: translate(-50%, -100%); padding: .35rem .5rem .4rem; background: #fff; border: 1px solid var(--ink); -webkit-text-stroke: 0; text-align: center; }
 .mlabel.callout small { margin-top: .25rem; }
+/* a point at the place, its name to the left */
+.mlabel.pt-left { transform: translate(calc(-100% + 4px), -50%); }
+.mlabel.pt-left::after { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); margin-left: .35rem; vertical-align: .05em; box-shadow: 0 0 0 2px #fff; }
 .mlabel.hq::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); margin-right: .35rem; vertical-align: .05em; box-shadow: 0 0 0 2px #fff; }
 .legend-ramp { display: grid; gap: .3rem; }
 .legend-ramp .ramp { display: flex; gap: 2px; }
@@ -79,7 +82,7 @@
 .legend-ramp .ramp i { display: block; height: 10px; }
 .legend-hatch { display: inline-flex; align-items: center; gap: .4rem; margin-top: .1rem; font: 400 .6875rem/1.2 var(--sans); color: var(--ink-3); }
 /* the swatch draws the same white diagonal hatch the map does */
-.legend-hatch i { width: 22px; height: 10px; background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .95) 0 1.3px, transparent 1.3px 3.5px); }
+.legend-hatch i { flex: none; width: 22px; height: 10px; background-color: #9b9b98; background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .95) 0 1.3px, transparent 1.3px 3.5px); }
 @media (max-width: 760px) { .legend-ramp .ramp span { width: 52px; } .legend-ramp .legend-t { font-size: .75rem; } }
 /* zoomed on Georgia, the legend stands upright in the corner beside the state */
 .map-legend.is-vertical { max-width: 11.5rem; }
@@ -109,6 +112,7 @@
 
 /* ---- Previews of the Components and Journey pages ------------------------------------------------------------- */
 .preview { display: grid; width: var(--measure); margin: 2.5rem auto; gap: .7rem; color: var(--ink); text-decoration: none; }
+.preview picture { display: block; }
 .preview img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--bg-2); }
 /* in Go deeper, the preview sits beside its caption, as wide as the cards under it */
 .chapter-cards .preview { width: min(var(--wide), 100% - 2 * var(--gutter)); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 1.75rem; margin: 0 auto 2rem; }

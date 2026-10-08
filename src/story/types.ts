@@ -9,7 +9,7 @@ export interface Operators { total: number; flock: number; branded: number; shar
 export interface CompletenessRow { place: string; usps: string; published: number; when: string; what: string; sources: string[]; mapped: number; police: number; other: number; untagged: number; topOther: { name: string; count: number } | null }
 export interface SourceRec { id: string; kind: string; title: string; publisher: string; url: string; date: string; lastVerified: string }
 export interface Ladder { id: string; agency: string; city: string; state: string; period: string; cameras: string; vendorMix?: boolean; vendor?: string; mixedWindows?: boolean; values: Record<"reads" | "alerts" | "falseAlerts" | "stops" | "recoveries" | "arrests", number | null>; note: string; sources: string[] }
-export interface Meta { snapshot: string; built: string; frame: [number, number]; cameras: { total: number; flock: number; onMap: number; offMap: number } }
+export interface Meta { snapshot: string; built: string; frame: [number, number]; cameras: { total: number; flock: number; onMap: number; offMap: number; offMapFlock: number } }
 export interface Overview { sections: { id: string; label: string; title: string; blurb: string }[] }
 export interface TimelineEvent { date: string; precision: "day" | "month"; kind: "added" | "ended" | "restricted" | "flock"; where: string; text: string; sources: string[] }
 
