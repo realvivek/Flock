@@ -1,0 +1,224 @@
+{
+  "$comment": "The home page story. Paragraph markup: [text](src:id) links to a source document; [text](#id) to a section; [text](page:id) to a site page; {{stat}} or {{stat.field}} inserts a figure from public/data/story/stats.json, with |k (rounded down to the thousand) or |pct (no decimals). Every figure block names its sources. Rendered into index.html at build time by src/story/render.ts.",
+  "kicker": "License plate readers",
+  "headline": "Inside the Network of Cameras Reading America’s License Plates",
+  "deck": "Volunteers have mapped more than {{mappedFlock|k}} cameras made by one company, Flock Safety. Public records show who can search what they capture, how long it is kept and what comes of it.",
+  "intro": [
+    "On poles at intersections, in store parking lots and along state highways, small cameras photograph the rear of passing cars. Most are made by Flock Safety, an Atlanta company that provides them for an annual fee to police departments, homeowner associations and businesses, and that says its network scans [more than 20 billion license plates a month](src:nbc-flock-2025).",
+    "Flock does not publish where its cameras are. Volunteers have been recording them, one at a time, on [OpenStreetMap](src:deflock-tiles-2026), the map anyone can edit."
+  ],
+  "map": {
+    "id": "the-map",
+    "alt": "A map of the United States made of 143,595 dots, one for each mapped license plate reader; the dots are densest along highways and around cities in the South, the Midwest, Texas and California.",
+    "steps": [
+      { "id": "all", "text": "Each dot is a license plate reader that volunteers have mapped: {{mappedTotal}} of them as of {{snapshot|date}}." },
+      { "id": "flock", "text": "About four in five were made by Flock. The rest come from companies including Motorola Solutions, Genetec and Axis Communications." },
+      { "id": "atlanta", "text": "Georgia, Flock’s home state, has more of its cameras per resident than any other state: {{topState.rate}} for every 100,000 people, {{topState.ratio}} times the national rate. In Fulton County, which includes most of Atlanta, volunteers have mapped {{topBigCounty.flock}}, the highest rate of any county with a million or more residents." },
+      { "id": "rate", "text": "Measured against population, the cameras are most common in the South and the Midwest and least common in the Northeast. Volunteers have mapped none in {{countiesNone.count}} of the country’s {{countiesNone.of}} counties, home to about {{countiesNone.popShare|pct}} percent of Americans." }
+    ]
+  },
+  "sections": [
+    {
+      "id": "what-the-map-shows",
+      "blocks": [
+        { "p": "The map is a record of what volunteers have seen, not an official inventory. Where cities publish their own counts, the mapped number can be higher, because it includes cameras that other owners run inside city limits, or lower, where mapping has not caught up. In Oakland, Calif., volunteers have mapped {{completeness.Oakland.mapped}} Flock cameras inside the city line; the police department reported [293 of its own](src:oaklandside-2026), and {{oaklandChp.count}} of the mapped cameras are tagged as run by the California Highway Patrol. [How the map compares with official counts](#how-this-was-made)." }
+      ]
+    },
+    {
+      "id": "where-the-cameras-are",
+      "title": "Where the cameras are",
+      "blocks": [
+        { "p": "Flock says it operates in [more than 6,000 communities in 49 states](src:wikipedia-flock). Across the 50 states and the District of Columbia, volunteers have mapped {{usFlock}} of them, about {{usRate|round}} for every 100,000 residents." },
+        { "p": "California and Texas have the most, {{mostStates.0.flock}} and {{mostStates.1.flock}}. Per resident, Georgia leads, followed by Ohio, Texas, Indiana and Alabama. New Hampshire has the fewest per resident: {{bottomStates.0.flock}} mapped cameras, {{bottomStates.0.rate}} for every 100,000 people." },
+        { "fig": "states" },
+        { "fig": "lookup" }
+      ]
+    },
+    {
+      "id": "what-a-camera-records",
+      "title": "What a camera records",
+      "blocks": [
+        { "p": "The cameras are set off by motion. When a vehicle passes, one takes [six to twelve still photographs of its rear](src:cehrp-dissection), lit at night by an infrared emitter." },
+        { "p": "Software on the camera reads the plate and its state and scores its confidence. It also describes the vehicle — make, body type and color, and details like a roof rack, bumper stickers or damage — in what Flock calls a [Vehicle Fingerprint](src:flock-lpr-policy). The camera adds the time, its GPS position and its own identifier. Flock says the crops and the text are sent to its servers; [full frames and video are not](src:flock-wing-2020)." },
+        { "fig": "read" },
+        { "preview": "components" }
+      ]
+    },
+    {
+      "id": "where-the-picture-goes",
+      "title": "Where the picture goes",
+      "blocks": [
+        { "p": "Each read travels over a cellular connection to Flock’s servers on [Amazon Web Services](src:flock-arch-2024), where it is indexed for search and checked against hot lists: the F.B.I.’s National Crime Information Center, the National Center for Missing and Exploited Children, Amber Alerts, state lists and custom lists that agencies write themselves." },
+        { "p": "The lists are sent to the cameras [about twice a day](src:aclu-2022), so a plate taken off a list can keep setting off alerts for up to 12 hours. When a plate matches, the photo, the location and the name of the list reach nearby officers’ phones within [about 10 to 15 seconds](src:flock-flex-datasheet)." },
+        { "p": "How long the pictures are kept depends on settings and state law. On Aug. 13, 2026, Flock [cut its default](src:flock-guardrails-2026) from 30 days to seven. [Virginia](src:independent-va-2025) and [Washington](src:wa-sb6002-2026) cap retention at 21 days, and California limits its Highway Patrol to [60](src:ca-sb34). A feature called Evidence Mode keeps data tied to an investigation, with [no published limit](src:aclu-guardrails)." },
+        { "fig": "ruler" },
+        { "preview": "journey" }
+      ]
+    },
+    {
+      "id": "who-can-search",
+      "title": "Who can search the reads",
+      "blocks": [
+        { "p": "Officers at a customer agency can search the reads by plate, by a description of the vehicle or with a written prompt, across their own cameras and those of agencies that share with them. Agencies can also join a national lookup; about 75 percent of Flock’s law enforcement customers had, [the company told Congress](src:wyden-ftc-2025) in August 2025." },
+        { "p": "Each search adds a row to an audit log, with a reason the officer types. Logs released under public records laws show how far one search can reach. On May 9, 2025, the sheriff’s office in Johnson County, Texas, searched a week of reads from 17,684 cameras in 1,295 networks, then a month of reads from 83,345 cameras in 6,809 networks. Both searches [logged the same reason](src:404-texas-2025)." },
+        { "fig": "audit" },
+        { "p": "In a review of 12 million searches, the Electronic Frontier Foundation found that about [one in five](src:eff-protesters-2025) gave a generic reason such as “investigation.” Across the audit logs that the group ALPR Watch obtained, rows recording outside searches that reached a department’s data outnumbered rows for the departments’ own searches [521 to 1](src:alprwatch-foia-2025). A search across thousands of networks appears in each of their logs, so the rows are not separate searches." }
+      ]
+    },
+    {
+      "id": "what-the-reads-produce",
+      "title": "What the reads produce",
+      "blocks": [
+        { "p": "Few agencies publish what their cameras lead to. Oakland’s Police Department publishes one of the fullest accounts. In 2025, its 293 Flock cameras read 638,747,333 plates and produced 1,099,837 alerts, about one for every 580 reads. Most of the alerts, 653,566, were for stolen plates or stolen vehicles, types the department [kept switched off](src:oakland-pac-2026) because it lacked the staff to respond." },
+        { "fig": "oakland" },
+        { "p": "Officers logged 425 “success stories” in the software over the year, which the department’s report summarizes as 162 arrests, 174 vehicles recovered and 51 guns recovered. A story can record more than one result, and outside agencies that search Oakland’s cameras [do not report theirs](src:oakland-pac-2026)." },
+        { "p": "Other departments count different steps, over different periods and with different definitions. Los Angeles’s inspector general, reviewing two months of the department’s readers of several makes, counted [210.6 million reads and 50,183 alerts](src:lapd-oig-2026), which led to 68 stops and 74 arrests; 337 stolen vehicles were recovered." },
+        { "fig": "ladder" },
+        { "p": "Whether the cameras reduce crime is disputed. Flock’s survey of about 700 agencies estimated that its technology [supported about a million investigations](src:flock-impact-2026) in 2025, figures the company calls “directional estimates rather than audited totals.” A working paper by two researchers who obtained deployment data from Flock found that [motor vehicle thefts fell 11 percent](src:mourtgos-adams-2026) where agencies adopted the cameras. The Institute for Justice, a public interest law firm, [said the drop](src:reason-flock-study-2026) appears only when agencies with larger theft problems count for more." }
+      ]
+    },
+    {
+      "id": "when-an-alert-is-wrong",
+      "title": "When an alert is wrong",
+      "blocks": [
+        { "p": "An alert means that a camera’s reading of a plate matched an entry on a list. Records show three ways that match can be wrong, each measured against a different total." },
+        { "fig": "errors" }
+      ]
+    },
+    {
+      "id": "who-runs-the-cameras",
+      "title": "Who runs the cameras",
+      "blocks": [
+        { "p": "Flock makes {{flockShareAll}} percent of the plate readers on the map. Volunteers have recorded an operator for {{operatorsNamed.count}} of its cameras, {{operatorsNamed.share}} percent; of those, {{operatorsPolice.share}} percent are listed as run by police or sheriffs and {{operatorsRetail.share}} percent by retailers and shopping centers." },
+        { "fig": "makes" },
+        { "p": "The largest named operators are Lowe’s, with {{topOperators.0.count}} mapped cameras, and The Home Depot, with {{topOperators.1.count}}. This year, shareholder proposals asked both companies to report on the privacy risks of sharing customer data, including images from the cameras in their parking lots; [both boards recommended voting no](src:prospect-retail-2026)." },
+        { "fig": "operators" }
+      ]
+    },
+    {
+      "id": "what-it-costs",
+      "title": "What it costs",
+      "blocks": [
+        { "p": "Customers pay a yearly fee that covers the camera, pole, solar panel, cellular data and software, and Flock [keeps ownership of the hardware](src:richland-agreement-2023). The list price is [$3,000 per camera per year](src:flock-catalog-2024), up from $2,500 before Jan. 1, 2024. Installation, $250 to $350 in contracts from 2019 to 2023, is [$1,000 to $1,250](src:flock-fee-schedule) on Flock’s 2026 fee schedule. In 2019, Greenville, S.C., paid [$2,000 a year for 11 cameras](src:deflocksc-greenville)." },
+        { "fig": "price" },
+        { "p": "The largest public contracts run to millions of dollars. The Texas Department of Public Safety signed a [$26 million contract](src:texastribune-2026) in 2025; Johnson City, Tenn., approved [$8,063,000 over 10 years](src:johnsoncity-2025)." },
+        { "fig": "contracts" }
+      ]
+    },
+    {
+      "id": "what-changed-in-2026",
+      "title": "What changed in 2026",
+      "blocks": [
+        { "p": "This year some governments added cameras or renewed contracts while others ended, paused or restricted them, and Flock changed its own defaults." },
+        { "fig": "timeline" },
+        { "p": "A tracker kept by the site Finding Flock lists [45 decisions](src:findingflock-cancellations) to cancel, pause, deactivate or not renew a contract between August 2025 and September 2026, and says the list is not complete." }
+      ]
+    },
+    {
+      "id": "go-deeper",
+      "kind": "cards",
+      "title": "Go deeper",
+      "blocks": [
+        { "p": "Each part of this story has a page with the full record: every figure, table and source." }
+      ]
+    },
+    {
+      "id": "how-this-was-made",
+      "kind": "methods",
+      "title": "How this was made",
+      "blocks": [
+        { "p": "Camera locations are OpenStreetMap nodes tagged as license plate readers, as served by [DeFlock’s hourly map tiles](src:deflock-tiles-2026), read on {{snapshot|date}} and pinned with a checksum. Each was assigned to a county with the Census Bureau’s [2024 boundary files](src:census-boundaries-2024) and compared with [Vintage 2024 population estimates](src:census-pop-2024). Rates cover the 50 states and the District of Columbia; Puerto Rico appears in the tables only." },
+        { "p": "“Mapped” means recorded by volunteers. A camera nobody has tagged is missing, a removed camera can remain until someone deletes it, and a make or operator is known only when a mapper added it. The table below compares mapped Flock cameras inside city limits with counts that cities or their reporting published." },
+        { "fig": "completeness" },
+        { "p": "Outcome figures come from the agencies’ own reports and audits, quoted with their definitions and periods; they are not combined across agencies. Every number on this page is listed with its source in the project’s [fact-check ledger](https://github.com/realvivek/Flock/blob/main/docs/fact-check.md), and the counts are available as files: [cameras by state](data/story/cameras-by-state.csv), [by county](data/story/cameras-by-county.csv) and the [operator classes](data/story/operator-classes.csv)." },
+        { "p": "Camera positions © OpenStreetMap contributors, available under the Open Database License. Population and boundaries: U.S. Census Bureau. This page does not describe ways to avoid or disable the cameras." }
+      ]
+    }
+  ],
+  "figures": {
+    "states": {
+      "title": "Georgia has the most mapped Flock cameras per resident",
+      "sub": "Mapped Flock cameras for every 100,000 residents, by state",
+      "notes": ["Population estimates for July 1, 2024."],
+      "sources": ["deflock-tiles-2026", "census-pop-2024"]
+    },
+    "lookup": {
+      "title": "Look up a county",
+      "sub": "Mapped Flock cameras and the rate per 100,000 residents",
+      "notes": ["Counties in Connecticut are its nine planning regions, as the Census Bureau now reports them."],
+      "sources": ["deflock-tiles-2026", "census-pop-2024", "census-boundaries-2024"]
+    },
+    "read": {
+      "title": "What one read records",
+      "sub": "Fields the camera produces for a passing vehicle, as Flock’s policy and independent teardowns describe them",
+      "notes": ["Illustration; the fields come from Flock’s published policy, its patents and independent analyses of the device."],
+      "sources": ["flock-lpr-policy", "flock-wing-2020", "aclu-2022", "cehrp-dissection"]
+    },
+    "ruler": {
+      "title": "Seconds to alert, days to deletion",
+      "sub": "Time from the moment a plate is read, on a scale where each step is ten times longer",
+      "notes": ["No figure is published for the upload. As of September 2026, two Flock pages still state different defaults, 30 days and seven."],
+      "sources": ["flock-flex-datasheet", "aclu-2022", "flock-guardrails-2026", "independent-va-2025", "wa-sb6002-2026", "ca-sb34", "aclu-guardrails"]
+    },
+    "audit": {
+      "title": "Two searches, one reason",
+      "sub": "Audit log entries for searches by the Johnson County, Texas, Sheriff’s Office on May 9, 2025, as reported, and three accounts of them",
+      "notes": ["Reconstructed from published copies of the logs; the case number is the office’s, for a death investigation."],
+      "sources": ["404-texas-2025", "eff-texas-2025"]
+    },
+    "oakland": {
+      "title": "In Oakland, one alert for every 580 plates read",
+      "sub": "Plates read and alerts produced by the Police Department’s 293 Flock cameras in 2025; each square’s area is proportional to the count",
+      "notes": ["Alerts for stolen plates and stolen vehicles were generated but not sent to officers."],
+      "sources": ["oakland-pac-2026"]
+    },
+    "ladder": {
+      "title": "Reads, alerts and arrests, as three departments count them",
+      "sub": "Counts from each department’s own report, on a scale where each step is ten times larger",
+      "notes": ["Definitions differ: Nashville counted only hits an employee verified; Los Angeles’s readers include several makes; Oakland’s arrests and recoveries are those officers logged in Flock’s software. Periods differ. The figures are not a ranking."],
+      "sources": ["oakland-pac-2026", "lapd-oig-2026", "nashville-lpr-2023"]
+    },
+    "errors": {
+      "title": "Three ways an alert can be wrong",
+      "sub": "Each measured against the total its own report gives",
+      "notes": ["Story County’s readers are Axon in-car units, not Flock cameras."],
+      "sources": ["sacbee-roseville-2026", "footnote4a-hotlist", "lapd-oig-2026"]
+    },
+    "makes": {
+      "title": "Four in five mapped plate readers are Flock cameras",
+      "sub": "Mapped license plate readers by make",
+      "notes": [],
+      "sources": ["deflock-tiles-2026"]
+    },
+    "operators": {
+      "title": "Where an operator is recorded, most are police or sheriffs",
+      "sub": "Mapped Flock cameras by the type of operator volunteers recorded",
+      "notes": ["Operator names with 10 or more cameras were classified by hand, the rest by keyword; the classification is published with the data."],
+      "sources": ["deflock-tiles-2026"]
+    },
+    "price": {
+      "title": "The price of a camera rose $500 in 2024",
+      "sub": "Annual price per standard camera in contracts and price lists, and the installation fee",
+      "notes": ["Greenville’s 2019 pilot was 11 cameras for $2,000 a year in total."],
+      "sources": ["deflocksc-greenville", "richland-agreement-2023", "indio-2023", "grafton-2024", "flock-catalog-2024", "parkridge-2025", "flock-fee-schedule"]
+    },
+    "contracts": {
+      "title": "The largest documented contracts",
+      "sub": "Contract value and term, from public records",
+      "notes": ["Values are as approved; some include video cameras, drones or gunshot sensors."],
+      "sources": ["texastribune-2026", "johnsoncity-2025", "houstonchronicle-2023", "govtech-dallas-2026", "wsbtv-smyrna-2025", "wvwatch-huntington-2026", "elpasomatters-2026", "turnto10-ri-2026", "okcfox-okc-2026"]
+    },
+    "timeline": {
+      "title": "2026: added, renewed, ended, restricted",
+      "sub": "Events reported in the sources on this site that changed where Flock cameras operate, who pays for them or how their data is kept",
+      "notes": ["Selection: decisions by a state, a large city or Flock itself, and decisions reported as firsts. Not a complete list."],
+      "sources": ["patch-windsor-2026", "wa-sb6002-2026", "evanston-2026", "turnto10-ri-2026", "flock-guardrails-2026", "okcfox-okc-2026", "texastribune-abbott-2026", "wusf-fdot-2026", "govtech-dallas-2026"]
+    },
+    "completeness": {
+      "title": "Mapped cameras and published counts",
+      "sub": "Flock cameras mapped inside city limits, and the count each city or its reporting published",
+      "notes": ["Mapped counts include cameras run by other operators inside city limits; published counts can be older than the map."],
+      "sources": ["deflock-tiles-2026", "census-boundaries-2024", "oaklandside-2026", "denverite-2025", "lexington-lpr-locations", "berkeleyside-2025", "piedmont-2025", "lafayette-co-alpr", "govtech-dallas-2026", "houstonchronicle-flock-2025"]
+    }
+  }
+}

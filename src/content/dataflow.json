@@ -47,7 +47,7 @@
   ],
   "retentionPresets": [
     { "label": "7 days", "days": 7, "note": "Flock default since 13 Aug 2026", "sources": ["flock-guardrails-2026"] },
-    { "label": "21 days", "days": 21, "note": "Virginia and Washington statutory caps", "sources": ["independent-va-2025", "aclu-wa-driver-privacy"] },
+    { "label": "21 days", "days": 21, "note": "Virginia and Washington statutory caps", "sources": ["independent-va-2025", "wa-sb6002-2026"] },
     { "label": "30 days", "days": 30, "note": "Flock default until Aug 2026; Oregon cap; shown on some Flock pages as of Sep 2026", "sources": ["flock-arch-2024", "flock-myths"] },
     { "label": "60 days", "days": 60, "note": "California Highway Patrol cap under SB 34", "sources": ["ca-sb34"] },
     { "label": "Evidence Mode", "days": 365, "note": "Cold storage for an active investigation; no published limit", "sources": ["flock-guardrails-2026", "aclu-guardrails"] }

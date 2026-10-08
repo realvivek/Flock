@@ -54,7 +54,7 @@ const body = () => document.getElementById("page-body")!;
 
 /** Each page's builder; components sets `ready` itself once its locator has decided between 3D and stills. */
 const BUILD: Record<string, () => Promise<void>> = {
-  home: async () => { await (await import("./home")).initHome(); },
+  home: async () => { await (await import("./story/home")).initHome(); },
   deployments: async () => { (await import("./ui/article")).renderDeployments(body()); },
   components: async () => {
     const [page, sections] = await Promise.all([import("./components-page"), import("./sections")]);

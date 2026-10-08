@@ -23,19 +23,25 @@ const nav = async (page: Page, current: string) => {
   await expect(page.locator(".sections a.is-active")).toHaveAttribute("aria-current", "page");
 };
 
-test("home: summary of every page, the components preview, older links redirect", async ({ page }) => {
+/** Scroll a lazy image into view and wait until it has loaded. */
+const loaded = async (page: Page, sel: string) => {
+  await page.locator(sel).scrollIntoViewIfNeeded();
+  await expect.poll(() => page.evaluate((sel) => { const i = document.querySelector<HTMLImageElement>(sel)!; return i.complete && i.naturalWidth > 0; }, sel)).toBe(true);
+};
+
+test("home: the story, a card for every page, the previews, older links redirect", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await go(page, "/");
   await ready(page);
   await instant(page);
   await nav(page, "Home");
-  await expect(page.locator("#preview-img")).toHaveJSProperty("complete", true);
-  expect(await page.evaluate(() => (document.getElementById("preview-img") as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect(page.locator(".story-head h1")).toHaveText("Inside the Network of Cameras Reading America’s License Plates");
+  await expect(page.locator(".story .chapter-title")).toHaveCount(11);
+  await loaded(page, "#preview-img");
   await expect(page.locator("#summary-cards .summary-card")).toHaveCount(8);
   await expect(page.locator("#summary-cards .summary-card .t")).toHaveText(["Deployments and contracts", "Inside the enclosure", "Data path", "Where the picture goes", "What the reads produce", "Common claims", "Economics", "Sources"]);
-  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(2200);
-  // no article content on the home page
+  // the home page tells the story; the reference pages hold the article content
   await expect(page.locator(".claim, .stage, .cell")).toHaveCount(0);
   // a summary card opens its page
   await page.locator("#summary-cards .summary-card", { hasText: "Data path" }).click();
@@ -50,7 +56,7 @@ test("home: summary of every page, the components preview, older links redirect"
   await page.waitForURL(/\/components\/$/, { waitUntil: "commit" });
   await go(page, "/");
   await ready(page);
-  expect(await page.evaluate(() => (document.getElementById("preview-journey-img") as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await loaded(page, "#preview-journey-img");
   await page.locator("#preview-journey").click();
   await page.waitForURL(/\/journey\/$/, { waitUntil: "commit" });
   await ready(page);

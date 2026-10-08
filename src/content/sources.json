@@ -1613,6 +1613,15 @@
       "lastVerified": "2026-09-18"
     },
     {
+      "id": "wa-sb6002-2026",
+      "kind": "independent",
+      "title": "Washington adds safeguards for Flock cameras (SB 6002 signed 30 March 2026: data deleted after 21 days unless needed as evidence; use limited to felonies and gross misdemeanors; no sharing except in court proceedings)",
+      "publisher": "Washington State Standard (via KUOW)",
+      "url": "https://www.kuow.org/stories/washington-adds-safeguards-for-flock-cameras",
+      "date": "2026-03-31",
+      "lastVerified": "2026-10-08"
+    },
+    {
       "id": "deflock-tiles-2026",
       "kind": "independent",
       "title": "DeFlock hourly camera tiles: every OpenStreetMap surveillance camera tagged as a plate reader, with make, operator and direction (PMTiles archive, ODbL)",

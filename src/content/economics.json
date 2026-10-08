@@ -642,15 +642,15 @@
   "scale": [
     {
       "k": "Cameras",
-      "v": "More than 120,000 in 49 states per Flock; about 96,000 mapped by DeFlock contributors",
+      "v": "115,437 Flock cameras mapped by OpenStreetMap contributors as of 8 October 2026; Flock says it operates in more than 6,000 communities in 49 states (July 2026)",
       "sources": [
         "wikipedia-flock",
-        "deflock"
+        "deflock-tiles-2026"
       ]
     },
     {
       "k": "Customers",
-      "v": "More than 5,000 law-enforcement agencies and 6,000 communities per Flock; retail customers including Home Depot and Lowe's share parking-lot camera data with police searches per The American Prospect",
+      "v": "Police departments, sheriffs, homeowner associations and businesses. Home Depot and Lowe's have Flock cameras in their parking lots; 2026 shareholder proposals asked both to report on the privacy risks of sharing customer data, including images from those cameras, and both boards recommended voting no",
       "sources": [
         "wikipedia-flock",
         "prospect-retail-2026"

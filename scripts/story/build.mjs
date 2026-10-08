@@ -24,7 +24,7 @@ import mapshaper from "mapshaper";
 import { PMTiles } from "pmtiles";
 import { VectorTile } from "@mapbox/vector-tile";
 import { PbfReader } from "pbf";
-import { geoAlbersUsa } from "d3-geo";
+import { geoAlbersUsa, geoArea } from "d3-geo";
 import { geoProject } from "d3-geo-projection";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
@@ -41,6 +41,13 @@ const log = (...a) => console.log(...a);
 // FIPS → USPS for the 50 states, D.C. and Puerto Rico.
 const USPS = { "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE", "11": "DC", "12": "FL", "13": "GA", "15": "HI", "16": "ID", "17": "IL", "18": "IN", "19": "IA", "20": "KS", "21": "KY", "22": "LA", "23": "ME", "24": "MD", "25": "MA", "26": "MI", "27": "MN", "28": "MS", "29": "MO", "30": "MT", "31": "NE", "32": "NV", "33": "NH", "34": "NJ", "35": "NM", "36": "NY", "37": "NC", "38": "ND", "39": "OH", "40": "OK", "41": "OR", "42": "PA", "44": "RI", "45": "SC", "46": "SD", "47": "TN", "48": "TX", "49": "UT", "50": "VT", "51": "VA", "53": "WA", "54": "WV", "55": "WI", "56": "WY", "72": "PR" };
 const STATES51 = Object.keys(USPS).filter((f) => f !== "72");
+// Census Bureau regions
+const REGIONS = [
+  { name: "Northeast", usps: "CT ME MA NH RI VT NJ NY PA".split(" ") },
+  { name: "Midwest", usps: "IL IN MI OH WI IA KS MN MO NE ND SD".split(" ") },
+  { name: "South", usps: "DE FL GA MD NC SC VA DC WV AL KY MS TN AR LA OK TX".split(" ") },
+  { name: "West", usps: "AZ CO ID MT NV NM UT WY AK CA HI OR WA".split(" ") },
+];
 
 // ---- 1. Cameras from the tile archive (zoom 9 keeps every point with its properties) ------------------------
 async function readCameras() {
@@ -79,6 +86,17 @@ async function shapes(zip, cmd = "") {
   return JSON.parse(out["out.json"]);
 }
 async function ms(cmd, input) { return mapshaper.applyCommands(cmd, input); }
+// d3-geo reads a polygon's ring order on the sphere: an outer ring wound the other way means "everything except this
+// shape", which projects to the whole clip rectangle. Reverse any polygon whose outer ring covers more than a hemisphere.
+function rewindForD3(fc) {
+  for (const f of fc.features) {
+    const gm = f.geometry;
+    if (!gm) continue;
+    const polys = gm.type === "Polygon" ? [gm.coordinates] : gm.type === "MultiPolygon" ? gm.coordinates : [];
+    for (const poly of polys) if (geoArea({ type: "Polygon", coordinates: [poly[0]] }) > 2 * Math.PI) for (const ring of poly) ring.reverse();
+  }
+  return fc;
+}
 // mapshaper writes a GeometryCollection when a layer has no attributes; d3's geoProject needs features.
 const asFeatures = (g) => (g.type === "FeatureCollection" ? g : { type: "FeatureCollection", features: (g.geometries ?? []).map((geometry) => ({ type: "Feature", properties: {}, geometry })) });
 
@@ -196,7 +214,7 @@ for (const c of cams) {
 const countyRows = [...countyProps.values()].filter((p) => USPS[p.STATEFP]).map((p) => {
   const r = byCounty.get(p.GEOID) ?? { flock: 0, all: 0 };
   const pop = popCounty.get(p.GEOID)?.pop ?? null;
-  return { fips: p.GEOID, name: p.NAMELSAD, state: p.STATE_NAME, usps: USPS[p.STATEFP], flock: r.flock, all: r.all, pop, per10k: pop ? Math.round(r.flock / pop * 1e5) / 10 : null };
+  return { fips: p.GEOID, name: p.NAMELSAD, state: p.STATE_NAME, usps: USPS[p.STATEFP], flock: r.flock, all: r.all, pop, per100k: pop ? Math.round(r.flock / pop * 1e6) / 10 : null };
 }).sort((a, b) => a.fips.localeCompare(b.fips));
 const missingPop = countyRows.filter((r) => r.pop == null && r.usps !== "PR");
 if (missingPop.length) log("counties without a population row:", missingPop.map((r) => r.fips + " " + r.name).join(", "));
@@ -242,12 +260,13 @@ const topNamed = [...named.entries()].filter(([k]) => classOf(k) !== "flock").so
 // projection: Albers USA fitted to the 50 states and D.C. in a 1000 x 620 frame
 const FRAME = [1000, 620];
 const states = await ms("-i in.json -filter 'STATEFP !== \"72\" && STATEFP < \"60\"' -dissolve STATEFP copy-fields=STUSPS,STATE_NAME -simplify 3% keep-shapes -o format=geojson precision=0.00001 out.json", { "in.json": JSON.stringify(counties) }).then((o) => JSON.parse(o["out.json"]));
+rewindForD3(states);
 const projection = geoAlbersUsa().fitExtent([[6, 6], [FRAME[0] - 6, FRAME[1] - 6]], states);
 const scale = projection.scale(), translate = projection.translate();
 const statesProj = round2(geoProject(states, projection));
 const statesTopo = await toTopo(statesProj, "states");
 const countiesSimple = await ms("-i in.json -filter 'STATEFP !== \"72\" && STATEFP < \"60\"' -simplify 1.2% keep-shapes -filter-fields GEOID -o format=geojson precision=0.00001 out.json", { "in.json": JSON.stringify(counties) }).then((o) => JSON.parse(o["out.json"]));
-const countiesTopo = await toTopo(round2(geoProject(countiesSimple, projection)), "counties", 8000);
+const countiesTopo = await toTopo(round2(geoProject(rewindForD3(countiesSimple), projection)), "counties", 8000);
 
 // points
 const pts = [];
@@ -266,11 +285,35 @@ const ATL = [-84.86, 33.42, -83.86, 34.2];
 const roadsGa = await shapes("tl_2024_13_prisecroads.zip", `-clip bbox=${ATL.join(",")} -filter 'MTFCC === "S1100" || MTFCC === "S1200"' -filter-fields MTFCC,FULLNAME -simplify 12%`);
 const metroFips = ["13121", "13089", "13067", "13135", "13063", "13057", "13117", "13151", "13113", "13097", "13247"];
 const atlCounties = await ms("-i in.json -filter '" + metroFips.map((f) => `GEOID === "${f}"`).join(" || ") + "' -simplify 15% keep-shapes -innerlines -o format=geojson precision=0.00001 out.json", { "in.json": JSON.stringify(counties) }).then((o) => JSON.parse(o["out.json"]));
+// Fulton County's outline, which the story names
+const fulton = rewindForD3({ type: "FeatureCollection", features: [JSON.parse(JSON.stringify(counties.features.find((f) => f.properties.GEOID === "13121")))] });
 const atlFc = { type: "FeatureCollection", features: [
+  ...geoProject(fulton, projection).features.map((f) => ({ type: "Feature", properties: { c: 3, n: "Fulton County" }, geometry: f.geometry })),
   ...geoProject(roadsGa, projection).features.filter((f) => f.geometry).map((f) => ({ type: "Feature", properties: { c: f.properties.MTFCC === "S1100" ? 1 : 2, n: f.properties.FULLNAME ?? "" }, geometry: f.geometry })),
   ...geoProject(asFeatures(atlCounties), projection).features.filter((f) => f.geometry).map((f) => ({ type: "Feature", properties: { c: 0 }, geometry: f.geometry })),
 ] };
 write(OUT, "atlanta.topo.json", await toTopo(atlFc, "atlanta", 10000));
+// Label positions for the story map, in the same projected frame: a few large cities for the national view; for the
+// Atlanta zoom the city, Fulton County and the interstates, each snapped to the nearest point on its road.
+{
+  const pt = (lon, lat) => projection([lon, lat]).map((v) => Math.round(v * 100) / 100);
+  const snap = (name, lon, lat) => {
+    const t = projection([lon, lat]); let best = null, bd = Infinity;
+    for (const f of atlFc.features) if (f.properties.n === name) for (const ln of (f.geometry.type === "LineString" ? [f.geometry.coordinates] : f.geometry.coordinates)) for (const q of ln) { const d = (q[0] - t[0]) ** 2 + (q[1] - t[1]) ** 2; if (d < bd) { bd = d; best = q; } }
+    if (!best) throw new Error(`label: no road named ${name}`);
+    return best.map((v) => Math.round(v * 100) / 100);
+  };
+  const corners = [[ATL[0], ATL[1]], [ATL[0], ATL[3]], [ATL[2], ATL[1]], [ATL[2], ATL[3]]].map(([lo, la]) => projection([lo, la]));
+  const labels = {
+    cities: [["Seattle", -122.33, 47.61], ["Los Angeles", -118.24, 34.05], ["Denver", -104.99, 39.74], ["Dallas", -96.8, 32.78], ["Houston", -95.37, 29.76], ["Chicago", -87.63, 41.88], ["Atlanta", -84.39, 33.75], ["Miami", -80.19, 25.76], ["New York", -74.01, 40.71]].map(([name, lon, lat]) => ({ name, xy: pt(lon, lat) })),
+    atlanta: {
+      bbox: [Math.min(...corners.map((c) => c[0])), Math.min(...corners.map((c) => c[1])), Math.max(...corners.map((c) => c[0])), Math.max(...corners.map((c) => c[1]))].map((v) => Math.round(v * 100) / 100),
+      places: [{ name: "Atlanta", kind: "city", xy: pt(-84.39, 33.75) }, { name: "Fulton County", kind: "area", xy: pt(-84.36, 34.03) }],
+      roads: [["75", "I- 75", -84.56, 34.0], ["85", "I- 85", -84.2, 33.93], ["20", "I- 20", -84.17, 33.72], ["285", "I- 285", -84.36, 33.92], ["75", "I- 75", -84.33, 33.5], ["85", "I- 85", -84.6, 33.5]].map(([name, road, lon, lat]) => ({ name, xy: snap(road, lon, lat) })),
+    },
+  };
+  write(OUT, "labels.json", labels);
+}
 
 // ---- Completeness: mapped Flock cameras inside city limits against published counts ------------------------------
 const places = await shapes("cb_2024_us_place_500k.zip", "-filter-fields GEOID,NAME,STUSPS");
@@ -296,10 +339,21 @@ for (const c of flockCams) {
   const city = w.name.split("-")[0].toLowerCase();
   const o = c.operator ? normOp(c.operator).toLowerCase() : "";
   const kind = !o ? "untagged" : o.includes(city) && /(police|\bpd\b|sheriff|public safety)/.test(o) ? "police" : "other";
-  const r = placeCounts.get(g) ?? { mapped: 0, police: 0, other: 0, untagged: 0 };
+  const r = placeCounts.get(g) ?? { mapped: 0, police: 0, other: 0, untagged: 0, ops: new Map() };
   r.mapped++; r[kind]++;
+  if (kind === "other") { const k = (classes.canonical?.[normOp(c.operator)] ?? normOp(c.operator)); r.ops.set(k, (r.ops.get(k) ?? 0) + 1); }
   placeCounts.set(g, r);
 }
+// the largest other operator in each city, then drop the working map
+for (const r of placeCounts.values()) { const top = [...r.ops.entries()].sort((a, b) => b[1] - a[1])[0]; r.topOther = top ? { name: top[0], count: top[1] } : null; delete r.ops; }
+// Mapped Flock cameras inside each incorporated place: the largest counts, for the Deployments page
+const byPlace = new Map();
+for (const c of flockCams) { const g = placeIdx.find(c.lon, c.lat); if (g) byPlace.set(g, (byPlace.get(g) ?? 0) + 1); }
+// Census names consolidated governments by their legal form ("Indianapolis city (balance)"); keep the city's name.
+const cleanPlace = (n) => n.replace(/ \(balance\)$/, "").replace(/ city$/, "").replace(/[-/][A-Z][A-Za-z ]* (metropolitan|metro|unified|consolidated) government$/, "").replace(/^Lexington-Fayette$/, "Lexington");
+const cities = [...byPlace.entries()].sort((a, b) => b[1] - a[1]).slice(0, 25).map(([g, n]) => ({ geoid: g, name: cleanPlace(placeById.get(g).NAME), usps: placeById.get(g).STUSPS, flock: n }));
+write(OUT, "cities.json", { snapshot: snapshot.slice(0, 10), sources: ["deflock-tiles-2026", "census-boundaries-2024"], rows: cities });
+log("cities:", cities.slice(0, 10).map((c) => `${c.name} ${c.usps} ${c.flock}`).join("; "));
 const completeness = WANT.map((w, i) => ({ place: w.name === "Lexington-Fayette" ? "Lexington" : w.name, usps: w.usps, published: w.published, when: w.when, what: w.what, sources: w.sources, ...(wantIds[i] ? (placeCounts.get(wantIds[i]) ?? { mapped: 0, police: 0, other: 0, untagged: 0 }) : { mapped: null }) }));
 write(OUT, "completeness.json", completeness);
 log("completeness:", completeness.map((r) => `${r.place} ${r.mapped}/${r.published} (police-tagged ${r.police}, other ${r.other}, untagged ${r.untagged})`).join("; "));
@@ -348,7 +402,7 @@ for (const city of CITY) {
 write(OUT, "states.topo.json", statesTopo);
 write(OUT, "counties.topo.json", countiesTopo);
 write(OUT, "states.json", { usRate, usFlock, usPop, rows: stateRows });
-write(OUT, "counties.json", countyRows.map((r) => [r.fips, r.name, r.usps, r.flock, r.all, r.pop, r.per10k]));
+write(OUT, "counties.json", countyRows.map((r) => [r.fips, r.name, r.usps, r.flock, r.all, r.pop, r.per100k]));
 write(OUT, "operators.json", {
   total: cams.length, flock: flockTotal, branded, shareAll: Math.round(flockTotal / cams.length * 1000) / 10, shareBranded: Math.round(flockTotal / branded * 1000) / 10,
   brands: brands.slice(0, 8).concat([{ brand: "Other makes", count: brands.slice(8).reduce((a, b) => a + b.count, 0) }]),
@@ -358,7 +412,7 @@ write(OUT, "operators.json", {
 });
 const csvRow = (a) => a.map((v) => (v == null ? "" : /[",]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : v)).join(",");
 fs.writeFileSync(path.join(OUT, "cameras-by-state.csv"), ["state,usps,flock_cameras,all_plate_readers,population_2024,flock_per_100k"].concat(stateRows.map((r) => csvRow([r.name, r.usps, r.flock, r.all, r.pop, r.per100k]))).join("\n") + "\n");
-fs.writeFileSync(path.join(OUT, "cameras-by-county.csv"), ["fips,county,usps,flock_cameras,all_plate_readers,population_2024,flock_per_10k"].concat(countyRows.map((r) => csvRow([r.fips, r.name, r.usps, r.flock, r.all, r.pop, r.per10k]))).join("\n") + "\n");
+fs.writeFileSync(path.join(OUT, "cameras-by-county.csv"), ["fips,county,usps,flock_cameras,all_plate_readers,population_2024,flock_per_100k"].concat(countyRows.map((r) => csvRow([r.fips, r.name, r.usps, r.flock, r.all, r.pop, r.per100k]))).join("\n") + "\n");
 fs.writeFileSync(path.join(OUT, "operator-classes.csv"), ["operator_as_tagged,flock_cameras,class"].concat([...opCounts.entries()].sort((a, b) => b[1] - a[1]).map(([o, n]) => csvRow([o, n, classOf(o)]))).join("\n") + "\n");
 const versions = { v1: cams.filter((c) => c.osmVersion === 1).length };
 write(OUT, "meta.json", {
@@ -373,7 +427,7 @@ const st = (value, sources, note) => ({ value, sources, ...(note ? { note } : {}
 const rank51 = s51.slice().sort((a, b) => b.per100k - a.per100k);
 const countiesUS = countyRows.filter((r) => r.usps !== "PR");
 const noneRows = countiesUS.filter((r) => r.flock === 0);
-const big = countiesUS.filter((r) => r.pop >= 1e6).sort((a, b) => b.per10k - a.per10k);
+const big = countiesUS.filter((r) => r.pop >= 1e6).sort((a, b) => b.per100k - a.per100k);
 const mostCounty = countiesUS.slice().sort((a, b) => b.flock - a.flock)[0];
 const opNamed = withOperator, retail = classCount.get("retail"), police = classCount.get("police");
 const stats = {
@@ -387,7 +441,9 @@ const stats = {
   bottomStates: st(rank51.slice(-5).reverse().map((r) => ({ name: r.name, rate: r.per100k, flock: r.flock })), POP),
   mostStates: st(s51.slice().sort((a, b) => b.flock - a.flock).slice(0, 2).map((r) => ({ name: r.name, flock: r.flock })), POP),
   countiesNone: st({ count: noneRows.length, of: countiesUS.length, popShare: Math.round(noneRows.reduce((a, r) => a + (r.pop || 0), 0) / countiesUS.reduce((a, r) => a + (r.pop || 0), 0) * 1000) / 10 }, POP),
-  topBigCounty: st({ name: big[0].name, usps: big[0].usps, rate: big[0].per10k, flock: big[0].flock }, POP, "Highest rate among counties of a million people or more"),
+  topBigCounty: st({ name: big[0].name, usps: big[0].usps, rate: big[0].per100k, flock: big[0].flock, pop: big[0].pop }, POP, "Highest rate per 100,000 residents among counties of a million people or more"),
+  regions: st(REGIONS.map((g) => { const rows = s51.filter((r) => g.usps.includes(r.usps)); const f = rows.reduce((a, r) => a + r.flock, 0), p = rows.reduce((a, r) => a + r.pop, 0); return { name: g.name, flock: f, rate: Math.round(f / p * 1e6) / 10 }; }), POP, "Census regions; Flock cameras per 100,000 residents"),
+  oaklandChp: st(completeness.find((r) => r.place === "Oakland")?.topOther ?? null, CAM, "The largest operator tagged on mapped Flock cameras inside Oakland other than its police"),
   mostCounty: st({ name: mostCounty.name, usps: mostCounty.usps, flock: mostCounty.flock }, POP),
   operatorsNamed: st({ count: opNamed, share: Math.round(opNamed / flockTotal * 100) }, CAM, "Flock cameras with an operator tagged"),
   operatorsRetail: st({ count: retail, share: Math.round(retail / opNamed * 100) }, CAM, "Retailers and shopping centers, among named operators"),

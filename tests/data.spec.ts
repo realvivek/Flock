@@ -32,9 +32,10 @@ test("cams.bin decodes to every on-map camera inside the frame", () => {
   }
   expect(badClass).toBe(0);
   expect(outside).toBe(0);
-  // Georgia, the state with the highest rate, should hold a dense block of dots near Atlanta (x ≈ 690, y ≈ 394)
+  // Georgia, the state with the highest rate, should hold a dense block of dots around Atlanta's label position
+  const [ax, ay] = json("public/data/story/labels.json").cities.find((c: { name: string }) => c.name === "Atlanta").xy;
   let atl = 0;
-  for (let i = 0; i < cams.n; i++) if (Math.abs(cams.x[i]! - 690) < 12 && Math.abs(cams.y[i]! - 394) < 12) atl++;
+  for (let i = 0; i < cams.n; i++) if (Math.abs(cams.x[i]! - ax) < 12 && Math.abs(cams.y[i]! - ay) < 12) atl++;
   expect(atl).toBeGreaterThan(1000);
   expect(flock).toBeLessThanOrEqual(meta.cameras.flock);
   expect(meta.cameras.flock - flock).toBeLessThanOrEqual(meta.cameras.offMap);
