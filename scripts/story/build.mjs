@@ -247,12 +247,13 @@ if (unmapped.length) {
   console.error(`${unmapped.length} operator names with 10 or more cameras have no class; a draft is in data/story/operator-classes.draft.json`);
   if (!process.argv.includes("--allow-draft")) process.exit(1);
 }
-const classOf = (o) => classes.map[o] ?? guessClass(o);
+// spelling variants of one operator (classes.canonical) take that operator's class
+const canon = (o) => classes.canonical?.[o] ?? o;
+const classOf = (o) => classes.map[o] ?? classes.map[canon(o)] ?? guessClass(o);
 const classCount = new Map(CLASSES.map((c) => [c.id, 0]));
 for (const [o, n] of opCounts) classCount.set(classOf(o), classCount.get(classOf(o)) + n);
 const withOperator = [...opCounts.values()].reduce((a, n) => a + n, 0);
 // group spelling variants of the same operator for the "largest named operators" list
-const canon = (o) => classes.canonical?.[o] ?? o;
 const named = new Map();
 for (const [o, n] of opCounts) { const k = canon(o); named.set(k, (named.get(k) ?? 0) + n); }
 const topNamed = [...named.entries()].filter(([k]) => classOf(k) !== "flock").sort((a, b) => b[1] - a[1]).slice(0, 15).map(([name, count]) => ({ name, count, cls: classOf(name) }));
@@ -270,10 +271,10 @@ const countiesTopo = await toTopo(round2(geoProject(rewindForD3(countiesSimple),
 
 // points
 const pts = [];
-let offMap = 0;
+let offMap = 0, offMapFlock = 0;
 for (const c of cams) {
   const p = projection([c.lon, c.lat]);
-  if (!p) { offMap++; continue; }
+  if (!p) { offMap++; if (c.cls === 0) offMapFlock++; continue; }
   pts.push({ qx: Math.max(0, Math.min(65535, Math.round(p[0] / FRAME[0] * 65535))), qy: Math.max(0, Math.min(65535, Math.round(p[1] / FRAME[1] * 65535))), cls: c.cls });
 }
 const bin = packPoints(pts, FRAME);
@@ -424,7 +425,7 @@ fs.writeFileSync(path.join(OUT, "operator-classes.csv"), ["operator_as_tagged,fl
 const versions = { v1: cams.filter((c) => c.osmVersion === 1).length };
 write(OUT, "meta.json", {
   snapshot: snapshot.slice(0, 10), built: new Date().toISOString().slice(0, 10), frame: FRAME, projection: { name: "geoAlbersUsa", scale, translate },
-  cameras: { total: cams.length, flock: flockTotal, onMap: pts.length, offMap, assignedByFallback: fallback, unassigned, neverEditedShare: Math.round(versions.v1 / cams.length * 1000) / 10 },
+  cameras: { total: cams.length, flock: flockTotal, onMap: pts.length, offMap, offMapFlock, assignedByFallback: fallback, unassigned, neverEditedShare: Math.round(versions.v1 / cams.length * 1000) / 10 },
   sources: ["deflock-tiles-2026", "census-pop-2024", "census-boundaries-2024"],
   licence: "Camera positions © OpenStreetMap contributors, ODbL 1.0, via DeFlock. Population: U.S. Census Bureau, Vintage 2024 estimates. Boundaries and roads: U.S. Census Bureau 2024 cartographic boundary and TIGER/Line files.",
 });
@@ -448,6 +449,8 @@ const stats = {
   bottomStates: st(rank51.slice(-5).reverse().map((r) => ({ name: r.name, rate: r.per100k, flock: r.flock })), POP),
   mostStates: st(s51.slice().sort((a, b) => b.flock - a.flock).slice(0, 2).map((r) => ({ name: r.name, flock: r.flock })), POP),
   countiesNone: st({ count: noneRows.length, of: countiesUS.length, popShare: Math.round(noneRows.reduce((a, r) => a + (r.pop || 0), 0) / countiesUS.reduce((a, r) => a + (r.pop || 0), 0) * 1000) / 10 }, POP),
+  // the states with the most counties where none is mapped
+  countiesNoneTop: st((() => { const by = new Map(); for (const r of noneRows) by.set(r.usps, (by.get(r.usps) ?? 0) + 1); return [...by.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4).map(([usps, count]) => ({ name: s51.find((x) => x.usps === usps).name, usps, count, of: countiesUS.filter((r) => r.usps === usps).length })); })(), POP, "States with the most counties where no Flock camera is mapped"),
   topBigCounty: st({ name: big[0].name, usps: big[0].usps, rate: big[0].per100k, flock: big[0].flock, pop: big[0].pop }, POP, "Highest rate per 100,000 residents among counties of a million people or more"),
   regions: st(REGIONS.map((g) => { const rows = s51.filter((r) => g.usps.includes(r.usps)); const f = rows.reduce((a, r) => a + r.flock, 0), p = rows.reduce((a, r) => a + r.pop, 0); return { name: g.name, flock: f, rate: Math.round(f / p * 1e6) / 10 }; }), POP, "Census regions; Flock cameras per 100,000 residents"),
   oaklandChp: st(completeness.find((r) => r.place === "Oakland")?.topOther ?? null, CAM, "The largest operator tagged on mapped Flock cameras inside Oakland other than its police"),

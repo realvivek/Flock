@@ -9,7 +9,7 @@ export function scrolly(section: HTMLElement, onStep: (i: number, prev: number) 
   const steps = [...section.querySelectorAll<HTMLElement>(".step")];
   const cards = steps.map((s) => s.querySelector<HTMLElement>(".step-card") ?? s);
   let cur = -1, raf = 0;
-  const line = () => innerHeight * (matchMedia("(max-width: 760px)").matches ? 0.86 : 0.72);
+  const line = () => innerHeight * (matchMedia("(max-width: 760px)").matches ? 0.8 : 0.72);
   const measure = () => {
     raf = 0;
     const y = line();

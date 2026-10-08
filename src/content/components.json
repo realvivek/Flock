@@ -14,15 +14,15 @@
       "id": "ledboard", "node": "falcon.ledboard", "order": 2, "group": "optics",
       "name": "Infrared illuminator board", "partNumber": "401-00028_B",
       "function": "Six high-power emitters in a ring around the lens light the plate at night. Independent optical measurement puts them at 850 nm, pulsed at 10 Hz. An orange dome sensor next to the ring meters ambient light to decide when to fire.",
-      "spec": { "Emitters": "6, ring, central lens cutout", "Wavelength": "850 nm (measured); teardown photos read as warm-white", "Pulse": "20 ms on / 80 ms off, up to ~40 strobes per capture", "Connector": "12-pin header J400, 12 V rail" },
+      "spec": { "Emitters": "6, ring, central lens cutout", "Wavelength": "850 nm (measured); teardown photos read as warm-white", "Pulse": "20 ms on / 80 ms off, up to about 40 strobes per capture", "Connector": "12-pin header J400, 12 V rail" },
       "dims": { "diameter": 2.3, "d": 0.12 }, "explode": [0, 0, 0.25], "hop": "hop-1",
       "confidence": "disputed", "sources": ["flockcamre", "noflock-ir", "flock-flex-datasheet"]
     },
     {
       "id": "lens", "node": "falcon.lens", "order": 3, "group": "optics",
-      "name": "M12 fixed-focus lens, ~16 mm",
+      "name": "M12 fixed-focus lens, about 16 mm",
       "function": "Long focal length, narrow field of view: about 15 ft wide at 65 ft per Flock's specification sheet, covering about two lanes at that distance.",
-      "spec": { "Mount": "M12 thread", "Focal length": "~16 mm (older unit); current lens unpublished", "Field of view": "15 ft wide at 65 ft (Flock sheet)" },
+      "spec": { "Mount": "M12 thread", "Focal length": "About 16 mm (older unit); current lens unpublished", "Field of view": "15 ft wide at 65 ft (Flock sheet)" },
       "dims": { "diameter": 0.6, "d": 0.8 }, "explode": [0, 0, 0.19], "hop": "hop-1",
       "confidence": "measured", "sources": ["cehrp-dissection", "flock-techspecs"]
     },
@@ -38,7 +38,7 @@
       "id": "sensor", "node": "falcon.sensor", "order": 5, "group": "optics",
       "name": "Camera module", "partNumber": "ISB-IMX477C-C02",
       "function": "About five megapixels, half-inch format, infrared-optimized. It captures six to 12 still frames per passing vehicle; it does not record continuous video.",
-      "spec": { "Resolution": "~5 MP", "Format": "1/2 in", "Interface": "Fine-pitch flex cable to the mainboard, CAM_3V3 rail", "Note": "The IMX477 marking may not be a genuine Sony part; resolution does not match a real IMX477" },
+      "spec": { "Resolution": "About 5 MP", "Format": "1/2 in", "Interface": "Fine-pitch flex cable to the mainboard, CAM_3V3 rail", "Note": "The IMX477 marking may not be a genuine Sony part; resolution does not match a real IMX477" },
       "dims": { "w": 1.0, "h": 1.0, "d": 0.2 }, "explode": [0, 0, 0.09], "hop": "hop-1",
       "confidence": "disputed", "sources": ["flockcamre", "cehrp-dissection", "jalopnik-speed"]
     },
@@ -62,7 +62,7 @@
       "id": "som", "node": "falcon.som", "order": 8, "group": "compute",
       "name": "System on module", "partNumber": "Lantronix Open-Q 624A", "vendor": "Lantronix / Qualcomm",
       "function": "Qualcomm APQ8053 (Snapdragon 624/625 family) running Android 8.1. Plate recognition and the Vehicle Fingerprint attributes are computed on this module before transmission.",
-      "spec": { "CPU": "8x ARM cores, 1.4 GHz class", "GPU": "Adreno 506", "RAM": "~2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "YOLO and OpenCV pipelines on device", "Support": "Chipset vendor security support ended 2021" },
+      "spec": { "CPU": "8x ARM cores, 1.4 GHz class", "GPU": "Adreno 506", "RAM": "About 2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "YOLO and OpenCV pipelines on device", "Support": "Chipset vendor security support ended 2021" },
       "dims": { "w": 1.2, "h": 2.0, "d": 0.15 }, "explode": [0, 0.11, -0.05], "hop": "hop-2",
       "confidence": "measured", "sources": ["flockcamre", "ryanohoro-2024", "flock-flex-datasheet", "footnote4a-trust"]
     },
@@ -70,7 +70,7 @@
       "id": "emmc", "node": "falcon.emmc", "order": 9, "group": "compute",
       "name": "Storage", "partNumber": "Kingston eMMC32G", "vendor": "Kingston",
       "function": "32 GB of flash for the operating system and the image upload queue. Flock states images are removed from the device once the cloud acknowledges the upload; the Flex data sheet describes about two weeks of local buffer.",
-      "spec": { "Capacity": "32 GB (29.1 GiB usable)", "Mode": "HS400ES", "Buffer": "~2 weeks offline (Flex sheet); standard Falcon unspecified" },
+      "spec": { "Capacity": "32 GB (29.1 GiB usable)", "Mode": "HS400ES", "Buffer": "About 2 weeks offline (Flex sheet); standard Falcon unspecified" },
       "dims": { "w": 0.5, "h": 0.45, "d": 0.06 }, "explode": [0, 0.18, -0.05], "hop": "hop-2",
       "confidence": "measured", "sources": ["flockcamre", "flock-flex-datasheet", "flock-privacy-access"]
     },
@@ -110,7 +110,7 @@
       "id": "clamps", "node": "falcon.clamps", "order": 14, "group": "mount",
       "name": "Band clamps and mounting boss",
       "function": "Two adjustable stainless bands clamp the unit to the pole. Flock's pole is 2.875 in outside diameter, the same as the camera's width.",
-      "spec": { "Bands": "2x adjustable stainless", "Pole OD": "2.875 in (Flock pole) or existing pole", "Height": "8 to 12 ft on existing poles; ~10 ft on the 12 ft Flock pole" },
+      "spec": { "Bands": "2x adjustable stainless", "Pole OD": "2.875 in (Flock pole) or existing pole", "Height": "8 to 12 ft on existing poles; about 10 ft on the 12 ft Flock pole" },
       "dims": { "w": 3.2, "h": 1.0, "d": 3.2 }, "explode": [0, 0, -0.46],
       "confidence": "measured", "sources": ["flock-techspecs", "flock-impl-guide"]
     }

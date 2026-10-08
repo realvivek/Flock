@@ -10,14 +10,14 @@ export function auditFigure(cfg: FigureCfg, ctx: Ctx, d: Deputy): string {
   const f = d.first!;
   const rows: [string, string, string][] = [
     ["Date", d.date, "same"],
-    ["Agency", "Johnson County Sheriff’s Office, Texas", "same"],
+    ["Agency", "Johnson County Sheriff’s Office, Tex.", "same"],
     ["Time frame", `${f.lookbackDays} days`, `${d.lookbackDays} days`],
     ["Networks searched", int(f.networks), int(d.networks)],
     ["Cameras searched", int(f.cameras), int(d.cameras)],
     ["Reason", `“${d.reasonAsLogged}”`, "same"],
-    ["Case number", "the office’s death investigation", "same"],
+    ["Case number", "[The office’s death investigation]", "same"],
   ];
-  const log = `<div class="audit-log"><table><caption class="visually-hidden">Audit log entries for two searches</caption><thead><tr><th scope="col"><span class="visually-hidden">Field</span></th><th scope="col">First search</th><th scope="col">Second search</th></tr></thead><tbody>${rows.map(([k, a, b]) => `<tr${k.startsWith("Cameras") ? ' class="is-key"' : ""}><th scope="row">${escape(k)}</th><td>${escape(a)}</td><td${b === "same" ? ' class="same"' : ""}>${b === "same" ? "〃" : escape(b)}</td></tr>`).join("")}</tbody></table></div>`;
+  const log = `<div class="audit-log"><table><caption class="visually-hidden">Audit log entries for two searches</caption><thead><tr><th scope="col"><span class="visually-hidden">Field</span></th><th scope="col">First search</th><th scope="col">Second search</th></tr></thead><tbody>${rows.map(([k, a, b]) => `<tr${k.startsWith("Cameras") ? ' class="is-key"' : ""}><th scope="row">${escape(k)}</th><td${a.startsWith("[") ? ' class="ed"' : ""}>${escape(a)}</td><td${b === "same" ? ' class="same"' : ""}>${b === "same" ? "Same" : escape(b)}</td></tr>`).join("")}</tbody></table></div>`;
   // The sheriff's and Flock's words are quotations; EFF's entry summarizes the records it obtained.
   const acc = (d.accounts ?? []).map((a, i) => {
     const quoted = i < 2;

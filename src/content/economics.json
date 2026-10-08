@@ -2,7 +2,7 @@
   "$comment": "Pricing, fee schedules, installation workflow, workforce, permitting, contract terms and company scale for a Flock deployment. Every row cites sources.json. Prices are per unit per year unless stated.",
   "intro": {
     "headline": "Pricing and cost structure",
-    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage, software and installation labor. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts from 2021 to 2023 list a one-time installation fee of $250 to $350 a camera. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
+    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage and software. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
     "sources": [
       "flock-catalog-2024",
       "parkridge-2025",
@@ -158,7 +158,7 @@
     },
     {
       "k": "Site work",
-      "v": "Site surveys, 811 locate scheduling, installation labor",
+      "v": "Site surveys and 811 locate scheduling",
       "sources": [
         "flock-impl-guide"
       ]
@@ -175,10 +175,11 @@
   "extra": [
     {
       "k": "Installation fee",
-      "v": "One-time per camera: $250 to $350 in contracts from 2021 to 2023. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan",
+      "v": "One-time per camera: $350 to $650 in contracts and quotes from 2022 and 2023, or $150 on existing infrastructure. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan",
       "sources": [
         "richland-agreement-2023",
-        "contrary-flock",
+        "indio-2023",
+        "flock-deck-2023",
         "flock-fee-schedule"
       ]
     },
@@ -312,12 +313,19 @@
       ]
     },
     {
-      "date": "2021 to 2023",
-      "price": "$2,000 to $2,500 plus $250 to $350 install",
-      "note": "Range in council agreements and reporting from this period",
+      "date": "September 2022",
+      "price": "$2,500 plus $350 install",
+      "note": "Richland, Wash. order form for 10 cameras",
       "sources": [
-        "richland-agreement-2023",
-        "contrary-flock"
+        "richland-agreement-2023"
+      ]
+    },
+    {
+      "date": "July 2023",
+      "price": "$2,500 plus $650 install",
+      "note": "Flock's proposal to Orlando's International Drive district",
+      "sources": [
+        "flock-deck-2023"
       ]
     },
     {
@@ -363,7 +371,7 @@
     {
       "date": "2026",
       "price": "$1,000 to $1,250 to install",
-      "note": "Flock's 2026 fee schedule, for installs the customer requests after the deployment plan is agreed; contracts from 2021 to 2023 list a one-time install fee of $250 to $350",
+      "note": "Flock's 2026 fee schedule, for installs the customer requests after the deployment plan is agreed; contracts and quotes from 2022 and 2023 list a one-time install fee of $350 to $650",
       "sources": [
         "flock-fee-schedule"
       ]
@@ -501,7 +509,7 @@
     },
     {
       "k": "Manufacturing",
-      "v": "Cameras assembled in Atlanta; a 97,000 square foot Smyrna, Georgia plant opened in 2025 for drones, panel assembly and refurbishing returned hardware",
+      "v": "Cameras assembled in Atlanta; a 97,000-square-foot plant in Smyrna, Ga., opened in 2025 for drones, panel assembly and refurbishing returned hardware",
       "sources": [
         "flock-techspecs",
         "flock-smyrna-2025",
@@ -743,12 +751,12 @@
         0.1
       ],
       "k": "installation fee, one-time",
-      "v": "$250 to $350 in 2021–23 contracts",
+      "v": "$350 to $650 in 2022–23 contracts and quotes",
       "dx": 235,
       "dy": -44,
       "sources": [
         "richland-agreement-2023",
-        "contrary-flock"
+        "indio-2023"
       ]
     },
     {

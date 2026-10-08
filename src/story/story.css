@@ -52,10 +52,14 @@
 .step { min-height: 100svh; display: flex; align-items: center; padding: 0 var(--gutter) 0 max(var(--gutter), calc((100% - var(--wide)) / 2)); }
 .step:first-child { min-height: calc(100svh - var(--topbar-h)); }
 .step:last-child { min-height: 120svh; }
-.step-card { pointer-events: auto; width: min(22rem, 100%); background: rgba(255, 255, 255, .96); border: 1px solid var(--rule); box-shadow: 0 1px 8px rgba(0, 0, 0, .07); padding: 1rem 1.2rem 1.05rem; }
+.step-card { pointer-events: auto; width: min(22rem, 100%); background: #fff; border: 1px solid var(--rule); box-shadow: 0 1px 8px rgba(0, 0, 0, .07); padding: 1rem 1.2rem 1.05rem; }
 .step-card p { margin: 0; font: 400 1.125rem/1.5 var(--serif); color: var(--ink); }
 /* the credit sits inside the sticky graphic, so every step of the map shows it */
-.map-credit { position: absolute; z-index: 1; left: 50%; bottom: .55rem; max-width: 36rem; margin: 0; padding: .2rem .4rem; margin-left: -.4rem; background: rgba(255, 255, 255, .88); font: 400 .75rem/1.4 var(--sans); color: var(--ink-3); }
+.map-credit { position: absolute; z-index: 1; left: 50%; bottom: .55rem; max-width: 36rem; margin: 0; padding: .2rem .4rem; margin-left: -.4rem; background: #fff; font: 400 .75rem/1.4 var(--sans); color: var(--ink-3); }
+/* the population source shows only on the steps that use population */
+.map-credit.no-rates .cr-rates { display: none; }
+.map-leaders { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; transition: opacity .4s; }
+.map-leaders path { fill: none; stroke: var(--ink); stroke-width: 1.25; }
 /* labels drawn over the map by the client */
 .mlabel { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; font: 650 .8125rem/1 var(--sans); color: var(--ink); -webkit-text-stroke: 3.5px #fff; paint-order: stroke fill; transition: opacity .4s; }
 .mlabel.small { font-weight: 600; font-size: .75rem; color: var(--ink-2); }
@@ -66,34 +70,51 @@
 .mlabel.state { font: 700 .9375rem/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; text-align: center; }
 .mlabel.state small { font-size: .75rem; letter-spacing: 0; }
 .mlabel.city small, .mlabel.area small { font-weight: 600; }
+.mlabel.callout { transform: translate(-50%, -100%); padding: .35rem .5rem .4rem; background: #fff; border: 1px solid var(--ink); -webkit-text-stroke: 0; text-align: center; }
+.mlabel.callout small { margin-top: .25rem; }
 .mlabel.hq::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); margin-right: .35rem; vertical-align: .05em; box-shadow: 0 0 0 2px #fff; }
 .legend-ramp { display: grid; gap: .3rem; }
 .legend-ramp .ramp { display: flex; gap: 2px; }
 .legend-ramp .ramp span { display: grid; gap: .25rem; width: 58px; font: 400 .6875rem/1 var(--sans); color: var(--ink-3); white-space: nowrap; }
 .legend-ramp .ramp i { display: block; height: 10px; }
-@media (max-width: 760px) { .legend-ramp .ramp span { width: 42px; font-size: .625rem; } }
-.legend-note { font: 400 .6875rem/1.3 var(--sans); color: var(--ink-3); }
+.legend-hatch { display: inline-flex; align-items: center; gap: .4rem; margin-top: .1rem; font: 400 .6875rem/1.2 var(--sans); color: var(--ink-3); }
+/* the swatch draws the same white diagonal hatch the map does */
+.legend-hatch i { width: 22px; height: 10px; background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .95) 0 1.3px, transparent 1.3px 3.5px); }
+@media (max-width: 760px) { .legend-ramp .ramp span { width: 52px; } .legend-ramp .legend-t { font-size: .75rem; } }
+/* zoomed on Georgia, the legend stands upright in the corner beside the state */
+.map-legend.is-vertical { max-width: 11.5rem; }
+.map-legend.is-vertical .legend-t { max-width: 10.5rem; }
+.map-legend.is-vertical .ramp { flex-direction: column; gap: 3px; }
+.map-legend.is-vertical .ramp span { display: flex; align-items: center; gap: .45rem; width: auto; }
+.map-legend.is-vertical .ramp i { width: 22px; height: 12px; }
+.map-legend.is-vertical .legend-hatch { margin-top: .2rem; align-items: flex-start; }
+.map-legend.is-vertical .legend-hatch i { flex: none; margin-top: .1rem; }
+.map-legend.is-vertical .legend-hatch i { height: 12px; }
 .legend-key { display: flex; gap: .9rem; align-items: center; }
 .legend-key span { display: inline-flex; align-items: center; gap: .35rem; }
 .legend-key i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 @media (max-width: 760px) {
-  .map-poster { padding: 1rem 1rem 46svh; object-position: center top; }
-  .step { align-items: flex-end; padding: 0 var(--gutter) 9svh; justify-content: center; }
+  .map-poster { padding: 5.5rem 1rem 4rem; object-position: center center; }
+  /* a card about every screen, so only one is over the map at a time; each rides up from the bottom */
+  .step { min-height: 85svh; align-items: flex-end; padding: 0 var(--gutter) 6svh; justify-content: center; }
   /* room after the last card, so the map stays pinned while it is read */
-  .step:last-child { padding-bottom: 60svh; }
+  .step:last-child { min-height: calc(85svh + 49svh); padding-bottom: 55svh; }
   .step-card { width: 100%; max-width: 30rem; }
   .step-card p { font-size: 1.0625rem; }
-  .map-legend { font-size: .75rem; }
-  .map-credit { left: var(--gutter); right: var(--gutter); max-width: none; bottom: auto; top: .35rem; margin-left: -.4rem; font-size: .6875rem; line-height: 1.35; }
+  /* the legend has its own band above the map, the credit its own below it */
+  .map-legend { left: var(--gutter); top: .6rem; margin-left: 0; padding: 0; background: none; font-size: .75rem; }
+  .map-credit { left: var(--gutter); right: var(--gutter); max-width: none; bottom: .4rem; margin-left: 0; padding: 0; font-size: .6875rem; line-height: 1.35; }
 }
 @media (prefers-reduced-motion: reduce) { .mlabel { transition: none; } }
 
 /* ---- Previews of the Components and Journey pages ------------------------------------------------------------- */
 .preview { display: grid; width: var(--measure); margin: 2.5rem auto; gap: .7rem; color: var(--ink); text-decoration: none; }
-.preview picture { display: block; }
-.preview img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--bg-2); }
-/* phones get their own 4:3 images, with larger parts and no small print */
-@media (max-width: 640px) { .preview img { aspect-ratio: 4 / 3; } }
+.preview img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--bg-2); }
+/* in Go deeper, the preview sits beside its caption, as wide as the cards under it */
+.chapter-cards .preview { width: min(var(--wide), 100% - 2 * var(--gutter)); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 1.75rem; margin: 0 auto 2rem; }
+.chapter-cards .preview img { max-width: 30rem; }
+.chapter-cards .preview .cap { border-bottom: 0; padding-bottom: 0; }
+@media (max-width: 760px) { .chapter-cards .preview { grid-template-columns: 1fr; gap: .7rem; } .chapter-cards .preview .cap { padding-bottom: .9rem; border-bottom: 1px solid var(--rule); } }
 .preview .cap { display: grid; gap: .25rem; padding-bottom: .9rem; border-bottom: 1px solid var(--rule); }
 .preview .t { font: 600 1.25rem/1.3 var(--serif); }
 .preview .go { font: 600 .875rem/1.3 var(--sans); color: var(--link); }
@@ -143,7 +164,9 @@
 .audit-log thead th { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--ink); }
 .audit-log tbody th { font: 700 .6875rem/1.5 var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
 .audit-log tr.is-key td { font-weight: 500; background: var(--amber-wash); }
-.audit-log td.same { color: var(--ink-3); }
+.audit-log td.same { color: var(--ink-3); font: 400 .8125rem/1.4 var(--sans); }
+/* an editor’s description, not text from the log */
+.audit-log td.ed { font: italic 400 .8125rem/1.4 var(--sans); color: var(--ink-2); }
 .accounts { display: grid; gap: 1rem; }
 .accounts-k { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
 .acct { margin: 0; padding: 0 0 0 .9rem; border-left: 2px solid var(--ink); }
@@ -156,23 +179,29 @@
 /* ---- Oakland: logged successes as stat tiles --------------------------------------------------------------- */
 .tiles { display: flex; flex-wrap: wrap; gap: .5rem 2rem; align-items: baseline; margin-top: 1.2rem; padding-top: .9rem; border-top: 1px solid var(--rule); }
 .tiles-k { flex: 1 1 100%; margin: 0; font: 400 .9375rem/1.4 var(--sans); color: var(--ink-2); }
-.tile { display: grid; gap: .1rem; }
-.tile .n { font: 700 2rem/1 var(--sans); color: var(--ink); letter-spacing: -.01em; }
-.tile .l { font: 400 .875rem/1.3 var(--sans); color: var(--ink-2); }
+.oak-t { border-collapse: collapse; font-family: var(--sans); }
+.oak-t th, .oak-t td { padding: .35rem 1.5rem .35rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: baseline; }
+.oak-t thead th { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); border-bottom-color: var(--ink); text-align: right; }
+.oak-t tbody th { font: 400 .9375rem/1.3 var(--sans); color: var(--ink-2); }
+.oak-t td { font: 700 1.625rem/1.1 var(--sans); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.oak-t td.differs { color: var(--amber-ink); }
+.oak-t th:last-child, .oak-t td:last-child { padding-right: 0; }
+@media (max-width: 480px) { .oak-t th, .oak-t td { padding-right: .9rem; } .oak-t td { font-size: 1.375rem; } .oak-t thead th { letter-spacing: .03em; } }
 
 /* ---- Three ways an alert is wrong -------------------------------------------------------------------------- */
 .errors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.25rem; }
 .err { display: grid; gap: .55rem; align-content: start; padding-top: .8rem; border-top: 2px solid var(--ink); }
 .err-k { margin: 0; font: 700 1rem/1.3 var(--sans); color: var(--ink); }
 .err-m { margin: -.3rem 0 0; font: 400 .8125rem/1.35 var(--sans); color: var(--ink-3); }
-.err-g { min-height: 132px; display: flex; align-items: center; }
-.err-g svg { max-width: 100%; height: auto; }
-.errors .err-waffle { width: 140px; }
-.errors .err-plates { width: min(250px, 100%); }
-.errors .err-list { width: min(214px, 100%); }
-.err-n { margin: 0; font: 700 2rem/1 var(--sans); color: var(--ink); letter-spacing: -.01em; }
+.err-g { display: flex; align-items: flex-end; gap: 1rem; margin: .25rem 0 .1rem; }
+.err-g svg { max-width: 100%; height: auto; flex: none; }
+.errors .err-waffle { width: 128px; }
+.err-n { margin: 0 0 -.2rem; font: 700 2.25rem/1 var(--sans); color: var(--ink); letter-spacing: -.015em; font-variant-numeric: tabular-nums; }
+.err-n span { font-size: 1.25rem; margin-left: .05em; }
 .err-t { margin: 0; font: 400 .9375rem/1.5 var(--sans); color: var(--ink-2); }
-@media (max-width: 900px) { .errors { grid-template-columns: 1fr; gap: 2rem; } .err-g { min-height: 0; } }
+.err-key { display: flex; align-items: center; gap: .45rem; margin: 0 0 1rem; font: 400 .8125rem/1.35 var(--sans); color: var(--ink-2); }
+.err-key i { width: 11px; height: 11px; border-radius: 1.5px; background: var(--amber-mark); flex: none; }
+@media (max-width: 900px) { .errors { grid-template-columns: 1fr; gap: 2rem; } }
 
 /* ---- Operators: the share with an operator recorded, then the types ----------------------------------------- */
 .ops-strip { display: flex; gap: 2px; height: 14px; margin: .2rem 0 .45rem; }

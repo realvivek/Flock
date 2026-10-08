@@ -89,10 +89,10 @@
         },
         {
           "k": "Install fee",
-          "v": "$250 to $350 a camera in 2021–23 contracts; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $750 to move a camera on a Flock pole",
+          "v": "$350 to $650 a camera in 2022–23 contracts and quotes; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $750 to move a camera on a Flock pole",
           "sources": [
             "richland-agreement-2023",
-            "contrary-flock",
+            "indio-2023",
             "flock-fee-schedule"
           ]
         }
@@ -131,10 +131,10 @@
         },
         {
           "k": "Install fee",
-          "v": "$250 to $350 a camera in 2021–23 contracts; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $350 to move a camera on an existing pole",
+          "v": "$150 a camera on existing infrastructure in a 2023 quote, $350 to $650 for a standard install in 2022–23 contracts and quotes; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $350 to move a camera on an existing pole",
           "sources": [
+            "indio-2023",
             "richland-agreement-2023",
-            "contrary-flock",
             "flock-fee-schedule"
           ]
         }

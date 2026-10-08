@@ -10,7 +10,7 @@ interface Est { label: string; sub: string; est: number; lo: number; hi: number;
 const ESTIMATES: Est[] = [
   { label: "Weighted by thefts before the cameras", sub: "The paper’s main estimate", est: -11.0, lo: -17.3, hi: -4.2, p: ".002", main: true },
   { label: "Weighted by population", sub: "From the paper’s appendix", est: 4.1, lo: -5.0, hi: 14.1, p: ".39" },
-  { label: "Every agency counted equally", sub: "From the paper’s appendix", est: 4.4, lo: -3.4, hi: 13.0, p: ".28" },
+  { label: "Every agency-month counted equally", sub: "From the paper’s appendix", est: 4.4, lo: -3.4, hi: 13.0, p: ".28" },
 ];
 const signed = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}`;
 
@@ -40,7 +40,7 @@ function draw(W: number, narrow: boolean): string {
     const val = label(x(e.est), cy - 11, `${signed(e.est)}%`, { "text-anchor": "middle", "font-size": 12.5, "font-weight": 700, fill: "var(--ink)" });
     out += tip(rect(0, y0, W, rowH, { fill: "transparent" }) + name + ci + dot(x(e.est), cy, 6, color) + val, `${signed(e.est)} percent (95 percent interval ${signed(e.lo)} to ${signed(e.hi)})`, e.label);
   });
-  return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Estimates of the change in vehicle thefts after Flock cameras went live: minus 11 percent when agencies are weighted by their thefts before the cameras, an interval that excludes zero; plus 4.1 and plus 4.4 percent when weighted by population or counted equally, intervals that include zero." });
+  return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Estimates of the change in vehicle thefts after Flock cameras went live: minus 11 percent when agencies are weighted by their thefts before the cameras, an interval that excludes zero; plus 4.1 and plus 4.4 percent when weighted by population or with every agency-month counted equally, intervals that include zero." });
 }
 
 export function evidenceFigure(cfg: FigureCfg, ctx: Ctx): string {

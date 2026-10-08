@@ -43,7 +43,7 @@ function car(): string {
   // plate
   s += rect(124, 122, 72, 30, { rx: 3, fill: "#fff", stroke: "#121212", "stroke-width": 1.5 });
   s += text(160, 131, "STATE", { "text-anchor": "middle", "font-size": 6.5, "font-weight": 700, "letter-spacing": 1, fill: "#555" });
-  s += text(160, 146, "ABC 1234", { "text-anchor": "middle", "font-size": 13, "font-weight": 700, "letter-spacing": 1, fill: "#121212", "font-family": "var(--mono)" });
+  s += text(160, 146, "ABC 1234", { "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, "letter-spacing": 0.4, fill: "#121212", "font-family": "var(--mono)" });
   // bumper with stickers and a dent
   s += rect(26, 160, 268, 30, { rx: 8, fill: "#d4d4d0", stroke: edge, "stroke-width": 1.5 });
   s += rect(62, 167, 30, 12, { rx: 1.5, fill: "#fff", stroke: edge }) + rect(96, 167, 18, 12, { rx: 1.5, fill: "#fff", stroke: edge });

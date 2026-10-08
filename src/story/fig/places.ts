@@ -18,7 +18,8 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
     const x = linScale(0, max, L, W - R);
     const yOf = (i: number) => T + i * rowH + (i >= top.length ? gapH : 0);
     let out = "";
-    out += g(ticks.map((t) => line(x(t), T - 6, x(t), H - 4)).join(""), { class: "grid" });
+    const brk = yOf(top.length) - gapH / 2;
+    out += g(ticks.map((t) => line(x(t), T - 6, x(t), brk - 10) + line(x(t), brk + 10, x(t), H - 4)).join(""), { class: "grid" });
     out += g(ticks.map((t, i) => text(x(t), T - 12, String(t), { "text-anchor": i === 0 ? "start" : "middle" })).join(""), { class: "axis" });
     [...top, ...bottom].forEach((r, i) => {
       const y = yOf(i), hi = r.usps === "GA";
@@ -35,7 +36,8 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
     out += label(narrow ? 0 : L, by + 4, `${mid.length} more, from ${mid[0]!.name} (${dec1(mid[0]!.per100k!)}) to ${mid[mid.length - 1]!.name} (${dec1(mid[mid.length - 1]!.per100k!)}), in the table`, { "font-size": fs - 1, "font-style": "italic", fill: "var(--ink-3)", "font-family": "var(--serif)" });
     // U.S. reference: a hairline from the top label down through the bars
     const ux = x(states.usRate);
-    out += line(ux, T - 40, ux, H - 4, { stroke: "var(--ink)", "stroke-width": 1 });
+    // it stops at the dotted rules, so the note between them reads clean
+    out += line(ux, T - 40, ux, by - 10, { stroke: "var(--ink)", "stroke-width": 1 }) + line(ux, by + 10, ux, H - 4, { stroke: "var(--ink)", "stroke-width": 1 });
     out += text(ux + 5, T - 32, `U.S. rate, ${dec1(states.usRate)}`, { "font-size": fs, "font-weight": 600, fill: "var(--ink)" });
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of mapped Flock cameras per 100,000 residents in the 10 highest and five lowest states. Georgia is highest at ${dec1(rows[0]!.per100k!)}; New Hampshire lowest at ${dec1(rows[rows.length - 1]!.per100k!)}; the U.S. rate is ${dec1(states.usRate)}.` });
   };
@@ -72,7 +74,7 @@ export function lookupCard(c: CountyRow, states: StatesFile, counties: CountyRow
 }
 /** The histogram of county rates; the selected county is marked by the client (and for the default at build time). */
 export function histogram(bins: { lo: number; hi: number; n: number }[], W: number, narrow: boolean, mark: number | null, markName = ""): string {
-  const L = narrow ? 30 : 34, R = 8, T = 24, B = 30, H = narrow ? 160 : 170;
+  const L = narrow ? 30 : 34, R = 8, T = 24, B = 40, H = narrow ? 172 : 182;
   const n = bins.length, gapNone = 10;
   const bw = (W - L - R - gapNone) / n;
   const maxN = Math.max(...bins.map((b) => b.n));
@@ -89,7 +91,7 @@ export function histogram(bins: { lo: number; hi: number; n: number }[], W: numb
   // axis: none, 0, 100, 200, 300+
   const xRate = (v: number) => xOf(1) + (v / 10) * bw;
   out += g([text(xOf(0), H - B + 15, "None", { "text-anchor": "start" }), ...[100, 200].map((v) => text(xRate(v), H - B + 15, String(v), { "text-anchor": "middle" })), text(xRate(300) + bw, H - B + 15, "300+", { "text-anchor": "end" })].join(""), { class: "axis" });
-  out += text(W - R, H - 4, "Mapped Flock cameras per 100,000 residents", { "text-anchor": "end", class: "axis-title", "font-size": 11, fill: "var(--ink-3)" });
+  out += text(W - R, H - 3, "Mapped Flock cameras per 100,000 residents", { "text-anchor": "end", class: "axis-title", "font-size": 11, fill: "var(--ink-3)" });
   out += text(L, 12, "Number of counties", { "font-size": 11, fill: "var(--ink-3)" });
   // the marker
   const mx = mark == null ? -100 : mark < 0 ? xOf(0) + bw / 2 : mark >= 300 ? xRate(300) + bw / 2 : xRate(mark);

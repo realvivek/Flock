@@ -19,5 +19,8 @@ export async function initHome(): Promise<void> {
   const map = createMap(sec.querySelector<HTMLElement>(".map")!, { busy, tween });
   const ids = [...sec.querySelectorAll<HTMLElement>(".step")].map((s) => s.dataset.step!);
   scrolly(sec, (i) => { set({ step: `map:${ids[i]}` }); map.go(ids[i]!); });
+  // once the map starts to scroll away, a transition still running jumps to its end
+  let raf = 0;
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; if (sec.getBoundingClientRect().bottom < innerHeight + 2) map.settle(); }); }, { passive: true });
   await map.ready.catch((e: unknown) => { console.warn("map:", e); });
 }

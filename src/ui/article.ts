@@ -176,7 +176,7 @@ export function renderEconomics(host: HTMLElement): void {
       }
       h.appendChild(tl);
     } },
-    { id: "econ-fees", title: "Fees for changes after installation, 2026 schedule", fine: "Flock's Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts from 2021 to 2023 list a one-time installation fee of $250 to $350.",
+    { id: "econ-fees", title: "Fees for changes after installation, 2026 schedule", fine: "Flock's Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure.",
       render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, Math.min(host.clientWidth || 680, 680))); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
     { id: "econ-workflow", title: "Installation workflow and responsibilities",
       render: (h) => table(h, ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources }))) },

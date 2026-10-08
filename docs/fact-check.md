@@ -20,11 +20,11 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Flock says its cameras make more than 20 billion scans a month | 20 billion | `nbc-flock-2025` | quotes Flock's website ("over 20 billion scans a month") |
 | Flock is an Atlanta company | | `wikipedia-flock` | infobox; The Texas Tribune also writes "Atlanta-based Flock Safety" (`texastribune-2026`) |
 | DeFlock is an anti-surveillance group that tracks the company's cameras | | `texastribune-2026` | "DeFlock, an anti-surveillance group monitoring the company"; EFF calls it an "anti-surveillance mapmaker" (`eff-deflock-2025`) |
-| Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; 143,595 are inside the map's frame, 334 (Puerto Rico and elsewhere) outside it, as the map credit says |
+| Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; 143,595 are inside the map's frame and 334 outside it, 255 of those in Puerto Rico (`meta.json`, `states.json`), as the map credit says |
 | Flock made about four in five | 80 percent | computed | 115,437 / 143,929 |
 | The rest come from companies including Motorola Solutions, Genetec and Axis Communications | 7,509; 3,647; 2,445 | computed | the three largest other makes, `operators.json` |
-| Most common in the South and Midwest, least in the Northeast | 41.3, 39.0, 33.3 (West), 11.6 per 100,000 | computed | `regions`, Census regions |
-| None mapped in 883 of 3,144 counties, home to about 4 percent of Americans | 883; 3.9 percent | computed | `countiesNone` |
+| Most common in the South, 41.3 for every 100,000 residents; least common in the Northeast, 11.6 | 41.3; 11.6 (Midwest 39.0, West 33.3) | computed | `regions`, Census regions |
+| None mapped in 883 counties, home to about 4 percent of Americans; Iowa, South Dakota, Kentucky and Montana have the most such counties | 883 of 3,144; 3.9 percent; 64 of 99, 55 of 66, 51 of 120, 46 of 56 | computed | `countiesNone`; `countiesNoneTop` |
 | Georgia has the most per resident: 82.7 per 100,000, 2.4 times the national rate | 82.7; 2.4 | computed | `topState`; 82.7 / 33.9 |
 | Georgia is where Flock is based | | `wikipedia-flock` | infobox |
 | Fulton County: 1,269 cameras, about 116 per 100,000, highest of any county with a million or more people | 1,269; 116.4 | computed | `topBigCounty` |
@@ -48,7 +48,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | California and Texas have the most | 16,919; 15,839 | computed | `mostStates` |
 | Per resident: Georgia, then Ohio, Texas, Indiana, Alabama | 82.7; 52.8; 50.6; 49.1; 48.4 | computed | `states.json` |
 | New Hampshire has the fewest per resident: 16 cameras, 1.1 per 100,000 | 16; 1.1 | computed | `bottomStates` |
-| The national total also counts 188 cameras in Puerto Rico and elsewhere | 188 | computed | `outsideStates`; 126 of them in Puerto Rico |
+| The national total also counts 188 Flock cameras outside the states, most in Puerto Rico | 188 | computed | `outsideStates`; 126 of them in Puerto Rico |
 
 ### Who runs the cameras
 
@@ -56,7 +56,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 |---|---|---|---|
 | An operator is recorded for 16,500 mapped Flock cameras, 14 percent | 16,500; 14 percent | computed | `operatorsNamed` |
 | Of those, 62 percent police or sheriffs, 20 percent retailers and shopping centers | 10,222; 3,237 | computed | `operatorsPolice`, `operatorsRetail` |
-| Lowe's 1,757; The Home Depot 1,154 | | computed | `topOperators` |
+| Lowe's 1,767; The Home Depot 1,162 | | computed | `topOperators`, with spelling variants grouped (`canonical` in `data/story/operator-classes.json`) |
 | Shareholder proposals asked both to report on privacy risks; both boards recommended voting no | | `prospect-retail-2026` | |
 
 ### What a camera records
@@ -77,8 +77,8 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Claim | Figure | Source | Where |
 |---|---|---|---|
 | Reads travel over a cellular connection to Flock's servers on Amazon Web Services | | `flock-arch-2024` | architecture summary |
-| Hot lists: NCIC, NCMEC, Amber Alerts, state and custom lists | | `flock-lpr-policy` | |
-| An alert reaches officers' phones in 10 to 15 seconds on average | 10–15 s | `flock-flex-datasheet` | "Notifications: Average of 10-15 seconds … Includes time, location, plate, and vehicle image" |
+| Hot lists: NCIC and NCMEC, per Flock's policy; Amber Alerts and custom lists, per the datasheet | | `flock-lpr-policy`; `flock-flex-datasheet` | the policy names NCIC, NCMEC "or other database or hot list"; the datasheet "NCIC, AMBER Alert & Custom" |
+| An alert reaches officers in 10 to 15 seconds on average | 10–15 s | `flock-flex-datasheet` | "Notifications: Average of 10-15 seconds … Includes time, location, plate, and vehicle image" |
 | The F.B.I.'s list reaches the cameras only twice a day; a removed plate can alert for up to 12 hours | twice; 12 hours | `aclu-2022` | "Accuracy problems": cameras "download fresh hit lists from the NCIC only twice a day … for up to 12 hours" |
 | On Aug. 13, 2026, Flock made seven days its default for new customers, down from 30; existing customers keep theirs | 7; 30 | `flock-guardrails-2026` | "updating our recommendation and default to a 7-day retention … Existing customers will keep their current, democratically approved retention periods" |
 | Virginia requires deletion after 21 days unless the data is needed for an investigation | 21 | `va-code-2-2-5517` | subsection E: "System data shall be purged after 21 days of the date of its capture" |
@@ -103,12 +103,13 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | 638,747,333 plate reads in 2025, counting a plate each time it passed | 638,747,333 | `oakland-pac-2026` | p. 2: "the same license plate can be read multiple times a day" |
 | 1,099,837 alerts, about one for every 580 reads | 1,099,837; 580.8 | `oakland-pac-2026` | pp. 2–3; ratio computed |
 | 653,566 for stolen plates or stolen vehicles, kept switched off for lack of staff | 620,331 + 33,235 | `oakland-pac-2026` | pp. 3–4 |
-| 425 success stories, summarized as 162 arrests, 174 vehicles and 51 guns | | `oakland-pac-2026` | p. 11, Figure F; its Table A (p. 12) totals 162 arrests, 25 vehicles and 50 guns, as the figure's note says |
+| 425 success stories; the report totals their results twice: 162 arrests, 174 vehicles and 51 guns in its summary, 162, 25 and 50 in its table by offense | | `oakland-pac-2026` | p. 11, Figure F (summary) and p. 12, Table A; the figure shows both, and the report does not explain the difference |
 | Outside agencies do not always report their results; the department cannot see their records | | `oakland-pac-2026` | p. 4 |
 | Los Angeles: 210.6 million reads in two months from all the department's readers | 210,568,103 | `lapd-oig-2026` | p. 2 and p. 15 |
 | In-car readers produced 50,183 alerts; 337 led to recovered stolen vehicles; 68 to stops with 74 arrests | | `lapd-oig-2026` | pp. 15–16; alerts from Axon in-car data only |
 | Columbia, Mo.: 5,521 alerts; 69 cases cleared by arrest | | `columbia-mo-2025` | |
 | Nashville: 443 verified hits, 25 stops, 22 recoveries, 18 arrests from 117 readers in eight weeks | | `nashville-lpr-2023` | |
+| Ladder title: alerts run from hundreds to tens of thousands; arrests, in the dozens | 443; 5,521; 50,183 / 18; 69; 74 | the three rows above | Nashville, Columbia and Los Angeles |
 
 ### Whether the cameras reduce crime
 
@@ -117,11 +118,11 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Flock says its technology supported about a million investigations in 2025, from a survey of about 700 agencies, "directional estimates rather than audited totals" | | `flock-impact-2026` | |
 | Mourtgos and Adams, University of South Carolina; deployment records from Flock | | `mourtgos-adams-2026` | title page; Data section ("Flock Safety operational records provide daily counts of live camera locations by agency") |
 | Flock says it did not fund the work | | `flock-study-2026` | |
-| 216 adopting agencies, 3,108 that did not | 216; 3,108 | `mourtgos-adams-2026` | Sample section and Table 1 |
+| 216 adopting agencies, 3,108 that did not; adoption from 2019 to 2024, 168 agencies before the crime data end in 2023 | 216; 3,108; 168 | `mourtgos-adams-2026` | Sample section and Table 1 |
 | Vehicle thefts fell 11 percent in the year after the first camera went live | −11.0 [−17.3, −4.2] | `mourtgos-adams-2026` | abstract; Table 2 |
-| Arrest clearance rose about 16 percent; the rise began in the three months before | +15.9 [+7.3, +25.0] | `mourtgos-adams-2026` | abstract; Table 2 |
+| The share of thefts cleared by an arrest, 7.4 percent in the year before, rose by about 16 percent of that level, roughly one more cleared theft in every 100; the rise began in the three months before, which the authors say weakens the link | +15.9 [+7.3, +25.0]; 7.4 | `mourtgos-adams-2026` | abstract and Table 2 (relative change); Table 1, treated agencies' pre-deployment arrest clearance rate, 7.4 percent; 7.4 × 0.159 = 1.2 points, computed here |
 | The main estimate weights agencies by their thefts before the cameras | | `mourtgos-adams-2026` | Weighting section |
-| Weighted by population, or every agency counted equally: no change distinguishable from zero | +4.1 [−5.0, +14.1]; +4.4 [−3.4, +13.0] | `mourtgos-adams-2026` | Table S7 |
+| Weighted by population, or every agency-month counted equally: no change distinguishable from zero | +4.1 [−5.0, +14.1]; +4.4 [−3.4, +13.0] | `mourtgos-adams-2026` | Table S7 |
 | The main estimate describes where the thefts are, not a uniform effect | | `mourtgos-adams-2026` | robustness discussion after Table 3 |
 | The Institute for Justice, a libertarian law firm, made the weighting point in September | | `reason-flock-study-2026` | Sept. 18, 2026 |
 | It sued Norfolk, Va., over its Flock cameras | | `ij-norfolk` | |
@@ -133,7 +134,8 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 |---|---|---|---|
 | Roseville: 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate | 71 percent | `sacbee-roseville-2026` | with the lieutenant's statement and Flock's response |
 | Story County: 165 of 214 hits matched an entry from another state, Axon in-car readers | 77 percent | `footnote4a-hotlist`; `data/outcomes/sources/story-rows.json` | Sept. 9 to Oct. 9, 2025 |
-| Los Angeles: 161 of 50,183 in-car alerts were accurate reads of cars that were not stolen | | `lapd-oig-2026` | p. 16 |
+| Los Angeles: 161 of 50,183 in-car alerts were accurate reads of cars that, it turned out, were not stolen | 0.3 percent | `lapd-oig-2026` | p. 16 ("determined that the vehicles had not been stolen"); percent computed |
+| The Story County report was published by Footnote 4a, the reporting site of Have I Been Flocked, which describes its focus as license plate surveillance accountability | | `haveibeenflocked-about` | the About page; footnote4a.org calls itself the site's editorial publication |
 
 ### What it costs
 
@@ -142,26 +144,55 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | The yearly fee covers camera, pole, solar panel, data and software; Flock keeps ownership | | `richland-agreement-2023` | agreement terms |
 | List price $3,000 per camera per year | $3,000 | `flock-catalog-2024` | Virginia Sheriffs' Association catalog, May 2024 |
 | Up from $2,500 before Jan. 1, 2024 | +$500 | `indio-2023`; `grafton-2024` | Indio staff report; Village of Grafton, Wis., renewal memo |
-| Contracts from 2021 to 2023: one-time installation fee of $250 to $350 a camera | | `richland-agreement-2023`; `contrary-flock` | |
+| Contracts and quotes from 2022 and 2023: one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure | $350; $650; $150 | `richland-agreement-2023`; `indio-2023`; `flock-deck-2023` | Richland order form, signed Sept. 22–23, 2022: "Standard Implementation $350.00"; Indio order form, October 2023: "Standard Implementation Fee $650.00", "Existing Infrastructure Implementation Fee $150.00"; Flock's July 2023 Orlando proposal: "One time implementation fee per camera =$650" |
 | 2026 schedule: $1,000 to $1,250 to install and $350 to $5,000 to move a camera, when a customer changes the agreed plan | | `flock-fee-schedule` | the page's introduction says the fees apply to changes "driven by a Customer's request" |
-| Price chart points: Indio $2,500 (October 2023); Greenville renewal $2,500 (April 2024); catalog $3,000 (May 2024); Park Ridge $3,000 (June 2025) | | `indio-2023`; `deflocksc-greenville`; `flock-catalog-2024`; `parkridge-2025` | |
+| Price chart points: Richland $2,500 (September 2022); Indio $2,500 (October 2023); Greenville renewal $2,500 (April 2024); catalog $3,000 (May 2024); Park Ridge $3,000 (June 2025) | | `richland-agreement-2023`; `indio-2023`; `deflocksc-greenville`; `flock-catalog-2024`; `parkridge-2025` | |
 | Greenville's 2019 pilot: 11 cameras for $2,000 a year in all | | `deflocksc-greenville` | city contracts published by DeFlock SC |
 | Texas Department of Public Safety approved a $26 million contract in 2025 | $26 million | `texastribune-2026` | "approved a $26 million contract with Flock last year"; separately, the state vehicle authority's $15.9 million contract with DPS funded almost 1,200 cameras (`texastribune-dps-2026`) |
 | Johnson City, Tenn.: $8.1 million over 10 years | $8,063,000 | `johnsoncity-2025` | agenda summary p. 1 |
-| Contracts per year: Dallas $5.7 million over three years; Houston up to $6.4 million over five; Smyrna $5.7 million over 10; Huntington $2.1 million over five; Rhode Island State Police $597,000 over three | | `govtech-dallas-2026`; `houstonchronicle-2023`; `wsbtv-smyrna-2025`; `wvwatch-huntington-2026`; `turnto10-ri-2026` | |
+| Contracts per year: Dallas $5.7 million over three years; Houston up to $6.4 million over five; Smyrna $5.7 million over 10; Huntington $2.1 million over five; Rhode Island State Police $597,000 over three | | `govtech-dallas-2026`; `houstonchronicle-2023`; `wsbtv-smyrna-2025`; `wvwatch-huntington-2026`; `turnto10-ri-2026` | Rhode Island's is dated by WJAR's July 30 report; Houston's is a ceiling and is drawn as an outline |
+| Of contracts with a known term, Dallas's costs the most per year | $1.9 million | computed | $5.7 million / 3; Texas DPS's $26 million has no reported term and is not charted |
 
 ### What changed in 2026
 
 | Claim | Figure | Source | Where |
 |---|---|---|---|
 | The governor paused state funding in August | Aug. 27, 2026 | `texastribune-abbott-2026` | |
-| At least 14 cities and counties switched off more than 900 cameras | 14; 900 | `texastribune-unplugged-2026` | Sept. 24, 2026 |
-| Dallas shut off its grant-funded cameras, then said it would keep them on after Flock paused payments for 90 days | 321 of 684 | `govtech-dallas-2026`; `texastribune-unplugged-2026`; `texastribune-reprieve-2026` | Oct. 2, 2026: "Dallas will keep more than 300 Flock Safety cameras originally slated for removal" |
+| The Texas Tribune counted at least 14 cities and counties that had switched off more than 900 cameras | 14; 900 | `texastribune-unplugged-2026` | Sept. 24, 2026; attributed, since the count includes Dallas (next row) |
+| Dallas, which had said it would switch off the cameras paid for with state grants, said on Sept. 30 that they would stay on for at least 90 days; The Texas Tribune reported that Flock had paused the city's payments for them | 321 of 684 | `govtech-dallas-2026`; `texastribune-dps-2026`; `fox4-dallas-2026`; `texastribune-reprieve-2026` | Sept. 1 (a Tuesday): police said they would shut down 321 state-funded cameras; Fox 4, Sept. 15: they "will remain in operation until September 25"; Fox 4, Sept. 30: cameras "that were set to be unplugged will remain active" for 90 days after "Wednesday's meeting"; The Dallas Morning News, Oct. 1: "will instead remain online for at least another 90 days"; the Tribune, Oct. 2: Flock "paused certain agencies' payments for the devices for 90 days". Only the Tribune's Sept. 24 story says Dallas "shuttered" them |
 | Finding Flock lists 45 decisions to cancel, pause, deactivate, reject or not renew, August 2025 to September 2026; not complete | 23, 11, 6, 4, 1 | `findingflock-cancellations` | "This list is not exhaustive" |
-| Sacra puts annual recurring revenue at about $500 million in March 2026, up from $285 million at the end of 2024 | | `sacra-flock` | Sacra's estimates |
+| Sacra puts annual recurring revenue at about $450 million in October 2025 and $500 million in March 2026, within the period of the 45 decisions | | `sacra-flock` | Sacra's estimates: "$450M … October 2025", "$500M … March 2026" |
 | In the week before Oct. 8, volunteers added at least 706 Flock cameras to the map | 706 | computed | `addedLastWeek`: nodes first mapped since Oct. 1 and not yet edited, a floor |
-| In Windsor, Conn., a mapper removed the cameras with a note that the town ended their use; the council voted in July to keep them off | | `osm-windsor-2026`; `patch-windsor-2026` | changeset 190182036 |
-| Timeline entries | | each entry's own source | `src/content/timeline-2026.json` |
+| In Windsor, Conn., a mapper deleted 14 of the cameras on Oct. 8, noting each had been removed, "presumably" because the town had canceled its contract; the council voted in July to keep them off | 14 | `osm-windsor-2026`; `patch-windsor-2026` | 12 changesets, 190181808 to 190182106, each noting the camera "has been removed. This is presumably due to the city's cancellation of their contract"; Patch counts 16 cameras |
+| Timeline entries | | each entry's own source | `src/content/timeline-2026.json`; the Texas Department of Public Safety's "at least 940" cameras are attributed to the email a lawmaker shared, as `texastribune-dps-2026` reports it |
+
+## Corrections, third review (8 October 2026)
+
+A second independent fact-check of every claim changed after the first two reviews.
+
+| What the site said | What the record shows | Source |
+|---|---|---|
+| Contracts from 2021 to 2023 added a one-time installation fee of $250 to $350 | No cited document shows $250 or a 2021 contract. Richland's 2022 order form lists $350; Indio's 2023 order form $650, or $150 on existing infrastructure; Flock's 2023 Orlando proposal $650. The story, Economics and Install pages now say so. | `richland-agreement-2023`; `indio-2023`; `flock-deck-2023` |
+| A range of $2,000 to $2,500 a year in 2021–23 contracts (price chart band, Economics history) | Nothing supports the low end; the band is removed and the chart shows only documented prices, now including Richland's $2,500 in September 2022. | `richland-agreement-2023` |
+| The annual fee covers "installation labor" | The implementation guide does not itemize the subscription, and a separate installation fee is billed; removed. | `flock-impl-guide` |
+| Dallas shut off its grant-funded cameras, then said it would turn them back on | Local reporting says they stayed on: the department said on Sept. 1 it would switch them off, and on Sept. 30 that they would stay on for at least 90 days. The Texas Tribune's Sept. 24 count of switch-offs, which includes Dallas, is now attributed. | `fox4-dallas-2026`; `texastribune-reprieve-2026`; `texastribune-unplugged-2026` |
+| Timeline: Dallas's announcement on Sept. 2; its reprieve on Oct. 2 | Sept. 1 ("announced Tuesday"); Sept. 30 (after "Wednesday's meeting"). | `texastribune-dps-2026`; `fox4-dallas-2026` |
+| State grants "paid for at least 3,200 cameras at local agencies" | They "helped state and local agencies install at least 3,200", the Department of Public Safety among them; the $30 million includes contracts. | `texastribune-abbott-2026`; `texastribune-dps-2026` |
+| Windsor: a mapper "removed them" in changeset 190182036 | That changeset deleted one node; the same mapper deleted 14 in 12 changesets, each noting the camera had been removed, "presumably" because of the contract's cancellation. | `osm-windsor-2026` |
+| "Each agency counted equally" | Each agency-month: Table S7's "Equal agency-month weighting". | `mourtgos-adams-2026` |
+| "216 adopting agencies and 3,108 others, 2017 to 2023" | Adoption ran from 2019 to 2024, with 168 agencies before the crime data end; the crime data cover 2017 to 2023. | `mourtgos-adams-2026` |
+| DPS "will keep using its own network of at least 940 cameras" | The count comes from an email a lawmaker shared; neither DPS nor Flock discloses it. Now attributed. | `texastribune-dps-2026` |
+| Oklahoma City: "a new Flock contract" | A renewal. | `okcfox-okc-2026` |
+| Washington limits use "to felonies and gross misdemeanors" | Also to vehicles that are stolen or registered to people with arrest warrants, and to missing or endangered people. | `wa-sb6002-2026` |
+| Hot lists include "Amber Alerts, state lists and custom lists", cited to Flock's policy | The policy names NCIC and NCMEC; the datasheet adds Amber Alerts and custom lists. "State lists" has no source and is removed. | `flock-lpr-policy`; `flock-flex-datasheet` |
+| An alert "reaches officers' phones" in 10 to 15 seconds | The datasheet names no device: "reaches officers". | `flock-flex-datasheet` |
+| Los Angeles: cars "no longer stolen" | The inspector general "determined that the vehicles had not been stolen". | `lapd-oig-2026` |
+| 433 counties with none "in the Plains and the Mountain West" | The count includes Iowa, Minnesota and Missouri. The step now names the four states with the most such counties. | computed, `countiesNoneTop` |
+| Lowe's 1,757; The Home Depot 1,154 | 1,767 and 1,162 once spelling variants are grouped. | computed |
+| Rhode Island's contract "signed earlier in the year" | "Signed the initial agreement with Flock months ago." | `turnto10-ri-2026` |
+| El Paso: use "halted" | The City Council later voted to remove the 150 cameras. | `texastribune-reprieve-2026` |
+| Revenue "over a similar period": $500 million in March 2026, up from $285 million at the end of 2024 | The 45 decisions run from Aug. 5, 2025, to Sept. 25, 2026; Sacra's estimates inside that period are $450 million (October 2025) and $500 million (March 2026). | `sacra-flock`; `findingflock-cancellations` |
+| Smyrna: "75 plate readers, 70 video cameras, one trailer, two drones" | The Marietta Daily Journal reports 75 more plate readers and two drones; WSB-TV reports 70 new cameras, two of them drones. Neither readable text gives the video cameras or the trailer; both reports are now given as they stand. | `mdjonline-smyrna-2025`; `wsbtv-smyrna-2025` |
 
 ## Corrections, second review (8 October 2026)
 
@@ -187,7 +218,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Timeline: "requires multifactor login" on Aug. 13; "stop spending"; grants "paid for" 3,200 | Multifactor login became mandatory at the start of August; the order paused funding; the grants helped install at least 3,200. | `flock-guardrails-2026`; `texastribune-abbott-2026` |
 | Timeline rule: "a large city … decisions reported as firsts" | Rewritten to describe the selection actually made, which includes contracts added and kept. | `timeline-2026.json` |
 | Finding Flock: "cancel, pause, deactivate or not renew" | Its 45 include one rejection. | `findingflock-cancellations` |
-| Dallas "said it would switch off 321 cameras on Sept. 15" | Dallas shut off its grant-funded cameras in September, then said it would keep them on after Flock paused payments for 90 days. | `texastribune-unplugged-2026`; `texastribune-reprieve-2026` |
+| Dallas "said it would switch off 321 cameras on Sept. 15" | Superseded by the third review: the department said on Sept. 1 it would switch them off, kept them running, and on Sept. 30 said they would stay on for at least 90 days. | `fox4-dallas-2026`; `texastribune-reprieve-2026` |
 | Oklahoma City: "for 90 cameras" | The cited story gives the contract (about $270,000, 5 to 3) but no count; the count is removed from the timeline. | `okcfox-okc-2026` |
 | The map's alt text: 143,595 dots; the step: 143,929 readers | Both are right and now say so: 334 are outside the map's frame. | `meta.json` |
 | Mapped vs. published: Oakland 293 | 290, from the report. | `oakland-pac-2026` |
@@ -196,7 +227,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 
 | What the site said | What the record shows | Source |
 |---|---|---|
-| LAPD: 498 alerts, 161 wrong (32%), misread plates | 50,183 in-car alerts (5,911 unique plates) on 1 Aug–30 Sep 2025, from Axon in-car readers; 161 were correct plate reads of cars no longer stolen; 337 vehicles recovered; 74 arrests from 68 stops; 4,575 with no action recorded. "498" was 161 + 337, not a count of alerts. | `lapd-oig-2026`, pp. 2 and 15–16 |
+| LAPD: 498 alerts, 161 wrong (32%), misread plates | 50,183 in-car alerts (5,911 unique plates) on 1 Aug–30 Sep 2025, from Axon in-car readers; 161 were correct plate reads of vehicles that "had not been stolen"; 337 vehicles recovered; 74 arrests from 68 stops; 4,575 with no action recorded. "498" was 161 + 337, not a count of alerts. | `lapd-oig-2026`, pp. 2 and 15–16 |
 | Story County: Flock cameras; "every wrong hot-list hit" | The sheriff's office's "Erroneous hotlist hits" report from its Axon in-car readers, 214 rows from NCIC lists: 165 wrong state, 3 incorrect, 10 correct with no action, 29 no action, 7 dismissed. Its hits are where patrol cars were, so they are no longer matched to fixed cameras. | `footnote4a-hotlist` ("an overview of Axon data"); `data/outcomes/sources/story-rows.json` |
 | Texas search: April 2025; "no warrant or case number" | Two searches on 9 May 2025: one week across 17,684 cameras in 1,295 networks, then a month across 83,345 cameras in 6,809 networks. Both logged "had an abortion, search for female" and the case number of the sheriff's death investigation. | `eff-texas-2025`; `404-texas-2025` |
 | "Outside agencies ran 521 searches for every local one" | ALPR Watch counted 29.3 million network-audit rows (searches by anyone in the network that touched an agency's data) against 56,230 organisation-audit rows (the agency's own searches) across the logs it obtained. Rows, not distinct searches. The story no longer uses the figure. | `alprwatch-foia-2025` |
@@ -271,5 +302,5 @@ The story's map, counts and rates use the 8 October 2026 snapshot. The Outcomes 
 GeoJSON snapshot (116,723 readers; `data/story/raw/cameras-us-hourly-2026-07-17.geojson`, pinned in the manifest),
 because its records were matched to the cameras mapped while they were made. Windsor, Conn., shows why: its 16
 cameras were switched off in February 2026, the town council voted 5–4 on July 6 not to turn them back on, and the
-cameras were removed from OpenStreetMap on 8 October 2026 (changeset 190182036; `osm-windsor-2026`,
-`patch-windsor-2026`).
+a mapper deleted 14 of them from OpenStreetMap on 8 October 2026 (12 changesets, 190181808 to 190182106;
+`osm-windsor-2026`, `patch-windsor-2026`).

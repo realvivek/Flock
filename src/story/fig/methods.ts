@@ -29,7 +29,7 @@ export function completenessFigure(cfg: FigureCfg, ctx: Ctx, rows: CompletenessR
         + (() => {
           // each count beside its own dot, outside the pair; where one side has no room, both go on the other
           const lo = Math.min(a, b), hi = Math.max(a, b), loT = r.mapped < r.published ? `${int(r.mapped)} mapped` : `${int(r.published)} published`, hiT = r.mapped < r.published ? `${int(r.published)} published` : `${int(r.mapped)} mapped`;
-          const fs = narrow ? 11 : 11.5, leftOk = lo - 9 - textWidth(loT, fs) > L + 2, rightOk = hi + 9 + textWidth(hiT, fs) < W - 2;
+          const fs = 12, leftOk = lo - 9 - textWidth(loT, fs) > L + 2, rightOk = hi + 9 + textWidth(hiT, fs) < W - 2;
           if (leftOk && rightOk) return label(lo - 9, y + 4, loT, { "font-size": fs, fill: "var(--ink-2)", "text-anchor": "end" }) + label(hi + 9, y + 4, hiT, { "font-size": fs, fill: "var(--ink-2)" });
           const both = `${loT} · ${hiT}`;
           return rightOk || !leftOk ? label(hi + 9, y + 4, both, { "font-size": fs, fill: "var(--ink-2)" }) : label(lo - 9, y + 4, both, { "font-size": fs, fill: "var(--ink-2)", "text-anchor": "end" });

@@ -13,7 +13,7 @@
     "steps": [
       { "id": "all", "text": "Each dot is a license plate reader that volunteers have mapped. As of {{snapshot|date}}, there were {{mappedTotal}}." },
       { "id": "flock", "text": "Flock made about four in five of them, shown in orange. The rest, in gray, come from companies including Motorola Solutions, Genetec and Axis Communications." },
-      { "id": "rate", "text": "Measured against population, Flock’s cameras are most common in the South and the Midwest and least common in the Northeast. Volunteers have mapped none in {{countiesNone.count}} of the nation’s {{countiesNone.of}} counties, home to about {{countiesNone.popShare|pct}} percent of Americans." },
+      { "id": "rate", "text": "Measured against population, Flock’s cameras are most common in the South, with {{regions.2.rate}} for every 100,000 residents, and least common in the Northeast, with {{regions.0.rate}}. Volunteers have mapped none in {{countiesNone.count}} counties, home to about {{countiesNone.popShare|pct}} percent of Americans; {{countiesNoneTop.0.name}}, {{countiesNoneTop.1.name}}, {{countiesNoneTop.2.name}} and {{countiesNoneTop.3.name}} have the most such counties." },
       { "id": "georgia", "text": "Georgia, where Flock is based, has the most per resident: {{topState.rate}} mapped Flock cameras for every 100,000 people, {{topState.ratio}} times the national rate." },
       { "id": "fulton", "text": "In Fulton County, which includes most of Atlanta, volunteers have mapped {{topBigCounty.flock}} Flock cameras, about {{topBigCounty.rate|round}} for every 100,000 residents, the highest rate of any county with a million or more people." }
     ]
@@ -51,16 +51,15 @@
       "blocks": [
         { "p": "The cameras are set off by [motion](src:flock-flex-datasheet). When a vehicle passes, one takes [six to 12 still photographs](src:jalopnik-speed) of its rear, lit at night by an infrared array." },
         { "p": "Software reads the plate and its state. It also describes the vehicle — its make, type and color, and features such as roof racks, bumper stickers and decals — in what Flock calls a [Vehicle Fingerprint](src:flock-deck-2023). The camera adds the time, its GPS position and its own identifier, and [Flock’s policy](src:flock-lpr-policy) says the plate and vehicle images are then transferred to the company’s servers." },
-        { "fig": "read" },
-        { "preview": "components" }
+        { "fig": "read" }
       ]
     },
     {
       "id": "where-the-picture-goes",
       "title": "Where the picture goes",
       "blocks": [
-        { "p": "Each read travels over a cellular connection to Flock’s servers on [Amazon Web Services](src:flock-arch-2024), where it is stored and indexed for search. Plates are checked against [hot lists](src:flock-lpr-policy): the F.B.I.’s National Crime Information Center, the National Center for Missing and Exploited Children, Amber Alerts, state lists and custom lists that agencies write themselves." },
-        { "p": "When a plate matches, an alert with the photo, the plate and the camera’s location reaches officers’ phones in [10 to 15 seconds on average](src:flock-flex-datasheet), according to Flock. The American Civil Liberties Union found that the F.B.I.’s list reaches the cameras only [twice a day](src:aclu-2022), so a plate taken off it can keep setting off alerts for up to 12 hours." },
+        { "p": "Each read travels over a cellular connection to Flock’s servers on [Amazon Web Services](src:flock-arch-2024), where it is stored and indexed for search. Plates are checked against hot lists: the F.B.I.’s National Crime Information Center and the National Center for Missing and Exploited Children, [Flock’s policy](src:flock-lpr-policy) says, as well as [Amber Alerts and custom lists](src:flock-flex-datasheet) that agencies write themselves." },
+        { "p": "When a plate matches, an alert with the photo, the plate and the camera’s location reaches officers in [10 to 15 seconds on average](src:flock-flex-datasheet), according to Flock. The American Civil Liberties Union found that the F.B.I.’s list reaches the cameras only [twice a day](src:aclu-2022), so a plate taken off it can keep setting off alerts for up to 12 hours." },
         { "p": "How long the pictures are kept depends on settings and state law. On Aug. 13, 2026, Flock [made seven days its default](src:flock-guardrails-2026) for new customers, down from 30; existing customers keep the periods they had set. [Virginia](src:va-code-2-2-5517) and [Washington](src:wa-sb6002-2026) require deletion after 21 days unless the data is needed for an investigation, and California limits its Highway Patrol to [60](src:ca-sb34). A feature called Evidence Mode keeps data tied to an investigation, with [no published limit](src:aclu-guardrails)." },
         { "fig": "ruler" },
         { "preview": "journey" }
@@ -70,8 +69,8 @@
       "id": "who-can-search",
       "title": "Who can search the reads",
       "blocks": [
-        { "p": "Officers at a customer agency can search the reads by plate, by a description of the vehicle or with a written prompt, across their own cameras and those of agencies that share with them. Agencies can also join a national lookup; about 75 percent of Flock’s law enforcement customers had, [the company told Congress](src:wyden-ftc-2025) in August 2025." },
-        { "p": "Each search adds a row to an audit log, with a reason the officer types. Logs released under public records laws show how far one search can reach. On May 9, 2025, the sheriff’s office in Johnson County, Texas, searched a week of reads from 17,684 cameras in 1,295 networks, then a month of reads from 83,345 cameras in 6,809 networks. Both searches logged the same reason, according to [records published by the Electronic Frontier Foundation](src:eff-texas-2025), a digital rights group." },
+        { "p": "Officers at a customer agency can search the reads by plate, by a description of the vehicle or with a written prompt, across their own cameras and those of agencies that share with them. Agencies can also join a national lookup; about 75 percent of Flock’s law enforcement customers had joined, [the company told Congress](src:wyden-ftc-2025) in August 2025." },
+        { "p": "Each search adds a row to an audit log, with a reason the officer types. Logs released under public records laws show how far one search can reach. On May 9, 2025, the sheriff’s office in Johnson County, Tex., searched a week of reads from 17,684 cameras in 1,295 networks, then a month of reads from 83,345 cameras in 6,809 networks. Both searches logged the same reason, according to [records published by the Electronic Frontier Foundation](src:eff-texas-2025), a digital rights group." },
         { "fig": "audit" },
         { "p": "In a review of 12 million searches, the foundation found that about [one in five](src:eff-protesters-2025) gave a generic reason such as “investigation.”" }
       ]
@@ -91,9 +90,9 @@
       "title": "Whether the cameras reduce crime",
       "blocks": [
         { "p": "Flock says its technology [supported about a million investigations](src:flock-impact-2026) in 2025. The figure comes from a survey of about 700 agencies, and the company calls its results “directional estimates rather than audited totals.”" },
-        { "p": "The most detailed independent test so far is a working paper by two University of South Carolina criminologists, Scott M. Mourtgos and Ian T. Adams, who used deployment records that [Flock supplied](src:flock-study-2026); the company says it did not fund the work. Comparing 216 agencies that adopted the cameras with 3,108 that did not, they estimated that reported vehicle thefts [fell 11 percent](src:mourtgos-adams-2026) in the year after an agency’s first camera went live. The share of thefts cleared by an arrest rose about 16 percent, though the authors note that the rise began in the three months before the cameras went live." },
+        { "p": "The most detailed independent test so far is a working paper by two University of South Carolina criminologists, Scott M. Mourtgos and Ian T. Adams, who used deployment records that [Flock supplied](src:flock-study-2026); the company says it did not fund the work. Comparing 216 agencies that adopted the cameras with 3,108 that did not, they estimated that reported vehicle thefts [fell 11 percent](src:mourtgos-adams-2026) in the year after an agency’s first camera went live. They also estimated that the share of thefts cleared by an arrest, 7.4 percent in the year before, rose by about 16 percent of that level — roughly one more cleared theft in every 100 — though the rise began in the three months before the cameras went live, which the authors say weakens the link to the cameras." },
         { "fig": "evidence" },
-        { "p": "The 11 percent estimate gives more weight to agencies that had more thefts before the cameras arrived. Weighted by population, or with each agency counted equally, the paper’s appendix shows no change that can be told apart from zero, a point the Institute for Justice, a libertarian law firm that [sued Norfolk, Va., over its Flock cameras](src:ij-norfolk), [made in September](src:reason-flock-study-2026). The authors say their main estimate describes the places that carry most of the thefts rather than a uniform effect. The paper has not been published in a peer-reviewed journal." }
+        { "p": "The 11 percent estimate gives more weight to agencies that had more thefts before the cameras arrived. Weighted by population, or with every agency-month counted equally, the paper’s appendix shows no change that can be told apart from zero, a point the Institute for Justice, a libertarian law firm that [sued Norfolk, Va., over its Flock cameras](src:ij-norfolk), [made in September](src:reason-flock-study-2026). The authors say their main estimate describes the places that carry most of the thefts rather than a uniform effect. The paper has not been published in a peer-reviewed journal." }
       ]
     },
     {
@@ -110,7 +109,7 @@
       "blocks": [
         { "p": "Customers pay a yearly fee that covers the camera, pole, solar panel, cellular data and software, and Flock [keeps ownership of the hardware](src:richland-agreement-2023). The list price is [$3,000 per camera per year](src:flock-catalog-2024), up from $2,500 before Jan. 1, 2024." },
         { "fig": "price" },
-        { "p": "Contracts from 2021 to 2023 added a one-time installation fee of [$250 to $350](src:richland-agreement-2023) a camera. When a customer changes its plan after it is agreed, Flock’s 2026 schedule charges [$1,000 to $1,250](src:flock-fee-schedule) to install a camera and $350 to $5,000 to move one." },
+        { "p": "Contracts and quotes from [2022](src:richland-agreement-2023) and [2023](src:indio-2023) list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. When a customer changes its plan after it is agreed, Flock’s 2026 schedule charges [$1,000 to $1,250](src:flock-fee-schedule) to install a camera and $350 to $5,000 to move one." },
         { "p": "The largest public contracts run to millions of dollars. The Texas Department of Public Safety approved a [$26 million contract](src:texastribune-2026) in 2025; Johnson City, Tenn., approved [$8.1 million over 10 years](src:johnsoncity-2025)." },
         { "fig": "contracts" }
       ]
@@ -119,10 +118,10 @@
       "id": "what-changed-in-2026",
       "title": "What changed in 2026",
       "blocks": [
-        { "p": "This year some governments added cameras or renewed contracts while others ended, paused or restricted them, and Flock changed its own defaults. In Texas, after the governor paused state funding in August, [at least 14 cities and counties](src:texastribune-unplugged-2026) switched off more than 900 cameras. Dallas, which shut off the ones paid for with state grants, has since said it will [keep them running](src:texastribune-reprieve-2026) after Flock paused its payments for 90 days." },
+        { "p": "This year some governments added cameras or renewed contracts while others ended, paused or restricted them, and Flock changed its own defaults. In Texas, after the governor paused state funding in August, The Texas Tribune counted [at least 14 cities and counties](src:texastribune-unplugged-2026) that had switched off more than 900 cameras. Dallas, which had said it would switch off the cameras paid for with state grants, said on Sept. 30 that they would [stay on for at least 90 days](src:fox4-dallas-2026); The Texas Tribune reported that Flock had [paused the city’s payments](src:texastribune-reprieve-2026) for them." },
         { "fig": "timeline" },
-        { "p": "Finding Flock, an independent site that tracks the cameras, lists [45 decisions](src:findingflock-cancellations) from August 2025 to September 2026 to cancel, pause, deactivate, reject or not renew a contract, and says its list is not complete. Over a similar period, the company grew: Sacra, a firm that estimates private companies’ revenue, put Flock’s annual recurring revenue at [about $500 million](src:sacra-flock) in March 2026, up from $285 million at the end of 2024." },
-        { "p": "The map keeps changing, too. In the week before {{snapshot|date}}, volunteers added at least {{addedLastWeek.flock}} Flock cameras to it. In Windsor, Conn., where the council voted in July to keep the town’s cameras off, a mapper [removed them](src:osm-windsor-2026) with a note that the town had ended their use." }
+        { "p": "Finding Flock, an independent site that tracks the cameras, lists [45 decisions](src:findingflock-cancellations) from August 2025 to September 2026 to cancel, pause, deactivate, reject or not renew a contract, and says its list is not complete. Over the same period, the company grew: Sacra, a firm that estimates private companies’ revenue, put Flock’s annual recurring revenue at [about $450 million](src:sacra-flock) in October 2025 and $500 million in March 2026." },
+        { "p": "The map keeps changing, too. In the week before {{snapshot|date}}, volunteers added at least {{addedLastWeek.flock}} Flock cameras to it. In Windsor, Conn., where the council voted in July to keep the town’s cameras off, a mapper [deleted 14 of them](src:osm-windsor-2026) on Oct. 8, noting that each had been removed, “presumably” because the town had canceled its contract." }
       ]
     },
     {
@@ -130,7 +129,8 @@
       "kind": "cards",
       "title": "Go deeper",
       "blocks": [
-        { "p": "Each part of this story has a page with the full record: every figure, table and source." }
+        { "p": "Each part of this story has a page with the full record: every figure, table and source." },
+        { "preview": "components" }
       ]
     },
     {
@@ -148,14 +148,14 @@
   "figures": {
     "completeness": {
       "title": "Mapped counts run above and below the published ones",
-      "sub": "Flock cameras mapped inside city limits, and the count each city or its reporting published, on a log scale",
+      "sub": "Flock cameras mapped inside city limits, and the count each city published or local news reported, on a logarithmic scale",
       "notes": ["Mapped counts include cameras that other operators run inside city limits; published counts can be older than the map."],
       "sources": ["deflock-tiles-2026", "census-boundaries-2024", "oakland-pac-2026", "denverite-2025", "lexington-lpr-locations", "berkeleyside-2025", "piedmont-2025", "lafayette-co-alpr", "govtech-dallas-2026", "houstonchronicle-flock-2025"]
     },
     "states": {
       "title": "Georgia has the most mapped Flock cameras per resident",
       "sub": "Mapped Flock cameras for every 100,000 residents in the 10 highest and five lowest states",
-      "notes": ["Population estimates for July 1, 2024. Rates cover the 50 states and D.C.; the national total also counts {{outsideStates}} cameras in Puerto Rico and elsewhere."],
+      "notes": ["Population estimates for July 1, 2024. Rates cover the 50 states and D.C.; the national total also counts {{outsideStates}} Flock cameras outside them, most in Puerto Rico."],
       "sources": ["deflock-tiles-2026", "census-pop-2024"]
     },
     "lookup": {
@@ -167,12 +167,12 @@
     "operators": {
       "title": "Where an operator is recorded, most are police or sheriffs",
       "sub": "Mapped Flock cameras by the type of operator volunteers recorded",
-      "notes": ["Operator names with 10 or more cameras were classified by hand, the rest by keyword; the classification is published with the data."],
+      "notes": ["Operator names with 10 or more cameras were classified by hand, the rest by keyword; the classification is published with the data. The counts include the {{outsideStates}} mapped Flock cameras outside the 50 states and D.C."],
       "sources": ["deflock-tiles-2026"]
     },
     "read": {
-      "title": "What one read records",
-      "sub": "Fields Flock’s cameras produce for a passing vehicle, as the company describes them",
+      "title": "Each read records more than the plate",
+      "sub": "The fields a Flock camera records for a passing vehicle",
       "notes": ["Illustration. The vehicle details are those Flock lists in a 2020 announcement and a 2023 sales presentation; The Texas Tribune reported that the cameras also record dents."],
       "sources": ["flock-wing-2020", "flock-deck-2023", "aclu-2022", "flock-lpr-policy", "texastribune-unplugged-2026"]
     },
@@ -184,18 +184,18 @@
     },
     "audit": {
       "title": "One search, 83,345 cameras",
-      "sub": "Audit log entries for two searches by the Johnson County, Texas, Sheriff’s Office on May 9, 2025, and three accounts of them",
+      "sub": "Audit log entries for two searches by the Johnson County, Tex., Sheriff’s Office on May 9, 2025, and three accounts of them",
       "notes": ["As documented by the Electronic Frontier Foundation from the published logs; both entries carried the case number of the office’s death investigation."],
       "sources": ["eff-texas-2025", "404-texas-2025"]
     },
     "oakland": {
       "title": "In Oakland, one alert for every 580 reads",
       "sub": "Plate reads and alerts from the Police Department’s 290 Flock cameras in 2025; each square’s area is proportional to the count",
-      "notes": ["Alerts for stolen plates and stolen vehicles were generated but not sent to officers. A success story can record more than one result; outside agencies that search Oakland’s cameras do not always report theirs, and the department cannot see their records. The report’s table of the same outcomes by offense totals 162 arrests, 25 vehicles and 50 guns."],
+      "notes": ["Alerts for stolen plates and stolen vehicles were generated but not sent to officers. A success story can record more than one result; outside agencies that search Oakland’s cameras do not always report theirs, and the department cannot see their records. The report does not explain why its two totals of vehicles and guns differ."],
       "sources": ["oakland-pac-2026"]
     },
     "ladder": {
-      "title": "Alerts number in the hundreds or thousands; arrests, in the dozens",
+      "title": "Alerts run from hundreds to tens of thousands; arrests, in the dozens",
       "sub": "Counts from each department’s report or audit, on a logarithmic scale",
       "notes": ["Definitions differ: Nashville counted only hits an employee verified; Columbia counts cases cleared by arrest; Los Angeles’s reads are from all its readers, its alerts and outcomes from Axon readers in patrol cars. Periods differ. The figures are not a ranking."],
       "sources": ["lapd-oig-2026", "columbia-mo-2025", "nashville-lpr-2023"]
@@ -203,14 +203,14 @@
     "evidence": {
       "title": "Whether thefts fell depends on how agencies are weighted",
       "sub": "Estimated change in reported vehicle thefts in the year after an agency’s first Flock camera went live, with 95 percent confidence intervals",
-      "notes": ["From Tables 2 and S7 of the working paper by Scott M. Mourtgos and Ian T. Adams, posted Aug. 16, 2026: 216 adopting agencies and 3,108 others, 2017 to 2023. The authors say the three weightings answer different questions rather than offering competing estimates of one effect."],
+      "notes": ["From Tables 2 and S7 of the working paper by Scott M. Mourtgos and Ian T. Adams, posted Aug. 16, 2026: 216 agencies that adopted the cameras from 2019 to 2024, 168 of them before the crime data end, and 3,108 that did not; crime data from 2017 to 2023. The authors say the three weightings answer different questions rather than offering competing estimates of one effect."],
       "sources": ["mourtgos-adams-2026", "reason-flock-study-2026"]
     },
     "errors": {
       "title": "Three ways an alert can be wrong",
       "sub": "Each measured against the total its own report gives",
-      "notes": ["Roseville’s cameras are Flock’s; the Story County and Los Angeles figures come from Axon readers in patrol cars."],
-      "sources": ["sacbee-roseville-2026", "footnote4a-hotlist", "lapd-oig-2026"]
+      "notes": ["Roseville’s cameras are Flock’s; the Story County and Los Angeles figures come from Axon readers in patrol cars. The Story County report was published by Footnote 4a, the reporting site of Have I Been Flocked, a project that describes its focus as license plate surveillance accountability."],
+      "sources": ["sacbee-roseville-2026", "footnote4a-hotlist", "haveibeenflocked-about", "lapd-oig-2026"]
     },
     "price": {
       "title": "The list price of a camera rose $500 in 2024",
@@ -219,16 +219,16 @@
       "sources": ["richland-agreement-2023", "indio-2023", "grafton-2024", "flock-catalog-2024", "parkridge-2025", "deflocksc-greenville"]
     },
     "contracts": {
-      "title": "Of the documented contracts, Dallas’s costs the most per year",
+      "title": "Of contracts with a known term, Dallas’s costs the most per year",
       "sub": "Contract value per year, with the total and term, from public records",
-      "notes": ["Values are as approved; some include video cameras, drones or gunshot sensors. The Texas Department of Public Safety’s $26 million contract is not charted because its term was not reported."],
-      "sources": ["texastribune-2026", "johnsoncity-2025", "houstonchronicle-2023", "govtech-dallas-2026", "wsbtv-smyrna-2025", "wvwatch-huntington-2026", "elpasomatters-2026", "turnto10-ri-2026", "okcfox-okc-2026"]
+      "notes": ["Values are as approved; some include video cameras, drones or gunshot sensors. Houston’s value is a ceiling, drawn as an outline. The Texas Department of Public Safety’s $26 million contract is not charted because its term was not reported."],
+      "sources": ["texastribune-2026", "johnsoncity-2025", "houstonchronicle-2023", "govtech-dallas-2026", "wsbtv-smyrna-2025", "mdjonline-smyrna-2025", "wvwatch-huntington-2026", "elpasomatters-2026", "turnto10-ri-2026", "okcfox-okc-2026"]
     },
     "timeline": {
-      "title": "2026: contracts added and kept, cameras switched off, new limits",
+      "title": "In 2026, some places added or kept the cameras while others switched them off",
       "sub": "Decisions this year that changed where Flock cameras operate, who pays for them or how their data is kept",
       "notes": [],
-      "sources": ["patch-windsor-2026", "wa-sb6002-2026", "cleveland-2026", "wvwatch-huntington-2026", "turnto10-ri-2026", "flock-guardrails-2026", "okcfox-okc-2026", "texastribune-abbott-2026", "wusf-fdot-2026", "texastribune-dps-2026", "texastribune-unplugged-2026", "texastribune-reprieve-2026"]
+      "sources": ["patch-windsor-2026", "wa-sb6002-2026", "cleveland-2026", "wvwatch-huntington-2026", "turnto10-ri-2026", "flock-guardrails-2026", "okcfox-okc-2026", "texastribune-abbott-2026", "wusf-fdot-2026", "texastribune-dps-2026", "govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"]
     }
   }
 }

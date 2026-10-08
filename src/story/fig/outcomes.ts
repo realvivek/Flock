@@ -6,7 +6,7 @@ import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 import type { Ladder } from "../types.ts";
 
-const OAK = { reads: 638_747_333, alerts: 1_099_837, off: 653_566, success: 425, arrests: 162, vehicles: 174, guns: 51 };
+const OAK = { reads: 638_747_333, alerts: 1_099_837, off: 653_566, success: 425, arrests: 162, vehicles: 174, guns: 51, byOffense: { arrests: 162, vehicles: 25, guns: 50 } };
 
 export function oaklandFigure(cfg: FigureCfg, ctx: Ctx): string {
   const draw = (W: number, narrow: boolean) => {
@@ -35,8 +35,10 @@ export function oaklandFigure(cfg: FigureCfg, ctx: Ctx): string {
     const H = narrow ? iy + I + 28 : Math.max(y0 + S, iy + I + 26) + 4;
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Two squares drawn to scale: ${int(OAK.reads)} plate reads and, in its corner, ${int(OAK.alerts)} alerts, about one for every 580 reads. Of the alerts, ${int(OAK.off)} were stolen-plate or stolen-vehicle alerts the department kept switched off.` });
   };
-  const tiles = `<div class="tiles" aria-label="Successes officers logged in 2025"><p class="tiles-k">Officers also logged <b>${OAK.success}</b> “success stories” in 2025, which the report sums up as</p><div class="tile"><span class="n">${OAK.arrests}</span><span class="l">arrests</span></div><div class="tile"><span class="n">${OAK.vehicles}</span><span class="l">vehicles recovered</span></div><div class="tile"><span class="n">${OAK.guns}</span><span class="l">guns recovered</span></div></div>`;
-  const table = dataTable(["Measure, Oakland 2025", "Count"], [["Plate reads", OAK.reads], ["Alerts", OAK.alerts], ["  Stolen plates and stolen vehicles (switched off)", OAK.off], ["  Other alert types", OAK.alerts - OAK.off], ["Success stories logged", OAK.success], ["Arrests (report summary)", OAK.arrests], ["Vehicles recovered (report summary; 25 in its table by offense)", OAK.vehicles], ["Guns recovered (report summary; 50 in its table by offense)", OAK.guns]]);
+  // the report totals the same outcomes twice, in its summary and in its table by offense, and they differ: both shown
+  const rowsOut: [string, number, number][] = [["Arrests", OAK.arrests, OAK.byOffense.arrests], ["Vehicles recovered", OAK.vehicles, OAK.byOffense.vehicles], ["Guns recovered", OAK.guns, OAK.byOffense.guns]];
+  const tiles = `<div class="tiles"><p class="tiles-k">Officers also logged <b>${OAK.success}</b> “success stories” in 2025. The report totals what came of them twice, and the totals differ:</p><table class="oak-t"><thead><tr><th scope="col"><span class="visually-hidden">Outcome</span></th><th scope="col">In the report’s summary</th><th scope="col">In its table by offense</th></tr></thead><tbody>${rowsOut.map(([k, a, b]) => `<tr><th scope="row">${k}</th><td>${a}</td><td${a !== b ? ' class="differs"' : ""}>${b}</td></tr>`).join("")}</tbody></table></div>`;
+  const table = dataTable(["Measure, Oakland 2025", "Count"], [["Plate reads", OAK.reads], ["Alerts", OAK.alerts], ["  Stolen plates and stolen vehicles (switched off)", OAK.off], ["  Other alert types", OAK.alerts - OAK.off], ["Success stories logged", OAK.success], ["Arrests, report summary", OAK.arrests], ["Arrests, table by offense", OAK.byOffense.arrests], ["Vehicles recovered, report summary", OAK.vehicles], ["Vehicles recovered, table by offense", OAK.byOffense.vehicles], ["Guns recovered, report summary", OAK.guns], ["Guns recovered, table by offense", OAK.byOffense.guns]]);
   return frame("oakland", cfg, ctx, draw(600, false) + draw(360, true) + tiles, { table });
 }
 

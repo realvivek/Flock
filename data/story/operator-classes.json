@@ -18,8 +18,17 @@
   "Saint Johns County Sheriff's Office": "St. Johns County Sheriff",
   "Riverside County Sheriff’s Department": "Riverside County Sheriff's Department",
   "The Colony PD": "The Colony Police Department",
-  "Everett Police": "Everett Police Department"
- },
+  "Everett Police": "Everett Police Department",
+  "LOWES": "Lowe's",
+  "Lowes Home Improvement (Corporate Security": "Lowe's",
+  "Lowe's Home Improvement Live Oak": "Lowe's",
+  "Lowe's (retailer)": "Lowe's",
+  "Lowes Home Improvement": "Lowe's",
+  "Lowe's Companies, Inc": "Lowe's",
+  "Home Depot (retailer)": "The Home Depot",
+  "HOME DEPOT": "The Home Depot",
+  "HomeDepot": "The Home Depot"
+},
  "map": {
   "Accomack County Sheriff's Office": "police",
   "Adams County Sheriff's Office": "police",

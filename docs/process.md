@@ -375,10 +375,13 @@ version is laid out for a phone rather than shrunk.
 - **Selection rules in writing.** The timeline states how its events were chosen and includes contracts added
   and kept as well as those ended; the outcomes ladder shows each department's counts from its own report or
   audit and computes no rates across departments.
-- **Dates move.** Dallas said in September it would switch off its 321 grant-funded cameras, did so, and in
-  October kept them on after Flock paused its payments; the story reports the state on its date.
-- **Phones** keep the two-row header, so all nine links stay visible; the map takes the top of the screen and
-  the step cards the bottom; the preview images have phone versions without small print.
+- **Dates move.** Dallas said on Sept. 1 that it would switch off its 321 grant-funded cameras; local reporting
+  says they stayed on, and on Sept. 30 the department said they would stay on for at least 90 days. One
+  newspaper's count of switch-offs included Dallas, so the story attributes that count and reports each state
+  on its date.
+- **Phones** keep the two-row header, so all nine links stay visible; the map's legend has its own band above
+  the map and its credit one below it, opaque step cards come about once a screen, and the preview images
+  are whole tiles with no small print at any width.
 - **No outside requests.** Fonts are self-hosted; the map draws from local files.
 
 ### Reviews
@@ -391,12 +394,18 @@ upload time; Evidence Mode past a break), a share of cameras with any operator r
 by type, and about 20 style and phone fixes. All are in. A further pass over the reference pages found the
 Claims page widening a phone's layout to 648 pixels; a test now checks every page at 360 pixels.
 
+A second round of both followed. The critique found county colours the legend did not show (counties are now
+drawn in their exact class colour, with the least populated hatched), a ladder title the data contradicted,
+an errors figure that gave a chart only to the Flock case, map labels and legends colliding with the map,
+and see-through phone cards; the fact-check found the installation fees, Dallas's switch-off and a timeline
+date wrong, and about 15 smaller points. All are corrected and listed in `docs/fact-check.md`.
+
 ## 8. Numbers for the article
 | What | Figure |
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
 | Commits | 40, Sept. 4 to Oct. 8, 2026 |
-| Bibliography rows | 190, tagged flock, independent, government or court |
+| Bibliography rows | 192, tagged flock, independent, government or court |
 | Content files | 14 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
@@ -405,5 +414,5 @@ Claims page widening a phone's layout to 648 pixels; a test now checks every pag
 | Mapped cameras, story | 143,929 readers, 115,437 Flock (Oct. 8, 2026) |
 | Mapped cameras, outcomes | 116,723 readers, 96,484 Flock (July 17, 2026, the snapshot the records were matched against) |
 | Outcome locations | 74 tied to fixed cameras, 55 placed, 21 within 150 m of a mapped camera |
-| Claims checked in the October fact-check | about 200 |
+| Claims checked in the October fact-checks | about 250, in two independent passes |
 | Home page weight before the first scroll | about 480 KB compressed, of which 13 KB JavaScript and 278 KB the map's camera file (`scripts/budget.mjs`) |

@@ -3,7 +3,7 @@
   "hops": [
     { "id": "hop-1", "n": 1, "title": "Capture", "where": "On the pole", "tag": "independent",
       "summary": "The passive infrared sensor triggers on a warm moving object. The camera captures six to 12 still frames of the vehicle's rear, illuminated at night by an 850 nm infrared array.",
-      "payload": ["6–12 JPEG frames", "~5 MP each"], "unknowns": ["People and cyclists that trigger the sensor appear in frame; Flock states they are not indexed"],
+      "payload": ["6–12 JPEG frames", "About 5 MP each"], "unknowns": ["People and cyclists that trigger the sensor appear in frame; Flock states they are not indexed"],
       "sources": ["cehrp-dissection", "jalopnik-speed", "flock-flex-datasheet", "aclu-2022"] },
     { "id": "hop-2", "n": 2, "title": "On-device inference", "where": "On the pole", "tag": "both",
       "summary": "The plate and its state are read with a confidence score, and the vehicle is described in what Flock calls a 'Vehicle Fingerprint'. Flock's policy says the plate and vehicle images are transferred to its cloud.",
@@ -31,10 +31,10 @@
       "summary": "The plate is compared against NCIC, NCMEC, AMBER, state and custom lists. The ACLU found that the cameras download the NCIC lists only twice a day, so a plate removed from a list can continue to generate alerts for up to 12 hours.",
       "payload": ["list hit", "list source"], "sources": ["flock-lpr-policy", "aclu-2022"] },
     { "id": "hop-9", "n": 9, "title": "Alert", "where": "Mobile app", "tag": "flock", "transport": "SNS push, radius-filtered",
-      "summary": "A hit sends plate, image, location and list source to officers' phones in 10 to 15 seconds on average, according to Flock's datasheet. Multi-factor login became mandatory in August 2026. In Roseville, California, 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 (71 percent) involved a misread plate; the department says none led to a contact or an arrest, and Flock calls the figure a mischaracterization of overall accuracy.",
+      "summary": "A hit sends plate, image, location and list source to officers' phones in 10 to 15 seconds on average, according to Flock's datasheet. Multi-factor login became mandatory in August 2026. In Roseville, Calif., 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 (71 percent) involved a misread plate; the department says none led to a contact or an arrest, and Flock calls the figure a mischaracterization of overall accuracy.",
       "payload": ["plate", "vehicle image", "camera location", "list source"], "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "sacbee-roseville-2026"] },
     { "id": "hop-10", "n": 10, "title": "Network search", "where": "FlockOS", "tag": "both",
-      "summary": "A user in a customer agency can search by plate, description, natural language or co-traveling vehicles, across the agency's cameras, its sharing partners, and the national lookup that about 75 percent of law-enforcement customers joined per Flock's statement to Congress. The audit log of a Johnson County, Texas, search on May 9, 2025, lists 83,345 cameras in 6,809 networks.",
+      "summary": "A user in a customer agency can search by plate, description, natural language or co-traveling vehicles, across the agency's cameras, its sharing partners, and the national lookup that about 75 percent of law-enforcement customers joined per Flock's statement to Congress. The audit log of a Johnson County, Tex., search on May 9, 2025, lists 83,345 cameras in 6,809 networks.",
       "payload": ["query", "reason (free text)", "case number (free text)"], "unknowns": ["Whether derived metadata is deleted on the same clock as images"],
       "sources": ["flock-platform", "wyden-ftc-2025", "404-texas-2025", "eff-texas-2025", "404-states-2025", "techtimes-casecodes-2026"] },
     { "id": "hop-11", "n": 11, "title": "Audit log", "where": "FlockOS Insights", "tag": "independent",
@@ -59,9 +59,9 @@
     "accounts": [
       { "who": "Johnson County Sheriff Adam King, to 404 Media", "text": "Her family was worried that she was going to bleed to death, and we were trying to find her to get her to a hospital." },
       { "who": "Flock Safety", "text": "She was being searched for as a missing person, not as a suspect of a crime." },
-      { "who": "EFF, from the incident report and the lead detective's affidavit", "text": "The records describe a death investigation of a non-viable fetus; the abortion took place more than two weeks before deputies were called." }
+      { "who": "EFF, from the incident report and the lead detective's affidavit", "text": "The records describe a death investigation of a nonviable fetus; the abortion took place more than two weeks before deputies were called." }
     ],
-    "note": "Reproduced from the audit logs of two searches by the Johnson County, Texas sheriff's office on May 9, 2025, reported by 404 Media and documented by EFF: one week across 17,684 cameras in 1,295 networks, then a month across 83,345 cameras in 6,809 networks. Both logged the same reason and the case number of the office's death investigation.",
+    "note": "Reproduced from the audit logs of two searches by the Johnson County, Tex. sheriff's office on May 9, 2025, reported by 404 Media and documented by EFF: one week across 17,684 cameras in 1,295 networks, then a month across 83,345 cameras in 6,809 networks. Both logged the same reason and the case number of the office's death investigation.",
     "sources": ["404-texas-2025", "eff-texas-2025"]
   }
 }

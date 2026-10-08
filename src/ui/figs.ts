@@ -40,10 +40,10 @@ export function citiesFigure(rows: City[], snapshot: string, width: number): str
 export function texasFigure(width: number): string {
   const flow = `<ol class="flow">
 <li><span class="n">$1</span><span class="t">added to each Texas auto insurance policy by a 2023 law, for the state’s Motor Vehicle Crime Prevention Authority</span></li>
-<li><span class="n">$30 million</span><span class="t">or more in the authority’s grants for Flock cameras</span></li>
-<li><span class="n">3,200</span><span class="t">Flock cameras or more installed with its help since 2023</span></li>
+<li><span class="n">$30 million</span><span class="t">or more in the authority’s grants and contracts for Flock cameras</span></li>
+<li><span class="n">3,200</span><span class="t">Flock cameras or more installed with its help by state and local agencies since 2023</span></li>
 <li class="is-stop"><span class="n">Aug. 27, 2026</span><span class="t">The governor orders state agencies to pause funding for Flock cameras</span></li>
-<li class="is-stop"><span class="n">900</span><span class="t">cameras or more switched off by at least 14 cities and counties by late September</span></li>
+<li class="is-stop"><span class="n">900</span><span class="t">cameras or more switched off by at least 14 cities and counties by late September, The Texas Tribune counted</span></li>
 </ol>`;
   const f1 = frame("texas", cfg("Texas paid for cameras with a $1 insurance fee, then paused the money", "How state money reached local Flock networks, as The Texas Tribune reported it", ["texastribune-abbott-2026", "texastribune-dps-2026", "texastribune-unplugged-2026"]), figCtx(), flow);
   // Dallas: 684 cameras, 321 of them paid for by state grants
@@ -51,9 +51,9 @@ export function texasFigure(width: number): string {
   let sq = "";
   for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols); sq += rect(c * (s + gap), r * (s + gap), s, s, { rx: 1.5, class: i < off ? "c-hi" : "c-ctx2" }); }
   const rows = Math.ceil(n / cols), W = cols * (s + gap) - gap, H = rows * (s + gap) - gap;
-  const unit = svg(W, H, sq, { cls: "unit", label: "684 squares, one per Dallas camera; 321 of them are marked as the cameras paid for by state grants, which the department switched off in September and kept on from October." });
-  const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 paid for by state grants: switched off in September, kept on from October</span><span><i class="c-ctx2-bg"></i>363 others</span></div>`;
-  const f2 = frame("dallas", cfg("Dallas switched off its 321 grant-funded cameras, then kept them on", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2026", "texastribune-unplugged-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. In early October, The Texas Tribune reported that Dallas would keep the grant-funded cameras on after Flock paused its payments for 90 days."]), figCtx(), unit + key);
+  const unit = svg(W, H, sq, { cls: "unit", label: "684 squares, one per Dallas camera; 321 of them are marked as the cameras paid for by state grants, which the department planned to switch off in September and then kept on." });
+  const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 paid for by state grants: to be switched off, then kept on for at least 90 days</span><span><i class="c-ctx2-bg"></i>363 others</span></div>`;
+  const f2 = frame("dallas", cfg("Dallas planned to switch off its 321 grant-funded cameras, then kept them on", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. On Sept. 30 the department said the grant-funded cameras would stay on for at least 90 days; The Texas Tribune reported that Flock paused the city’s payments for them."]), figCtx(), unit + key);
   return f1 + f2;
 }
 
