@@ -11,7 +11,7 @@ import { drawNational, drawCity, loadCameras, type Ring } from "./outcomes-map";
 
 const Values = z.object({ reads: z.number().nullable(), alerts: z.number().nullable(), falseAlerts: z.number().nullable(), stops: z.number().nullable(), recoveries: z.number().nullable(), arrests: z.number().nullable() });
 const Match = z.object({ osmId: z.number(), brand: z.string().nullable(), distanceM: z.number(), lon: z.number(), lat: z.number() }).passthrough().nullable();
-const Site = z.object({ id: z.string(), source: z.string(), level: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), label: z.string(), lon: z.number().nullable(), lat: z.number().nullable(), geocode: z.string(), match: Match, nearest: Match, values: Values, extra: z.record(z.string(), z.unknown()).optional(), sources: z.array(z.string()), quadrant: z.string().optional(), mobile: z.boolean().optional(), cameras: z.number().optional() });
+const Site = z.object({ id: z.string(), source: z.string(), level: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), label: z.string(), lon: z.number().nullable(), lat: z.number().nullable(), geocode: z.string(), match: Match, nearest: Match, values: Values, extra: z.record(z.string(), z.unknown()).optional(), sources: z.array(z.string()), quadrant: z.string().optional(), mobile: z.boolean().optional(), cameras: z.number().optional(), placedAtCamera: z.boolean().optional(), inCar: z.boolean().optional() });
 const File = z.object({
   generated: z.string(),
   cameras: z.object({ total: z.number(), flock: z.number(), asOf: z.string(), withDirection: z.number() }),
@@ -21,9 +21,9 @@ const File = z.object({
   windsor: z.object({ cameras: z.number(), cases: z.array(z.object({ date: z.string(), type: z.string(), site: z.string().nullable(), summary: z.string(), outcome: z.string() })), sources: z.array(z.string()) }),
   courts: z.array(z.object({ id: z.string(), case: z.string(), court: z.string(), state: z.string(), city: z.string().optional(), date: z.string(), crime: z.string(), role: z.string(), outcome: z.string(), sources: z.array(z.string()) })),
   districts: z.array(z.object({ agency: z.string(), city: z.string(), state: z.string(), unit: z.string(), asOf: z.string(), cameras: z.number(), sources: z.array(z.string()), rows: z.array(z.tuple([z.string(), z.number()])) })),
-  ladders: z.array(z.object({ id: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), cameras: z.string(), vendorMix: z.boolean().optional(), values: Values, note: z.string(), sources: z.array(z.string()) })),
+  ladders: z.array(z.object({ id: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), cameras: z.string(), vendorMix: z.boolean().optional(), vendor: z.string().optional(), mixedWindows: z.boolean().optional(), values: Values, note: z.string(), sources: z.array(z.string()) })),
   national: z.object({ statements: z.array(z.object({ tag: z.string(), who: z.string(), text: z.string(), sources: z.array(z.string()) })), excluded: z.array(z.object({ what: z.string(), why: z.string(), sources: z.array(z.string()) })) }),
-  coverage: z.object({ sites: z.number(), located: z.number(), matched: z.number(), bySource: z.record(z.string(), z.object({ sites: z.number(), located: z.number(), matched: z.number() })) }),
+  coverage: z.object({ sites: z.number(), located: z.number(), matched: z.number(), placedAtCamera: z.number(), inCar: z.number(), bySource: z.record(z.string(), z.object({ sites: z.number(), located: z.number(), matched: z.number(), placedAtCamera: z.number() })) }),
 });
 type Data = z.infer<typeof File>;
 type SiteT = z.infer<typeof Site>;
@@ -35,7 +35,7 @@ const depth = (v: V): Ring["depth"] => (v.arrests || v.recoveries) ? 3 : v.stops
 const SOURCE_META: Record<string, { title: string; how: string; unit: string }> = {
   nashville: { title: "Nashville, Tennessee: 24 fixed sites and 4 mobile units, eight weeks in 2023", how: "Metro Nashville Police published verified hits, stops, searches, arrests and recoveries for each intersection in its ALPR pilot. A verified hit is a hit notification an employee confirmed before a stop was authorised. The report does not name the vendor of the fixed cameras. Sites were located as the node the two named roads share in OpenStreetMap.", unit: "Verified hits" },
   windsor: { title: "Windsor, Connecticut: 16 cameras at 14 sites, cases named to a camera", how: "The town's fact sheet lists every camera site and ten dated cases; four name the camera used. Counts here are those cases, not hit totals, which the town does not publish.", unit: "Alerts" },
-  story: { title: "Story County, Iowa: every wrong hot-list hit for one month, by location", how: "The sheriff's export of hits reviewed as wrong, with the coordinates of each hit. 77% were 'wrong state': the plate matched a list entry from another state. Correct hits were not exported, so the denominator is unknown. Each row carries a coordinate; few fall within 150 m of a camera on the crowd-sourced map, so either the county's cameras are largely unmapped or the coordinates are not the camera positions. The match column says which.", unit: "Hits reviewed" },
+  story: { title: "Story County, Iowa: a month of hot-list hits from the sheriff's in-car readers, by location", how: "The sheriff's office's 'Erroneous hotlist hits' report from its Axon in-car readers (not Flock cameras), with the coordinates of each hit: 214 rows from NCIC lists, 165 of them marked 'wrong state', meaning the plate matched a list entry from another state. Accurate hits and total reads were not in the report. A hit's location is where a patrol car was, so these records are mapped but not matched to fixed cameras.", unit: "Hits in the report" },
   tucson: { title: "Tucson, Arizona: dispatch calls with nature code FLOCK, last 45 days", how: "The city's calls-for-service layer carries a FLOCK nature code, used by the University of Arizona police, with the intersection and a disposition code. Codes: A arrest, B report, G citation, J no report, O other. The layer is a rolling window; the build keeps every snapshot.", unit: "Calls" },
   news: { title: "News reports that name the camera's road", how: "From a public dataset of 1,743 news-reported outcomes credited to Flock cameras, the records whose summary names the road or intersection of the camera. These are police statements relayed by local news; successes reach the news far more often than errors. Each row is one incident.", unit: "Incidents" },
   court: { title: "Court opinions that name the camera", how: "An appellate opinion that identifies the camera whose hot-list alert began the case.", unit: "Alerts" },
@@ -60,7 +60,7 @@ function rates(v: V): string {
   if (v.alerts && v.arrests != null) out.push(per(v.arrests, "arrests"));
   return out.length ? `<p class="rates mono">${out.join(" · ")}</p>` : "";
 }
-const matchText = (s: SiteT) => s.mobile ? `<span class="na">mobile unit, no fixed site</span>` : s.lat == null ? `<span class="na">location not resolved</span>` : s.match ? `${s.match.distanceM} m${s.match.brand && s.match.brand !== "Flock Safety" ? ` (${escape(s.match.brand)})` : ""}` : s.nearest ? `<span class="na">${s.nearest.distanceM.toLocaleString("en-US")} m, no match</span>` : `<span class="na">no mapped camera within about 4 km</span>`;
+const matchText = (s: SiteT) => s.inCar ? `<span class="na">in-car reader, not a fixed camera</span>` : s.placedAtCamera ? `<span class="na">placed at a mapped camera on the named road</span>` : s.mobile ? `<span class="na">mobile unit, no fixed site</span>` : s.lat == null ? `<span class="na">location not resolved</span>` : s.match ? `${s.match.distanceM} m${s.match.brand && s.match.brand !== "Flock Safety" ? ` (${escape(s.match.brand)})` : ""}` : s.nearest ? `<span class="na">${s.nearest.distanceM.toLocaleString("en-US")} m, no match</span>` : `<span class="na">no mapped camera within about 4 km</span>`;
 const RUNG_COLS: Record<string, string> = { falseAlerts: "Wrong alerts", stops: "Stops", recoveries: "Recoveries", arrests: "Arrests" };
 
 function siteTable(d: Data, sites: SiteT[], key: string): HTMLElement {
@@ -157,7 +157,7 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
     const tr = el("tr", "ladder"); tr.id = `ladder-${L.id}`;
     tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="mono small">${escape(L.period).replace(/(\d{4}-\d{2}(?:-\d{2})?)/g, '<span class="nw">$1</span>')}</td>${rungCells(L.values, { bars: true })}`;
     ltb.appendChild(tr);
-    const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${rates(L.values)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
+    const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows ? "" : rates(L.values)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
   }
   lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
   // National

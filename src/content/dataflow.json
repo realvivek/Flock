@@ -31,10 +31,10 @@
       "summary": "The plate is compared against NCIC, NCMEC, AMBER, state and custom lists. Lists are pushed to cameras about twice a day; a plate removed from a list can continue to generate alerts for up to twelve hours.",
       "payload": ["list hit", "list source"], "sources": ["flock-lpr-policy", "aclu-2022"] },
     { "id": "hop-9", "n": 9, "title": "Alert", "where": "Mobile app", "tag": "flock", "transport": "SNS push, radius-filtered",
-      "summary": "A hit sends plate, image, location and list source to nearby officers' phones within about ten to fifteen seconds. Multi-factor login became mandatory in August 2026. Audits in Roseville, CA and Los Angeles found 71% and 32% of alerts involved misread plates.",
-      "payload": ["plate", "vehicle image", "camera location", "list source"], "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "roseville-71"] },
+      "summary": "A hit sends plate, image, location and list source to nearby officers' phones within about ten to fifteen seconds. Multi-factor login became mandatory in August 2026. In Roseville, California, 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 (71%) involved a misread plate; the department says none led to a contact or an arrest, and Flock calls the figure a mischaracterization of overall accuracy.",
+      "payload": ["plate", "vehicle image", "camera location", "list source"], "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "sacbee-roseville-2026"] },
     { "id": "hop-10", "n": 10, "title": "Network search", "where": "FlockOS", "tag": "both",
-      "summary": "A user in a customer agency can search by plate, description, natural language or co-travelling vehicles, across the agency's cameras, its sharing partners, and the national lookup that about 75% of law-enforcement customers joined per Flock's statement to Congress. The audit log of one Texas deputy's April 2025 query lists 83,345 cameras in 6,809 networks.",
+      "summary": "A user in a customer agency can search by plate, description, natural language or co-travelling vehicles, across the agency's cameras, its sharing partners, and the national lookup that about 75% of law-enforcement customers joined per Flock's statement to Congress. The audit log of a Johnson County, Texas search on May 9, 2025 lists 83,345 cameras in 6,809 networks.",
       "payload": ["query", "reason (free text)", "case number (free text)"], "unknowns": ["Whether derived metadata is deleted on the same clock as images"],
       "sources": ["flock-platform", "wyden-ftc-2025", "404-texas-2025", "eff-texas-2025", "404-states-2025", "techtimes-casecodes-2026"] },
     { "id": "hop-11", "n": 11, "title": "Audit log", "where": "FlockOS Insights", "tag": "independent",
@@ -53,8 +53,15 @@
     { "label": "Evidence Mode", "days": 365, "note": "Cold storage for an active investigation; no published limit", "sources": ["flock-guardrails-2026", "aclu-guardrails"] }
   ],
   "deputy": {
-    "networks": 6809, "cameras": 83345, "lookbackDays": 30, "date": "April 2025", "reasonAsLogged": "had an abortion, search for female",
-    "note": "Reproduced from the audit log of a Johnson County, Texas search reported by 404 Media and documented by EFF. The log records no warrant or case number. The counts shown are those recorded in the log.",
+    "networks": 6809, "cameras": 83345, "lookbackDays": 30, "date": "May 9, 2025", "reasonAsLogged": "had an abortion, search for female",
+    "first": { "networks": 1295, "cameras": 17684, "lookbackDays": 7 },
+    "caseNumber": "the case number of the sheriff's office death investigation",
+    "accounts": [
+      { "who": "Johnson County Sheriff Adam King, to 404 Media", "text": "Her family was worried that she was going to bleed to death, and we were trying to find her to get her to a hospital." },
+      { "who": "Flock Safety", "text": "She was being searched for as a missing person, not as a suspect of a crime." },
+      { "who": "EFF, from the incident report and the lead detective's affidavit", "text": "The records describe a death investigation of a non-viable fetus; the abortion took place more than two weeks before deputies were called." }
+    ],
+    "note": "Reproduced from the audit logs of two searches by the Johnson County, Texas sheriff's office on May 9, 2025, reported by 404 Media and documented by EFF: one week across 17,684 cameras in 1,295 networks, then a month across 83,345 cameras in 6,809 networks. Both logged the same reason and the case number of the office's death investigation.",
     "sources": ["404-texas-2025", "eff-texas-2025"]
   }
 }

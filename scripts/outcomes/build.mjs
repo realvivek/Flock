@@ -157,7 +157,9 @@ function camerasAlongRoad(res, maxM = 60) {
 }
 const SITE_M = 150, ROAD_M = 60;
 const sites = [];
-const locate = (rec, lon, lat, method) => { const m = nearest(lon, lat); return { ...rec, lon: +lon.toFixed(5), lat: +lat.toFixed(5), geocode: method, match: m && m.distanceM <= SITE_M ? m : null, nearest: m }; };
+// A record placed at a camera on its named road (road-only reports) sits at that camera by construction, so it is
+// flagged and never counted as an independent match.
+const locate = (rec, lon, lat, method, placedAtCamera = false) => { const m = nearest(lon, lat); return { ...rec, lon: +lon.toFixed(5), lat: +lat.toFixed(5), geocode: method, match: !placedAtCamera && m && m.distanceM <= SITE_M ? m : null, nearest: m, ...(placedAtCamera ? { placedAtCamera: true } : {}) }; };
 // ---- Nashville -----------------------------------------------------------------------------------------------
 const nash = read("nashville.json");
 for (const s of nash.sites) {
@@ -173,9 +175,9 @@ for (const s of win.sites) {
   const cases = win.cases.filter((c) => c.site === s.id);
   const rec = { id: `win-${s.id}`, source: "windsor", level: "site", agency: win.agency, city: win.city, state: win.state, period: "2023 to 2025", label: s.label, cameras: s.cameras ?? 1, values: { reads: null, alerts: null, falseAlerts: null, stops: null, recoveries: cases.filter((c) => /recover/.test(c.outcome)).length || null, arrests: cases.filter((c) => /arrest/.test(c.outcome)).length || null }, extra: { cases: cases.map((c) => ({ date: c.date, type: c.type, outcome: c.outcome, summary: c.summary })) }, sources: win.sources };
   let x = null;
-  if (s.roadOnly) { const res = await roadGeo(s.roads[0], "Windsor, Connecticut", "CT"); const along = camerasAlongRoad(res); if (along.length) x = { lon: along[0].lon, lat: along[0].lat, method: `road only; nearest mapped camera on the road (${along.length} on it)` }; }
+  if (s.roadOnly) { const res = await roadGeo(s.roads[0], "Windsor, Connecticut", "CT"); const along = camerasAlongRoad(res); if (along.length) x = { lon: along[0].lon, lat: along[0].lat, method: `road only; placed at a mapped camera on the road (${along.length} on it)`, atCamera: true }; }
   else x = await intersection(s.roads, "Windsor, Connecticut", "CT");
-  sites.push(x ? locate(rec, x.lon, x.lat, x.method) : { ...rec, lon: null, lat: null, geocode: "intersection not resolved", match: null, nearest: null });
+  sites.push(x ? locate(rec, x.lon, x.lat, x.method, !!x.atCamera) : { ...rec, lon: null, lat: null, geocode: "intersection not resolved", match: null, nearest: null });
   console.log("windsor", s.label, x ? "ok" : "unresolved");
 }
 // ---- Story County clusters -----------------------------------------------------------------------------------
@@ -186,7 +188,9 @@ clusters.sort((a, b) => b.rows.length - a.rows.length);
 clusters.forEach((c, i) => {
   const st = (k) => c.rows.filter((r) => r.review_status.toLowerCase() === k).length;
   const rec = { id: `story-${i}`, source: "story", level: "cluster", agency: "Story County Sheriff's Office", city: "Story County", state: "IA", period: "2025-09-09 to 2025-10-09", label: `Location ${i + 1}`, values: { reads: null, alerts: c.rows.length, falseAlerts: st("wrong state") + st("incorrect"), stops: null, recoveries: null, arrests: null }, extra: { wrongState: st("wrong state"), incorrect: st("incorrect"), correct: st("correct"), noAction: st("no action"), dismissed: st("dismiss"), categories: Object.fromEntries(c.rows.reduce((m, r) => m.set(r.hotlist_offense_category, (m.get(r.hotlist_offense_category) ?? 0) + 1), new Map())) }, sources: ["footnote4a-hotlist"] };
-  sites.push(locate(rec, c.lon, c.lat, "coordinates in the county's export"));
+  // The export comes from the sheriff's Axon in-car readers: a hit's coordinates are where a patrol car was, so the
+  // record is mapped but never matched to a fixed camera.
+  sites.push({ ...rec, lon: +c.lon.toFixed(5), lat: +c.lat.toFixed(5), geocode: "hit location from an in-car reader", match: null, nearest: null, inCar: true });
 });
 console.log("story clusters", clusters.length);
 // ---- Tucson calls --------------------------------------------------------------------------------------------
@@ -194,11 +198,14 @@ const tucsonFiles = fs.readdirSync(SRC).filter((f) => /^tucson-.*\.json$/.test(f
 const calls = new Map();
 for (const f of tucsonFiles) for (const ft of JSON.parse(fs.readFileSync(path.join(SRC, f), "utf8")).features) { const a = ft.attributes; if (!calls.has(a.call_id)) calls.set(a.call_id, { ...a, lon: ft.geometry.x, lat: ft.geometry.y }); }
 const byPlace = new Map();
-for (const c of calls.values()) { const k = c.ADDRESS_PUBLIC; if (!byPlace.has(k)) byPlace.set(k, { lon: c.lon, lat: c.lat, calls: [] }); byPlace.get(k).calls.push(c); }
+// The layer writes an intersection in either street order ('E 1ST ST & N EUCLID AV' / 'N EUCLID AV & E 1ST ST'),
+// so places are keyed by the sorted pair of street names.
+const placeKey = (a) => a.split("&").map((x) => x.trim()).sort().join(" & ");
+for (const c of calls.values()) { const k = placeKey(c.ADDRESS_PUBLIC); if (!byPlace.has(k)) byPlace.set(k, { lon: c.lon, lat: c.lat, label: c.ADDRESS_PUBLIC, calls: [] }); byPlace.get(k).calls.push(c); }
 let ti = 0;
 for (const [addr, p] of byPlace) {
   const disp = Object.fromEntries(p.calls.reduce((m, c) => m.set(c.CSDISPOSIT || "?", (m.get(c.CSDISPOSIT || "?") ?? 0) + 1), new Map()));
-  const rec = { id: `tucson-${ti++}`, source: "tucson", level: "call", agency: "University of Arizona Police (Tucson dispatch)", city: "Tucson", state: "AZ", period: `${new Date(Math.min(...p.calls.map((c) => c.ACTDATETIME))).toISOString().slice(0, 10)} to ${new Date(Math.max(...p.calls.map((c) => c.ACTDATETIME))).toISOString().slice(0, 10)}`, label: addr.replace(/\b(\w)(\w*)/g, (_, a, b) => a + b.toLowerCase()).replace(/\bAv\b/g, "Ave").replace(/\bBl\b/g, "Blvd"), values: { reads: null, alerts: p.calls.length, falseAlerts: null, stops: null, recoveries: null, arrests: disp.A ?? null }, extra: { dispositions: disp, caseIds: p.calls.map((c) => c.case_id).filter(Boolean) }, sources: ["tucson-cfs"] };
+  const rec = { id: `tucson-${ti++}`, source: "tucson", level: "call", agency: "University of Arizona Police (Tucson dispatch)", city: "Tucson", state: "AZ", period: `${new Date(Math.min(...p.calls.map((c) => c.ACTDATETIME))).toISOString().slice(0, 10)} to ${new Date(Math.max(...p.calls.map((c) => c.ACTDATETIME))).toISOString().slice(0, 10)}`, label: p.label.replace(/\b(\w)(\w*)/g, (_, a, b) => a + b.toLowerCase()).replace(/\bAv\b/g, "Ave").replace(/\bBl\b/g, "Blvd"), values: { reads: null, alerts: p.calls.length, falseAlerts: null, stops: null, recoveries: null, arrests: disp.A ?? null }, extra: { dispositions: disp, caseIds: p.calls.map((c) => c.case_id).filter(Boolean) }, sources: ["tucson-cfs"] };
   sites.push(locate(rec, p.lon, p.lat, "dispatch coordinates (intersection)"));
 }
 console.log("tucson places", byPlace.size, "calls", calls.size);
@@ -208,9 +215,9 @@ for (const n of news) {
   const place = `${n.city}, ${n.state}`;
   let x = null, along = [];
   if (n.roads?.length === 2) x = await intersection(n.roads, place, n.state);
-  else if (n.roads?.length === 1) { const res = await roadGeo(n.roads[0], place, n.state); along = camerasAlongRoad(res); if (along.length) x = { lon: along[0].lon, lat: along[0].lat, method: `road only; nearest mapped camera on the road (${along.length} on it)` }; else if (res.length) { const c = coords(res[0].geo); const m = c[Math.floor(c.length / 2)]; if (m) x = { lon: m[0], lat: m[1], method: "a point on the road; no mapped camera on the road" }; } }
+  else if (n.roads?.length === 1) { const res = await roadGeo(n.roads[0], place, n.state); along = camerasAlongRoad(res); if (along.length) x = { lon: along[0].lon, lat: along[0].lat, method: `road only; placed at a mapped camera on the road (${along.length} on it)`, atCamera: true }; else if (res.length) { const c = coords(res[0].geo); const m = c[Math.floor(c.length / 2)]; if (m) x = { lon: m[0], lat: m[1], method: "a point on the road; no mapped camera on the road" }; } }
   const rec = { id: `news-${n.id}`, source: "news", level: n.roads?.length === 2 ? "site" : "road", agency: `${n.city} (${n.state}) police, as reported`, city: n.city, state: n.state, period: n.date, label: n.site, values: { reads: null, alerts: 1, falseAlerts: null, stops: null, recoveries: /recover/i.test(n.outcome) ? 1 : null, arrests: /arrest|charged|indicted/i.test(n.outcome) ? 1 : null }, extra: { crime: n.crime, outcome: n.outcome, summary: n.summary, url: n.url }, sources: ["lehman-tracker"] };
-  sites.push(x ? locate(rec, x.lon, x.lat, x.method) : { ...rec, lon: null, lat: null, geocode: "not resolved", match: null, nearest: null });
+  sites.push(x ? locate(rec, x.lon, x.lat, x.method, !!x.atCamera) : { ...rec, lon: null, lat: null, geocode: "not resolved", match: null, nearest: null });
   console.log("news", n.city, n.site, x ? "ok" : "unresolved");
 }
 // ---- Court site ----------------------------------------------------------------------------------------------
@@ -221,8 +228,11 @@ for (const c of courts.records.filter((r) => r.site)) {
   sites.push(res.length ? locate(rec, res[0].lon, res[0].lat, "address geocode") : { ...rec, lon: null, lat: null, geocode: "address not resolved", match: null, nearest: null });
 }
 // ---- Assemble ------------------------------------------------------------------------------------------------
-const located = sites.filter((s) => s.lat != null);
+// Coverage counts records tied to fixed cameras; Story County's in-car hits are reported separately.
+const fixed = sites.filter((s) => !s.inCar);
+const located = fixed.filter((s) => s.lat != null);
 const matched = located.filter((s) => s.match);
+const placedAtCamera = located.filter((s) => s.placedAtCamera);
 const out = {
   generated: new Date().toISOString().slice(0, 10),
   cameras: { total: cams.length, flock: flock.length, asOf: newest, withDirection: cams.filter((c) => c.dir != null).length },
@@ -241,8 +251,8 @@ const out = {
   districts: read("districts.json").districts,
   ladders: read("agencies.json").ladders,
   national: read("national.json"),
-  coverage: { sites: sites.length, located: located.length, matched: matched.length, bySource: Object.fromEntries(["nashville", "windsor", "story", "tucson", "news", "court"].map((k) => [k, { sites: sites.filter((s) => s.source === k).length, located: located.filter((s) => s.source === k).length, matched: matched.filter((s) => s.source === k).length }])) },
+  coverage: { sites: fixed.length, located: located.length, matched: matched.length, placedAtCamera: placedAtCamera.length, inCar: sites.length - fixed.length, bySource: Object.fromEntries(["nashville", "windsor", "tucson", "news", "court"].map((k) => [k, { sites: fixed.filter((s) => s.source === k).length, located: located.filter((s) => s.source === k).length, matched: matched.filter((s) => s.source === k).length, placedAtCamera: placedAtCamera.filter((s) => s.source === k).length }])) },
 };
 fs.writeFileSync(path.join(ROOT, "public/data/outcomes.json"), JSON.stringify(out));
-console.log("sites", sites.length, "located", located.length, "matched within", SITE_M, "m:", matched.length);
+console.log("fixed-camera records", fixed.length, "located", located.length, "matched within", SITE_M, "m:", matched.length, "placed at a camera:", placedAtCamera.length, "in-car:", sites.length - fixed.length);
 console.log(JSON.stringify(out.coverage.bySource));

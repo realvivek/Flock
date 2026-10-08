@@ -50,18 +50,18 @@
     {
       "id": "alert", "status": "Out for delivery", "where": "Officers' phones", "when": "10 to 15 s", "icon": "phone",
       "title": "If it matches, an alert",
-      "line": "A match puts your plate, photo and location on nearby officers' phones in about fifteen seconds; audits in two cities found 32% and 71% of alerts involved misread plates.",
-      "body": "A hit sends the plate, the image, the camera location and the list source to nearby officers' phones within about ten to fifteen seconds. Audits in Roseville, California and Los Angeles found 71% and 32% of alerts involved misread plates.",
+      "line": "A match puts your plate, photo and location on nearby officers' phones in about fifteen seconds; in Roseville, California, 71% of stolen-car and felony alerts involved a misread plate.",
+      "body": "A hit sends the plate, the image, the camera location and the list source to nearby officers' phones within about ten to fifteen seconds. In Roseville, California, 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate; the department says none led to a contact or an arrest. In Los Angeles, an Inspector General review counted 161 alerts in two months that were correct reads of cars no longer stolen, from out-of-date list entries.",
       "packed": ["Plate, image, location, list source"],
       "opens": "Officers in the agency's app. Multi-factor login became mandatory in August 2026.",
       "hops": ["hop-9"],
-      "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "roseville-71"]
+      "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "sacbee-roseville-2026", "lapd-oig-2026"]
     },
     {
       "id": "search", "status": "Available for pickup", "where": "FlockOS, any partner agency", "when": "any time before deletion", "icon": "search",
       "title": "Searchable by far more people than the local police",
       "line": "Thousands of agencies that share with the camera's owner can search for your car, giving a reason typed by hand.",
-      "body": "A user in a customer agency can search by plate, description, natural language or co-travelling vehicles, across the agency's cameras, its sharing partners, and a national lookup that about 75% of law-enforcement customers joined. The audit log of one Texas deputy's April 2025 query lists 83,345 cameras in 6,809 networks. In released logs, for every search a local agency ran, outside agencies ran 521 against its cameras.",
+      "body": "A user in a customer agency can search by plate, description, natural language or co-travelling vehicles, across the agency's cameras, its sharing partners, and a national lookup that about 75% of law-enforcement customers joined, according to Flock's statement to Congress. The audit log of a Johnson County, Texas search on May 9, 2025 lists 83,345 cameras in 6,809 networks. In logs released under public-records laws, ALPR Watch counted 521 network-search rows touching an agency's data for every search the agency logged itself.",
       "packed": ["A row in the audit log: who, when, how many cameras, and the reason typed in"],
       "opens": "Any user at any agency that shares with the camera's owner, with a free-text reason. About one in five reasons across twelve million searches were generic terms such as investigation.",
       "hops": ["hop-10", "hop-11"],

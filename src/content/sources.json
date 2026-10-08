@@ -395,7 +395,7 @@
       "publisher": "Electronic Frontier Foundation",
       "url": "https://www.eff.org/deeplinks/2025/10/flock-safety-and-texas-sheriff-claimed-license-plate-search-was-missing-person-it",
       "date": "2025-10",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "eff-raven-2025",
@@ -512,7 +512,7 @@
       "publisher": "Office of Sen. Ron Wyden",
       "url": "https://www.wyden.senate.gov/imo/media/doc/wyden_letter_to_ftc_on_flockpdf.pdf",
       "date": "2025-11-03",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "wyden-flock-2025",
@@ -580,11 +580,11 @@
     {
       "id": "alprwatch-foia-2025",
       "kind": "independent",
-      "title": "Flock FOIA findings: 7,212 networks, 92,502 cameras, 521 network queries per local search, mutable audit rows",
+      "title": "Flock FOIA findings: at least 7,212 networks and 92,502 cameras; 29.3 million network-audit rows against 56,230 organisation-audit rows (521 to 1); mutable audit rows",
       "publisher": "ALPRWatch",
       "url": "https://alprwatch.org/news/2025-07-28_flock_foia/",
       "date": "2025-07-28",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "apis-io-flock",
@@ -638,7 +638,7 @@
       "publisher": "NBC News (Kevin Collier)",
       "url": "https://www.nbcnews.com/tech/tech-news/flock-police-cameras-scan-billions-month-sparking-protests-rcna230037",
       "date": "2025-11-01",
-      "lastVerified": "2026-09-29"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "roseville-71",
@@ -647,7 +647,25 @@
       "publisher": "Red Banyan (summarising the department's report)",
       "url": "https://redbanyan.com/blog/flock-license-plate-reader-accuracy-71-percent-explained/",
       "date": "2025",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "reason-flock-study-2026",
+      "kind": "independent",
+      "title": "The shaky evidence that Flock cameras reduce crime rates (Institute for Justice critique of the Mourtgos and Adams working paper)",
+      "publisher": "Reason",
+      "url": "https://reason.com/2026/09/18/the-shaky-evidence-that-flock-cameras-reduce-crime-rates/",
+      "date": "2026-09-18",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "sacbee-roseville-2026",
+      "kind": "independent",
+      "title": "Roseville police say 1,000+ incorrect Flock camera alerts led to no wrongful stops (1,011 of 1,427 stolen and felony alerts, 2023 to 2024)",
+      "publisher": "The Sacramento Bee (via AOL)",
+      "url": "https://www.aol.com/articles/roseville-police-1-000-incorrect-223000000.html",
+      "date": "2026-08-04",
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "forbes-sanmarino-2024",
@@ -773,7 +791,7 @@
       "publisher": "Finding Flock",
       "url": "https://www.findingflock.com/learn/flock-contract-cancellations",
       "date": "2026",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "aclu-wa-driver-privacy",
@@ -917,7 +935,7 @@
       "publisher": "City of Johnson City",
       "url": "https://johnsoncitytn.civicweb.net/document/322557/",
       "date": "2025-07-17",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "grafton-2024",
@@ -971,7 +989,7 @@
       "publisher": "WUSF",
       "url": "https://www.wusf.org/transportation/2026-08-31/fdot-revokes-permits-for-flock-cameras-installed-on-state-land-next-to-roads",
       "date": "2026-08-31",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "wusf-florida-funding-2026",
@@ -1007,7 +1025,7 @@
       "publisher": "El Paso Matters",
       "url": "https://elpasomatters.org/2026/09/03/el-paso-police-eppd-flock-license-plate-reader-halted-greg-abbott/",
       "date": "2026-09-03",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "bolts-verona-2026",
@@ -1079,7 +1097,7 @@
       "publisher": "DeFlock SC",
       "url": "https://deflocksc.org/blog/greenville-flock-contracts/",
       "date": "2025",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "gadgetreview-ontech-2026",
@@ -1187,7 +1205,7 @@
       "publisher": "The Texas Tribune",
       "url": "https://www.texastribune.org/2026/08/28/texas-greg-abbott-flock-cameras-order-state-money/",
       "date": "2026-08-28",
-      "lastVerified": "2026-09-06"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "houstonchronicle-2023",
@@ -1214,7 +1232,7 @@
       "publisher": "Government Technology",
       "url": "https://www.govtech.com/public-safety/with-state-funding-pause-dallas-to-switch-off-flock-cameras",
       "date": "2026-09",
-      "lastVerified": "2026-09-06"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "wsbtv-smyrna-2025",
@@ -1336,11 +1354,11 @@
     {
       "id": "footnote4a-hotlist",
       "kind": "independent",
-      "title": "Flock's hot lists are a hot mess (Story County erroneous hot-list hits export, Harris County custom lists)",
+      "title": "Flock's hot lists are a hot mess (Story County sheriff's Axon in-car 'Erroneous hotlist hits' report; Harris County custom lists)",
       "publisher": "Footnote 4a",
       "url": "https://footnote4a.org/news/hotlist-mess",
       "date": "2026-03-14",
-      "lastVerified": "2026-09-18"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "tucson-cfs",
@@ -1403,7 +1421,7 @@
       "publisher": "City of Oakland",
       "url": "https://www.oaklandca.gov/files/assets/city/v/1/public-meetings/privacy-advisory-commission/2026/june-4-pac-agenda-packet.pdf",
       "date": "2026-06-04",
-      "lastVerified": "2026-09-18"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "oakland-pac-2025",
@@ -1421,7 +1439,7 @@
       "publisher": "Oaklandside",
       "url": "https://oaklandside.org/2026/06/05/flock-cameras-oakland-600-million-license-plate-reader/",
       "date": "2026-06-05",
-      "lastVerified": "2026-09-18"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "lapd-oig-2026",
@@ -1430,7 +1448,7 @@
       "publisher": "Los Angeles Police Commission, Office of the Inspector General",
       "url": "https://www.lapdpolicecom.lacity.org/071426/BPC_26-184x.pdf",
       "date": "2026-07-10",
-      "lastVerified": "2026-09-18"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "techtimes-lapd-2026",
@@ -1466,7 +1484,7 @@
       "publisher": "City of Columbia, Missouri Police Department",
       "url": "https://www.como.gov/police/surveillance-technology-report-2025/",
       "date": "2026-02-01",
-      "lastVerified": "2026-09-18"
+      "lastVerified": "2026-10-08"
     },
     {
       "id": "piedmont-2025",

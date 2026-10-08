@@ -7,17 +7,17 @@
       "city": "Los Angeles",
       "state": "CA",
       "period": "2025-08-01 to 2025-09-30",
-      "cameras": "about 2,000 readers from three vendors, of which 138 Flock poles",
+      "cameras": "In-car and roof-mounted readers (Axon, Motorola) plus 50 Flock cameras donated after the January 2025 fires",
       "vendorMix": true,
       "values": {
-        "reads": 210500000,
-        "alerts": 498,
+        "reads": 210568103,
+        "alerts": 50183,
         "falseAlerts": 161,
-        "stops": null,
+        "stops": 68,
         "recoveries": 337,
         "arrests": 74
       },
-      "note": "Inspector General review. False alerts were traced to stale or wrong database entries rather than misreads. The department suspended the Flock contract in July 2026.",
+      "note": "Inspector General review of the two months from 1 August to 30 September 2025. Reads are for all of the department's readers; alerts are the 50,183 in-car alerts (5,911 unique plates). Officers recorded no action on 4,575; 161 were correct plate reads of cars no longer stolen, from out-of-date list entries; 337 stolen vehicles were recovered; 68 stops produced 74 arrests. The review says the records do not fully document what officers did. The department suspended its Flock agreement in July 2026.",
       "sources": [
         "lapd-oig-2026",
         "techtimes-lapd-2026"
@@ -38,7 +38,7 @@
         "recoveries": 174,
         "arrests": 162
       },
-      "note": "Alerts include more than 620,000 for stolen plates; the department kept stolen-vehicle alerts deactivated for staffing reasons. Recoveries and arrests are the 425 outcomes officers logged in the software's outcome feature, not a count of all alerts.",
+      "note": "Alerts include 620,331 for stolen plates; the department kept stolen-plate and stolen-vehicle notifications switched off for lack of staff to respond. Officers logged 425 'success stories' in the software's outcome feature, which the report summarises as 162 arrests, 174 vehicles and 51 guns recovered. Outside agencies do not report their outcomes to Oakland.",
       "sources": [
         "oakland-pac-2026",
         "oaklandside-2026"
@@ -63,7 +63,8 @@
       "note": "Alerts are 1,748 on official lists plus 18,638 on agency custom lists. Reads cover the only 38-day window the system still held; purge data for 2025 was unavailable. 49 investigations used reader data. Shares camera access with 299 agencies.",
       "sources": [
         "greenbay-audit-2026"
-      ]
+      ],
+      "mixedWindows": true
     },
     {
       "id": "roseville-2023",
@@ -80,8 +81,9 @@
         "recoveries": null,
         "arrests": null
       },
-      "note": "Alerts on stolen-vehicle and felony lists; 71% involved a misread plate. The department states none of the 1,011 misread alerts led to a contact or arrest. Stops from correct alerts were not reported.",
+      "note": "Stolen-vehicle and felony alerts in 2023 and 2024; 1,011 of 1,427 (71%) involved a misread plate. A department lieutenant said none of the misread alerts led to a contact or an arrest. Flock called the figure a mischaracterization that conflates felony alerts with overall read accuracy, and said Roseville's deployment was unusual (older hardware, cameras mounted higher and farther from vehicles than recommended).",
       "sources": [
+        "sacbee-roseville-2026",
         "roseville-71"
       ]
     },
@@ -100,10 +102,11 @@
         "recoveries": 22,
         "arrests": 18
       },
-      "note": "Alerts here are verified hits only, confirmed by an employee before a stop was authorised. Per-site figures are in the table above.",
+      "note": "Alerts here are verified hits only, confirmed by an employee before a stop was authorised. The report does not name the vendor of the fixed cameras. Its per-site arrests sum to 17 against a stated total of 18.",
       "sources": [
         "nashville-lpr-2023"
-      ]
+      ],
+      "vendorMix": true
     },
     {
       "id": "nashville-pilot-140",
@@ -123,7 +126,9 @@
       "note": "Reads are MNPD's estimate from four ten-day samples (20,479,087 reads, 13,399 hit notifications, 1,346 verified hits in the samples; 511,977 reads a day over 140 days). Alerts here are unverified hit notifications in the 40 sampled days only. Arrests are persons arrested over the whole pilot; recoveries are the 26 vehicles recovered unoccupied, on top of recoveries at arrest.",
       "sources": [
         "nashville-lpr-sampling-2023"
-      ]
+      ],
+      "vendorMix": true,
+      "mixedWindows": true
     },
     {
       "id": "columbia-2025",
@@ -140,7 +145,7 @@
         "recoveries": null,
         "arrests": 69
       },
-      "note": "Alerts: 2,877 warrant, 1,452 stolen plate, 1,192 stolen vehicle. Of 217 cases that involved an alert: 69 cleared by arrest, 52 lead generation, 33 in progress, 31 unable to locate, 20 cleared otherwise, 7 no action.",
+      "note": "Alerts: 2,877 warrant, 1,452 stolen plate, 1,192 stolen vehicle; the system went live in March 2025. Of 217 case outcomes associated with alerts: 69 cleared by arrest (cases, not persons), 52 leads generated, 33 in progress, 31 unable to locate, 20 cleared by other means, 7 no action, 3 warrants issued, 1 added to a hot list; the report's categories sum to 216.",
       "sources": [
         "columbia-mo-2025"
       ]
@@ -272,19 +277,20 @@
       "city": "Ames",
       "state": "IA",
       "period": "2025-09-09 to 2025-10-09",
-      "cameras": "Flock cameras, count not stated",
+      "cameras": "Axon in-car readers in sheriff's patrol vehicles (not Flock)",
       "values": {
         "reads": null,
-        "alerts": null,
-        "falseAlerts": 214,
+        "alerts": 214,
+        "falseAlerts": 168,
         "stops": null,
         "recoveries": null,
         "arrests": null
       },
-      "note": "The county's erroneous-hits export: 214 rows, 77% marked wrong state. Correct hits were not exported, so the denominator is unknown. Per-location rows are mapped above.",
+      "note": "The sheriff's office's 'Erroneous hotlist hits' report from its in-car readers: 214 rows from NCIC lists. 165 were marked 'wrong state' (the plate matched a list entry from another state), 3 incorrect, 10 correct with no action, 29 no action and 7 dismissed. Accurate hits and total reads were not in the report.",
       "sources": [
         "footnote4a-hotlist"
-      ]
+      ],
+      "vendor": "Axon"
     },
     {
       "id": "windsor-2025",

@@ -45,7 +45,7 @@ export const HopSchema = z.object({
 export const DataflowFile = z.object({
   hops: z.array(HopSchema),
   retentionPresets: z.array(z.object({ label: z.string(), days: z.number(), note: z.string(), sources: ids })),
-  deputy: z.object({ networks: z.number(), cameras: z.number(), lookbackDays: z.number(), date: z.string(), reasonAsLogged: z.string(), note: z.string(), sources: ids }),
+  deputy: z.object({ networks: z.number(), cameras: z.number(), lookbackDays: z.number(), date: z.string(), reasonAsLogged: z.string(), first: z.object({ networks: z.number(), cameras: z.number(), lookbackDays: z.number() }).optional(), caseNumber: z.string().optional(), accounts: z.array(z.object({ who: z.string(), text: z.string() })).optional(), note: z.string(), sources: ids }),
 }).passthrough();
 
 export const MythsFile = z.object({
