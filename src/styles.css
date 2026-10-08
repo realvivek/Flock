@@ -168,7 +168,7 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 /* ---- Figures: title, subtitle, graphic, notes and source; the data table folds under "Show the data" ---------- */
 .fig { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; min-width: 0; }
 .fig-head { display: grid; gap: .2rem; }
-.fig-title { font: 700 1.0625rem/1.3 var(--sans); color: var(--ink); margin: 0; text-wrap: balance; }
+.fig-title { font: 700 1.0625rem/1.3 var(--sans); color: var(--ink); margin: 0; text-wrap: pretty; }
 .fig-sub { font: 400 .9375rem/1.4 var(--sans); color: var(--ink-3); margin: 0; }
 .fig-body { position: relative; min-width: 0; }
 .fig-body svg { display: block; width: 100%; height: auto; overflow: visible; }

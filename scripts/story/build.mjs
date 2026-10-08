@@ -273,13 +273,14 @@ const countiesTopo = await toTopo(round2(geoProject(rewindForD3(countiesSimple),
 const pts = [];
 let offMap = 0, offMapFlock = 0;
 for (const c of cams) {
-  const p = projection([c.lon, c.lat]);
+  // the map draws the 50 states and D.C., the area its rates cover; readers elsewhere are counted in its credit
+  const p = c.state && STATES51.includes(c.state) ? projection([c.lon, c.lat]) : null;
   if (!p) { offMap++; if (c.cls === 0) offMapFlock++; continue; }
   pts.push({ qx: Math.max(0, Math.min(65535, Math.round(p[0] / FRAME[0] * 65535))), qy: Math.max(0, Math.min(65535, Math.round(p[1] / FRAME[1] * 65535))), cls: c.cls });
 }
 const bin = packPoints(pts, FRAME);
 fs.writeFileSync(path.join(OUT, "cams.bin"), bin);
-log(`cams.bin: ${pts.length} points (${offMap} outside the map's states), ${(bin.length / 1024).toFixed(0)} KB gzip`);
+log(`cams.bin: ${pts.length} points (${offMap} outside the 50 states and D.C., ${offMapFlock} of them Flock's), ${(bin.length / 1024).toFixed(0)} KB gzip`);
 
 // ---- Atlanta zoom: primary and secondary roads, county lines -------------------------------------------------------
 const ATL = [-84.86, 33.42, -83.86, 34.2];
@@ -309,7 +310,7 @@ write(OUT, "atlanta.topo.json", await toTopo(atlFc, "atlanta", 10000));
     cities: [["Seattle", -122.33, 47.61], ["Los Angeles", -118.24, 34.05], ["Denver", -104.99, 39.74], ["Dallas", -96.8, 32.78], ["Houston", -95.37, 29.76], ["Chicago", -87.63, 41.88], ["Atlanta", -84.39, 33.75], ["Miami", -80.19, 25.76], ["New York", -74.01, 40.71]].map(([name, lon, lat]) => ({ name, xy: pt(lon, lat) })),
     atlanta: {
       bbox: [Math.min(...corners.map((c) => c[0])), Math.min(...corners.map((c) => c[1])), Math.max(...corners.map((c) => c[0])), Math.max(...corners.map((c) => c[1]))].map((v) => Math.round(v * 100) / 100),
-      places: [{ name: "Atlanta", kind: "city", xy: pt(-84.39, 33.75) }, { name: "Fulton County", kind: "area", xy: pt(-84.36, 34.03), sub: (() => { const f = countyRows.find((r) => r.fips === "13121"); return `${f.flock.toLocaleString("en-US")} cameras · ${Math.round(f.per100k)} per 100,000`; })() }],
+      places: [{ name: "Atlanta", kind: "city", xy: pt(-84.39, 33.75) }, { name: "Fulton County", kind: "area", xy: pt(-84.36, 34.03), sub: (() => { const f = countyRows.find((r) => r.fips === "13121"); return `${f.flock.toLocaleString("en-US")} Flock cameras · ${Math.round(f.per100k)} per 100,000`; })() }],
       roads: [["75", "I- 75", -84.56, 34.0], ["85", "I- 85", -84.2, 33.93], ["20", "I- 20", -84.17, 33.72], ["285", "I- 285", -84.36, 33.92], ["75", "I- 75", -84.33, 33.5], ["85", "I- 85", -84.6, 33.5]].map(([name, road, lon, lat]) => ({ name, xy: snap(road, lon, lat) })),
     },
   };

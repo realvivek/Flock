@@ -31,9 +31,9 @@ export const RATE_COLORS = ["#dcab55", "#c4851a", "#9e6510", "#6f4508", "#3f2504
 /** Counties with fewer residents than this are hatched. */
 export const SMALL_POP = 10_000;
 const NONE = "#ecece9";
-/** Reserved at the top of the phone graphic for the legend on the zoomed steps, so it never sits on the map */
+/** Reserved at the top of the phone graphic for the legend, so it never sits on the map */
 const PHONE_LEGEND = 96;
-/** On phones the map ends this far up the screen (a share of its height), above where the step cards are read */
+/** On phones the map ends this far down the screen (a share of its height), above where the step cards are read */
 const PHONE_MAP_BOTTOM = 0.6;
 interface Place { name: string; kind: string; xy: [number, number]; sub?: string }
 interface Labels { cities: { name: string; xy: [number, number] }[]; atlanta: { bbox: [number, number, number, number]; places: Place[]; roads: { name: string; xy: [number, number] }[] }; georgia: { bbox: [number, number, number, number]; xy: [number, number]; name: string; sub: string } }
@@ -107,7 +107,8 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
   let creditH = 0;
   const area = () => {
     if (posterMode) return { x0: 24, y0: 24, x1: W - 24, y1: H - 24 };
-    // on phones the map sits between the legend and the cards' reading zone, so a card being read covers none of it
+    // on phones the map sits between the legend band and the cards' reading zone, so a card being read covers none
+    // of it; the credit is at the foot of the screen, below the cards
     if (phone()) return { x0: 8, y0: PHONE_LEGEND, x1: W - 8, y1: Math.max(PHONE_LEGEND + 220, H - (1 - PHONE_MAP_BOTTOM) * innerHeight) };
     const gutter = 20, left = Math.max(gutter, (W - 992) / 2) + Math.min(352, W - 2 * gutter) + 28;
     return { x0: Math.min(left, W * 0.42), y0: 76, x1: W - 24, y1: H - Math.max(24, creditH + 14) };
@@ -117,7 +118,10 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     const fit = (b: [number, number, number, number], pad: number): View => [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2, Math.max(b[2] - b[0], (b[3] - b[1]) * aw / ah) * pad];
     if (id === "atl" && labels) return fit(labels.atlanta.bbox, 1.02);
     if (id === "ga" && labels) return fit(labels.georgia.bbox, 1.12);
-    return [500, 310, Math.max(1000, 620 * aw / ah) * 1.01];
+    const w = Math.max(1000, 620 * aw / ah) * 1.01;
+    // on phones the national map hangs from the top of its panel, just under the legend, not centred below it
+    if (phone() && !posterMode) { const k = aw / w, spare = ah - 620 * 1.01 * k; if (spare > 0) return [500, 310 + (spare / 2 - 4) / k, w]; }
+    return [500, 310, w];
   };
   const project = (v: { cx: number; cy: number; w: number }, x: number, y: number): [number, number] => { const a = area(), k = (a.x1 - a.x0) / v.w; return [(a.x0 + a.x1) / 2 + (x - v.cx) * k, (a.y0 + a.y1) / 2 + (y - v.cy) * k]; };
 
@@ -279,18 +283,12 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     legend.classList.toggle("is-vertical", look.view === "ga" && !phone());
     placeLegend();
   }
-  /** Phones: above the map. Desktop: at the national map's top-left corner, or, zoomed on Georgia, at the panel's
+  /** Phones: in its band above the map. Desktop: just above the national map's top-left corner, or, zoomed on Georgia, at the panel's
    *  bottom left, over the faded Gulf and Alabama rather than the state's northern counties. */
   function placeLegend(): void {
     if (!W) return;
     const a = area();
-    if (phone()) {
-      legend.style.left = "";
-      if (LOOKS[want]!.view !== "us") { legend.style.top = ""; return; }
-      const us = viewFor("us"), [, ly] = project({ cx: us[0], cy: us[1], w: us[2] }, 0, 0);
-      legend.style.top = `${Math.round(Math.max(6, ly - legend.offsetHeight - 4))}px`;
-      return;
-    }
+    if (phone()) { legend.style.left = legend.style.top = ""; return; }
     if (LOOKS[want]!.view === "ga") {
       legend.style.left = `${Math.round(a.x0)}px`;
       legend.style.top = `${Math.round(a.y1 - legend.offsetHeight - 8)}px`;
@@ -298,7 +296,7 @@ export function createMap(fig: HTMLElement, hooks: { busy(d: number): void; twee
     }
     const us = viewFor("us"), [lx, ly] = project({ cx: us[0], cy: us[1], w: us[2] }, 0, 0);
     legend.style.left = `${Math.round(Math.max(a.x0, lx))}px`;
-    legend.style.top = `${Math.round(Math.max(12, ly - 50))}px`;
+    legend.style.top = `${Math.round(Math.max(12, ly - legend.offsetHeight - 4))}px`;
   }
 
   // ---- data ----

@@ -103,7 +103,7 @@ function mapSection(inp: StoryInput & { poster?: string }, ctx: Ctx): string {
   // The credit sits inside the sticky graphic, so it is on screen with every step of the map.
   const off = Number(inp.meta.cameras.offMap), offFlock = Number(inp.meta.cameras.offMapFlock);
   // the population line shows only on the steps that use population (the script hides it on the others)
-  const credit = `<p class="map-credit">Map: license plate readers on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock. Alaska and Hawaii are shown at different scales; ${escape(int(off))} readers outside the frame, ${escape(int(offFlock))} of them Flock’s, are not shown, most of them in Puerto Rico.<span class="cr-rates"> Rates: U.S. Census Bureau 2024 population estimates.</span></p>`;
+  const credit = `<p class="map-credit">Map: license plate readers on OpenStreetMap as of ${escape(apDate(String(inp.stats.snapshot!.value)))}, via DeFlock. It shows the 50 states and D.C., with Alaska and Hawaii at different scales; ${escape(int(off))} readers elsewhere, ${escape(int(offFlock))} of them Flock’s, most in Puerto Rico, are not shown.<span class="cr-rates"> Rates: U.S. Census Bureau 2024 population estimates.</span></p>`;
   for (const id of ["deflock-tiles-2026", "census-pop-2024", "census-boundaries-2024"]) ctx.used.add(id);
   return `<section class="scrolly scrolly-map" id="${escape(m.id)}" data-scrolly="map" aria-label="Map of mapped license plate readers">
 <div class="scrolly-graphic"><figure class="map" role="img" aria-label="${escape(m.alt)}">${poster}<canvas class="map-canvas" hidden></canvas><div class="map-labels" aria-hidden="true"></div><div class="map-legend" aria-hidden="true"></div></figure>${credit}</div>

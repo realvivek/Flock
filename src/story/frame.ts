@@ -68,7 +68,9 @@ export function stat(key: string, fmt: string | undefined, ctx: Ctx): string {
 /** Paragraph markup: {{stat|fmt}}, [text](src:id), [text](#anchor), [text](page:id), [text](url). */
 export function inline(md: string, ctx: Ctx): string {
   const withStats = md.replace(/\{\{([\w.]+)(?:\|(\w+))?\}\}/g, (_, k: string, f?: string) => stat(k, f, ctx));
-  return escape(withStats).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text: string, target: string) => {
+  // a date's month and day stay on one line
+  const kept = escape(withStats).replace(/\b(Jan\.|Feb\.|March|April|May|June|July|Aug\.|Sept\.|Oct\.|Nov\.|Dec\.) (\d{1,2})\b/g, "$1&nbsp;$2");
+  return kept.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text: string, target: string) => {
     if (target.startsWith("src:")) {
       const id = target.slice(4), s = ctx.sources.get(id);
       if (!s) throw new Error(`story: unknown source ${id}`);

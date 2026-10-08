@@ -20,14 +20,14 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Flock says its cameras make more than 20 billion scans a month | 20 billion | `nbc-flock-2025` | quotes Flock's website ("over 20 billion scans a month") |
 | Flock is an Atlanta company | | `wikipedia-flock` | infobox; The Texas Tribune also writes "Atlanta-based Flock Safety" (`texastribune-2026`) |
 | DeFlock is an anti-surveillance group that tracks the company's cameras | | `texastribune-2026` | "DeFlock, an anti-surveillance group monitoring the company"; EFF calls it an "anti-surveillance mapmaker" (`eff-deflock-2025`) |
-| Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; 143,595 are inside the map's frame and 334 outside it, 183 of them Flock's and 255 in Puerto Rico (`meta.json`: `offMap`, `offMapFlock`; `states.json`), as the map credit says. The 188 Flock cameras outside the 50 states and D.C. are those 183 and five drawn on the map just across a border |
+| Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; the map draws the 143,575 in the 50 states and D.C., the area its rates cover; the 354 elsewhere, 188 of them Flock's (the `outsideStates` the notes give) and 255 in Puerto Rico, are not drawn, as the map credit says (`meta.json`: `onMap`, `offMap`, `offMapFlock`; `states.json`) |
 | Flock made about four in five | 80 percent | computed | 115,437 / 143,929 |
 | The rest come from companies including Motorola Solutions, Genetec and Axis Communications | 7,509; 3,647; 2,445 | computed | the three largest other makes, `operators.json` |
 | Most common in the South, 41.3 for every 100,000 residents; least common in the Northeast, 11.6 | 41.3; 11.6 (Midwest 39.0, West 33.3) | computed | `regions`, Census regions |
 | None mapped in 883 counties, home to about 4 percent of Americans; Iowa, South Dakota, Kentucky and Montana have the most such counties | 883 of 3,144; 3.9 percent; 64 of 99, 55 of 66, 51 of 120, 46 of 56 | computed | `countiesNone`; `countiesNoneTop` |
 | Georgia has the most per resident: 82.7 per 100,000, 2.4 times the national rate | 82.7; 2.4 | computed | `topState`; 82.7 / 33.9 |
 | Georgia is where Flock is based | | `wikipedia-flock` | infobox |
-| Fulton County: 1,269 cameras, about 116 per 100,000, highest of any county with a million or more people | 1,269; 116.4 | computed | `topBigCounty` |
+| Fulton County: 1,269 Flock cameras, about 116 per 100,000, highest of any county with a million or more people | 1,269; 116.4 | computed | `topBigCounty`; the map's label for the county gives the same count of Flock cameras |
 | Fulton County includes most of Atlanta | | `census-boundaries-2024` | the city's boundary lies in Fulton and DeKalb counties, mostly Fulton |
 
 ### What the map shows
@@ -58,7 +58,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Of those, 62 percent police or sheriffs, 20 percent retailers and shopping centers | 10,222; 3,237 | computed | `operatorsPolice`, `operatorsRetail` |
 | Lowe's 1,767; Home Depot 1,162 | | computed | `topOperators`, with spelling variants grouped (`canonical` in `data/story/operator-classes.json`) |
 | Shareholder proposals asked both to report on privacy risks; both boards recommended voting no | | `prospect-retail-2026` | |
-| The proposals won 8.9 percent of the votes cast at The Home Depot (May 21) and 9.1 percent at Lowe's (May 29) | 62,948,880 for, 645,876,261 against; 38,182,128 for, 380,809,009 against | `homedepot-8k-2026`; `lowes-8k-2026` | Form 8-K vote tables; percent of for plus against, the "votes cast" both proxies use; abstentions and broker non-votes excluded |
+| The proposals won 8.9 percent of the votes cast at Home Depot (May 21) and 9.1 percent at Lowe's (May 29) | 62,948,880 for, 645,876,261 against; 38,182,128 for, 380,809,009 against | `homedepot-8k-2026`; `lowes-8k-2026` | Form 8-K vote tables; percent of for plus against, the "votes cast" both proxies use; abstentions and broker non-votes excluded |
 
 ### What a camera records
 
@@ -278,7 +278,7 @@ the tables add up to it.
 | Most cameras, county | Harris County, Tex., 3,717 | |
 | Flock cameras with an operator tagged | 16,500 (14%) | `operator` field present |
 | Operator classes, among those tagged | police and sheriffs 10,222 (62%); retailers and shopping centers 3,237 (20%); Flock Safety listed 1,388; other government 645; unclear 466; business 234; residential 207; schools 101 | every name with 10 or more cameras classed by hand in `data/story/operator-classes.json`; smaller ones by keyword; all published in `operator-classes.csv` |
-| Largest named operators | Lowe's 1,757; The Home Depot 1,154; California Highway Patrol 441 | spelling variants grouped (`canonical` in the class file) |
+| Largest named operators | Lowe's 1,767; Home Depot 1,162; California Highway Patrol 441 | spelling variants grouped (`canonical` in the class file) |
 | Added in the week before the snapshot | at least 1,101 readers, 706 of them Flock's | nodes at version 1 first mapped since Oct. 1, 2026 |
 
 ### Mapped against published counts

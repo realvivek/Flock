@@ -12,8 +12,8 @@
  "canonical": {
   "Lowes": "Lowe's",
   "Lowe's Home Improvement": "Lowe's",
-  "Home Depot": "The Home Depot",
-  "The Home Depo": "The Home Depot",
+  "The Home Depot": "Home Depot",
+  "The Home Depo": "Home Depot",
   "California Highway Patrol": "California Highway Patrol (CHP)",
   "Saint Johns County Sheriff's Office": "St. Johns County Sheriff",
   "Riverside County Sheriff’s Department": "Riverside County Sheriff's Department",
@@ -25,9 +25,9 @@
   "Lowe's (retailer)": "Lowe's",
   "Lowes Home Improvement": "Lowe's",
   "Lowe's Companies, Inc": "Lowe's",
-  "Home Depot (retailer)": "The Home Depot",
-  "HOME DEPOT": "The Home Depot",
-  "HomeDepot": "The Home Depot"
+  "Home Depot (retailer)": "Home Depot",
+  "HOME DEPOT": "Home Depot",
+  "HomeDepot": "Home Depot"
 },
  "map": {
   "Accomack County Sheriff's Office": "police",

@@ -402,6 +402,9 @@ date wrong, and about 15 smaller points. All are corrected and listed in `docs/f
 critique found all but one of its earlier items resolved and asked for the phone map to sit wholly above the
 cards, larger type in the phone teaser, state names on the phone completeness chart, dots clipped to the map's
 panel, grey states around Georgia and Times place names ("Houston", "Oakland, Calif."); those are in too.
+A fourth found those resolved and four small points, now fixed: the map draws only the 50 states and D.C., so its
+credit and every note give the same 188 Flock cameras elsewhere; the Fulton label says "Flock cameras"; phone
+labels keep their full wording on two lines; and the legend no longer clips Washington.
 
 ## 8. Numbers for the article
 | What | Figure |
