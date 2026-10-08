@@ -37,6 +37,7 @@
     "@gltf-transform/core": "^4.5.0",
     "@gltf-transform/extensions": "^4.5.0",
     "@gltf-transform/functions": "^4.5.0",
+    "@mapbox/vector-tile": "^3.0.0",
     "@playwright/test": "^1.62.0",
     "@types/d3-array": "^3.2.2",
     "@types/d3-ease": "^3.0.2",
@@ -48,7 +49,10 @@
     "@types/node": "^22.0.0",
     "@types/topojson-client": "^3.1.5",
     "@types/topojson-specification": "^1.0.5",
+    "d3-geo-projection": "^4.0.0",
     "mapshaper": "^0.7.80",
+    "pbf": "^5.1.2",
+    "pmtiles": "^4.5.0",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
     "vite": "^8.2.0"

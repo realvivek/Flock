@@ -6,3 +6,4 @@ playwright-report/
 tools/blender/out/
 *.blend1
 .DS_Store
+data/story/raw/

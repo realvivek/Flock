@@ -42,6 +42,61 @@ Checked 8 October 2026 unless noted.
 
 ## Figures computed in this repository
 
-Added as the story's data pipeline is built: camera counts by make, state and county; rates per resident; operator
-classes; mapped-versus-published counts. Each lists the script, the snapshot date of the camera data and the Census
-vintage.
+Produced by `scripts/story/build.mjs` from the inputs pinned in `data/story/manifest.json` (URL, size, SHA-256,
+ETag and fetch time of each download; run `scripts/story/fetch.mjs` to fetch them again). The machine-readable copy
+of every figure below, each with its source ids, is `public/data/story/stats.json`; `tests/data.spec.ts` checks that
+the tables add up to it.
+
+- **Camera data**: OpenStreetMap plate readers as served by DeFlock's hourly vector-tile archive
+  (`deflock-tiles-2026`), read at zoom 9, where every point is kept with its tags. Snapshot: the latest edit in the
+  archive, 8 October 2026. "Mapped" means tagged in OpenStreetMap by volunteers; it is not an official count
+  (see the completeness table).
+- **Population**: U.S. Census Bureau Vintage 2024 estimates (`census-pop-2024`), July 1, 2024.
+- **Boundaries**: Census 2024 cartographic boundary files, counties and places, 1:500,000 (`census-boundaries-2024`).
+  Connecticut uses its planning regions, as the Census Bureau now does.
+- **Rates** use the 50 states and D.C.; Puerto Rico (126 Flock cameras, 3.9 per 100,000) appears in the tables only.
+
+| Figure | Value | How |
+|---|---|---|
+| Mapped plate readers | 143,929 | every point in the archive's `cameras` layer (DeFlock's export of OpenStreetMap plate readers), de-duplicated by OSM id |
+| Mapped Flock cameras | 115,437 | `brand` field equal to "Flock Safety" |
+| Flock share | 80% of all mapped readers; 84% of those with a make tagged | 115,437 / 143,929; 115,437 / 137,214 |
+| Other makes | Motorola Solutions 7,509; Genetec 3,647; Axis 2,445; Leonardo 1,259; Rekor 804; Axon 752; no make tagged 6,715 | `public/data/story/operators.json` |
+| Never edited since first mapped | 76% | `osmVersion` equal to 1 |
+| Flock cameras, U.S. | 115,249 (50 states and D.C.) | point in county polygon; 43 points within 1 km of a county assigned to the nearest, 20 outside every county |
+| U.S. rate | 33.9 per 100,000 residents | 115,249 / 340,110,988 |
+| Highest state rate | Georgia, 82.7 per 100,000 (9,251 cameras; 2.4 times the U.S. rate) | then Ohio 52.8, Texas 50.6, Indiana 49.1, Alabama 48.4 |
+| Lowest state rates | New Hampshire 1.1, Alaska 2.6, Vermont 2.8, Maine 3.3, Hawaii 4.6 | |
+| Most cameras | California 16,919; Texas 15,839 | |
+| Counties with none mapped | 883 of 3,144 (home to 3.9% of residents) | 50 states and D.C. |
+| Highest rate, counties of 1 million or more | Fulton County, Ga., 11.6 per 10,000 (1,269 cameras) | the story's zoom target, chosen by this rule |
+| Most cameras, county | Harris County, Tex., 3,717 | |
+| Flock cameras with an operator tagged | 16,500 (14%) | `operator` field present |
+| Operator classes, among those tagged | police and sheriffs 10,222 (62%); retailers and shopping centres 3,237 (20%); Flock Safety listed 1,388; other government 645; unclear 466; business 234; residential 207; schools 101 | every name with 10 or more cameras classed by hand in `data/story/operator-classes.json`; smaller ones by keyword; all published in `operator-classes.csv` |
+| Largest named operators | Lowe's 1,757; The Home Depot 1,154; California Highway Patrol 441 | spelling variants grouped (`canonical` in the class file) |
+
+### Mapped against published counts
+
+Flock cameras mapped inside each city's Census 2024 boundary, against the count the city or its reporting
+published. Mapping includes cameras run by others inside city limits (the California Highway Patrol in Oakland,
+retailers, homeowner groups), and published counts can be older than the map, so neither number is the other's
+error; the table shows how far "mapped" can sit from an official figure.
+
+| City | Mapped (police-tagged / other operator / untagged) | Published | Source |
+|---|---|---|---|
+| Oakland, Calif. | 518 (20 / 402 / 96); 380 of the "other" tagged to the CHP | 293 (2025 report) | `oaklandside-2026`, `oakland-pac-2026` |
+| Denver | 139 (1 / 7 / 131) | 111 at about 70 sites (2024–25) | `denverite-2025` |
+| Lexington, Ky. | 195 (60 / 16 / 119) | 125 (Dec. 2025) | `lexington-lpr-locations` |
+| Berkeley, Calif. | 81 (41 / 6 / 34) | 52 (2025) | `berkeleyside-2025` |
+| Piedmont, Calif. | 35 (0 / 34 / 1) | 48 (2025) | `piedmont-2025` |
+| Lafayette, Colo. | 33 (1 / 0 / 32) | 30 (2024–25) | `lafayette-co-alpr` |
+| Dallas | 919 (62 / 10 / 847) | 684 (Sept. 2026, before 321 were to be switched off) | `govtech-dallas-2026` |
+| Houston | 2,266 (1 / 167 / 2,098) | 3,800 police and private (2024, per city officials) | `houstonchronicle-flock-2025` |
+
+### Two camera snapshots
+
+The story's map, counts and rates use the 8 October 2026 snapshot. The Outcomes page keeps the 17 July 2026
+GeoJSON snapshot (116,723 readers; `data/story/raw/cameras-us-hourly-2026-07-17.geojson`, pinned in the manifest),
+because its records were matched to the cameras mapped while they were made. Windsor, Conn., shows why: its 16
+cameras were switched off in February 2026, the town council voted 5–4 on July 6 not to renew, and the cameras were
+removed from OpenStreetMap on 8 October 2026 (changeset 190182036; `osm-windsor-2026`, `patch-windsor-2026`).

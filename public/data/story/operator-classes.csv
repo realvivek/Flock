@@ -1,0 +1,1484 @@
+operator_as_tagged,flock_cameras,class
+Lowe's,1666,retail
+Flock Safety,1381,flock
+The Home Depot,1094,retail
+San Francisco Police Department,416,police
+California Highway Patrol (CHP),392,police
+Detroit Police Department,229,police
+Norfolk Police Department,157,police
+Irvine Police Department,123,police
+Simon Property Group,119,retail
+Hampton Police Division,100,police
+Las Vegas Metropolitan Police Department,98,police
+Henrico County Police Division,97,police
+Tulsa Police Department,96,police
+Newport News Police Department,96,police
+Toledo Police Department,93,police
+Oakland County Sheriff's Office,89,police
+Salinas Police Department,87,police
+Richmond Police Department,81,police
+Santa Maria Police Department,76,police
+Amarillo Police Department,75,police
+Volusia County Sheriff's Office,75,police
+Lowes,73,retail
+Kaiser Permanente,70,business
+Dearborn Police Department,70,police
+Stockton Police Department,67,police
+El Centro Police Department,66,police
+Dallas Police Department,63,police
+Pasadena Police Department,61,police
+Clay County Sheriff's Office,61,police
+Lexington Police Department,60,police
+University of Arizona Police Department,58,police
+Louisville Metro Police Department,58,police
+City of Yakima,57,government
+Champaign Police Department,57,police
+City of Buckeye,55,government
+Portsmouth Police Department,52,police
+Dierbergs Markets,50,retail
+Hempstead Police Department,50,police
+California Highway Patrol,49,police
+Cedar Rapids Police Department,49,police
+St. Johns County Sheriff,49,police
+West Des Moines Police Department,48,police
+Taylor Police Department,48,police
+Suffolk Police Department,48,police
+Home Depot,47,retail
+Shelby Township Police Department,46,police
+San Leandro Police Department,44,police
+City of Piedmont,43,government
+Berkeley Police Department,42,police
+San Mateo Police Department,42,police
+Youngstown Police Department,42,police
+Lakewood Police Department,41,police
+Little Rock Police Department,40,police
+Farmington Hills Police Department,40,police
+Altoona Police Department,39,police
+JCPD,39,police
+Lowell Police,39,police
+Newport Beach Police Department,38,police
+Redlands Police Department,38,police
+Springfield Police,38,police
+Santa Rosa Police Department,36,police
+Santa Clara Police Department,36,police
+Milford Police Department,36,police
+Van Buren Township Police Department,36,police
+Chesapeake Police Department,36,police
+Spokane County Sheriff's Office,34,police
+Daly City Police Department,33,police
+Seminole County Sheriff's Office,33,police
+Flint Police Department,33,police
+Lompoc Police Department,32,police
+Maricopa PD,32,police
+Boulder Police Department,32,police
+Garden City Police Department,32,police
+Pasco Sheriff’s Office,32,police
+Prescott Police Department,31,police
+Highland Park Police Department,31,police
+FedEx,30,business
+Chula Vista Police Department,30,police
+Prescott Valley Police Department,30,police
+Marshalltown Police Department,30,police
+O'Fallon PD,30,police
+Metro Police Department,30,police
+City of Columbia,29,government
+Macomb County Sheriff's Office,29,police
+University of Toledo Police Department,29,police
+Seaside Police Department,28,police
+Wood Dale Police Department,28,police
+Southfield Police Department,28,police
+River Rouge Police Department,28,police
+Auburn Police,27,police
+Atlanta Police Department,27,police
+Romulus Police Department,27,police
+Northampton County Sheriff's Office,27,police
+Virginia Beach Police Department,27,police
+Wayne County Airport Authority,26,government
+Everett Police Department,25,police
+Orange County Sheriff,25,police
+Barstow Police Department,25,police
+Troy Police Department (Michigan),25,police
+Livonia Police Department,25,police
+Williamsburg Police Department,25,police
+Town of Westfield Police Department,25,police
+Norwich Police Department,25,police
+Owasso Police,24,police
+Iowa State University Police Department,24,police
+Urbandale Police Department,24,police
+Lansing Police Department,24,police
+Grand Blanc Township Police Department,24,police
+Southington Police Department,24,police
+Dixon Police Department,23,police
+Huntington Beach Police Department,23,police
+Grand Rapids Police Department,23,police
+Portage Department of Public Safety Police Division,23,police
+Sterling Heights Police Department,23,police
+Brownstown Police Department,23,police
+Saint Johns County Sheriff's Office,23,police
+York-Poquoson Sheriff's Office,23,police
+Los Altos Police Department,22,police
+Burbank,22,government
+San Marino Police Department,22,police
+Ridgecrest Police Department,22,police
+Beaumont Police Department,22,police
+Auburn Hills Police Department,22,police
+United Wholesale Mortgage,22,business
+City of Florence PD,22,police
+Oakland Police Department,21,police
+Odessa Police Department,21,police
+Lucas County Sheriff's Office,21,police
+West Bloomfield Police Department,21,police
+Lincoln Park Police Department,21,police
+Vidalia GA,21,government
+Great Wolf Lodge,20,business
+Larimer County Sheriff's Office,20,police
+Laredo PD,20,police
+Sun City Texas,20,residential
+Live Oak,20,government
+Roseville Police Department,20,police
+Forest Park PD,20,police
+Michigan State Police,20,police
+Boardman Police Department,20,police
+CCPD,20,police
+Lawrence Police,20,police
+Watsonville Police Department,19,police
+Alhambra Police Department,19,police
+Clive Police Department,19,police
+University of Iowa Police Department,19,police
+Kalamazoo Department of Public Safety,19,police
+Davison Township Police Department,19,police
+Waterford Police Department,19,police
+Wyandotte Police Department,19,police
+Rossford Police Department,19,police
+Port Huron Police Department,19,police
+Dover Police Department,19,police
+Accomack County Sheriff's Office,19,police
+Fairfield Police Department,19,police
+Tewksbury Police,19,police
+Fall River Police,19,police
+Roseburg Police Department,18,police
+Stanford University,18,school
+Lowe's Home Improvement,18,retail
+Oro Valley Police Department,18,police
+West Allis,18,government
+Bloomfield Township Police Department,18,police
+Warren Police Department,18,police
+Monroe Police Department,18,police
+Hernando County Sheriff's Office,18,police
+University Heights PD,18,police
+Town of Bay Harbor Islands,18,government
+Everett Police,17,police
+East Palo Alto Police Department,17,police
+Marina Department of Public Safety,17,police
+Riverside County Sheriff’s Department,17,police
+St. Charles County PD,17,police
+Wentzville PD,17,police
+Albion Department of Public Safety,17,police
+Kenwood Towne Center,17,retail
+Dearborn Heights Police Department,17,police
+Eastpointe Police Department,17,police
+West Hartford Police Department,17,police
+Glastonbury Police Department,17,police
+Methuen Police,17,police
+City of Bakersfield,16,government
+San Gabriel Police Department,16,police
+Costa Mesa Police Department,16,police
+Riverside County Sheriff's Department,16,police
+Clovis Police Department,16,police
+Kyle Police Department,16,police
+Plano Police Department,16,police
+Storm Lake Police Department,16,police
+Hudson Police Department,16,police
+Dodge County,16,government
+Sylvania Police Department,16,police
+Haverhill Police,16,police
+Lynnwood Police,15,police
+Fashion Show Mall,15,retail
+West Fargo Police Department,15,police
+Johnston Police Department,15,police
+Lake St. Louis PD,15,police
+Oak Creek Police Department,15,police
+Manitowoc Police Department,15,police
+Adams County Sheriff's Office,15,police
+Burton Police Department,15,police
+Northville Township Police Department,15,police
+Hamtramck Police Department,15,police
+CVS,15,retail
+Lantana Police Department,15,police
+Saugus Police,15,police
+Lynn Police,15,police
+Atherton Police Department,14,police
+Sunnyvale Department of Public Safety,14,police
+"Interlocken Owners' Association, Inc.",14,residential
+Wright County Sheriffs Office,14,police
+Elk River Police Department,14,police
+Ankeny Police Department,14,police
+Mayfair Mall / Brookfield Properties Retail Inc.,14,retail
+Owensboro Police Dept.,14,police
+Huron Township Police Department,14,police
+Melvindale Police Department,14,police
+City of Strongsville Police,14,police
+UNC Chapel Hill Police Department,14,police
+Cranston Police Department,14,police
+Stonestown Galleria Mall,13,retail
+Foster City Police Department,13,police
+The Home Depo,13,retail
+ASU Police,13,police
+Edmond Police Department,13,police
+The Colony Police Department,13,police
+Midlothian Police Department,13,police
+Wausau Police Department,13,police
+Whitewater Police Department,13,police
+Grand Traverse County Sheriff's Office,13,police
+Blackman-Leoni Township Department of Public Safety,13,police
+Flint Township Police Department,13,police
+Saint Clair County Sheriff's Office,13,police
+Virginia Tech Police Department,13,police
+Hopewell Police Department,13,police
+Norfolk State University,13,school
+New Canaan Police Department,13,police
+Boston Police,13,police
+Lewiston Police,13,police
+Burlingame Police Department,12,police
+Hollister Police Department,12,police
+Toppenish Police,12,police
+Sparks,12,government
+El Monte Police Department,12,police
+Imperial County Sheriff Department,12,police
+Universal City,12,government
+Bedford Police Department,12,police
+St. Peters PD,12,police
+Fond Du Lac County,12,government
+Plainfield Police,12,police
+Ottawa County Sheriff's Office,12,police
+Jackson Police Department,12,police
+Metro Police Authority of Genesee County,12,police
+Maumee Police Department,12,police
+Saint Clair Shores Police Department,12,police
+Town of Culpeper Police Department,12,police
+James City County Police Department,12,police
+Clarkstown Police Department,12,police
+Brisbane Police Department,11,police
+Pacific Grove Police Department,11,police
+Nevada County Sheriff’s Office,11,police
+Somerton Police Department,11,police
+Boulder County Sheriff's Office,11,police
+Boeing,11,business
+The Colony PD,11,police
+Carrollton Police Department,11,police
+Quapaw Nation,11,government
+Barron County Sheriff,11,police
+North Liberty Police Department,11,police
+Jonesboro Police Department,11,police
+Greenfield,11,government
+Green Township PD,11,police
+Mount Morris Township Police Department,11,police
+Southfield Town Center,11,retail
+Newark Ohio Division of Police,11,police
+Pinellas County Sheriff's Office,11,police
+Mount Pleasant Police Department,11,police
+Smithfield Police Department,11,police
+Newtown Police Department,11,police
+Manchester Police Department,11,police
+Mass State Police,11,police
+Ludlow Police,11,police
+Des Moines Police,10,police
+Sumner Police,10,police
+Palo Alto Police Department,10,police
+Los Gatos/Monte Sereno Police Department,10,police
+Chelan County SO,10,police
+Santa Barbara Police Department,10,police
+Thousand Oaks Police Department,10,police
+Oceanside Police Department,10,police
+San Diego Sheriff Department,10,police
+San Luis Police Department,10,police
+Park Meadows,10,retail
+New Braunfels,10,government
+Williamsburg Settlement Maintenance Association,10,residential
+Waukee Police Department,10,police
+Faribault Police Department,10,police
+Sawyer County Sheriff,10,police
+Creve Coeur PD,10,police
+Menomonee Falls,10,government
+Genesee County Sheriff's Office,10,police
+Adrian Police Department,10,police
+Warner Robins Police Department,10,police
+Wixom Police Department,10,police
+Novi Police Department,10,police
+Royal Oak Police Department,10,police
+Oak Park Police Department,10,police
+Athens County Sheriff's Office,10,police
+Lyons GA,10,government
+Polk County Sheriff,10,police
+Canfield Police Department,10,police
+Wake Forest Police Department,10,police
+Brookfield Property Partners,10,retail
+Woburn Police,10,police
+Revere Police,10,police
+Sausalito Police Department,9,police
+SeaTac Police,9,police
+Puyallup Police,9,police
+Menlo Park Police Department,9,police
+Monterey Police Department,9,police
+Holmby Hills Homeowners Association,9,residential
+Brawley Police Department,9,police
+Scottsdale Police Department,9,police
+Farmington Police Department,9,police
+Trophy Club PD,9,police
+Indianola Police Department,9,police
+ThedaCare-Froedtert Health,9,business
+Grandville Police Department,9,police
+Kent County Sheriff's Office,9,police
+Flushing Police Department,9,police
+Napoleon Township Police Department,9,police
+Ecorse Police Department,9,police
+Perrysburg Police Department,9,police
+Worthington PD,9,police
+New Baltimore Police Department,9,police
+City of Oxford,9,government
+City of Fredericksburg,9,government
+anne arundel police department,9,police
+College of William and Mary,9,school
+Darien Police Department,9,police
+Cheshire Police Department,9,police
+North Andover Police,9,police
+Warwick Police Department,9,police
+Centralia Police Department,8,police
+South San Francisco Police Department,8,police
+Kent Police,8,police
+Lakeshore Homes Association (LHA),8,residential
+Carmel Police Department,8,police
+Wapato Police,8,police
+"Los Angeles County Sheriff's Department,Santa Clarita",8,police
+Garden Grove Police Department,8,police
+Westminster Police Department,8,police
+San Bernardino County Sheriff,8,police
+Calexico Police Department,8,police
+Scheels,8,retail
+"City of Taylor, TX",8,government
+Baylor Scott & White Health,8,business
+UTTyler,8,unclear
+Edina Police Department,8,police
+McCracken County Sheriffs Office,8,police
+Navy Federal Credit Union,8,business
+Mt. Juliet,8,unclear
+Charlotte Police Department,8,police
+Delhi Township PD,8,police
+Clio Police Department,8,police
+unknown,8,unclear
+Westland Police Department,8,police
+ROCO Real Estate,8,business
+Redford Township Police Department,8,police
+Trenton Police Department,8,police
+Fraser Department of Public Safety,8,police
+Heath Police Department,8,police
+Blacksburg Police Department,8,police
+King George Sherrifs Office,8,unclear
+Destiny USA,8,unclear
+Harrington Police Department,8,police
+Mashantucket Pequot Tribal Nation Police Department,8,police
+Town of Groton Police Department,8,police
+Billerica Police,8,police
+Grafton Police,8,police
+Chelsea Police,8,police
+Ukiah Police Department,7,police
+Wenatchee Police Department,7,police
+Truckee Police Department,7,police
+Richland Police,7,police
+California State Parks,7,government
+Unknown,7,unclear
+City of Stanton,7,government
+Sedona Police Department,7,police
+Broomfield Police Department,7,police
+Lone Tree Police Department,7,police
+Converse,7,unclear
+Rogers Police Department,7,police
+Norwalk Police Department,7,police
+Hopkins PD,7,police
+Eagan,7,unclear
+Dakota County Sheriff's Office,7,police
+Bensenville Police Department,7,police
+"Panama City, FL",7,unclear
+Bryan PD,7,police
+DHL,7,business
+City of Palmetto PD,7,police
+"Dayton, OH Police Dept",7,police
+Birmingham Police Department (Michigan),7,police
+Hazel Park Police Department,7,police
+ProMedica,7,unclear
+Oregon Police Department,7,police
+Swainsboro GA,7,unclear
+Pasco Sheriff's Office,7,police
+Hampton University Police Department,7,police
+Windsor Locks Police Department,7,police
+Beacon Falls Police Department,7,police
+Clinton Police Department,7,police
+Douglas Police,7,police
+Sharon Police Department,7,police
+Peabody Police,7,police
+City of Redmond,6,government
+Gilroy Police Department,6,police
+Othello PD,6,police
+College of the Sequoias,6,school
+City of Beverly Hills,6,government
+Spokane Co Sheriff,6,police
+San Bernardino County Sheriff's Department,6,police
+Coronado Police Department,6,police
+Idaho Falls Police Department,6,police
+Tulia Police Dept,6,police
+"Boerne TX, City of",6,government
+Sunset Valley,6,unclear
+Selma,6,unclear
+Buc-ee's,6,unclear
+Wichita Police Department,6,police
+Jenks Police,6,police
+Muskogee Police,6,police
+Palmyra Police Department,6,police
+Winghaven ROA,6,unclear
+Trumann Police Department,6,police
+Sentry Insurance,6,unclear
+Lake Delton Police Department,6,police
+Columbia County,6,government
+City of Beaver Dam,6,government
+Beaver Dam,6,unclear
+Fond Du Lac,6,unclear
+Mequon,6,unclear
+Grafton Police Dept,6,police
+Mahomet Police Department,6,police
+Meijer,6,unclear
+Wakarusa Police Department,6,police
+Indiana Dept. of Corrections,6,unclear
+Kentwood Police Department,6,police
+Barry County Sheriff's Office,6,police
+Auburn Police Department,6,police
+Fort Wayne Police Department,6,police
+GoldOller Real Estate Investments,6,business
+CVG Airport,6,unclear
+Saginaw Police Department,6,police
+Buena Vista Township Police Department,6,police
+Centennial Park HOA,6,residential
+LAW ENFORCEMENT,6,police
+White Lake Township Police Department,6,police
+Bridge Valley HOA,6,residential
+Cambio Communities,6,unclear
+Walled Lake Police Department,6,police
+Schoolcraft College Police Department,6,police
+Inkster Police Department,6,police
+Beverly Hills Department of Public Safety (Michigan),6,police
+University of Michigan-Dearborn Department of Public Safety,6,police
+City of Athens Police Department,6,police
+Jacksonville Sheriffs Office,6,police
+Lake County Sheriffs Office,6,police
+Volusia County Sheriff’s Office,6,police
+Girard Police Department,6,police
+Chesterfield County Sheriff's Office,6,police
+Anne Arundel County Police,6,police
+Onondaga Community Collage Public Safety (OCC PS),6,police
+Harbour View HOA,6,residential
+Norfolk Redevelopment and Housing Authority,6,government
+New Castle County PD,6,police
+Simsbury Police Department,6,police
+Bristol Police Department,6,police
+Ayer Police,6,police
+Malden Police,6,police
+South Portland Police,6,police
+Winthrop Police,6,police
+New Bedford Police,6,police
+Federal Way Police,5,police
+St Francis Wood HOA,5,residential
+King County Housing Authority,5,government
+Skamania County Sheriff's Department,5,police
+Elk Grove Police Department,5,police
+UPS,5,business
+West Richland Police,5,police
+South Pasadena Police Department,5,police
+Azusa Police Department,5,police
+Lone Peak Police Department,5,police
+Chino Valley Police Department,5,police
+"Alamogordo, City of",5,government
+Omni Hotels & Resorts,5,unclear
+WestWind Management,5,unclear
+Castle Rock,5,unclear
+Academy Sports + Outdoors,5,school
+Cibolo,5,unclear
+Salina Police,5,police
+Caldwell County Sheriff,5,police
+Sapulpa Police,5,police
+City of Willmar - Police,5,police
+Pryor Police,5,police
+FCIC,5,unclear
+Minnesota State Patrol / Paul Bunyan Task Force,5,police
+Paul Bunyan Drug Task Force,5,unclear
+Sartell Police Department,5,police
+Marshall Police Department,5,police
+Saint Cloud Police Department,5,police
+Hennepin County Sheriff's Office,5,police
+City of Columbia PD,5,police
+Coral Ridge Mall,5,retail
+Brentwood PD,5,police
+Marathon County Sheriff’s Office,5,police
+Sun Prairie Police Department,5,police
+Rockton Police Department,5,police
+Roscoe Police Department,5,police
+Marseilles City Police Department,5,police
+West Bend,5,unclear
+Germantown Police Department,5,police
+Launch Apartments,5,residential
+Wells County Sheriff's Office,5,police
+Jackson Housing Commission,5,unclear
+Colerain Township PD,5,police
+Colerain Township,5,government
+North College Hill PD,5,police
+Winton Woods City Schools,5,school
+Sharonville PD,5,police
+Nicholasville Police Department,5,police
+Ellijay Police Department,5,police
+Lenawee County Sheriff's Office,5,police
+Roswell Police,5,police
+Wayne Police Department,5,police
+Oakland Towne Square,5,unclear
+Dick's Sporting Goods,5,unclear
+Clinton Township Police Department,5,police
+Chesterfield Township Police Department,5,police
+Akron Police Department,5,police
+Police,5,police
+St. Johns County Sheriff’s Office,5,police
+Grottoes Police Department,5,police
+New Kent County Sheriff's Office,5,police
+Onondaga County Sheriff’s Office,5,police
+Gloucester County Sheriffs Office,5,police
+Delaware State Police,5,police
+Readington Township Police Department,5,police
+West Springfield Police,5,police
+Prospect Police Department,5,police
+Worcester Police,5,police
+Quincy Police,5,police
+St. Francis Homes Association,4,residential
+Valley Medical Center,4,business
+Covington Police,4,police
+Vacaville Police Department,4,police
+PulteGroup,4,unclear
+Manteca Police Department,4,police
+San Juan Bautista Police Department,4,police
+Sunnyside Police,4,police
+Storey County,4,government
+Mammoth Lakes Police Department,4,police
+"Los Angeles County Sheriff's Department,City Of Palmdale",4,police
+Target Corporation,4,retail
+Culver City,4,unclear
+Covina Police Department,4,police
+Target,4,retail
+Tustin Police Department,4,police
+Fountain Valley Police Department,4,police
+Liberty Lake PD,4,police
+National City Police Department,4,police
+Cedar City Police Department,4,police
+Bonneville County Sheriff's Office,4,police
+CCSO,4,unclear
+City of Tempe,4,government
+Gilbert PD,4,police
+The Beacon Group,4,unclear
+Farmington Police,4,police
+Flock,4,flock
+Swisher County Sheriff's Office,4,police
+Ochiltree County Sheriff,4,police
+San Marcos,4,unclear
+Wilson County,4,government
+Watauga Police Department,4,police
+Richland Hills Police Department,4,police
+Nolanville PD,4,police
+Texas Department of Public Safety,4,police
+Bristow Police,4,police
+Frisco Police Department,4,police
+Farmers Branch Police Department,4,police
+Creek County Sheriff,4,police
+HOA,4,residential
+Minnesota State Patrol,4,police
+XNA,4,unclear
+Sherburne County Sheriffs Office,4,police
+Polk City Police Department,4,police
+Pleasant Hill Police Department,4,police
+Ramsey County Police Department,4,police
+Minnetonka High School,4,school
+Minnetonka Police Department,4,police
+Barron Co Sheriff,4,police
+Grant County,4,government
+Livingston Parish Sheriff's Office,4,police
+St. Charles City PD,4,police
+Des Peres PD,4,police
+Warson Woods PD,4,police
+Byrnes Mill PD,4,police
+Wisconsin State Capitol Police Department,4,police
+Loves Park Police Department,4,police
+Metropolis IL PD,4,police
+Village of Menomonee Falls,4,government
+Camp Jellystone LLC,4,business
+Forest Preserve District of DuPage County,4,government
+Itasca Police Department,4,police
+Hybernia HOA,4,residential
+Bowlero,4,unclear
+Crown Point Indiana Police,4,police
+Warrick county sherriff,4,police
+Battle Creek Police Department,4,police
+Bluffton Police Department,4,police
+Springdale PD,4,police
+Coweta County Sheriff,4,police
+Livingston County Sheriff's Office,4,police
+Beavercreek Police Dept.,4,police
+Springboro OH PD,4,police
+Hamilton Township PD,4,police
+Knollwood Village Apartments,4,residential
+Utica Police Department (Michigan),4,police
+Farmington Public Safety Department (Michigan),4,police
+Lathrup Village Police Department,4,police
+McKinley,4,unclear
+Grosse Ile Police Department,4,police
+Monroe County Sheriff's Office,4,police
+West Union Police Department,4,police
+Seneca Police Department,4,police
+Bexley,4,unclear
+Mount Vernon OH PD,4,police
+Transylvania County Sheriff's Office,4,police
+City of Brunswick Police,4,police
+Cuyahoga Heights Police Department,4,police
+City of Wadsworth Police,4,police
+"Bryan County, GA",4,government
+Windham Police Department,4,police
+Pooler PD,4,police
+Atlantic Beach Police Department,4,police
+Struthers Police Department,4,police
+Hermitage Police Department,4,police
+Pulaski County Sheriff's Office,4,police
+Radford Police Department,4,police
+Christiansburg Police Department,4,police
+Roanoke Police Department,4,police
+Rocky Mount Police Department,4,police
+Village of Kenmore Police Department,4,police
+Walden Galeria,4,unclear
+Fayetteville Police Department,4,police
+Batavia Police Department,4,police
+City of Henderson,4,government
+Remington Police Department,4,police
+Petersburg Police Department,4,police
+Fort Monroe Authority,4,government
+Portsmouth Police Department (Virginia),4,police
+Temple University Campus PA PD,4,police
+Wilton Police Department,4,police
+Agawam Police,4,police
+Avon Police Department,4,police
+ebm-papst,4,unclear
+BJ's Wholesale Club,4,unclear
+Boylston Police,4,police
+Charlton Police,4,police
+East Lyme Police Department,4,police
+Stonington Police Department,4,police
+Groton Police,4,police
+Marlborough Police,4,police
+Home Depot (retailer),4,retail
+York Police,4,police
+Beverly Police,4,police
+Falmouth Police,4,police
+Bangor Police,4,police
+Florence Police Department,3,police
+Montesano Police Department,3,police
+Edmonds Police,3,police
+Saint Helena Police Department,3,police
+Mill Creek Police Department,3,police
+Northlake Ridge HOA,3,residential
+San Benito County Sheriff's Office,3,police
+Reno Police Department,3,police
+Hope Ranch,3,unclear
+Santa Barbara County Sheriff's Office,3,police
+TOPD,3,unclear
+Studio City Property & Business Improvement District,3,unclear
+Los Angeles Police Department,3,police
+Arcadia Police Department,3,police
+Baldwin Park Police Department,3,police
+Riverside County Sheriff's Office,3,police
+Imperial Police Department,3,police
+NAU PD,3,police
+HOME DEPOT,3,retail
+Mead Police Department,3,police
+Lockheed Martin,3,unclear
+Winkler SO,3,police
+City of Boerne,3,government
+Stonewall Ranch Municipal Utility District,3,government
+Leander Police Department,3,police
+Balcones Trails Apartment Complex,3,residential
+Windcrest,3,unclear
+City of Windcrest TX,3,government
+Abilene Police,3,police
+Colleyville PD,3,police
+Fort Worth Police Department,3,police
+Haltom City Police Department,3,police
+Founders Parc HOA,3,residential
+Round Rock Police Department,3,police
+Farmers Branch PD,3,police
+Baylor University Nursing School,3,school
+Holland Pointe HOA,3,residential
+QuikTrip,3,unclear
+Catoosa Police,3,police
+Walmart,3,retail
+Bixby Police,3,police
+Vanbrooke Owners Association,3,residential
+"Kading Properties, LLC",3,business
+Locust Grove Police,3,police
+Checotah Police,3,police
+Mille Lacs County Sheriffs Office,3,police
+Carlisle Police Department,3,police
+Blaine PD,3,police
+New Brighton Police Department,3,police
+City of Fremont Hills,3,government
+Burnett County Sheriff,3,police
+LA PD / UL PD,3,police
+Stone Meadows HOA,3,residential
+Union PD,3,police
+Cottleville PD,3,police
+Ballwin PD,3,police
+Southern Illinois University Police Department,3,police
+PaducahPD,3,unclear
+Prosper Gulfport,3,unclear
+Oconomowoc,3,unclear
+Menomonee Falls Police Department,3,police
+Brookfield,3,retail
+New Berlin,3,unclear
+Schaumburg Police Department,3,police
+Fenton High School,3,school
+Morris Police Department,3,police
+Tanger Inc.,3,business
+Valparasio Police Department,3,police
+Planned-Owensboro Police Dept.,3,police
+Southlake Residential Association,3,residential
+Plainfield Police Department,3,police
+Shively PD,3,police
+Gallatin PD,3,police
+"Panama City Bch, FL",3,unclear
+Rockford Department of Public Safety,3,police
+Carroll County Sheriff,3,police
+Spring Arbor University,3,school
+Coldwater Police Department,3,police
+Towne Properties,3,unclear
+City of Fairfield PD,3,police
+Springfield Township PD,3,police
+Milan Police Department,3,police
+Hamilton Township,3,government
+Union Township Police Department,3,police
+Wolverine Lake Police Department,3,police
+Goldoller,3,unclear
+Madison Heights Police Department,3,police
+DTE Energy,3,unclear
+Saint Ursula Academy,3,school
+Ottawa Hills Local School District,3,school
+Grandview Heights,3,unclear
+Stephens County Sheriffs Office,3,police
+Madison County Sheriffs Department,3,police
+Transylvania County SO,3,police
+Dublin GA,3,unclear
+Belpre Police Department,3,police
+Florida Highway Patrol,3,police
+Tallmadge PD,3,police
+North Canton Police Department,3,police
+Port Wentworth PD,3,police
+Garden City PD,3,police
+Savannah PD,3,police
+Neptune Beach Police Department,3,police
+Jacksonville Beach Police Department,3,police
+Liberty Police Department,3,police
+Poland Village Police Department,3,police
+Dublin Police Department,3,police
+Pulaski Police Department,3,police
+Sheriff's Office (martin county),3,police
+WakeMed,3,unclear
+Mount Jackson Police Department,3,police
+Town of Orange Police Department,3,police
+Culpeper Police Department,3,police
+Chesterfield County Police Department,3,police
+ReNew Foundry Centre Apartments,3,residential
+King George Sherrif's Office,3,unclear
+Colonial Beach Police Department,3,police
+New Castle County Police Department,3,police
+Seaford Police Department,3,police
+Georgetown Police Department,3,police
+Suffolk County Police Department,3,police
+Berlin Police Department,3,police
+Vernon Police Department,3,police
+Monson Police,3,police
+Putnam Police Department,3,police
+Rhode Island State Police,3,police
+Ledyard Police Department,3,police
+Nashua Housing Authority,3,government
+Littleton Police,3,police
+Police (Millis),3,police
+Dartmouth Police,3,police
+Salem Police,3,police
+Rochester Police,3,police
+Fairhaven Police,3,police
+Barnstable Police,3,police
+Washington State Patrol,2,police
+Chehalis Tribal Law Enforcement,2,police
+Total Wine,2,unclear
+Colma Police Department,2,police
+Lynnwood,2,unclear
+Tuscany Homeowners Association,2,residential
+The Hedges Homeowners Association,2,residential
+UCANN,2,unclear
+Lakeshore Avenue Business Improvement District (LABID),2,unclear
+Moraga PD,2,police
+Columbia Electric,2,unclear
+The Gardens HOA,2,residential
+San Mateo County Sheriff's Office,2,police
+Alameda County Sheriff's Department,2,police
+Union City Police Department,2,police
+Prometheus Apartments,2,residential
+Van Buren Neighborhood Los Altos,2,unclear
+Sunnyvale DPS,2,police
+East Wenatchee Police Department,2,police
+Adams County Sheriff,2,police
+California Resources Corporation,2,business
+City of Walla Walla,2,government
+Los Angeles County Sheriff's Department,2,police
+Los Angeles County Sheriff,2,police
+West Covina Police Department,2,police
+Santa Ana Police Department,2,police
+McDonald's,2,unclear
+Riverside Police Department,2,police
+Imperial Valley College,2,school
+West Jordan Police Department,2,police
+Embry-Riddle Aeronautical University,2,school
+Embry Riddle Aeronautical University,2,school
+LOWES,2,retail
+"City of Farmington, NM",2,government
+uknown,2,unclear
+University of Colorado Boulder,2,school
+City of Thornton,2,government
+KPD,2,unclear
+Texas Department of Transportation,2,government
+Harlan County Sheriff,2,police
+Abilene Police Department,2,police
+Boerne,2,unclear
+VILLAGE GREEN HOMEOWNERS ASSOCIATION,2,residential
+hays county sheriffs office,2,police
+Village of Briarcliff,2,government
+Schertz,2,unclear
+Decatur Police Department,2,police
+Live Oak Creek HOA,2,residential
+Northlake PD,2,police
+Kroger,2,retail
+North Richland Hills Police Department,2,police
+Colleyville Police Department,2,police
+Hurst Police Department,2,police
+Bell Station HOA,2,residential
+Holland PD,2,police
+Sioux City Police,2,police
+Brisotw Police,2,police
+Wylie Police Department,2,police
+Midlothian PD,2,police
+Sand Springs Police,2,police
+Tulsa Sheriff,2,police
+Tulsa Police,2,police
+Collinsville Police,2,police
+Nordam,2,unclear
+Marshall Park HOA,2,residential
+Bretton Woods HOA,2,residential
+Redbud HOA,2,residential
+Yorktown HOA,2,residential
+Memorial Club Townhomes,2,unclear
+Greenwood,2,unclear
+Elk River PD,2,police
+South Lake Minnetonka Police Department,2,police
+Story County Sheriff's Department,2,police
+Grain Valley,2,unclear
+Rogers Police,2,police
+Chisago County Sheriff's Office,2,police
+Ramsey Police Department,2,police
+University of Minnesota Police Department,2,police
+Temple of Aaron,2,unclear
+Shakopee,2,unclear
+Lake City Police Department,2,police
+Wapello County SO,2,police
+Wapello County Sheriff's Department,2,police
+"Town of Harrisburg, Mo",2,government
+"Columbia, Mo Police Department",2,police
+Quincy Police Department,2,police
+Bayfield County Sheriffs Dept,2,police
+Anna Meadows Homeowners Association,2,residential
+Twin Chimneys Village HOA,2,residential
+Villages At Dardenne Prairie Village HOA,2,residential
+Iowa County,2,government
+St. Charles Community College,2,school
+Woodstone Apartments,2,residential
+The Vineyards HOA,2,residential
+Wind Castle HOA,2,residential
+Chesterfield PD,2,police
+Kirk of the Hills Presbyterian Church,2,business
+Chaminade College Preparatory School,2,school
+Webster Groves PD,2,police
+Missouri State Highway Patrol,2,police
+Abita Lakes Homeowner's Association,2,residential
+Fleet Farm,2,unclear
+Portage County Sheriff's Office,2,police
+Stevens Point Police Department,2,police
+Wilderness Hotel & Golf Resort,2,business
+Baraboo Police Department,2,police
+Portage,2,unclear
+Columbia County Sheriff's Office,2,police
+Migration Path Estates,2,unclear
+Walworth County Sheriff,2,police
+Lowes Home Improvement (Corporate Security,2,retail
+Illiopolis Police Department,2,police
+Brillion,2,unclear
+Oshkosh,2,unclear
+Slinger Police Department,2,police
+Waukesha County Sheriff's Office,2,police
+froedtert,2,unclear
+Germantown Police Department / Menonomee Falls Police Department,2,police
+City of West Allis,2,government
+City of Greenfield,2,government
+Elk Grove Village Police Department,2,police
+Northlake Police Department,2,police
+University of Illinois Police Department,2,police
+Rosemont Police Department,2,police
+Niles Police Department,2,police
+Cook County Sheriff's Office,2,police
+Riverside IL PD,2,police
+University of Illinois Chicago,2,school
+Porter County Sheriffs Office,2,police
+Starke County Sheriffs Office,2,police
+West Lafayette Police Department,2,police
+Dublin Farms HOA,2,residential
+Elkhart Police Department,2,police
+Marshall County Sheriffs Office,2,police
+Wabash County Sheriff,2,police
+ZionsvillePD,2,unclear
+Grand Traverse County Sheriff's Department,2,police
+Walker Police Department,2,police
+Whitley County Sheriffs Office,2,police
+Huntington County SO,2,police
+Polk County Police Department,2,police
+Spring Arbor Township Police Department,2,police
+Jackson County Sheriff's Office,2,police
+Angola Police Department,2,police
+Butler Police Department,2,police
+Hicksville Police Department,2,police
+West Chester PD,2,police
+Micro Center,2,unclear
+Amberley Village,2,unclear
+Central Bank & Trust Co.,2,business
+Gilmer County Sheriff's Office,2,police
+Owner,2,unclear
+Cobb County Police Department,2,police
+Atlanta Police,2,police
+Saginaw County Sheriff's Office,2,police
+Concordia University Ann Arbor,2,school
+Jewish Federation of Greater Toledo,2,unclear
+Sugarcreek PD,2,police
+City of Lebanon,2,government
+Lebanon Division of Police,2,police
+Camargo Club/Indian Hill,2,unclear
+Pierce Township Police,2,police
+Alpharetta Police,2,police
+Kennison Creek Community Association,2,residential
+Reynolds,2,unclear
+Gregory Meadows HOA,2,residential
+Guardian Industries,2,unclear
+Whittaker Village HOA,2,residential
+Danbury Park Manor/Green National,2,unclear
+Franklin-Bingham Farms Police Department,2,police
+Warren Manor Apartments,2,residential
+Saint Francis de Sales School,2,school
+(Haywood Co. Sheriff),2,police
+Franklin County Sheriff's Office,2,police
+Valdosta Police Dept.,2,police
+Lowe's Home Improvement Live Oak,2,retail
+Michigan Department of Natural Resources,2,unclear
+Marysville Police Department,2,police
+Gahanna,2,unclear
+Hebron Police Department,2,police
+Wise County Sheriff's Department,2,police
+ETSU,2,unclear
+Town of Mars Hill,2,government
+PCSO,2,unclear
+Soperton GA,2,unclear
+Hernado County Sheriff's Office,2,police
+Pasco County Sheriff's Office,2,police
+Pinellas Park,2,unclear
+Hillsbourough County Sheriff's Office,2,police
+SarasotaPoliceDepartment,2,unclear
+City of Cleveland Police,2,police
+Cambridge Police Department,2,police
+River Run Apartment Homes,2,residential
+Nassau County Sheriff's Office,2,police
+Lee County Sheriff's Office,2,police
+Boston Heights,2,unclear
+Akron PD,2,police
+Chatham County PD,2,police
+VCSO,2,unclear
+Seminole County Sheriff's Office (Florida),2,police
+Millcreek Mall,2,retail
+Town of Amherst,2,government
+Niagara Frontier Transportation Authority,2,government
+Amherst Police Department,2,police
+Souther Pines Police Department,2,police
+Town of Woodstock,2,government
+Town of Gordonsville Police Department,2,police
+Mecklenburg County,2,government
+Pennsylvania State University,2,school
+Fairfax County Police Department,2,police
+Colonial Heights Police Department,2,police
+Silverbrook Wood Condominium,2,residential
+Mason PD,2,police
+Arlington County Police Department,2,police
+Marylander Condominiums,2,residential
+Prince George's County Police,2,police
+New Kent County,2,government
+James City County,2,government
+Franklin Police Department,2,police
+Windsor Police Department,2,police
+Binghamton University PD,2,police
+US Department of Energy,2,unclear
+Founders Pointe HOA,2,residential
+Poquoson Police Department,2,police
+Lochhaven HOA,2,residential
+Chesapeake Bay Bridge and Tunnel District,2,unclear
+AllentownPolice,2,unclear
+Deleware State Police,2,police
+Chincoteague Police Department,2,police
+Village of Saint Johnsville Police Department,2,police
+New Britain Township Police Department,2,police
+Village of Wappigners PD/Village of Wappingers,2,police
+Clark Township Police Department,2,police
+Fort Lee Police Department,2,police
+'Dutchess County Sheriff's Office',2,police
+Norwalk PD,2,police
+Old Brookville Police Department,2,police
+Nassau County Police Department,2,police
+Holyoke Police,2,police
+Westfield Police,2,police
+South Windsor Police Department,2,police
+Killingworth Resident State Trooper Office,2,police
+Putnam Police Dept,2,police
+Chelmsford Police,2,police
+Lowe's (retailer),2,retail
+Police (Grafton),2,police
+Police (Medway),2,police
+Lynnfield Police,2,police
+Boston Police Department,2,police
+Police (Westwood),2,police
+East Providence Police Department,2,police
+Swansea Police,2,police
+Brook Casino,2,unclear
+Wareham Police,2,police
+Acushnet Police,2,police
+Shelton Police Dept.,1,police
+Shelton PD,1,police
+Sutherlin Police Department,1,police
+Mendocino County Sheriff Office,1,police
+Marin County Sheriff's Department,1,police
+Cylde Hill PD,1,police
+Newport Yacht Club,1,unclear
+Tukwila Police,1,police
+Normandy Park Police Department,1,police
+Des Moines WA Police Department,1,police
+Renton Police,1,police
+Black Diamond Police,1,police
+Orting PD,1,police
+Anderson PD,1,police
+Piedmont,1,unclear
+Rio Vista Police Department,1,police
+Burlingame PD,1,police
+San Mateo PD,1,police
+Alameda County Sheriff's Office,1,police
+Hayward Police Department,1,police
+San Jose Police Department,1,police
+BCSO,1,unclear
+Nevada County Sheriff's Office,1,police
+Grass Valley Police Department,1,police
+Nevada county Sheriffs office,1,police
+Placer County Sheriff,1,police
+Placer County Sheriff’s Office,1,police
+Gustine Police Department,1,police
+City of Ellensburg,1,government
+Lompoc POlice Department,1,police
+Lompoc police Department,1,police
+Government,1,government
+Carson City,1,unclear
+Storey County NV SO,1,police
+Douglas County,1,government
+Rancho Conejo Home Owners Association,1,residential
+Lincoln County Sheriff Office,1,police
+Walla Walla Police Department,1,police
+Simi Valley PD,1,police
+LASD,1,unclear
+Bel-Air Association,1,unclear
+Los Angeles County Sheriff’s Department,1,police
+Los Angeles Sheriff's Department,1,police
+Spokane County Sherrif,1,government
+Temple City,1,unclear
+Seal Beach Police Department,1,police
+Cypress Police Department,1,police
+"Angle was recently turned. Unknown if intentional by Flock, or an adversary of.",1,flock
+Orange County Sheriff Dept,1,police
+Mission Viejo,1,unclear
+Rancho Santa Margarita,1,unclear
+Gated Community,1,unclear
+Spokane County SO,1,police
+HoA,1,residential
+City of El Cajon,1,government
+Ada County Sheriff’s Office,1,police
+San Diego County Sheriff Office,1,police
+Henderson,1,unclear
+Provo PD,1,police
+Spanish Fork Police Department,1,police
+Coconino County Sheriff's Office,1,police
+Oro Valley PD,1,police
+South Tucson PD,1,police
+Farmington Police Dapertment,1,police
+{Farmington Police Department,1,police
+Coronado Mall,1,retail
+Albuquerque Police Department,1,police
+Albuqueque Police Department,1,police
+Glenrock Police Department,1,police
+Summit County,1,government
+City of Alamogordo,1,government
+Lafayette Police Department,1,police
+Arvada Police Department,1,police
+City of Westminster,1,government
+Denver Police Department,1,police
+Town of Castle Rock,1,government
+Kermit PD,1,police
+Winkler County Sheriff's Office,1,police
+Amarillo Police Depart,1,police
+Swisher County Sheriffs Office,1,police
+Halran County Sheriff,1,police
+Harlan County Sheriff Office,1,police
+BOERNE INDEPENDENT SCHOOL DISTRICT,1,school
+Connect Community Management,1,unclear
+Castroville,1,unclear
+El Reno Police,1,police
+Yukon Police,1,police
+Liberty Hill Police Department,1,police
+Cedar Park Police,1,police
+Flock Safety (Development),1,flock
+City of Selma,1,government
+City of Live Oak,1,government
+Guadalupe County,1,government
+Land owner,1,unclear
+Land Owner,1,unclear
+Landowner,1,unclear
+Kyle Police department,1,police
+Kyle police department,1,police
+kyle police department,1,police
+Guthrie Police,1,police
+Oklahoma City Police Department,1,police
+OKC Police,1,police
+OKC PD,1,police
+Jones PC,1,unclear
+Benbrook Lakeshore Neighbors Association,1,unclear
+Palladium East Berry Apts/ FWPD,1,unclear
+Fort Worth,1,unclear
+HomeDepot,1,unclear
+Hood County,1,government
+Caldwell County sheriff,1,police
+Caldwell County Constable Pct 2,1,police
+Minnehaha County Sheriff Department,1,police
+Sioiux City Police,1,police
+Riley County Sheriff,1,police
+Ovilla Police Department,1,police
+National Park Service,1,unclear
+Woodbury County Sheriff's Department,1,police
+Bartlesville Police Department,1,police
+Tulsa County Sheriff,1,police
+Marshall HOA,1,residential
+Owasso Police Department,1,police
+Glenpool Police,1,police
+Glenpool police,1,police
+Mark Allen Chevrolet,1,unclear
+Wagoner County Sheriff,1,police
+Wagoner Co. Sheriff,1,police
+Fannin County SO,1,police
+East Tawakoni PD,1,police
+Tyler PD,1,police
+City of Conroe,1,government
+Houston Police Department,1,police
+BSU Department of Public Safety,1,police
+Parkville PD,1,police
+"Parkville, MO",1,unclear
+Cherokee County SO,1,police
+Williamson Place POA,1,residential
+Willaimson Place POA,1,residential
+Wright County Sheriff,1,police
+Mille Lacs County Sheriff's Office,1,police
+Princeton Police Department,1,police
+Elk River Sportsmans Club,1,unclear
+City of Rogers MN,1,government
+Woodhill Country Club,1,unclear
+South Lake Minnetonka PD,1,police
+Orono Police Department,1,police
+SLMPD,1,unclear
+Westport Station Office Park,1,unclear
+Cass County Sheriff's Office,1,police
+Holden Police Department,1,police
+Little Flock Police Department,1,flock
+INTERNATIONAL FALLS POLICE DEPARTMENT,1,police
+Anoka County Sheriff’s Office,1,police
+Mounds View Police Department,1,police
+St louis park PD,1,police
+Bet Shalom Congregation,1,unclear
+Stadium Village Flats,1,unclear
+"Richfield, MN PD",1,police
+Ramsey County Sheriff's Office,1,police
+Shakopee Police,1,police
+St. Louis County Sheriff's Department,1,police
+Stillwater Police Department,1,police
+Jefferson City Police,1,police
+Greers Ferry,1,unclear
+Louisiana Tech University,1,school
+Bayfield County Sherrif's Dept,1,government
+Washburn County Sheriff,1,police
+Palmyra PD,1,police
+Marion County SO,1,police
+Hannibal Police Department,1,police
+Bayfield County Sheriff's Dept,1,police
+Ralls County Sheriff's Office Missouri,1,police
+Boulder Ridge HOA,1,residential
+Dardenne Prairie,1,unclear
+The Cove at Dardenne HOA,1,residential
+Union Police Department,1,police
+Copper Mill HOA,1,residential
+Montecito Village Homeowners Association,1,residential
+Austin Ridge HOA,1,residential
+West Hills HOA,1,residential
+Bellerive Country Club,1,unclear
+Manchester PD,1,police
+Dierbergs,1,retail
+Jefferson county parks and rec,1,government
+Jefferson County PD,1,police
+Jefferson County Parks Deptment,1,government
+Jefferson county SD,1,government
+Shrewsbury PD,1,police
+Village of Marlborough,1,government
+Missouri Highway Patrol,1,police
+"Grandview Lakes Homeowners Association, Inc.",1,residential
+Marathon County Sheriff's Department,1,police
+(Marathon County Sheriff's Department),1,police
+Rivers Edge Campground,1,unclear
+Plover Police Department,1,police
+Lodi,1,unclear
+Cape Girardeau Police Department,1,police
+Olive Branch Police,1,police
+Rockford Police Department,1,police
+Mississippi State University,1,school
+Fibd Du Lac County,1,government
+Walmart/Germantown Police Department,1,police
+Germantown,1,unclear
+Delafield,1,unclear
+Waukesha PD,1,police
+The Corners of Brookfield,1,retail
+Fleet Farm Muskego,1,unclear
+Barrington Police,1,police
+Vernon Hills Police Department,1,police
+Mellody Farms,1,unclear
+Buffalo Grove Police Department,1,police
+"Saint Charles, IL PD",1,police
+Medinah Police Department,1,police
+Villa Park Police Department,1,police
+Joint Commission,1,unclear
+Naperville Police,1,police
+Romeoville Police Department,1,police
+University of Illinois,1,school
+Champaingn County Sheriff,1,police
+City of Mount Pleasant,1,government
+HPPD,1,unclear
+Chicago Police Department,1,police
+Cook County Serrif,1,government
+Harwood Heights Police,1,police
+IL DOT,1,government
+Summit Police Department,1,police
+"Crown Point, IN Police",1,police
+Warrick county sheriff,1,police
+LaPorte County Sheriffs Office,1,police
+Spring Hill Police Department,1,police
+Smyrna Police Department,1,police
+Hoover Police Department,1,police
+Mountain Brook Police Department,1,police
+Traffic,1,unclear
+City of Muskegon,1,government
+Mishawaka Police Department,1,police
+Cass County Sheriffs Office,1,police
+McCordsville Police Department,1,police
+Humane Society - Johnson County,1,government
+Leesburg Police Department,1,police
+Kalamazoo County Sheriff's Office,1,police
+Battle Creek City Police,1,police
+LaGrange County Sheriffs Office,1,police
+Anchorage PD,1,police
+(Anchorage),1,unclear
+East Lansing Police Department,1,police
+Green Township,1,government
+Gated Properties VIII LLC,1,business
+Glendale PD,1,police
+West Chester Township PD,1,police
+Norwood PD,1,police
+Rollman Estates Subdivision,1,unclear
+Sycamore Township,1,government
+Highland Heights Police Department,1,police
+Leinbach Company,1,business
+Garrard County KY SO,1,police
+(Cobb County PD),1,police
+Cobb Parks,1,unclear
+Cobb County Police,1,police
+Pace Academy,1,school
+Gadsden County Sheriffs Office / Gadsden County Board of County Commissioners,1,police
+Franklin County,1,government
+Great Parks of Hamilton County,1,government
+Deerfield Township,1,government
+Morrow PD,1,police
+Pierce Township Police Department,1,police
+Fulton County Schools,1,school
+Glenn Ivey HOA,1,residential
+DeKalb County Police,1,police
+Amelia Place Homeowners Association,1,residential
+Lowes Home Improvement,1,retail
+Redpoint Tallahassee,1,unclear
+Hills of Lone Pine HOA,1,residential
+Barrington Park HOA,1,residential
+Dourdan Place HOA,1,residential
+South Lyon Police Department,1,police
+(Deactivated) South Lyon Police Department,1,police
+Saddle Ridge HOA,1,residential
+American Concrete Institute,1,unclear
+Western Heights Apartments,1,residential
+Rodeway Inn Madison Heights - Detroit,1,unclear
+Travelodge Madison Heights,1,unclear
+Red Roof Inn Detroit - Royal Oak/Madison Heights,1,unclear
+Hazel Park Police Department/Warren Police Department,1,police
+Allen Park Police Department,1,police
+Marathon Petroleum Corporation,1,business
+City of Dublin PD,1,police
+City of Columbus,1,government
+Baldwin County Sheriff's Office,1,police
+Village of Buckeye Lake Police Department,1,police
+City of Ashland KY Police,1,police
+Johnson City Police Department,1,police
+jcpd,1,unclear
+Laurens County GA,1,government
+Alachua County SO,1,police
+Hillsborough County Sheriffs Office,1,police
+North Ridgeville Police Department,1,police
+City of Brunswick Police Department,1,police
+City of Medina Police,1,police
+City of Medina Police Department,1,police
+Spartanburg Regional Medical Center,1,business
+Baker County FL SO,1,police
+(Clay County Sheriff's Office),1,police
+U-Haul Parking Lot,1,unclear
+Hamlin Retail Partners li LLC,1,business
+lakelandpolicedepartment,1,unclear
+Jackson Township Police,1,police
+North Wilkesboro PD,1,police
+Catawba Nation Tribal Police Department,1,police
+Bull River Bluff Condominium Association,1,residential
+Volusia Sheriff's Office,1,police
+MCSO,1,unclear
+Mahoning County Sheriff's Office,1,police
+Rich Creek Police Department,1,police
+Pembroke Police Department,1,police
+Montgomery County Sheriff's Office,1,police
+Cheshunt HOA,1,residential
+Sherrif's Office (martin county),1,government
+sheriff's office (of martin county),1,police
+CEDAR HOLLOW ESTATES HOMEOWNERS ASSOC INC,1,residential
+Boynton Beach,1,unclear
+Niagara Falls Police Department,1,police
+Tonawanda Police Department,1,police
+Staunton Police Department,1,police
+Southern Pines Police Department,1,police
+Hoke County Sheriff's Department,1,police
+Hoke County Sheriff,1,police
+Q508358,1,unclear
+shenandoah co sheriff,1,police
+Madison County Sheriff's Office,1,police
+City Of Oxford PD,1,police
+Raleigh Police Department,1,police
+Ted Britt Chevrolet,1,unclear
+Hanover County Sheriff's Office,1,police
+Chesterfield County,1,government
+Emporia Police Department,1,police
+Fairfax City VA PD,1,police
+Insight Public Sector(contracted by FCPD,1,unclear
+Insight Public Sector (contracted by FCPD),1,unclear
+Insight Public Sector Inc,1,business
+DC Metropolitan Police Department,1,police
+Metropolitan Washington Airports Authority,1,government
+Baltimore County (police?),1,police
+Anne Arundel Police Department,1,police
+United States Park Police,1,police
+Metropolitan Police Department,1,police
+King George Sheriff's Office,1,police
+King and Gueen County Sheriff's Office,1,police
+King and Queen County Sheriff's Office,1,police
+King William County SO,1,police
+Gloucester County Sheriff's Office,1,police
+James City County Police,1,police
+Surry County Sheriff's Office,1,police
+Tompkins County Sheriff,1,police
+vestal police department,1,police
+binghamton university police department,1,police
+target,1,retail
+Manhattan Beach Civic Association,1,unclear
+Calvert County Sheriff,1,police
+Isle of White Sheriif's Office,1,unclear
+Suffolk PD,1,police
+Chesapeake Bay Bridge Tunnel District,1,unclear
+Regent University Police Department,1,police
+Bethlehem Township Police Department,1,police
+Salisbury PD,1,police
+Northampton County Sheriff's Department,1,police
+New Britian Township Police,1,police
+Saranac Lake Police Department,1,police
+Warren Township,1,government
+Burlington Hyundai (likely),1,unclear
+Burlington Subaru (likely),1,unclear
+Burlington Subaru (probably),1,unclear
+Ridgefield Police Department,1,police
+Suffolk County Sheriff’s Office,1,police
+Russell Police,1,police
+Montgomery Police,1,police
+Hadley Police,1,police
+"Lowe's Companies, Inc",1,retail
+Holyoke Police or Holyoke Mall,1,police
+South Hadley Police,1,police
+Hampden County Sheriff,1,police
+Farmington PD,1,police
+Bloomfield Police Department,1,police
+Milford Police,1,police
+BrookhavenTown,1,unclear
+Town of Hubbardston Chief of Police,1,police
+Fedex,1,business
+Lisbon Resident State Trooper Office,1,police
+Norwich Police Deparment,1,police
+Montville Police Department,1,police
+City of Groton Police Department,1,police
+New Hampshire Department of Corrections,1,unclear
+Haverhill Police Department,1,police
+Wilmington Police,1,police
+Westborough Police,1,police
+Melrose Police,1,police
+neighborhood association,1,unclear
+Police (Norwood),1,police
+Cumberland Police,1,police
+Pawtucket Police Department,1,police
+Bristol Police Dept,1,police
+Fall River Police Dept,1,police
+Fall River PD,1,police
+Tiverton Police Department,1,police
+Westport Police,1,police
+Portland Police,1,police
+Nahant Police,1,police
+BJs Wholesale Club,1,unclear
+Mattapoisett Police,1,police
+Patriot Series LLC?,1,business
+Lewiston Police Department,1,police
+Maine National Guard,1,unclear
+Yarmouth Police,1,police
+Brewer Police,1,police

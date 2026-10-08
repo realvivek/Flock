@@ -1611,6 +1611,51 @@
       "url": "https://www.nashville.gov/sites/default/files/2023-08/LPR-Sampling-Data.pdf",
       "date": "2023-08-03",
       "lastVerified": "2026-09-18"
+    },
+    {
+      "id": "deflock-tiles-2026",
+      "kind": "independent",
+      "title": "DeFlock hourly camera tiles: every OpenStreetMap surveillance camera tagged as a plate reader, with make, operator and direction (PMTiles archive, ODbL)",
+      "publisher": "DeFlock",
+      "url": "https://tiles.dontgetflocked.com/cameras-us-hourly.json",
+      "date": "2026-10-08",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "census-pop-2024",
+      "kind": "government",
+      "title": "Annual estimates of the resident population for states and counties, Vintage 2024 (NST-EST2024, CO-EST2024)",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://www.census.gov/programs-surveys/popest/data/tables.html",
+      "date": "2025-03",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "census-boundaries-2024",
+      "kind": "government",
+      "title": "2024 cartographic boundary files (counties, incorporated places) and TIGER/Line roads and area water",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html",
+      "date": "2025",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "osm-windsor-2026",
+      "kind": "independent",
+      "title": "OpenStreetMap changeset 190182036: Windsor, Connecticut plate-reader nodes deleted, with the mapper's note that the town ended its use",
+      "publisher": "OpenStreetMap",
+      "url": "https://www.openstreetmap.org/changeset/190182036",
+      "date": "2026-10-08",
+      "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "patch-windsor-2026",
+      "kind": "independent",
+      "title": "Windsor keeps Flock cameras off in CT first (council votes 5 to 4 on July 6 against reactivation; cameras off since February)",
+      "publisher": "Patch",
+      "url": "https://patch.com/connecticut/windsor/windsor-keeps-flock-cameras-ct-first",
+      "date": "2026-07-15",
+      "lastVerified": "2026-10-08"
     }
   ]
 }

@@ -127,7 +127,10 @@ async function intersection(roads, place, state) {
 }
 async function roadGeo(road, place, state) { return (await roadWays(road, place, state)).map((w) => ({ geo: { type: "LineString", coordinates: w.geometry.map((p) => [p.lon, p.lat]) } })); }
 // ---- cameras -------------------------------------------------------------------------------------------------
-const camPath = process.argv[2];
+// Pinned snapshot: data/story/raw/cameras-us-hourly-2026-07-17.geojson (fetched by scripts/story/fetch.mjs; its
+// checksum is in data/story/manifest.json). Pass another path as the first argument to rebuild against it.
+const pinned = path.join(ROOT, "data/story/raw/cameras-us-hourly-2026-07-17.geojson");
+const camPath = process.argv[2] ?? (fs.existsSync(pinned) ? pinned : null);
 let geojson;
 if (camPath) geojson = JSON.parse(fs.readFileSync(camPath, "utf8"));
 else { const res = await fetch("https://data.dontgetflocked.com/cameras-us-hourly.geojson.gz", { headers: { "User-Agent": UA } }); geojson = await res.json(); }

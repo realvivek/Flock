@@ -59,6 +59,21 @@ for (const key of ["priceList", "included", "extra", "fees", "history", "workflo
   (econ[key] as { sources: string[] }[]).forEach((row, i) => need(`economics.${key}[${i}]`, row.sources));
 }
 
+// Figures computed by scripts/story/build.mjs: every number the story quotes carries the sources behind it.
+const pub = (f: string) => JSON.parse(readFileSync(new URL(`../public/data/${f}`, import.meta.url), "utf8"));
+for (const [k, v] of Object.entries(pub("story/stats.json") as Record<string, { sources?: string[] }>)) need(`stats.${k}`, v.sources);
+need("story meta", pub("story/meta.json").sources);
+for (const row of pub("story/completeness.json") as { place: string; sources: string[] }[]) need(`completeness ${row.place}`, row.sources);
+// The Outcomes page's built file: every `sources` list anywhere in it.
+(function walk(v: unknown, at: string): void {
+  if (Array.isArray(v)) { v.forEach((x, i) => walk(x, `${at}[${i}]`)); return; }
+  if (!v || typeof v !== "object") return;
+  for (const [k, x] of Object.entries(v)) {
+    if (k === "sources" && Array.isArray(x) && x.every((s) => typeof s === "string")) need(`outcomes${at}`, x as string[]);
+    else walk(x, `${at}.${k}`);
+  }
+})(pub("outcomes.json"), "");
+
 const stills = StillsFile.parse(read("stills.json"));
 const missingStills = stills.stills.filter((st) => !existsSync(new URL(`../public/${stills.dir}/${st.file}`, import.meta.url)));
 if (missingStills.length && !process.env.ALLOW_MISSING_STILLS) problems.push(`stills not rendered: ${missingStills.map((s) => s.id).join(", ")} (run npm run stills, or set ALLOW_MISSING_STILLS=1)`);

@@ -1,0 +1,134 @@
+{
+  "files": {
+    "cameras": {
+      "url": "https://tiles.dontgetflocked.com/cameras-us-hourly.pmtiles",
+      "file": "cameras-us-hourly.pmtiles",
+      "note": "OpenStreetMap surveillance nodes as published by DeFlock, ODbL",
+      "bytes": 49937451,
+      "sha256": "73a7d01e7a31b2259545c8c220a190fdcbba3a97cf31b1a2719ad4aeed8474ba",
+      "etag": "\"421c34ab56f492938f7576e31b24551f-6\"",
+      "lastModified": null,
+      "fetchedAt": "2026-10-08T12:00:00.034Z"
+    },
+    "counties": {
+      "url": "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_county_500k.zip",
+      "file": "cb_2024_us_county_500k.zip",
+      "note": "Census 2024 cartographic boundary, counties (Connecticut planning regions)",
+      "bytes": 11626066,
+      "sha256": "da4051717caec55c75e3748c3608c2a3dbde8d1ff401bbaf4f952e3c3fb63ef1",
+      "etag": null,
+      "lastModified": "Thu, 10 Apr 2025 16:26:02 GMT",
+      "fetchedAt": "2026-10-08T12:00:01.066Z"
+    },
+    "places": {
+      "url": "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_place_500k.zip",
+      "file": "cb_2024_us_place_500k.zip",
+      "note": "Census 2024 cartographic boundary, incorporated places",
+      "bytes": 22957701,
+      "sha256": "2be68094759b710979f41afd1996cf0132eec78350dfef45566a65478a6944b3",
+      "etag": null,
+      "lastModified": "Thu, 10 Apr 2025 16:25:56 GMT",
+      "fetchedAt": "2026-10-08T12:00:01.943Z"
+    },
+    "pop-states": {
+      "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/totals/NST-EST2024-ALLDATA.csv",
+      "file": "NST-EST2024-ALLDATA.csv",
+      "note": "Census Vintage 2024 state population estimates",
+      "bytes": 41378,
+      "sha256": "b8b50bd345d8a5f33d5c8a28c95aeaa0a50971356f000d9b48276a65fd9022a7",
+      "etag": null,
+      "lastModified": "Thu, 19 Dec 2024 13:35:06 GMT",
+      "fetchedAt": "2026-10-08T12:00:02.115Z"
+    },
+    "pop-counties": {
+      "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv",
+      "file": "co-est2024-alldata.csv",
+      "note": "Census Vintage 2024 county population estimates (Latin-1)",
+      "bytes": 1769182,
+      "sha256": "abcc8720d669e793bbfdcd440eeec37a78db3b452adbe4ccd1eadf7c72b522b9",
+      "etag": null,
+      "lastModified": "Thu, 13 Mar 2025 12:38:39 GMT",
+      "fetchedAt": "2026-10-08T12:00:02.189Z"
+    },
+    "roads-ga": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/PRISECROADS/tl_2024_13_prisecroads.zip",
+      "file": "tl_2024_13_prisecroads.zip",
+      "note": "TIGER 2024 primary and secondary roads, Georgia",
+      "bytes": 10101847,
+      "sha256": "30fe0d0216d40a396ffa8d870c244d5d7a2375c6c1bc12bc4f69a93415e3ff99",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:04:04 GMT",
+      "fetchedAt": "2026-10-08T12:00:02.426Z"
+    },
+    "roads-davidson": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/ROADS/tl_2024_47037_roads.zip",
+      "file": "tl_2024_47037_roads.zip",
+      "note": "TIGER 2024 roads, Davidson County TN (Nashville)",
+      "bytes": 3228491,
+      "sha256": "238c7b8a2dbc0b0fb12b85992b9923552f954bfb597817b48d9c6b3283904dd2",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:04:26 GMT",
+      "fetchedAt": "2026-10-08T12:00:02.571Z"
+    },
+    "roads-capitol": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/ROADS/tl_2024_09110_roads.zip",
+      "file": "tl_2024_09110_roads.zip",
+      "note": "TIGER 2024 roads, Capitol Planning Region CT (Windsor)",
+      "bytes": 5080248,
+      "sha256": "9640c42da86e1ab31698cb5649ed0300c991ddbc070ef290a3be38d5e6023a5c",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:04:10 GMT",
+      "fetchedAt": "2026-10-08T12:00:02.779Z"
+    },
+    "roads-pima": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/ROADS/tl_2024_04019_roads.zip",
+      "file": "tl_2024_04019_roads.zip",
+      "note": "TIGER 2024 roads, Pima County AZ (Tucson)",
+      "bytes": 9247195,
+      "sha256": "125979ef37ba345a80efcca5239d1aa2e4c2e41e3117fe0b336b7d700350a122",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:04:07 GMT",
+      "fetchedAt": "2026-10-08T12:00:02.974Z"
+    },
+    "roads-story": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/ROADS/tl_2024_19169_roads.zip",
+      "file": "tl_2024_19169_roads.zip",
+      "note": "TIGER 2024 roads, Story County IA",
+      "bytes": 820805,
+      "sha256": "a417e76326cf99ddcb0451415eadc9797d78fd5a4c901bde3798cf307c228602",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:04:14 GMT",
+      "fetchedAt": "2026-10-08T12:00:03.102Z"
+    },
+    "water-davidson": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/AREAWATER/tl_2024_47037_areawater.zip",
+      "file": "tl_2024_47037_areawater.zip",
+      "note": "TIGER 2024 area water, Davidson County TN",
+      "bytes": 141310,
+      "sha256": "30d0f3800df737e03152529e8f90891667b8143d2f7369e689ae8d1a9d902e1e",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:01:15 GMT",
+      "fetchedAt": "2026-10-08T12:00:03.165Z"
+    },
+    "water-capitol": {
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/AREAWATER/tl_2024_09110_areawater.zip",
+      "file": "tl_2024_09110_areawater.zip",
+      "note": "TIGER 2024 area water, Capitol Planning Region CT",
+      "bytes": 348161,
+      "sha256": "170107692c640e184cc35dd6849f24fc57f6f647619514a5ba8627a42057c9ff",
+      "etag": null,
+      "lastModified": "Fri, 27 Jun 2025 20:01:10 GMT",
+      "fetchedAt": "2026-10-08T12:00:03.272Z"
+    },
+    "cameras-july": {
+      "url": "https://data.dontgetflocked.com/cameras-us-hourly.geojson.gz",
+      "file": "cameras-us-hourly-2026-07-17.geojson",
+      "note": "The same data as one GeoJSON file; its latest edit is 17 July 2026 (the snapshot the Outcomes matches use)",
+      "bytes": 31126827,
+      "sha256": "b5c49b88609ebc445cc4c6436dae261f6d39c851f0a2dc347a2d5adb0109c91c",
+      "etag": "W/\"b714de0dde451221c037d7cbfcdfdd68-4\"",
+      "lastModified": null,
+      "fetchedAt": "2026-10-08T12:07:36.465Z"
+    }
+  }
+}
