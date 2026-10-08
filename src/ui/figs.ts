@@ -68,7 +68,7 @@ export function feesFigure(fees: Fee[], width: number): string {
   const x = linScale(0, 5000, L, W - R - (narrow ? 64 : 0));
   const ticks = [0, 1000, 2000, 3000, 4000, 5000];
   let out = g(ticks.map((t) => line(x(t), T - 4, x(t), T + rows.length * rowH)).join(""), { class: "grid" });
-  out += g(ticks.filter((t) => !narrow || t % 2000 === 0 || t === 5000).map((t) => text(x(t), T - 9, `$${int(t)}`, { "text-anchor": "middle" })).join(""), { class: "axis" });
+  out += g(ticks.filter((t) => !narrow || t % 2000 === 0 || t === 5000).map((t) => text(x(t), T - 9, `$${int(t)}`, { "text-anchor": t === 0 && narrow ? "start" : "middle" })).join(""), { class: "axis" });
   rows.forEach(({ f, v }, i) => {
     const y = T + i * rowH, by = narrow ? y + 20 : y + (rowH - barH) / 2, hi = i === 0;
     const plan = f.now.includes("$0 with") ? ", or $0 with the protection plan" : "";

@@ -38,6 +38,23 @@ export function apDate(iso: string, opts: { year?: boolean } = {}): string {
   return opts.year === false ? `${month} ${d}` : `${month} ${d}, ${y}`;
 }
 
+/** Periods written in data files as ISO dates, in AP style: "2025-08-01 to 2025-09-30" → "Aug. 1 to Sept. 30, 2025",
+ *  "2022-03 to 2022-11" → "March to November 2022", "12 months from 2024-05" → "12 months from May 2024". */
+export function apPeriod(p: string): string {
+  const full = p.match(/^(\d{4})-(\d{2})-(\d{2}) to (\d{4})-(\d{2})-(\d{2})$/);
+  if (full) {
+    const [, y1, , , y2] = full;
+    const a = `${y1}-${full[2]}-${full[3]}`, b = `${y2}-${full[5]}-${full[6]}`;
+    return y1 === y2 ? `${apDate(a, { year: false })} to ${apDate(b)}` : `${apDate(a)}, to ${apDate(b)}`;
+  }
+  const months = p.match(/^(\d{4})-(\d{2}) to (\d{4})-(\d{2})$/);
+  if (months) {
+    const [, y1, m1, y2, m2] = months;
+    return y1 === y2 ? `${MONTH_NAMES[Number(m1) - 1]} to ${MONTH_NAMES[Number(m2) - 1]} ${y1}` : `${apDate(`${y1}-${m1}`)} to ${apDate(`${y2}-${m2}`)}`;
+  }
+  return p.replace(/\b\d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}\b/g, (r) => apPeriod(r)).replace(/\b(\d{4}-\d{2}(?:-\d{2})?)\b/g, (d) => apDate(d));
+}
+
 /** Typographic apostrophes and quotes for text that comes from data files. */
 export const smart = (s: string): string => s.replace(/(\w)'(\w)/g, "$1’$2").replace(/'(\d0s)/g, "’$1").replace(/(^|[\s(])"/g, "$1“").replace(/"/g, "”").replace(/(^|[\s(])'/g, "$1‘").replace(/'/g, "’");
 

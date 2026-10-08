@@ -8,7 +8,7 @@ import { cite, escape } from "./ui/cite";
 import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
 import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
-import { tickWords, apState, apDate } from "./viz/format";
+import { tickWords, apState, apDate, apPeriod } from "./viz/format";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
 
@@ -98,7 +98,7 @@ function siteTable(d: Data, sites: SiteT[], key: string): HTMLElement {
     else if (key === "windsor") extra = `<td class="small">${((x.cases as { date: string; type: string }[]) ?? []).map((c) => `${c.date} ${escape(c.type)}`).join("; ") || "<span class=na>none named to this site</span>"}</td>`;
     const rungs = shown.map((c) => `<td class="rung">${fmt(s.values[c.k])}</td>`).join("");
     const cats = key === "story" ? Object.entries((x.categories as Record<string, number>) ?? {}).map(([k, n]) => `${n} ${escape(k.toLowerCase())}`).join(", ") : "";
-    const sub = key === "news" || key === "court" ? `<div class="small">${escape(s.city)}, ${escape(s.state)} · ${s.period ? `<span class="nw">${escape(s.period)}</span>` : "date not stated"}</div>` : cats ? `<div class="small">${cats}</div>` : "";
+    const sub = key === "news" || key === "court" ? `<div class="small">${escape(s.city)}, ${escape(s.state)} · ${s.period ? `<span class="nw">${escape(apPeriod(s.period))}</span>` : "date not stated"}</div>` : cats ? `<div class="small">${cats}</div>` : "";
     tr.innerHTML = `<td class="mono">${i + 1}</td><td class="site-label">${escape(s.label)}${sub}</td>${rungs}${extra}<td class="small">${matchText(s)}</td>`;
     tb.appendChild(tr);
   });
@@ -156,8 +156,8 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   const ov = el("figure", "fig ladder-ov");
   ov.innerHTML = `<figcaption class="fig-head"><h3 class="fig-title">Every rung each audit reports, on one scale</h3><p class="fig-sub">Counts per department, on a logarithmic scale. Hollow marks: reads and alerts from different windows, or readers of several makes.</p></figcaption><div class="fig-body"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`;
   ag.appendChild(ov);
-  const drawOv = () => { ov.querySelector(".fig-body")!.innerHTML = ladderOverview(d.ladders, Math.min(ov.clientWidth || 640, 760)); };
-  drawOv();
+  // drawn at the width it is shown at (once the section is in the page), so its labels keep their size on a phone
+  const drawOv = () => { ov.querySelector(".fig-body")!.innerHTML = ladderOverview(d.ladders, Math.max(300, Math.min(ov.clientWidth || 640, 760))); };
   let ovW = innerWidth; addEventListener("resize", () => { if (innerWidth !== ovW) { ovW = innerWidth; drawOv(); } });
   initTooltips(ov);
   const lw = el("div", "tablewrap"); const lt = el("table", "rung-table ladders");
@@ -165,11 +165,12 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   const ltb = el("tbody");
   for (const L of d.ladders) {
     const tr = el("tr", "ladder"); tr.id = `ladder-${L.id}`;
-    tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="mono small">${escape(L.period).replace(/(\d{4}-\d{2}(?:-\d{2})?)/g, '<span class="nw">$1</span>')}</td>${rungCells(L.values, { bars: true })}`;
+    tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="small">${escape(apPeriod(L.period))}</td>${rungCells(L.values, { bars: true })}`;
     ltb.appendChild(tr);
     const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows ? "" : rates(L.values)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
   }
   lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
+  drawOv();
   // National
   const ns = el("section", "source-block"); ns.id = "national";
   ns.innerHTML = `<div class="sec-head"><h2>National statements</h2><p class="lede small">Figures that describe the whole network rather than a place, tagged by who states them.</p></div>`;
@@ -226,23 +227,24 @@ const LADDER_RUNGS: { k: keyof V; label: string }[] = [{ k: "reads", label: "Pla
 /** One row per department, a dot per reported rung on a logarithmic scale, coloured light to dark down the ladder. */
 function ladderOverview(ladders: Data["ladders"], W: number): string {
   const rows = ladders.filter((L) => LADDER_RUNGS.filter((r) => L.values[r.k] != null).length >= 2);
-  const narrow = W < 560, LW = narrow ? 112 : 190, R = 14, T = 30, rowH = 36;
+  const narrow = W < 560, LW = narrow ? 138 : 190, R = 14, T = 30, rowH = 36;
   const x = logScale(1, 1e9, LW + 8, W - R);
   const dec = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
   let out = g(dec.map((v) => line(x(v), T - 6, x(v), T + rows.length * rowH)).join(""), { class: "grid" });
   // every power of 10 has a grid line; labels skip as many as the width needs
-  out += g(dec.filter((_, i) => i % (narrow ? 3 : 2) === 0).map((v) => text(x(v), T - 12, tickWords(v), { "text-anchor": "middle" })).join(""), { class: "axis" });
+  const shown = dec.filter((_, i) => i % (narrow ? 3 : 2) === 0);
+  out += g(shown.map((v, i) => text(x(v), T - 12, tickWords(v), { "text-anchor": i === shown.length - 1 && x(v) + 30 > W ? "end" : "middle" })).join(""), { class: "axis" });
   rows.forEach((L, i) => {
     const y = T + i * rowH + rowH / 2, hollow = !!(L.mixedWindows || L.vendorMix);
     out += line(0, y + rowH / 2, W, y + rowH / 2, { stroke: "var(--rule)" });
     const who = /Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : `${L.city}, ${apState(L.state)}`;
     out += text(LW - 4, y - 2, who, { "text-anchor": "end", "font-size": 12, "font-weight": 600, fill: "var(--ink)" });
-    out += text(LW - 4, y + 11, L.period.replace(/ \(.*\)/, ""), { "text-anchor": "end", "font-size": 10.5, fill: "var(--ink-3)" });
+    out += text(LW - 4, y + 11, apPeriod(L.period.replace(/ \(.*\)/, "")), { "text-anchor": "end", "font-size": 10.5, fill: "var(--ink-3)" });
     LADDER_RUNGS.forEach((r, k) => {
       const v = L.values[r.k];
       if (v == null) return;
       const mark = circle(x(v), y, 5.5, hollow ? { fill: "#fff", stroke: ORD[k], "stroke-width": 2.5 } : { fill: ORD[k], stroke: "#fff", "stroke-width": 1.5 });
-      out += tip(rect(x(v) - 9, y - 9, 18, 18, { fill: "transparent" }) + mark, v.toLocaleString("en-US"), `${L.agency}, ${L.period}: ${r.label.toLowerCase()}`);
+      out += tip(rect(x(v) - 9, y - 9, 18, 18, { fill: "transparent" }) + mark, v.toLocaleString("en-US"), `${L.agency}, ${apPeriod(L.period)}: ${r.label.toLowerCase()}`);
     });
   });
   return svg(W, T + rows.length * rowH + 4, out, { label: "Dot chart of the counts each department's audit reports, from plate reads to arrests, on a logarithmic scale." });
