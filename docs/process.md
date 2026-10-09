@@ -435,7 +435,7 @@ straight quotes in content text that the story's renderer would have curled.
 
 `src/content/pages.json` holds each page's kicker, headline, deck and opening figure. The headline states the
 page's main finding where the page has one ("Houston Has the Most Mapped Flock Cameras, and Texas Helped Pay
-for Thousands") and says plainly what the page holds where it does not ("The 14 Parts Inside a Flock Camera").
+for Thousands") and says plainly what the page holds where it does not ("The 14 Parts of a Flock Camera").
 Decks use the story's markup: Houston's count is a `{{stat}}` token that resolves against the built data, and
 a source is a link the build checks. The Vite plugin that prerenders the story writes each page's head, title,
 share tags and opening figure into its HTML, so the first screen reads without JavaScript, and the source
@@ -508,6 +508,16 @@ had to be swiped sideways and cut their notes off mid-sentence; they are now car
 verdict is "The record is mixed," defined on the page; Components got drawings of the mount, the power
 options and the field of view; and the Journey's sources show under each stop instead of in a tooltip.
 
+A second round followed the same way. The graphics critiques found one blocker on four pages: the tables under
+"Show the data" set each row's name as a column head, and the names stacked over the heads as the box scrolled.
+They also asked more of Outcomes. Its agency chart became the home page's ladder for all 12 departments that
+report two or more steps, with each count labeled. Its lead figure now names its unit (entries in published
+records of results), adds a state for entries placed at a camera on the named road, and says that five of the
+21 matches report a stop, a recovery or an arrest. Each city map became a figure with its own title, key and
+source line. The second fact-checks found that Flock's terms of Aug. 21, 2026, again say it will not sell
+customer data, which a figure and a claim had missed, and 14 bibliography dates that did not match the
+documents. Those and 18 smaller corrections are listed in the sixth table of `docs/fact-check.md`.
+
 ### Decisions
 
 - **The plate-cover claim stays.** "A plate cover or spray defeats it" is one of the 21 claims. The entry
@@ -527,7 +537,7 @@ options and the field of view; and the Journey's sources show under each stop in
 | What | Figure |
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
-| Commits | 55, Sept. 4 to Oct. 9, 2026 |
+| Commits | 67, Sept. 4 to Oct. 9, 2026 |
 | Bibliography rows | 182, tagged flock, independent, government or court |
 | Content files | 15 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
@@ -537,6 +547,6 @@ options and the field of view; and the Journey's sources show under each stop in
 | Mapped cameras, story | 143,929 readers, 115,437 Flock (Oct. 8, 2026) |
 | Mapped cameras, outcomes | 116,723 readers, 96,484 Flock (July 17, 2026, the snapshot the records were matched against) |
 | Outcome locations | 74 tied to fixed cameras, 55 placed, 21 within 150 m of a mapped camera |
-| Claims checked in the October fact-checks | about 250 on the home page, in two independent passes; every number on the eight reference pages, in two more |
-| Corrections from the reference pages' reviews | 22 in the fourth review, 39 in the fifth |
+| Claims checked in the October fact-checks | about 250 on the home page, in two independent passes; every number on the eight reference pages, in four more |
+| Corrections from the reference pages' reviews | 22 in the fourth review, 39 in the fifth, 20 in the sixth |
 | Home page weight before the first scroll | about 480 KB compressed, of which 13 KB JavaScript and 278 KB the map's camera file (`scripts/budget.mjs`) |
