@@ -6,6 +6,7 @@ import { icon } from "./ui/icons";
 import { ap } from "./viz/format";
 import { figCtx, figureCfg } from "./ui/figs";
 import { auditFigure, type Deputy } from "./story/fig/searches";
+import { mountDiagram, powerDiagram, fovDiagram } from "./story/fig/install";
 
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
 
@@ -14,16 +15,16 @@ export function buildPole(host: HTMLElement): void {
   for (const m of ["flock", "existing", "ac"] as const) {
     const mode = install.modes[m]!;
     const card = el("article", "card sheet");
-    card.innerHTML = `<figure><img src="${still(`pole-${m}`)}" alt="${escape(mode.label)}" loading="lazy" decoding="async" /></figure><h3>${escape(mode.label)}</h3>`;
+    card.innerHTML = `<figure class="card-fig">${mountDiagram(m, install.pole)}</figure><h3>${escape(mode.label)}</h3>`;
     facts(card, mode.facts);
     host.appendChild(card);
   }
   const c = install.coverage;
-  const fov = el("article", "card sheet wide");
-  fov.innerHTML = `<figure><img src="${still("falcon-side")}" alt="Falcon side view" loading="lazy" decoding="async" /></figure><h3>Field of view</h3>`;
-  kv(fov, [["Field of view", `${c.widthFt} ft wide at ${c.distFt} ft`], ["Range", `up to ${c.maxFt} ft, ${ap(c.lanes)} lanes, ${c.mph} mph`], ["Frames", `${c.framesPerVehicle} stills per vehicle`], ["Aims at", c.aims]]);
+  const fov = el("article", "card sheet wide fov");
+  fov.innerHTML = `<h3>What the camera sees</h3><figure class="card-fig">${fovDiagram(c)}</figure>`;
+  kv(fov, [["Field of view", `${c.widthFt} feet wide at ${c.distFt} feet`], ["Range", `Up to ${c.maxFt} feet across ${ap(c.lanes)} lanes, at speeds up to ${c.mph} miles an hour`], ["Photos", `${c.framesPerVehicle.charAt(0).toUpperCase()}${c.framesPerVehicle.slice(1)} of each passing vehicle`], ["Aimed at", c.aims]]);
   fov.appendChild(cite(c.sources));
-  p(fov, "Flock’s specification sheet gives the field of view at 65 feet; Flock’s product page gives a range of up to 100 feet.", "fine");
+  p(fov, "The field of view is from Flock’s specification sheet; the range, lanes and speed are from its product page. Drawn to scale; lanes are 12 feet wide.", "fine");
   host.appendChild(fov);
 }
 
@@ -31,7 +32,7 @@ export function buildPower(host: HTMLElement): void {
   for (const m of ["solar", "ac", "wing"] as const) {
     const path = install.paths[m]!;
     const card = el("article", "card sheet");
-    card.innerHTML = `<figure><img src="${still(m === "wing" ? "wing-closet" : m === "ac" ? "pole-ac" : "pole-flock")}" alt="${escape(path.label)}" loading="lazy" decoding="async" /></figure><h3>${escape(path.label)}</h3>`;
+    card.innerHTML = `<figure class="card-fig flow-fig">${powerDiagram(m)}</figure><h3>${escape(path.label)}</h3>`;
     p(card, path.summary);
     facts(card, path.facts);
     host.appendChild(card);

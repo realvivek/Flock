@@ -11,11 +11,13 @@
     "components": {
       "kicker": "Components",
       "title": "The 14 Parts Inside a Flock Camera",
-      "deck": "The Falcon is [8.75 inches tall](src:flock-techspecs) and weighs about 3 pounds. It reads plates with its own processor and sends each read over a cellular connection; it has no network cable. Select a part for its specification, part number and sources.",
+      "deck": "The Falcon’s case is [8.75 inches long](src:flock-techspecs) and weighs about 3 pounds. It reads plates with its own processor and sends each read over a cellular connection; it has no network cable.",
+      "lead": "parts",
+      "about": true,
       "jump": [
         {
           "href": "#components",
-          "label": "Components"
+          "label": "The parts"
         },
         {
           "href": "#pole",
@@ -24,6 +26,10 @@
         {
           "href": "#power",
           "label": "Power and network"
+        },
+        {
+          "href": "#about",
+          "label": "About the parts"
         }
       ]
     },

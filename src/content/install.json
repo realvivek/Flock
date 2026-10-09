@@ -50,46 +50,46 @@
   },
   "modes": {
     "flock": {
-      "label": "Flock breakaway pole, solar",
+      "label": "On Flock’s own pole, with solar power",
       "facts": [
         {
           "k": "Pole",
-          "v": "12 ft installed, 2.875 in OD, 6061 aluminum, 32 lb, DOT breakaway base",
+          "v": "Aluminum, 12 feet tall once installed, 2.875 inches across and 32 pounds; Flock calls it a “DOT breakaway pole”",
           "sources": [
             "flock-techspecs"
           ]
         },
         {
-          "k": "Set in",
-          "v": "Dirt, grass or loose gravel; Flock crews do not bore concrete or asphalt",
+          "k": "Where it goes",
+          "v": "In dirt, grass or loose gravel; Flock’s crews do not bore through concrete or asphalt",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
           "k": "Before digging",
-          "v": "811 utility locate; MUTCD traffic control by the Flock technician",
+          "v": "Buried lines are marked through the 811 call-before-you-dig service, and the Flock technician sets up traffic control under the federal work-zone manual (MUTCD)",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
-          "k": "Devices per pole",
-          "v": "One, when solar: a second panel shades the first",
+          "k": "Cameras per pole",
+          "v": "One on solar power: a second panel would shade the first",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
-          "k": "Panel",
-          "v": "Dual array 21.25 x 28 in, 18-20 V, 25.7 lb with hardware, pole-top mount",
+          "k": "Solar panels",
+          "v": "Two, 21.25 by 28 inches, 18 to 20 volts and 25.73 pounds with hardware, on top of the pole",
           "sources": [
             "flock-techspecs"
           ]
         },
         {
-          "k": "Install fee",
-          "v": "$350 to $650 a camera in 2022–23 contracts and quotes; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $750 to move a camera on a Flock pole",
+          "k": "Installation fee",
+          "v": "$350 to $650 a camera in contracts and quotes from 2022 and 2023. Flock’s 2026 schedule charges $1,000 when a customer changes the agreed plan, and $750 to move a camera on a Flock pole",
           "sources": [
             "richland-agreement-2023",
             "indio-2023",
@@ -99,39 +99,39 @@
       ]
     },
     "existing": {
-      "label": "Existing utility or light pole, solar",
+      "label": "On an existing pole, with solar power",
       "facts": [
         {
-          "k": "Mount height",
-          "v": "8 to 12 ft; access is a 14 ft A-frame ladder at most",
+          "k": "Mounting height",
+          "v": "8 to 12 feet; installers work from an A-frame ladder no taller than 14 feet",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
           "k": "Attachment",
-          "v": "Adjustable band clamps around the pole; side-of-pole solar bracket",
+          "v": "Adjustable band clamps around the pole, with the solar panels on a bracket at its side",
           "sources": [
             "flock-techspecs"
           ]
         },
         {
           "k": "Permits",
-          "v": "Occasionally required; customer pays filing fees; public works may weigh in on right-of-way",
+          "v": "Occasionally required; the customer pays the filing fees, and public works departments may weigh in on the right of way",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
-          "k": "DOT right-of-way",
-          "v": "NCHRP 350 or MASH-approved breakaway pole required",
+          "k": "On state roads",
+          "v": "Where a transportation department controls the right of way, it requires a breakaway pole approved under national crash-test standards (NCHRP 350 or MASH)",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
-          "k": "Install fee",
-          "v": "$150 a camera on existing infrastructure in a 2023 quote, $350 to $650 for a standard install in 2022–23 contracts and quotes; Flock's 2026 schedule charges $1,000 when a customer changes the agreed plan, and $350 to move a camera on an existing pole",
+          "k": "Installation fee",
+          "v": "$150 a camera on existing infrastructure in a 2023 quote, and $350 to $650 for a standard installation in contracts and quotes from 2022 and 2023. Flock’s 2026 schedule charges $1,000 when a customer changes the agreed plan, and $350 to move a camera on an existing pole",
           "sources": [
             "indio-2023",
             "richland-agreement-2023",
@@ -141,40 +141,40 @@
       ]
     },
     "ac": {
-      "label": "Existing pole, 120 V AC",
+      "label": "On an existing pole, wired to its power",
       "facts": [
         {
           "k": "Who wires it",
-          "v": "A licensed electrician the customer hires lands 120 V after Flock mounts the device",
+          "v": "An electrician the customer hires connects 120-volt power after Flock mounts the camera",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
           "k": "Flock supplies",
-          "v": "AC power kit and junction box with diagnostic indicator lights; replacement kit $150",
+          "v": "A power kit and a junction box with indicator lights for diagnosis; a replacement kit costs $150",
           "sources": [
             "flock-impl-guide",
             "flock-fee-schedule"
           ]
         },
         {
-          "k": "Devices per pole",
-          "v": "Two allowed on AC power",
+          "k": "Cameras per pole",
+          "v": "Two can share a pole on wired power",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
-          "k": "Customer responsibility",
-          "v": "Breaker and GFCI troubleshooting; Flock maintains the device side",
+          "k": "The customer handles",
+          "v": "The circuit breaker and the ground-fault protection (GFCI); Flock maintains its own equipment",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
           "k": "Bundles",
-          "v": "Intersection bundle: 4 Falcon AC + 2 Condor fixed AC, $15,000 per year",
+          "v": "An intersection bundle of four wired Falcons and two fixed Condor video cameras, listed at $15,000 a year in 2024",
           "sources": [
             "flock-catalog-2024"
           ]
@@ -355,19 +355,19 @@
   ],
   "paths": {
     "solar": {
-      "label": "Solar + battery",
-      "summary": "DC only. Panel to battery box, battery box to the camera's rear connector. No conductor reaches the ground.",
+      "label": "Solar panels and a battery",
+      "summary": "Direct current only: the panels charge a battery box, which powers the camera through its rear connector. No cable runs to the ground.",
       "facts": [
         {
-          "k": "Panel",
-          "v": "18-20 V dual array on the pole top",
+          "k": "Panels",
+          "v": "Two, 18 to 20 volts, on top of the pole or at its side",
           "sources": [
             "flock-techspecs"
           ]
         },
         {
           "k": "Battery",
-          "v": "10.8 V / 19 Ah lithium-ion in an external box; Bluetooth health telemetry",
+          "v": "A 10.8-volt lithium-ion pack of 19 amp-hours in its own box on the pole; it reports its condition over Bluetooth",
           "sources": [
             "cehrp-dissection",
             "ryanohoro-2024"
@@ -375,22 +375,22 @@
         },
         {
           "k": "Cables",
-          "v": "Panel-to-battery and battery-to-camera DC leads; billed as replacement cables at $50",
+          "v": "One from the panels to the battery and one from the battery to the camera; Flock bills $50 to replace them",
           "sources": [
             "flock-fee-schedule"
           ]
         },
         {
           "k": "Data",
-          "v": "No data conductor; all data is transmitted over LTE",
+          "v": "No cable carries data; the reads go out over the cellular network (LTE)",
           "sources": [
             "flock-techspecs",
             "cehrp-dissection"
           ]
         },
         {
-          "k": "Unknown",
-          "v": "Panel wattage, camera draw in watts, and battery runtime in days are not published",
+          "k": "Not published",
+          "v": "The panels’ wattage, how much power the camera draws and how many days the battery lasts",
           "sources": [
             "flock-techspecs"
           ]
@@ -398,33 +398,33 @@
       ]
     },
     "ac": {
-      "label": "120 V AC kit",
-      "summary": "Mains from the customer's supply into a Flock junction box, stepped down to DC for the same rear connector.",
+      "label": "Wired power",
+      "summary": "Power from the customer’s 120-volt supply goes into a Flock junction box, which converts it to direct current for the same rear connector.",
       "facts": [
         {
           "k": "Supply",
-          "v": "120 V AC, landed by the customer's licensed electrician",
+          "v": "120 volts AC, connected by the customer’s licensed electrician",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
           "k": "Junction box",
-          "v": "Flock-supplied, with indicator lights for diagnostics",
+          "v": "Supplied by Flock, with indicator lights for diagnosis",
           "sources": [
             "flock-impl-guide"
           ]
         },
         {
           "k": "Kit",
-          "v": "AC power kit $150 replacement; DC power kit also listed",
+          "v": "A replacement AC power kit costs $150; a DC kit is also listed",
           "sources": [
             "flock-fee-schedule"
           ]
         },
         {
-          "k": "Data path",
-          "v": "AC changes the power source; the uplink remains LTE",
+          "k": "Data",
+          "v": "Only the power source changes; the reads still go out over the cellular network",
           "sources": [
             "flock-techspecs"
           ]
@@ -432,34 +432,34 @@
       ]
     },
     "wing": {
-      "label": "Wing gateway · PoE · SFP",
-      "summary": "The configuration in which Ethernet, PoE and fiber are used. An agency's existing cameras stream RTSP to a Wing Gateway in the network closet, which runs the Vehicle Fingerprint models and forwards results to Flock's cloud.",
+      "label": "Wing, for an agency’s own cameras",
+      "summary": "The one setup that uses network cables and fiber. Video from cameras an agency already owns streams to a Wing gateway in its network closet, which reads plates, describes vehicles and sends the results to Flock’s cloud.",
       "facts": [
         {
           "k": "Gateway",
-          "v": "Wing Gateway 2.0: 8, 16 or 32 streams; $300 to $1,000 per year plus per-stream software",
+          "v": "Wing Gateway 2.0, for 8, 16 or 32 video streams; $300 to $1,000 a year, plus software for each stream",
           "sources": [
             "flock-catalog-2024",
             "flock-video-webinar"
           ]
         },
         {
-          "k": "Camera side",
-          "v": "Any RTSP camera on PoE; CAT6 to a PoE switch",
+          "k": "Cameras",
+          "v": "Any network camera that streams video in the common RTSP format, on a network cable that also carries its power (PoE)",
           "sources": [
             "flock-video-webinar",
             "flock-wing-2020"
           ]
         },
         {
-          "k": "Uplink",
-          "v": "Switch SFP port with a fiber or copper module to the closet; then the city's internet to Flock",
+          "k": "Link to the closet",
+          "v": "Fiber or copper from the switch, through a plug-in module (SFP); then the city’s internet to Flock",
           "sources": [
             "flock-video-webinar"
           ]
         },
         {
-          "k": "What Wing extracts",
+          "k": "What Wing records",
           "v": "Plate and state, or a missing plate; make, type and color; and features such as aftermarket wheels, a roof rack or a trailer hitch",
           "sources": [
             "flock-wing-2020"
@@ -467,7 +467,7 @@
         },
         {
           "k": "Also on the pole",
-          "v": "Condor video cameras use a Flock SIM or AC; solar Condor and Falcon can share one pole",
+          "v": "Condor video cameras run on a Flock SIM or on wired power; a solar Condor and a Falcon can share a pole",
           "sources": [
             "flock-catalog-2024",
             "police1-condor"

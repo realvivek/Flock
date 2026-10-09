@@ -7,7 +7,7 @@ import type { StoryInput, Stats, SourceRec } from "../../src/story/types.ts";
 import type { Deputy } from "../../src/story/fig/searches.ts";
 import type { Ctx } from "../../src/story/frame.ts";
 import { renderPageMeta, renderPageHead, asLead } from "../../src/story/pagehead.ts";
-import { citiesFigure, verdictIndex, originsFigure, type Myth } from "../../src/story/fig/reference.ts";
+import { citiesFigure, verdictIndex, originsFigure, partsFigure, type Myth } from "../../src/story/fig/reference.ts";
 import { rulerFigure } from "../../src/story/fig/ruler.ts";
 import { priceFigure } from "../../src/story/fig/money.ts";
 import { apDate, typeset } from "../../src/viz/format.ts";
@@ -81,13 +81,15 @@ export function renderPage(root: string, id: string): RenderedPage {
       case "verdicts": return verdictIndex(myths, ctx, { level: 2 });
       case "origins": return originsFigure(sources, ctx, { level: 2 });
       case "ruler": return asLead(rulerFigure(story.figures.ruler!, ctx));
+      case "parts": { const c = j("src/content/components.json"); return partsFigure(c.parts.length, [...new Set([...c.envelope.sources, "cehrp-dissection", "ryanohoro-2024", "flockcamre", "fccid-2bkg8"])], ctx, { level: 2 }); }
       default: throw new Error(`pages.json: unknown lead figure ${cfg.lead} on ${id}`);
     }
   })();
   return {
     meta: renderPageMeta(cfg, ctx),
     head: renderPageHead(cfg, ctx, updatedDate(base, sources)),
-    lead: lead ? `<div class="page-lead">${lead}</div>` : "",
+    // the parts explorer spans the page; the other opening figures keep the reading column
+    lead: lead ? `<div class="page-lead${cfg.lead === "parts" ? " is-wide" : ""}">${lead}</div>` : "",
     // the numbers client-rendered text may quote and the story figures it draws, for src/ui/figs.ts; "<" escaped so it
     // cannot close the tag
     data: JSON.stringify({ stats, figures: Object.fromEntries((PAGE_FIGURES[id] ?? []).map((f) => [f, story.figures[f]])) }).replace(/</g, "\\u003c"),

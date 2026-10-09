@@ -85,6 +85,20 @@ export function feesFigure(fees: Fee[], ctx: Ctx): string {
   return frame("fees", cfg("Moving a camera onto a highway pole costs the most", "Flock’s 2026 fees per camera for changes a customer requests after the deployment plan is agreed, and for replacements", srcs, ["* $0 for customers with Flock’s Camera Protection Plan, whose price is not published."]), ctx, draw(WIDE, false) + draw(NARROW, true));
 }
 
+/** The Components page's parts explorer, framed like the story's figures: the 3D locator (or the assembled still) beside
+ *  the parts grid, which the page script fills. */
+export function partsFigure(n: number, sources: string[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
+  const body = `<div class="components">
+<aside class="locator sheet" id="locator">
+<div class="locator-fig"><canvas id="locator-canvas" aria-label="The assembled camera, see-through" hidden></canvas><img id="locator-img" alt="The assembled Falcon camera" hidden /></div>
+<div class="locator-ui" id="locator-ui" hidden><div class="stage-row"><button type="button" class="chip" id="explode-prev" aria-label="Previous stage">‹</button><input id="explode-stage" type="range" min="0" max="5" value="0" step="1" aria-label="Explode stage" /><button type="button" class="chip" id="explode-next" aria-label="Next stage">›</button></div><p class="aim-readout" id="explode-readout"></p></div>
+<p class="locator-note" id="locator-note">In place. The shell is drawn see-through; a selected part is framed on its own.</p>
+</aside>
+<div id="knolling" class="knolling"></div>
+</div>`;
+  return frame("parts", cfg("Optics at the front, then a computer and three radios", `The ${n} parts of the Falcon V2, numbered from the front of the case. Select one for its specification, part number and sources; on a desktop, the 3D view frames it and the slider pulls the parts apart.`, sources, ["Illustration. The 3D view and the part images are drawn from these records by scripts, not photographed; inside the case, positions and sizes are approximate."]), ctx, body, { level: o.level, cls: "parts" });
+}
+
 export interface Myth { id: string; claim: string; verdict: "false" | "true" | "nuanced" }
 export const VERDICT = { false: "Not supported by the record", true: "Supported by the record", nuanced: "Depends on the product or setting" } as const;
 /** The claims as a row of squares by verdict, each linked to its entry; every claim cites its own sources. */

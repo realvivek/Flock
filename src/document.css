@@ -24,6 +24,7 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 /* the figure that opens a page: the reading column's width, its title an h2 */
 .page-lead { max-width: var(--col); margin: -.4rem 0 1.4rem; }
 .page-lead .fig { margin: 0; }
+.page-lead.is-wide { max-width: none; }
 .page-lead h2.fig-title { font: 700 1.0625rem/1.3 var(--sans); letter-spacing: 0; }
 /* a section of a reference page: the story's section type, a size smaller */
 .sec-title { margin: 0; font: 650 1.625rem/1.2 var(--serif); letter-spacing: -.006em; color: var(--ink); scroll-margin-top: calc(var(--topbar-h) + 1.5rem); }
@@ -142,7 +143,6 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .cell .txt { display: grid; gap: .15rem; min-width: 0; }
 .cell .n { font: 700 .6875rem/1 var(--sans); letter-spacing: .06em; color: var(--ink-3); }
 .cell .t { font: 600 .9375rem/1.25 var(--sans); }
-.cell .pn { font: 400 .6875rem/1.3 var(--mono); color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.2em; }
 .cell:hover img, .cell:focus-visible img { box-shadow: inset 0 0 0 1px var(--ink); }
 .cell:focus-visible { outline: none; }
 .cell.is-active img, .cell.is-active .thumb { box-shadow: inset 0 0 0 2px var(--amber); background: var(--amber-wash); }
@@ -165,6 +165,19 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .card figure img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .card h3 { margin: 0; font: 600 1.25rem/1.25 var(--serif); }
 .card p { margin: 0; }
+/* the cards' diagrams: drawn to the card's width, no tile behind them */
+.card figure.card-fig { aspect-ratio: auto; background: none; overflow: visible; }
+.card-fig svg { width: 100%; height: auto; display: block; }
+.card-fig svg.mount { max-width: 26rem; }
+.card-fig.flow-fig svg { max-width: 26rem; }
+.card.wide.fov { display: flex; flex-direction: column; gap: .8rem; }
+.card.wide.fov .card-fig { max-width: 600px; }
+.card.wide.fov .kv { max-width: var(--col); }
+/* the parts explorer, framed like a figure: its title and notes keep the reading column */
+.fig.parts > .fig-head, .fig.parts > .fig-foot { max-width: var(--col); }
+.fig.parts > .fig-body { margin-top: .4rem; }
+.about-parts { display: grid; gap: .8rem; max-width: var(--col); }
+.about-parts .lede-p { margin: 0; font: 400 1.0625rem/1.6 var(--serif); color: var(--ink-2); }
 
 /* ---- Data path: the pipeline beside the stages; a progress bar under the header on phones ---------------------- */
 .datapath { display: grid; grid-template-columns: 17.5rem minmax(0, 1fr); gap: 0 3rem; align-items: start; }
@@ -215,10 +228,14 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
   .components { grid-template-columns: 1fr; }
   .locator { position: static; display: grid; grid-template-columns: 12rem 1fr; align-items: center; gap: 1rem; }
   .locator-fig { aspect-ratio: 1; }
+  /* the still alone (phones, or no 3D): the camera at the width of the column, its caption below */
+  .locator.is-still { display: flex; flex-direction: column; align-items: stretch; gap: .5rem; max-width: 26rem; }
+  .locator.is-still .locator-fig { aspect-ratio: 10 / 11; }
 }
 @media (max-width: 800px) {
   main { gap: 2.4rem; padding-top: calc(var(--topbar-h) + 1.5rem); }
   .locator { grid-template-columns: 9rem 1fr; }
+  .locator.is-still { display: flex; }
   .cells { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem .6rem; }
   .cell img, .cell .thumb { height: 6.5rem; }
   .detail { grid-template-columns: 1fr; }

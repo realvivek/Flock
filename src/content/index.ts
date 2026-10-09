@@ -33,11 +33,11 @@ export const hopById = new Map(dataflow.hops.map((h) => [h.id, h]));
 
 /** Explode-stage labels shared by the desktop stage control and the phone deck. Index = stage 0..5. */
 export const EXPLODE_STAGES = [
-  { label: "Assembled", copy: "8.75 in tall, about 3 lb, band-clamped to the pole." },
+  { label: "Assembled", copy: "The case is 8.75 inches long and weighs about 3 pounds; band clamps hold it to the pole." },
   { label: "Bezel and ring", copy: "The bezel and the illuminator ring move forward." },
-  { label: "Optics", copy: "Lens, mechanical IR-cut filter and image sensor." },
-  { label: "Compute", copy: "System on module, storage and LTE module lifted from the mainboard." },
-  { label: "Radios", copy: "Wi-Fi and Bluetooth module, GPS patch and rear shell." },
+  { label: "Optics", copy: "The lens, the filter that switches between day and infrared light, and the image sensor." },
+  { label: "Compute", copy: "The processor module, the storage chip and the cellular modem lift off the mainboard." },
+  { label: "Radios", copy: "The Wi-Fi and Bluetooth module, the GPS antenna and the rear shell." },
   { label: "All parts", copy: "All 14 components, front to back." },
 ] as const;
 

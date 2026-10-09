@@ -35,19 +35,7 @@
     <main id="main">
       <!--page-head:components-->
       <section class="sec" id="components">
-        <h2 class="visually-hidden">The parts</h2>
         <!--page-lead:components-->
-        <div class="components">
-          <aside class="locator sheet" id="locator">
-            <figure class="locator-fig"><canvas id="locator-canvas" aria-label="The assembled camera, see-through" hidden></canvas><img id="locator-img" alt="The assembled Falcon camera" hidden /></figure>
-            <div class="locator-ui" id="locator-ui" hidden>
-              <div class="stage-row"><button type="button" class="chip" id="explode-prev" aria-label="Previous stage">‹</button><input id="explode-stage" type="range" min="0" max="5" value="0" step="1" aria-label="Explode stage" /><button type="button" class="chip" id="explode-next" aria-label="Next stage">›</button></div>
-              <p class="aim-readout" id="explode-readout"></p>
-            </div>
-            <p class="locator-note" id="locator-note">In place. The shell is drawn see-through; a selected part is framed on its own.</p>
-          </aside>
-          <div id="knolling" class="knolling"></div>
-        </div>
       </section>
       <section class="sec" id="pole">
         <div class="sec-head">
@@ -59,9 +47,13 @@
       <section class="sec" id="power">
         <div class="sec-head">
           <h2 class="sec-title">Power and network connections</h2>
-          <p class="lede">The Falcon has no wired network interface and is not a Power over Ethernet device. Fiber, SFP modules and PoE are used in one configuration, the Wing gateway, which ingests video from an agency’s existing cameras.</p>
+          <p class="lede">The Falcon has no network cable. It runs on solar power or on a pole’s electricity and sends its reads over a cellular connection. Network cables and fiber appear in one setup, the Wing gateway, which takes video from cameras an agency already owns.</p>
         </div>
         <div id="power-body" class="cards"></div>
+      </section>
+      <section class="sec" id="about">
+        <div class="sec-head"><h2 class="sec-title">About the parts</h2></div>
+        <div id="about-body" class="about-parts"></div>
       </section>
       <nav class="pager" id="pager" aria-label="Pages in order"></nav>
     </main>

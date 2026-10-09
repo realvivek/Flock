@@ -8,6 +8,7 @@ import { still, nn, el, scrollToEl, topbarHeight } from "./ui/common";
 import { BASE, ROOT } from "./lib/base";
 import { parseRoute, chapterFor } from "./router";
 import { state, set, subscribe } from "./store";
+import { smart } from "./viz/format";
 
 const confidenceLabel = { measured: "Measured or documented", estimated: "Estimated from the envelope", disputed: "Sources disagree" } as const;
 const parts = components.parts.slice().sort((a, b) => a.order - b.order);
@@ -20,7 +21,9 @@ function buildKnolling(host: HTMLElement): void {
     if (!members.length) continue;
     const group = el("div", `group g-${g.id}`);
     group.dataset.group = g.id;
-    group.innerHTML = `<div class="group-head"><span class="mono">${members.length === 1 ? nn(members[0]!.order) : `${nn(members[0]!.order)}–${nn(members[members.length - 1]!.order)}`}</span><h3>${escape(g.label)}</h3><span class="count">${members.length} part${members.length === 1 ? "" : "s"}</span></div>`;
+    const nums = members.map((m) => m.order), runs = nums.every((v, i) => i === 0 || v === nums[i - 1]! + 1);
+    const span = members.length === 1 ? nn(nums[0]!) : runs ? `${nn(nums[0]!)}–${nn(nums[nums.length - 1]!)}` : nums.map(nn).join(", ");
+    group.innerHTML = `<div class="group-head"><span class="mono">${span}</span><h3>${escape(g.label)}</h3><span class="count">${members.length} part${members.length === 1 ? "" : "s"}</span></div>`;
     const grid = el("div", "cells");
     grid.setAttribute("role", "list");
     for (const pt of members) {
@@ -30,7 +33,7 @@ function buildKnolling(host: HTMLElement): void {
       b.setAttribute("role", "listitem");
       b.setAttribute("aria-expanded", "false");
       const s = stillById.get(`part-${pt.id}`);
-      b.innerHTML = `${s ? `<img src="${BASE}${s}" alt="" loading="lazy" decoding="async" />` : `<span class="thumb"></span>`}<span class="txt"><span class="n">${nn(pt.order)}</span><span class="t">${escape(pt.name)}</span><span class="pn">${escape(pt.partNumber ?? "")}</span></span>`;
+      b.innerHTML = `${s ? `<img src="${BASE}${s}" alt="" loading="lazy" decoding="async" />` : `<span class="thumb"></span>`}<span class="txt"><span class="n">${nn(pt.order)}</span><span class="t">${escape(pt.name)}</span></span>`;
       b.addEventListener("click", () => set({ focusedPart: state.focusedPart === pt.id ? null : pt.id }));
       grid.appendChild(b);
       cells.set(pt.id, b);
@@ -56,7 +59,7 @@ function renderDetail(id: string | null): void {
     <div class="detail-body">
       <div class="mono">${nn(pt.order)} · ${escape(PART_GROUPS.find((g) => g.id === pt.group)?.label ?? pt.group)}</div>
       <h3>${escape(pt.name)}</h3>
-      ${pt.partNumber ? `<div class="pn">${escape(pt.partNumber)}${pt.vendor ? " · " + escape(pt.vendor) : ""}</div>` : ""}
+      ${pt.partNumber ? `<div class="pn">${escape(smart(pt.partNumber))}${pt.vendor ? " · " + escape(pt.vendor) : ""}</div>` : ""}
       <p>${escape(pt.function)}</p>
       <dl class="kv">${Object.entries(pt.spec).map(([k, v]) => `<dt>${escape(k)}</dt><dd>${escape(v)}</dd>`).join("")}</dl>
       <p class="fine">${confidenceLabel[pt.confidence]}${hop ? ` · <a href="${ROOT}data/#stage-${hop.n}">data stage ${nn(hop.n)}: ${escape(hop.title)}</a>` : ""}</p>
@@ -86,8 +89,9 @@ async function initLocator(): Promise<void> {
     console.warn("locator: stills", why);
     canvas.hidden = true; ui.hidden = true;
     img.classList.remove("is-poster");
-    img.src = still("explode-0"); img.hidden = false;
-    note.textContent = "The assembled camera. Select a part for its record.";
+    img.src = still("falcon-front"); img.alt = "The assembled Falcon camera, from the front"; img.hidden = false;
+    document.getElementById("locator")!.classList.add("is-still");
+    note.textContent = "The assembled camera, from the front: the lens in its ring of infrared lights, the motion sensor below. Select a part for its record.";
     status.textContent = "stills";
     set({ ready: true, mode: "stills" });
   };
@@ -137,8 +141,18 @@ function resolveHash(): void {
   } else location.replace(`${ROOT}${location.hash}`);
 }
 
+/** How the records were built and what their labels mean. */
+function buildAbout(host: HTMLElement): void {
+  host.innerHTML = `<p class="lede-p">Part names, part numbers and vendors come from three teardowns, by the Center for Human Rights and Privacy (April 2022), Ryan O’Horo (November 2024) and the FlockCamRE reverse-engineering project (2026), and from Federal Communications Commission records; the size and weight of the case are from Flock’s specification sheet. Each record carries one of these labels:</p>
+<dl class="verdict-defs"><dt>${confidenceLabel.measured}</dt><dd>From a specification sheet, or a teardown that shows the part number.</dd><dt>${confidenceLabel.disputed}</dt><dd>The teardowns or documents differ; the record gives each.</dd></dl>
+<p class="lede-p">The 3D view and the images of the parts are drawn from these records by scripts, not photographed. Where no dimension is published, a part is sized from the case and from photographs, so positions and sizes inside the case are approximate.</p>`;
+  host.appendChild(cite(["cehrp-dissection", "ryanohoro-2024", "flockcamre", "fccid-2bkg8", "flock-techspecs"], 5));
+}
+
 export function initComponentsPage(): void {
   buildKnolling(document.getElementById("knolling")!);
+  const about = document.getElementById("about-body");
+  if (about) buildAbout(about);
   subscribe((s, changed) => { if (changed.has("focusedPart")) renderDetail(s.focusedPart); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && state.focusedPart) set({ focusedPart: null }); });
   addEventListener("hashchange", resolveHash);
