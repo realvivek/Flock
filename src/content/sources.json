@@ -40,11 +40,11 @@
     {
       "id": "flock-fee-schedule",
       "kind": "flock",
-      "title": "Reinstall and Relocation Fee Schedule 2026: fees for changes a customer requests after the deployment plan is agreed (installation $1,000 to $1,250; relocation $350 to $5,000; replacements)",
+      "title": "Reinstall and Relocation Fee Schedule 2026 (fees for changes a customer requests after the deployment plan is agreed, and for replacements)",
       "publisher": "Flock Safety",
       "url": "https://www.flocksafety.com/reinstall-fee-schedule",
       "date": "2026",
-      "lastVerified": "2026-10-08"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-arch-2024",
@@ -835,7 +835,7 @@
       "title": "Village of Grafton, Wis., renewal memo: $500 per camera increase from January 2024",
       "publisher": "Village of Grafton",
       "url": "https://www.villageofgraftonwi.gov/DocumentCenter/View/26078/IFC---Flock-Safety-Renewal",
-      "date": "2024",
+      "date": "2023-11-29",
       "lastVerified": "2026-09-04"
     },
     {
@@ -962,7 +962,7 @@
       "publisher": "Sacra",
       "url": "https://sacra.com/c/flock-safety/",
       "date": "2026",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "deflocksc-greenville",
@@ -985,11 +985,20 @@
     {
       "id": "cardinal-roanoke-2026",
       "kind": "independent",
-      "title": "Roanoke pauses Raven audio device installs after devices placed at wrong locations (city data-entry error)",
+      "title": "Installation of Flock Raven audio devices paused in Roanoke after 30 installed in wrong locations",
       "publisher": "Cardinal News",
       "url": "https://cardinalnews.org/2026/06/24/installation-of-flock-raven-audio-devices-paused-in-roanoke-after-16-installed-in-wrong-locations/",
       "date": "2026-06-24",
       "lastVerified": "2026-09-04"
+    },
+    {
+      "id": "cardinal-roanoke-vote-2026",
+      "kind": "independent",
+      "title": "After complaints and mistakes, Roanoke City Council votes to discontinue gunshot audio devices",
+      "publisher": "Cardinal News",
+      "url": "https://cardinalnews.org/2026/07/06/after-complaints-and-mistakes-roanoke-city-council-votes-to-discontinue-gunshot-audio-devices/",
+      "date": "2026-07-06",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "404-narrative-2025",
@@ -1004,7 +1013,7 @@
       "id": "homedepot-8k-2026",
       "kind": "independent",
       "title": "The Home Depot, Form 8-K: results of the May 21, 2026, annual meeting (Proposal 8, report on customer data privacy risks: 62,948,880 for, 645,876,261 against)",
-      "publisher": "The Home Depot, via the Securities and Exchange Commission",
+      "publisher": "The Home Depot via the Securities and Exchange Commission",
       "url": "https://www.sec.gov/Archives/edgar/data/354950/000035495026000105/hd-20260521.htm",
       "date": "2026-05-26",
       "lastVerified": "2026-10-08"
@@ -1013,7 +1022,7 @@
       "id": "lowes-8k-2026",
       "kind": "independent",
       "title": "Lowe's Companies, Form 8-K: results of the May 29, 2026, annual meeting (Proposal 6, report on risks of sharing customer data with third parties: 38,182,128 for, 380,809,009 against)",
-      "publisher": "Lowe’s Companies, via the Securities and Exchange Commission",
+      "publisher": "Lowe’s Companies via the Securities and Exchange Commission",
       "url": "https://www.sec.gov/Archives/edgar/data/60667/000006066726000091/low-20260529.htm",
       "date": "2026-06-02",
       "lastVerified": "2026-10-08"
@@ -1052,7 +1061,7 @@
       "publisher": "USAspending.gov",
       "url": "https://www.usaspending.gov/recipient/4fbcf525-e991-fad8-2aaa-6a02c70053aa-C/latest",
       "date": "2026",
-      "lastVerified": "2026-09-06"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "usaspending-uspp-2025",
@@ -1061,7 +1070,7 @@
       "publisher": "Department of the Interior via USAspending.gov",
       "url": "https://www.usaspending.gov/award/CONT_AWD_140D0425P0230_1406_-NONE-_-NONE-",
       "date": "2025-09-25",
-      "lastVerified": "2026-09-06"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "usaspending-va-2023",
@@ -1070,7 +1079,7 @@
       "publisher": "Department of Veterans Affairs via USAspending.gov",
       "url": "https://www.usaspending.gov/award/CONT_AWD_36C25023P1216_3600_-NONE-_-NONE-",
       "date": "2023-07-02",
-      "lastVerified": "2026-09-06"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "usaspending-va-2025",
@@ -1079,7 +1088,7 @@
       "publisher": "Department of Veterans Affairs via USAspending.gov",
       "url": "https://www.usaspending.gov/award/CONT_AWD_36C25025P1681_3600_-NONE-_-NONE-",
       "date": "2025-09-18",
-      "lastVerified": "2026-09-06"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "texastribune-dps-2026",
@@ -1143,6 +1152,15 @@
       "url": "https://www.fox4news.com/news/dpd-chief-flock",
       "date": "2026-09-30",
       "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "govtech-dallas-2025",
+      "kind": "independent",
+      "title": "How Dallas uses hundreds of license plate reading cameras",
+      "publisher": "The Dallas Morning News via Government Technology",
+      "url": "https://www.govtech.com/public-safety/how-dallas-uses-hundreds-of-license-plate-reading-cameras",
+      "date": "2025-12-01",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "govtech-dallas-2026",
@@ -1584,6 +1602,15 @@
       "url": "https://www.census.gov/programs-surveys/popest/data/tables.html",
       "date": "2025-03",
       "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "census-places-pop-2024",
+      "kind": "government",
+      "title": "Annual estimates of the resident population for incorporated places, Vintage 2024 (SUB-EST2024)",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/cities/totals/sub-est2024.csv",
+      "date": "2025-05",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "census-boundaries-2024",

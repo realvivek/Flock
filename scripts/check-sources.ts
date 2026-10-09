@@ -54,7 +54,7 @@ for (const key of ["records", "contracts", "funding", "unknowns"] as const) {
 
 const econ = EconomicsFile.parse(read("economics.json"));
 need("economics.intro", econ.intro.sources);
-for (const key of ["priceList", "included", "extra", "fees", "history", "workflow", "workforce", "permitting", "contract", "scale", "unknowns", "pricedPole"] as const) {
+for (const key of ["priceList", "included", "extra", "fees", "history", "workflow", "workforce", "permitting", "contract", "termsChanges", "scale", "unknowns", "pricedPole"] as const) {
   (econ[key] as { sources: string[] }[]).forEach((row, i) => need(`economics.${key}[${i}]`, row.sources));
 }
 

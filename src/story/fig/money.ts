@@ -14,7 +14,7 @@ const GREENVILLE = { date: "2019-12", price: 182, what: "Greenville, S.C., pilot
 const POINTS: PricePoint[] = [
   { date: "2022-09", price: 2500, what: "Richland, Wash., order form: 10 cameras", kind: "contract" },
   { date: "2023-10", price: 2500, what: "Indio, Calif.: $2,500 offered for a five-year term", kind: "contract" },
-  { date: "2024-04", price: 2500, what: "Greenville renewal, 50 cameras", kind: "contract" },
+  { date: "2024-04", price: 2500, what: "Greenville, S.C., third year, 50 cameras", kind: "contract" },
   { date: "2024-05", price: 3000, what: "Virginia Sheriffs’ Association catalog list price", kind: "list" },
   { date: "2025-06", price: 3000, what: "Park Ridge, Ill., invoice", kind: "contract" },
 ];
@@ -46,22 +46,25 @@ export function priceFigure(cfg: FigureCfg, ctx: Ctx): string {
     out += circle(L + (narrow ? 140 : 160), lg - 4, 4.5, { fill: "var(--ink)" }) + text(L + (narrow ? 150 : 170), lg, "Price list", { "font-size": 12 });
     return svg(W, lg + 8, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Chart of the annual price per Flock camera from 2022 to 2026: $2,500 in contracts and quotes from 2022 and 2023, and a list price of $3,000 since Jan. 1, 2024." });
   };
-  const table = dataTable(["Date", "Price per camera per year", "Record"], [GREENVILLE, ...POINTS].map((p) => [apDate(p.date), p.price, p.what]).concat([["Jan. 1, 2024", "$3,000", "List price, up $500 (Grafton, Wis., village memo)"]]) as (string | number)[][], { text: [2] });
+  // every price in dollars, in date order, the list-price change among them
+  const rows = [GREENVILLE, ...POINTS, { date: "2024-01-01", price: 3000, what: "List price, up $500 (Grafton, Wis., village memo)", kind: "list" as const }].sort((a, b) => a.date.localeCompare(b.date));
+  const table = dataTable(["Date", "Price per camera per year", "Record"], rows.map((p) => [apDate(p.date), `$${int(p.price)}`, p.what]), { text: [2] });
   return frame("price", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }
 
 interface Contract { who: string; total: number; years: number; approved: string; note: string; upTo?: boolean }
 const CONTRACTS: Contract[] = [
-  { who: "Dallas", total: 5_700_000, years: 3, approved: "May 2025", note: "$1.7 million from a state grant" },
+  { who: "Dallas", total: 5_700_000, years: 3, approved: "May 2025", note: "nearly $1.7 million from a state grant" },
   { who: "Houston", total: 6_400_000, years: 5, approved: "August 2022", note: "318 cameras", upTo: true },
   { who: "Johnson City, Tenn.", total: 8_063_000, years: 10, approved: "July 2025", note: "with video cameras and gunshot detection" },
-  { who: "Smyrna, Ga.", total: 5_700_000, years: 10, approved: "December 2025", note: "75 more plate readers and two drones" },
+  { who: "Smyrna, Ga.", total: 5_700_000, years: 10, approved: "December 2025", note: "plate readers, live video cameras, a trailer and two drones" },
   { who: "Huntington, W.Va.", total: 2_100_000, years: 5, approved: "July 2026", note: "with video cameras, drones, gunshot detection" },
   { who: "Rhode Island State Police", total: 597_000, years: 3, approved: "reported July 2026", note: "39 cameras" },
 ];
 const money = (n: number) => (n >= 1e6 ? `$${(Math.round(n / 1e5) / 10).toString()} million` : `$${int(Math.round(n / 1000) * 1000)}`);
 
-export function contractsFigure(cfg: FigureCfg, ctx: Ctx): string {
+/** `table: false` leaves out the data table where the page lists the same contracts in full below the chart. */
+export function contractsFigure(cfg: FigureCfg, ctx: Ctx, o: { table?: boolean } = {}): string {
   const rows = CONTRACTS.map((c) => ({ ...c, perYear: c.total / c.years })).sort((a, b) => b.perYear - a.perYear);
   const max = rows[0]!.perYear;
   const draw = (W: number, narrow: boolean) => {
@@ -91,8 +94,8 @@ export function contractsFigure(cfg: FigureCfg, ctx: Ctx): string {
     ...CONTRACTS.map((c) => [c.who, `${c.upTo ? "Up to " : ""}${money(c.total)}`, `${ap(c.years)} years`, c.approved, c.note]),
     ["Texas Department of Public Safety", "$26 million", "not stated", "2025", "state roads; not charted because its term was not reported"],
     ["El Paso", "$702,500 state grant", "from May 2025", "2025", "about 150 cameras; use halted after Aug. 27, 2026, and the council later voted to remove them"],
-    ["Oklahoma City", "about $270,000", "not stated", "Aug. 18, 2026", "approved 5 to 3"],
+    ["Oklahoma City", "about $270,000", "through June 30, 2027", "Aug. 18, 2026", "approved 5 to 3"],
     ["Greenville, S.C.", "$2,000 a year", "pilot", "December 2019", "11 cameras"],
   ], { text: [1, 2, 3, 4] });
-  return frame("contracts", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
+  return frame("contracts", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), o.table === false ? {} : { table });
 }

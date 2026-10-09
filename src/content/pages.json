@@ -4,7 +4,7 @@
     "deployments": {
       "kicker": "Deployments and contracts",
       "title": "Houston Has the Most Mapped Flock Cameras, and Texas Helped Pay for Thousands",
-      "deck": "Volunteers have mapped {{topCity.flock}} Flock cameras inside Houston’s city limits, more than in any other U.S. city. In Texas, at least $30 million from [a $1 fee on auto insurance policies](src:texastribune-abbott-2026) helped state and local agencies install at least 3,200 of the company’s cameras before the governor paused state funding on Aug. 27.",
+      "deck": "Volunteers have mapped {{topCity.flock}} Flock cameras inside Houston’s city limits, more than in any other U.S. city, though several smaller cities have more per resident. In Texas, at least $30 million from [a $1 fee on auto insurance policies](src:texastribune-abbott-2026) helped state and local agencies install at least 3,200 of the company’s cameras before the governor paused state funding on Aug. 27.",
       "lead": "cities",
       "about": true
     },

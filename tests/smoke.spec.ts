@@ -249,7 +249,9 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await page.locator(".sections a", { hasText: "Economics" }).click();
   await page.waitForURL(/\/economics\/$/, { waitUntil: "commit" });
   await ready(page);
-  await expect(page.locator("#page-body .inset img")).toHaveAttribute("src", /pole-flock\.webp$/);
+  // the 2026 terms figure and the list prices, which read as rows on a phone
+  await expect(page.locator("#fig-terms .terms-row").first()).toBeVisible();
+  await expect(page.locator("#econ-prices .pl-row")).toHaveCount(13);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   // every header link, Home included, sits inside the fixed header on a phone; scrolling does not move it
   await page.evaluate(() => scrollTo(0, 1200));

@@ -11,28 +11,35 @@ import type { FigureCfg } from "../schema.ts";
 
 const cfg = (title: string, sub: string, srcs: string[], notes: string[] = []): FigureCfg => ({ title, sub, notes, sources: srcs });
 
-export interface City { name: string; usps: string; flock: number }
-/** Mapped Flock cameras inside city limits: the 15 largest counts as bars, all of them in the data table. */
+export interface City { name: string; usps: string; flock: number; pop?: number | null; per100k?: number | null }
+/** Mapped Flock cameras inside city limits: the 15 largest counts as bars, each with the number per 100,000 residents
+ *  in a column at the right; all 25 in the data table. */
 export function citiesFigure(rows: City[], snapshot: string, ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
   const list = rows.slice(0, 15), max = list[0]!.flock;
+  const rate = (c: City) => (c.per100k == null ? "" : String(Math.round(c.per100k)));
   const draw = (W: number, narrow: boolean) => {
-    const L = narrow ? 118 : 168, R = narrow ? 44 : 56, T = 22, rowH = 24, barH = 11;
-    const x = linScale(0, max * 1.02, L, W - R);
+    const L = narrow ? 118 : 168, R = narrow ? 40 : 56, RW = narrow ? 44 : 72, T = 22, rowH = 24, barH = 11;
+    const x = linScale(0, max * 1.02, L, W - R - RW);
     const ticks = niceTicks(max, narrow ? 3 : 4).filter((t) => t <= max);
     let out = g(ticks.map((t) => line(x(t), T - 4, x(t), T + list.length * rowH)).join(""), { class: "grid" });
     out += g(ticks.map((t) => text(x(t), T - 9, int(t), { "text-anchor": "middle" })).join(""), { class: "axis" });
+    // the rate column: cameras per 100,000 residents, for the scale of each city
+    out += text(W - 2, T - 9, narrow ? "Per 100,000" : "Per 100,000 residents", { "text-anchor": "end", "font-size": 12, fill: "var(--ink-3)" });
     list.forEach((c, i) => {
       const y = T + i * rowH, hi = i === 0;
-      out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + text(L - 8, y + rowH / 2 + 4, placeName(c.name, c.usps), { "text-anchor": "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" }) + hbar(x(0), y + (rowH - barH) / 2, x(c.flock) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(c.flock) + 5, y + rowH / 2 + 4, int(c.flock), { "font-size": 12, "font-weight": hi ? 700 : 500, fill: "var(--ink)" }), `${int(c.flock)} mapped Flock cameras`, placeName(c.name, c.usps));
+      out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + text(L - 8, y + rowH / 2 + 4, placeName(c.name, c.usps), { "text-anchor": "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" }) + hbar(x(0), y + (rowH - barH) / 2, x(c.flock) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(c.flock) + 5, y + rowH / 2 + 4, int(c.flock), { "font-size": 12, "font-weight": hi ? 700 : 500, fill: "var(--ink)" }) + text(W - 2, y + rowH / 2 + 4, rate(c), { "text-anchor": "end", "font-size": 12, fill: "var(--ink-2)", "font-variant-numeric": "tabular-nums" }), `${int(c.flock)} mapped Flock cameras${c.per100k == null ? "" : `, ${rate(c)} per 100,000 residents`}`, placeName(c.name, c.usps));
     });
     out += line(x(0), T - 4, x(0), T + list.length * rowH, { class: "baseline" });
     return svg(W, T + list.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of mapped Flock cameras inside city limits: ${list[0]!.name} has the most, ${int(max)}.` });
   };
-  const table = dataTable(["City", "Mapped Flock cameras"], rows.map((c) => [placeName(c.name, c.usps), c.flock]), { caption: "Mapped Flock cameras inside city limits" });
+  const table = dataTable(["City", "Mapped Flock cameras", "Population, 2024", "Per 100,000 residents"], rows.map((c) => [placeName(c.name, c.usps), c.flock, c.pop ?? null, c.per100k ?? null]), { caption: "Mapped Flock cameras inside city limits" });
+  // the cities in the table with more cameras per resident than the one with the most cameras
+  const denser = rows.filter((c) => c.per100k != null && list[0]!.per100k != null && c.per100k > list[0]!.per100k).sort((a, b) => b.per100k! - a.per100k!);
   // the takeaway the headline does not already give: how far ahead the first city is
   const ratio = list[0]!.flock / list[1]!.flock;
   const title = ratio >= 2 ? `${list[0]!.name} has more than twice as many mapped Flock cameras as any other city` : `${list[0]!.name} has the most mapped Flock cameras of any city`;
-  return frame("cities", cfg(title, `Flock cameras mapped inside city limits as of ${snapshot}, the 15 largest counts`, ["deflock-tiles-2026", "census-boundaries-2024"], ["Inside each city’s 2024 Census boundary. Mapped counts include cameras run by businesses, homeowner groups and state police inside city limits, and miss any camera no volunteer has tagged."]), ctx, draw(WIDE, false) + draw(NARROW, true), { table, level: o.level });
+  const per = denser.length ? `Among the ${rows.length} cities in the table, ${denser.map((c) => c.name).slice(0, -1).join(", ")}${denser.length > 1 ? " and " : ""}${denser[denser.length - 1]!.name} have more mapped Flock cameras per resident than ${list[0]!.name}. ` : "";
+  return frame("cities", cfg(title, `Flock cameras mapped inside city limits as of ${snapshot}: the 15 largest counts, and the number per 100,000 residents`, ["deflock-tiles-2026", "census-boundaries-2024", "census-places-pop-2024"], [`${per}Counts are inside each city’s 2024 Census boundary, and population is the Census Bureau’s estimate for 2024. Mapped counts include cameras run by businesses, homeowner groups and state police inside city limits, and miss any camera no volunteer has tagged.`]), ctx, draw(WIDE, false) + draw(NARROW, true), { table, level: o.level });
 }
 
 /** Texas: the $1 fee, the grants, the cameras, the governor's order and the switch-offs; Dallas's 684 cameras as squares. */
@@ -48,14 +55,14 @@ export function texasFigure(ctx: Ctx): string {
   // Dallas: 684 cameras, 321 of them paid for by state grants
   const n = 684, off = 321;
   const unit = (narrow: boolean) => {
-    const cols = narrow ? 24 : 38, s = narrow ? 12 : 13, gap = 2;
+    const cols = narrow ? 30 : 38, s = narrow ? 9 : 13, gap = 2;
     let sq = "";
     for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols); sq += rect(c * (s + gap), r * (s + gap), s, s, { rx: 1.5, class: i < off ? "c-hi" : "c-ctx2" }); }
     const rows = Math.ceil(n / cols), W = cols * (s + gap) - gap, H = rows * (s + gap) - gap;
-    return svg(W, H, sq, { cls: `unit ${narrow ? "v-narrow" : "v-wide"}`, label: "684 squares, one per Dallas camera; 321 of them are marked as the cameras paid for by state grants, which the department planned to switch off in September and then kept on." });
+    return svg(W, H, sq, { cls: `unit ${narrow ? "v-narrow" : "v-wide"}`, label: "684 squares, one per Dallas camera; 321 of them, nearly half, are marked as the cameras paid for by the state grant." });
   };
-  const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 paid for by state grants: to be switched off, then kept on for at least 90 days</span><span><i class="c-ctx2-bg"></i>363 others</span></div>`;
-  const f2 = frame("dallas", cfg("Dallas planned to switch off its 321 grant-funded cameras, then kept them on", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. On Sept. 30 the department said the grant-funded cameras would stay on for at least 90 days; The Texas Tribune reported that Flock paused the city’s payments for them."]), ctx, unit(false) + unit(true) + key);
+  const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 paid for by the state grant</span><span><i class="c-ctx2-bg"></i>363 others</span></div>`;
+  const f2 = frame("dallas", cfg("Nearly half of Dallas’s 684 cameras were paid for by the state grant Texas paused", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2025", "govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. On Sept. 1, the department said it would switch off the 321 grant-funded cameras; on Sept. 30 it said they would stay on for at least 90 days, and The Texas Tribune reported that Flock had paused the city’s payments for them."]), ctx, unit(false) + unit(true) + key);
   return f1 + f2;
 }
 
@@ -64,6 +71,8 @@ const dollars = (v: string) => { const m = v.replace(/,/g, "").match(/\$(\d+)/);
 /** Flock's 2026 schedule of fees for changes after installation, largest first. Rows priced per part (Flex) stay in
  *  the table. */
 export function feesFigure(fees: Fee[], ctx: Ctx): string {
+  // every row of the schedule in the table, the parts priced for the Falcon Flex included
+  const table = dataTable(["Fee", "2026 schedule"], fees.map((f) => [f.item, f.now]), { text: [1], caption: "Flock’s 2026 fee schedule" });
   const rows = fees.map((f) => ({ f, v: dollars(f.now) })).filter((r) => r.v != null && !r.f.now.includes("/")).sort((a, b) => b.v! - a.v!) as { f: Fee; v: number }[];
   const draw = (W: number, narrow: boolean) => {
     const L = narrow ? 0 : 250, R = narrow ? 8 : 70, T = narrow ? 2 : 22, rowH = narrow ? 44 : 26, barH = 11;
@@ -71,18 +80,21 @@ export function feesFigure(fees: Fee[], ctx: Ctx): string {
     const ticks = [0, 1000, 2000, 3000, 4000, 5000];
     // on a phone the labels sit above the bars and every bar carries its value, so the grid would only cross the labels
     let out = narrow ? "" : g(ticks.map((t) => line(x(t), T - 4, x(t), T + rows.length * rowH)).join(""), { class: "grid" }) + g(ticks.map((t) => text(x(t), T - 9, `$${int(t)}`, { "text-anchor": "middle" })).join(""), { class: "axis" });
+    const top = Math.max(...rows.map((r) => r.v));
     rows.forEach(({ f, v }, i) => {
-      const y = T + i * rowH, by = narrow ? y + 20 : y + (rowH - barH) / 2, hi = i === 0;
+      // the dearest fees, tied, are marked together
+      const y = T + i * rowH, by = narrow ? y + 20 : y + (rowH - barH) / 2, hi = v === top;
       const plan = f.now.includes("$0 with") ? ", or $0 with the protection plan" : "";
       const short = f.item.replace(" after vandalism, theft or damage", "").replace(" or existing infrastructure", "");
       const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, short, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
       out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(v) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(v) + 6, by + barH - 1, `$${int(v)}${plan ? "*" : ""}`, { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `$${int(v)}${plan}`, f.item);
     });
     if (!narrow) out += line(x(0), T - 4, x(0), T + rows.length * rowH, { class: "baseline" });
-    return svg(W, T + rows.length * rowH + 6, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of Flock's 2026 fees for changes after installation: moving a camera onto an advanced or DOT pole costs $5,000, the most; installing a camera at the customer's request costs $1,000 to $1,250.` });
+    return svg(W, T + rows.length * rowH + 6, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of Flock's 2026 fees for changes after installation: moving a camera to an advanced pole, or replacing an advanced pole, costs $5,000, the most; installing a camera at the customer's request costs $1,000 to $1,250.` });
   };
   const srcs = [...new Set(rows.flatMap((r) => r.f.sources))];
-  return frame("fees", cfg("Moving a camera onto a highway pole costs the most", "Flock’s 2026 fees per camera for changes a customer requests after the deployment plan is agreed, and for replacements", srcs, ["* $0 for customers with Flock’s Camera Protection Plan, whose price is not published."]), ctx, draw(WIDE, false) + draw(NARROW, true));
+  const lo = Math.min(...rows.map((r) => r.v)), hi = Math.max(...rows.map((r) => r.v));
+  return frame("fees", cfg(`After the plan is agreed, changes and replacements cost $${int(lo)} to $${int(hi)} a camera`, "Flock’s 2026 fees per camera for changes a customer requests after the deployment plan is agreed, and for replacements after vandalism, theft or damage", srcs, ["* $0 for customers with Flock’s Camera Protection Plan, whose price is not published. The schedule does not say what makes a pole “advanced.”"]), ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }
 
 /** The Components page's parts explorer, framed like the story's figures: the 3D locator (or the assembled still) beside
@@ -97,6 +109,14 @@ export function partsFigure(n: number, sources: string[], ctx: Ctx, o: { level?:
 <div id="knolling" class="knolling"></div>
 </div>`;
   return frame("parts", cfg("Optics at the front, then a computer and three radios", `The ${n} parts of the Falcon V2, numbered from the front of the case. Select one for its specification, part number and sources; on a desktop, the 3D view frames it and the slider pulls the parts apart.`, sources, ["Illustration. The 3D view and the part images are drawn from these records by scripts, not photographed; inside the case, positions and sizes are approximate."]), ctx, body, { level: o.level, cls: "parts" });
+}
+
+export interface Row { k: string; v: string; sources: string[] }
+/** Flock's 2026 terms for customers: what changed, one line each, framed like a figure. */
+export function termsFigure(rows: Row[], ctx: Ctx): string {
+  const list = `<dl class="terms">${rows.map((r) => `<div class="terms-row"><dt>${escape(r.k)}</dt><dd>${escape(r.v)}.</dd></div>`).join("")}</dl>`;
+  const srcs = [...new Set([...rows.flatMap((r) => r.sources), "flock-tc-update-2026", "flock-myths"])];
+  return frame("terms", cfg("Flock’s 2026 terms no longer say it will not sell customer data", "What changed in Flock’s standard terms for customers in 2026, as Footnote 4a and the A.C.L.U. compared them with the earlier terms, and as contracts from 2023 give the earlier rules", srcs, ["Flock says it has never sold customer data and describes the February changes as a clarification of its definitions."]), ctx, list);
 }
 
 export interface Myth { id: string; claim: string; verdict: "false" | "true" | "nuanced" }

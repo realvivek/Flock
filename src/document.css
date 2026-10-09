@@ -65,9 +65,9 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .inset figcaption h3 { margin: 0 0 .5rem; font: 700 1.0625rem/1.3 var(--sans); }
 .timeline { display: grid; border-top: 1px solid var(--rule); }
 .tl { display: grid; grid-template-columns: 6.5rem 10rem 1fr; gap: .8rem; font: 400 .875rem/1.45 var(--sans); padding: .6rem 0; border-bottom: 1px solid var(--rule); }
-.tl .d { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-.tl .p { font-weight: 600; color: var(--amber-ink); }
-.tl .n { color: var(--ink-2); }
+.tl > .d { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tl > .p { font-weight: 600; color: var(--ink); }
+.tl > .n { color: var(--ink-2); }
 .tl .cite { margin-top: .2rem; }
 .article .tablewrap.products table { min-width: 36rem; }
 .article .tablewrap.contracts table { font-size: .8125rem; }
@@ -400,7 +400,6 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 /* What the fee covers: the two lists side by side */
 .covers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; max-width: 46rem; }
 .article .covers-col h3 { margin: 0; padding-bottom: .45rem; border-bottom: 2px solid var(--ink); font: 700 .75rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); }
-.article .covers-out h3 { border-bottom-color: var(--amber); }
 .covers ul { list-style: none; margin: 0; padding: 0; }
 .covers li { padding: .6rem 0; border-bottom: 1px solid var(--rule); font: 400 .9375rem/1.45 var(--sans); color: var(--ink-2); }
 .covers li b { display: block; color: var(--ink); font-weight: 650; }
@@ -423,3 +422,17 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .vi-sq.v-nuanced { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink-3); }
 .vi-sq:hover, .vi-sq:focus-visible { outline: 2px solid var(--amber); outline-offset: 1px; }
 .article .fig-title { font: 700 1.0625rem/1.3 var(--sans); margin: 0; }
+
+/* Economics: the 2026 changes to Flock's terms, one row each; list prices as a short table that stays a table */
+.terms { display: grid; margin: 0; border-top: 1px solid var(--ink); }
+.terms-row { display: grid; grid-template-columns: 10.5rem minmax(0, 1fr); gap: .3rem 1.2rem; padding: .65rem 0; border-bottom: 1px solid var(--rule); }
+.terms dt { font: 700 .875rem/1.45 var(--sans); color: var(--ink); }
+.terms dd { margin: 0; font: 400 1.0625rem/1.5 var(--serif); color: var(--ink-2); }
+@media (max-width: 640px) { .terms-row { grid-template-columns: 1fr; } }
+.plist { display: grid; border-top: 1px solid var(--ink); max-width: var(--col); }
+.pl-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .2rem 1.2rem; align-items: start; padding: .6rem 0; border-bottom: 1px solid var(--rule); }
+.pl-item { display: grid; gap: .1rem; min-width: 0; }
+.pl-name { font: 600 .9375rem/1.4 var(--sans); color: var(--ink); }
+.pl-term { font: 400 .8125rem/1.4 var(--sans); color: var(--ink-3); }
+.pl-item .cite { margin-top: .15rem; }
+.pl-price { font: 600 .9375rem/1.4 var(--sans); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; max-width: 11rem; }

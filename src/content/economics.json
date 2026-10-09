@@ -1,12 +1,12 @@
 {
   "$comment": "Pricing, fee schedules, installation workflow, workforce, permitting, contract terms and company scale for a Flock deployment. Every row cites sources.json. Prices are per unit per year unless stated.",
   "intro": {
-    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage and software. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
+    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Contracts and city staff reports itemize what the annual fee covers: the camera, pole, solar panel, cellular data, cloud storage and software. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
     "sources": [
       "flock-catalog-2024",
-      "parkridge-2025",
-      "indio-2023",
       "flock-fee-schedule",
+      "indio-2023",
+      "parkridge-2025",
       "richland-agreement-2023"
     ]
   },
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "item": "Falcon LR, long range for highways",
+      "item": "Falcon Long-Range, for highways",
       "sku": "Falcon_Highway",
       "price": "$5,000",
       "term": "per year",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "item": "Condor video camera, PTZ or fixed, Flock SIM",
+      "item": "Condor video camera, pan-tilt-zoom or fixed, on Flock’s cellular service",
       "sku": "FLCK-CONDOR",
       "price": "$3,000",
       "term": "per year",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "item": "Wing LPR on a customer's existing camera",
+      "item": "Wing plate reading on a customer’s existing camera",
       "sku": "FLCK-WINGLPR",
       "price": "$1,500",
       "term": "per year",
@@ -142,8 +142,9 @@
     },
     {
       "k": "Connectivity",
-      "v": "Cellular data on AT&T or T-Mobile",
+      "v": "Cellular data for each camera",
       "sources": [
+        "indio-2023",
         "flock-impl-guide"
       ]
     },
@@ -192,7 +193,7 @@
     },
     {
       "k": "Permits",
-      "v": "Permit application fees, engineering drawings, contractor licensing, DOT-approved or MASH poles",
+      "v": "Permit application fees, engineering drawings, contractor licensing, and poles approved under crash-test standards where a transportation department requires them",
       "sources": [
         "flock-impl-guide",
         "richland-agreement-2023"
@@ -200,14 +201,14 @@
     },
     {
       "k": "Traffic control and lifts",
-      "v": "Bucket trucks, lane closures, MUTCD traffic control plans",
+      "v": "Bucket trucks for mounts above 14 feet, lane closures and traffic control plans beyond the standard setup",
       "sources": [
         "flock-impl-guide"
       ]
     },
     {
       "k": "Loss, theft, damage",
-      "v": "Replacement camera $800, pole $500, panel $350, or $0 with a Camera Protection Plan whose price is not published",
+      "v": "Replacement camera $800, Flock pole $500, advanced pole $5,000, solar panel $350; all but the advanced pole $0 with a Camera Protection Plan, whose price is not published",
       "sources": [
         "flock-fee-schedule",
         "richland-agreement-2023"
@@ -215,14 +216,14 @@
     },
     {
       "k": "Moves",
-      "v": "Relocation $350 on an existing pole, $750 on a Flock pole, $5,000 on a DOT pole; technician visit $350",
+      "v": "Relocation $350 on an existing pole, $750 on a Flock pole, $5,000 on an advanced pole; technician visit $350",
       "sources": [
         "flock-fee-schedule"
       ]
     },
     {
       "k": "Early termination",
-      "v": "Contracts from 2023 and earlier: $500 removal fee per unit for termination for convenience; the 2026 terms remove the general termination-for-convenience right",
+      "v": "A $500 removal fee per camera under contracts from 2023 and earlier, which allowed ending the contract for convenience",
       "sources": [
         "richland-agreement-2023",
         "bsquare-monroe",
@@ -260,7 +261,7 @@
       ]
     },
     {
-      "item": "Relocation, advanced or DOT pole",
+      "item": "Relocation, advanced pole",
       "now": "$5,000",
       "sources": [
         "flock-fee-schedule"
@@ -281,6 +282,13 @@
       ]
     },
     {
+      "item": "Advanced pole replacement",
+      "now": "$5,000",
+      "sources": [
+        "flock-fee-schedule"
+      ]
+    },
+    {
       "item": "Solar panel replacement",
       "now": "$350, or $0 with plan",
       "sources": [
@@ -295,7 +303,7 @@
       ]
     },
     {
-      "item": "Flex parts: camera / battery / panel / power kit / cables",
+      "item": "Falcon Flex parts: camera / battery / solar panel / power kit / cables",
       "now": "$800 / $750 / $500 / $150 / $50",
       "sources": [
         "flock-fee-schedule"
@@ -345,8 +353,8 @@
     },
     {
       "date": "April 2024",
-      "price": "$2,500, termination fee $500",
-      "note": "Greenville renewal, 50 cameras; the termination fee was $200 in 2019",
+      "price": "$2,500",
+      "note": "Greenville, third year, 50 cameras; the termination fee had risen to $500 by 2023, from $200 in 2019",
       "sources": [
         "deflocksc-greenville"
       ]
@@ -366,14 +374,6 @@
       "sources": [
         "parkridge-2025"
       ]
-    },
-    {
-      "date": "2026",
-      "price": "$1,000 to $1,250 to install",
-      "note": "Flock's 2026 fee schedule, for installs the customer requests after the deployment plan is agreed; contracts and quotes from 2022 and 2023 list a one-time install fee of $350 to $650",
-      "sources": [
-        "flock-fee-schedule"
-      ]
     }
   ],
   "workflow": [
@@ -389,7 +389,7 @@
     },
     {
       "step": "Contract",
-      "flock": "Proceeds on non-permit sites; historically a 10-location minimum for a partial install",
+      "flock": "Proceeds on sites that need no permit",
       "customer": "Signs; starts permit applications; gets an electrician quote for AC sites",
       "other": "",
       "sources": [
@@ -427,8 +427,8 @@
     },
     {
       "step": "Traffic control",
-      "flock": "Standard MUTCD control by the technician",
-      "customer": "Provides a patrol escort or pays for full traffic control; custom plans can double the cost",
+      "flock": "Standard traffic control by the technician, under the federal work-zone manual (MUTCD)",
+      "customer": "Pays for traffic control beyond the standard setup",
       "other": "Lane closure approval",
       "sources": [
         "flock-impl-guide"
@@ -436,8 +436,8 @@
     },
     {
       "step": "Install",
-      "flock": "Field Operations technician or an approved third-party technician sets the pole, panel and camera and aims it",
-      "customer": "Pays for a bucket truck when the mount is above about 15 ft",
+      "flock": "A Flock technician or an approved third-party technician sets the pole, panel and camera and aims it",
+      "customer": "Pays for a bucket truck when the mount is above 14 feet",
       "other": "",
       "sources": [
         "flock-impl-guide",
@@ -448,7 +448,7 @@
     {
       "step": "AC power",
       "flock": "Supplies the kit; verifies power remotely while the electrician is on site",
-      "customer": "Hires, pays and carries liability for the electrician; must finish within two days of install",
+      "customer": "Hires, pays and carries liability for the electrician",
       "other": "Electrician wires 120 V to code",
       "sources": [
         "flock-impl-guide"
@@ -465,7 +465,7 @@
     },
     {
       "step": "Ongoing",
-      "flock": "Maintains its equipment; bills moves and non-defect replacements per the fee schedule",
+      "flock": "Maintains its equipment; bills moves and non-defect replacements according to the fee schedule",
       "customer": "Pays for relocations, losses, electrical faults and outage downtime",
       "other": "",
       "sources": [
@@ -477,9 +477,8 @@
   "workforce": [
     {
       "k": "In-house",
-      "v": "A Field Operations team of traveling technicians, organized in at least three regions, doing new installs and maintenance about half and half; postings list $55,000 to $65,000",
+      "v": "Traveling field technicians install and maintain the cameras and may travel up to half the time, according to a Flock job posting, which lists pay of $55,000 to $65,000",
       "sources": [
-        "flock-impl-guide",
         "flock-field-tech-job"
       ]
     },
@@ -497,13 +496,6 @@
       "v": "Falcon Flex is customer-installed with no on-site service; its contract term commences at signature rather than validation",
       "sources": [
         "richland-agreement-2023"
-      ]
-    },
-    {
-      "k": "Timeline",
-      "v": "Installs typically complete six to eight weeks after locations are final; permitting can add two months or more",
-      "sources": [
-        "flock-impl-guide"
       ]
     },
     {
@@ -570,9 +562,10 @@
       "scenario": "Approved location list",
       "permit": "Council-approved location list",
       "who": "Customer supplies it",
-      "note": "Roanoke, Va.: 30 of 41 Raven audio sensors were installed at locations not on the approved list after a city data-entry error; the city later canceled the program",
+      "note": "Roanoke, Va.: 30 of the 41 Raven audio sensors installed were at locations not on the approved list, after a city data-entry error; on July 6, 2026, the City Council voted unanimously to end the program",
       "sources": [
-        "cardinal-roanoke-2026"
+        "cardinal-roanoke-2026",
+        "cardinal-roanoke-vote-2026"
       ]
     }
   ],
@@ -586,7 +579,7 @@
     },
     {
       "k": "At the end",
-      "v": "Contracts from 2023 and earlier specify removal within six months of termination; the 2026 terms specify “a commercially reasonable time.” In Verona, Wis., cameras stayed up for months after the contract ended; in Evanston, Ill., Flock reinstalled cameras after the city ended its contract; and in Cambridge, Mass., Flock installed two after the city ordered its cameras taken down",
+      "v": "Contracts from 2023 and earlier specify removal within six months of expiration, or within “a commercially reasonable period of time” after a termination for convenience; the 2026 terms specify “a commercially reasonable time.” In Verona, Wis., cameras stayed up for months after the contract ended; in Evanston, Ill., Flock reinstalled cameras after the city ended its contract; and in Cambridge, Mass., Flock installed two after the city ordered its cameras taken down",
       "sources": [
         "richland-agreement-2023",
         "flock-tc-2026",
@@ -619,15 +612,6 @@
       ]
     },
     {
-      "k": "February 2026 changes",
-      "v": "The sentence “Flock does not own and shall not sell Customer Data” was deleted, the data license became perpetual and product-improvement scoped, disputes moved to Georgia arbitration, the gross-negligence carve-out left the liability cap, and the non-appropriation exit was narrowed",
-      "sources": [
-        "footnote4a-terms-2026",
-        "aclu-terms",
-        "flock-tc-update-2026"
-      ]
-    },
-    {
       "k": "Cooperative purchasing",
       "v": "OMNIA, Sourcewell, Texas DIR and similar cooperative contracts provide an exemption from competitive bidding under state procurement rules; a Park Ridge sole-source memo states that “all of our neighboring communities are in the Flock system”",
       "sources": [
@@ -650,7 +634,7 @@
       "k": "Customers",
       "v": "Police departments, sheriffs, homeowner associations and businesses. Home Depot and Lowe's have Flock cameras in their parking lots; 2026 shareholder proposals asked both to report on the privacy risks of sharing customer data, including images from those cameras, and both boards recommended voting no",
       "sources": [
-        "wikipedia-flock",
+        "flock-lpr-products",
         "prospect-retail-2026"
       ]
     },
@@ -663,17 +647,9 @@
     },
     {
       "k": "Valuation",
-      "v": "$7.5 billion in 2025, $8.4 billion in April 2026; about $1 billion raised in total",
+      "v": "$7.5 billion in September 2025 and $8.4 billion in April 2026, according to Sacra; more than $1 billion raised in total",
       "sources": [
-        "sacra-flock",
-        "wikipedia-flock"
-      ]
-    },
-    {
-      "k": "People",
-      "v": "About 1,500 employees in 2025",
-      "sources": [
-        "wikipedia-flock"
+        "sacra-flock"
       ]
     },
     {
@@ -688,7 +664,7 @@
     },
     {
       "k": "Sales channel",
-      "v": "Direct sales to individual agencies and communities; 404 Media published a Flock guide for police on presenting the product to councils; Flock offers pilot programs and grant-writing assistance",
+      "v": "Direct sales to individual agencies and communities. 404 Media published a Flock guide for police on presenting the product to councils, and Flock's own guide to funding lists ways agencies pay for cameras, from asset forfeiture funds to federal grants",
       "sources": [
         "404-narrative-2025",
         "flock-funding-blog"
@@ -831,6 +807,54 @@
       "dx": 180,
       "dy": 18,
       "sources": [
+        "richland-agreement-2023",
+        "bsquare-monroe"
+      ]
+    }
+  ],
+  "termsChanges": [
+    {
+      "k": "Selling customer data",
+      "v": "The sentence “Flock does not own and shall not sell Customer Data” was deleted",
+      "sources": [
+        "footnote4a-terms-2026",
+        "aclu-terms"
+      ]
+    },
+    {
+      "k": "Using customer data",
+      "v": "Flock’s license to use customer data became perpetual, scoped to improving its products",
+      "sources": [
+        "footnote4a-terms-2026",
+        "aclu-terms"
+      ]
+    },
+    {
+      "k": "Disputes",
+      "v": "Disputes go to arbitration in Georgia",
+      "sources": [
+        "footnote4a-terms-2026"
+      ]
+    },
+    {
+      "k": "Liability",
+      "v": "Gross negligence no longer falls outside the cap on Flock’s liability",
+      "sources": [
+        "footnote4a-terms-2026"
+      ]
+    },
+    {
+      "k": "Funding lapses",
+      "v": "The customer’s way out when its government does not appropriate the money was narrowed",
+      "sources": [
+        "footnote4a-terms-2026"
+      ]
+    },
+    {
+      "k": "Leaving early",
+      "v": "No general right to end the contract for convenience; contracts from 2023 and earlier allowed it, with a $500 removal fee per camera",
+      "sources": [
+        "flock-tc-2026",
         "richland-agreement-2023",
         "bsquare-monroe"
       ]

@@ -19,6 +19,7 @@ export const INPUTS = [
   { id: "places", url: `${CENSUS}/geo/tiger/GENZ2024/shp/cb_2024_us_place_500k.zip`, file: "cb_2024_us_place_500k.zip", note: "Census 2024 cartographic boundary, incorporated places" },
   { id: "pop-states", url: `${CENSUS}/programs-surveys/popest/datasets/2020-2024/state/totals/NST-EST2024-ALLDATA.csv`, file: "NST-EST2024-ALLDATA.csv", note: "Census Vintage 2024 state population estimates" },
   { id: "pop-counties", url: `${CENSUS}/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv`, file: "co-est2024-alldata.csv", note: "Census Vintage 2024 county population estimates (Latin-1)" },
+  { id: "pop-places", url: `${CENSUS}/programs-surveys/popest/datasets/2020-2024/cities/totals/sub-est2024.csv`, file: "sub-est2024.csv", note: "Census Vintage 2024 population estimates for incorporated places (Latin-1)" },
   { id: "roads-ga", url: `${CENSUS}/geo/tiger/TIGER2024/PRISECROADS/tl_2024_13_prisecroads.zip`, file: "tl_2024_13_prisecroads.zip", note: "TIGER 2024 primary and secondary roads, Georgia" },
   { id: "roads-davidson", url: `${CENSUS}/geo/tiger/TIGER2024/ROADS/tl_2024_47037_roads.zip`, file: "tl_2024_47037_roads.zip", note: "TIGER 2024 roads, Davidson County TN (Nashville)" },
   { id: "roads-capitol", url: `${CENSUS}/geo/tiger/TIGER2024/ROADS/tl_2024_09110_roads.zip`, file: "tl_2024_09110_roads.zip", note: "TIGER 2024 roads, Capitol Planning Region CT (Windsor)" },

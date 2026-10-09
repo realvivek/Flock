@@ -129,6 +129,16 @@
       "etag": "W/\"b714de0dde451221c037d7cbfcdfdd68-4\"",
       "lastModified": null,
       "fetchedAt": "2026-10-08T12:07:36.465Z"
+    },
+    "pop-places": {
+      "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/cities/totals/sub-est2024.csv",
+      "file": "sub-est2024.csv",
+      "note": "Census Vintage 2024 population estimates for incorporated places (Latin-1)",
+      "bytes": 7087080,
+      "sha256": "af9cd4835c93552a2161fc88bf4d7aa31e81b4f16f7457980b95295cf91e49e9",
+      "etag": null,
+      "lastModified": "Thu, 15 May 2025 12:15:26 GMT",
+      "fetchedAt": "2026-10-09T08:48:31.218Z"
     }
   }
 }

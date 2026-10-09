@@ -358,8 +358,10 @@ const byPlace = new Map();
 for (const c of flockCams) { const g = placeIdx.find(c.lon, c.lat); if (g) byPlace.set(g, (byPlace.get(g) ?? 0) + 1); }
 // Census names consolidated governments by their legal form ("Indianapolis city (balance)"); keep the city's name.
 const cleanPlace = (n) => n.replace(/ \(balance\)$/, "").replace(/ city$/, "").replace(/[-/][A-Z][A-Za-z ]* (metropolitan|metro|unified|consolidated) government$/, "").replace(/^Lexington-Fayette$/, "Lexington");
-const cities = [...byPlace.entries()].sort((a, b) => b[1] - a[1]).slice(0, 25).map(([g, n]) => ({ geoid: g, name: cleanPlace(placeById.get(g).NAME), usps: placeById.get(g).STUSPS, flock: n }));
-write(OUT, "cities.json", { snapshot: snapshot.slice(0, 10), sources: ["deflock-tiles-2026", "census-boundaries-2024"], rows: cities });
+// Each place's Vintage 2024 population, for the cameras per 100,000 residents beside each count
+const popPlace = new Map(csv("sub-est2024.csv", "latin1").filter((r) => r.SUMLEV === "162").map((r) => [r.STATE + r.PLACE, +r.POPESTIMATE2024]));
+const cities = [...byPlace.entries()].sort((a, b) => b[1] - a[1]).slice(0, 25).map(([g, n]) => { const pop = popPlace.get(g) ?? null; return { geoid: g, name: cleanPlace(placeById.get(g).NAME), usps: placeById.get(g).STUSPS, flock: n, pop, per100k: pop ? Math.round(n / pop * 1e6) / 10 : null }; });
+write(OUT, "cities.json", { snapshot: snapshot.slice(0, 10), sources: ["deflock-tiles-2026", "census-boundaries-2024", "census-places-pop-2024"], rows: cities });
 log("cities:", cities.slice(0, 10).map((c) => `${c.name} ${c.usps} ${c.flock}`).join("; "));
 const completeness = WANT.map((w, i) => ({ place: w.name === "Lexington-Fayette" ? "Lexington" : w.name, usps: w.usps, published: w.published, when: w.when, what: w.what, sources: w.sources, ...(wantIds[i] ? (placeCounts.get(wantIds[i]) ?? { mapped: 0, police: 0, other: 0, untagged: 0 }) : { mapped: null }) }));
 write(OUT, "completeness.json", completeness);

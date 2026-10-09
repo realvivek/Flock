@@ -67,6 +67,7 @@ export const EconomicsFile = z.object({
   workforce: z.array(Row),
   permitting: z.array(z.object({ scenario: z.string(), permit: z.string(), who: z.string(), note: z.string(), sources: ids })),
   contract: z.array(Row),
+  termsChanges: z.array(Row),
   scale: z.array(Row),
   unknowns: z.array(z.object({ v: z.string(), sources: ids })),
   pricedPole: z.array(z.object({ id: z.string(), anchor: z.tuple([z.number(), z.number(), z.number()]), k: z.string(), v: z.string(), dx: z.number(), dy: z.number(), sources: ids })),

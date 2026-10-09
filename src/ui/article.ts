@@ -5,7 +5,7 @@ import { apDate, apState } from "../viz/format";
 import { initTooltips } from "../viz/tooltip";
 import { texasFigure, feesFigure, figCtx, figureCfg } from "./figs";
 import { contractsFigure } from "../story/fig/money";
-import { SOURCE_KINDS, VERDICT, VERDICT_DEF } from "../story/fig/reference";
+import { SOURCE_KINDS, VERDICT, VERDICT_DEF, termsFigure } from "../story/fig/reference";
 
 /**
  * Article renderers shared by the desktop acts 5 to 7 and the phone stepper.
@@ -66,6 +66,20 @@ export function rows(host: HTMLElement, list: { k: string; v: string; sources: s
     wrap.appendChild(d);
   }
   host.appendChild(wrap);
+}
+
+/** A price list that reads the same on a phone: each item with its unit under it and its source, the price at the right. */
+export function priceList(host: HTMLElement, body: { item: string; price: string; term: string; sources: string[] }[]): void {
+  const list = el("div", "plist");
+  list.setAttribute("role", "list");
+  for (const r of body) {
+    const row = el("div", "pl-row");
+    row.setAttribute("role", "listitem");
+    row.innerHTML = `<div class="pl-item"><span class="pl-name">${escape(r.item)}</span><span class="pl-term">${escape(r.term)}</span></div><div class="pl-price">${escape(r.price)}</div>`;
+    row.querySelector(".pl-item")!.appendChild(cite(r.sources, 1));
+    list.appendChild(row);
+  }
+  host.appendChild(list);
 }
 
 export function table(host: HTMLElement, head: string[], body: { cells: string[]; num?: number[]; sources: string[] }[]): void {
@@ -178,38 +192,16 @@ export function renderEconomics(host: HTMLElement): void {
         two.appendChild(col);
       }
       h.appendChild(two);
-      // the priced pole: the still with the fee attached to each element
-      const fig = el("figure", "inset");
-      const img = document.createElement("img");
-      img.src = `${BASE}${stillById.get("pole-flock") ?? ""}`;
-      img.alt = "Flock pole with camera, solar panel and battery box";
-      img.loading = "lazy";
-      img.decoding = "async";
-      fig.appendChild(img);
-      const cap = el("figcaption");
-      cap.appendChild(el("h3", undefined, "What each part of a camera costs"));
-      rows(cap, e.pricedPole.map((p) => ({ k: p.k, v: p.v, sources: p.sources })));
-      fig.appendChild(cap);
-      h.appendChild(fig);
     } },
-    { id: "econ-fees", title: "Fees after installation", fine: "Flock’s Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure.",
-      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, figCtx())); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
-    { id: "econ-prices", title: "List prices", fine: "Virginia Sheriffs’ Association catalog, May 2024, matching 2025 invoices. Per unit per year.",
-      render: (h) => table(h, ["Item", "Price", "Term"], e.priceList.map((p) => ({ cells: [p.item + (p.sku ? ` (${p.sku})` : ""), p.price, p.term], num: [1], sources: p.sources }))) },
-    { id: "econ-history", title: "Price history", render: (h) => {
-      const tl = el("div", "timeline");
-      for (const r of e.history) {
-        const d = el("div", "tl");
-        d.innerHTML = `<span class="d">${escape(r.date)}</span><span class="p">${escape(r.price)}</span><span class="n">${escape(r.note)}</span>`;
-        d.querySelector(".n")!.appendChild(cite(r.sources, 1));
-        tl.appendChild(d);
-      }
-      h.appendChild(tl);
-    } },
-    { id: "econ-contract", title: "Ownership and contract terms", render: (h) => rows(h, e.contract) },
+    // the 2026 changes first, then the terms they changed
+    { id: "econ-contract", title: "Ownership and contract terms", render: (h) => { h.insertAdjacentHTML("beforeend", termsFigure(e.termsChanges, figCtx())); rows(h, e.contract); } },
+    { id: "econ-fees", title: "Fees after installation", fine: "Flock’s Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage.",
+      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, figCtx())); } },
+    { id: "econ-prices", title: "List prices", fine: "From the Virginia Sheriffs’ Association catalog of May 2024, which matches 2025 invoices; the price of a drone program is from Everett, Wash., and Dunwoody, Ga.",
+      render: (h) => { priceList(h, e.priceList.map((p) => ({ item: p.item, price: p.price, term: p.term, sources: p.sources }))); } },
     { id: "econ-install", title: "Installation and permits", render: (h) => {
       h.appendChild(el("h3", "sub-title", "Who does what"));
-      table(h, ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources })));
+      table(h, ["Step", "Flock", "Customer", "Utility, transportation department or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer || "—", w.other || "—"], sources: w.sources })));
       h.appendChild(el("h3", "sub-title", "Who installs the cameras"));
       rows(h, e.workforce);
       h.appendChild(el("h3", "sub-title", "Permits by location"));
@@ -241,8 +233,11 @@ export async function renderDeployments(host: HTMLElement): Promise<void> {
   sections(host, [
     { id: "dep-pays", title: "Who pays for the cameras", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(figCtx())); rows(h, d.funding); } },
     { id: "dep-contracts", title: "The largest documented contracts", render: (h) => {
-      h.insertAdjacentHTML("beforeend", contractsFigure(figureCfg("contracts"), figCtx()));
-      table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [`${c.agency} · ${c.level}${c.level === "Federal" ? "" : `, ${apState(c.state)}`}`, c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
+      h.insertAdjacentHTML("beforeend", contractsFigure(figureCfg("contracts"), figCtx(), { table: false }));
+      h.appendChild(el("p", "fine", "The contracts in full, with the agencies whose terms were not reported:"));
+      // a city agency carries its state unless its name is a city the Times names alone; a state or federal agency's name says where it is
+      const who = (c: (typeof d.contracts)[number]) => (c.level === "City" && !/^(Houston|Dallas|Oklahoma City)\b/.test(c.agency) ? `${c.agency}, ${apState(c.state)}` : c.agency);
+      table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [who(c), c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
       h.lastElementChild?.classList.add("contracts");
     } },
     { id: "dep-unknowns", title: "What is not public", render: (h) => unknownList(h, d.unknowns) },
