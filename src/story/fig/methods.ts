@@ -1,6 +1,6 @@
 /** How complete the map is: mapped Flock cameras inside city limits against the counts cities or reporting published. */
 import { placeName, int } from "../../viz/format.ts";
-import { circle, g, line, rect, svg, text, label, tip, logScale, textWidth } from "../../viz/svg.ts";
+import { circle, g, line, rect, svg, text, label, tip, logScale, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 import type { CompletenessRow } from "../types.ts";
@@ -43,5 +43,5 @@ export function completenessFigure(cfg: FigureCfg, ctx: Ctx, rows: CompletenessR
     return svg(W, T + list.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Dot chart comparing mapped Flock cameras inside eight cities with the counts the cities or their reporting published." });
   };
   const table = dataTable(["City", "Mapped", "Tagged to the city’s police", "Tagged to another operator", "No operator tagged", "Published", "Published count"], list.map((r) => [placeName(r.place, r.usps), r.mapped, r.police, r.other, r.untagged, r.published, `${r.what} (${r.when})${r.topOther && r.topOther.count >= 20 ? `; largest other operator mapped: ${r.topOther.name}, ${int(r.topOther.count)}` : ""}`]), { text: [6] });
-  return frame("completeness", cfg, ctx, draw(600, false) + draw(360, true), { table });
+  return frame("completeness", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }

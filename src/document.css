@@ -346,8 +346,8 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .ladder-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .35rem; vertical-align: -.05em; }
 
 /* Reference-page figures: Texas funding flow, Dallas units, the claims index */
-.article .fig { margin: .4rem 0 1rem; max-width: 46rem; }
-.article .fig-body svg { width: auto; max-width: 100%; height: auto; }
+.article .fig { margin: .4rem 0 1rem; max-width: var(--col); }
+.article .fig-body svg { width: 100%; height: auto; }
 .flow { list-style: none; margin: .2rem 0 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0; counter-reset: fl; }
 .flow li { position: relative; display: grid; gap: .3rem; align-content: start; padding: .8rem 1.4rem .9rem 0; border-top: 2px solid var(--ink); }
 .flow li + li { padding-left: 1rem; }

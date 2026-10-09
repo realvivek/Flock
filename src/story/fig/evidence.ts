@@ -1,6 +1,6 @@
 /** Whether the cameras reduce crime: the working paper's estimate of the change in vehicle thefts under its main
  *  weighting and the two alternatives in its appendix, each with a 95 percent confidence interval. */
-import { g, line, rect, svg, text, label, tip, linScale, dot } from "../../viz/svg.ts";
+import { g, line, rect, svg, text, label, tip, linScale, dot, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 
@@ -46,5 +46,5 @@ function draw(W: number, narrow: boolean): string {
 export function evidenceFigure(cfg: FigureCfg, ctx: Ctx): string {
   const key = `<div class="ev-key"><span><i class="ev-dot"></i>Estimate</span><span><i class="ev-ci"></i>95 percent confidence interval: the range of effects consistent with the data</span></div>`;
   const table = dataTable(["Weighting", "Estimated change, %", "95% interval, low", "95% interval, high", "p"], ESTIMATES.map((e) => [e.label, e.est, e.lo, e.hi, e.p]), { text: [4] });
-  return frame("evidence", cfg, ctx, key + draw(600, false) + draw(360, true), { table });
+  return frame("evidence", cfg, ctx, key + draw(WIDE, false) + draw(NARROW, true), { table });
 }

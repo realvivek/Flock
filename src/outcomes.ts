@@ -242,7 +242,7 @@ function ladderOverview(ladders: Data["ladders"], W: number): string {
     out += line(0, y + rowH / 2, W, y + rowH / 2, { stroke: "var(--rule)" });
     const who = /Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : placeName(L.city, L.state);
     out += text(LW - 4, y - 2, who, { "text-anchor": "end", "font-size": 12, "font-weight": 600, fill: "var(--ink)" });
-    out += text(LW - 4, y + 11, apPeriod(L.period.replace(/ \(.*\)/, "")), { "text-anchor": "end", "font-size": 10.5, fill: "var(--ink-3)" });
+    out += text(LW - 4, y + 11, apPeriod(L.period.replace(/ \(.*\)/, "")), { "text-anchor": "end", "font-size": 11.5, fill: "var(--ink-3)" });
     LADDER_RUNGS.forEach((r, k) => {
       const v = L.values[r.k];
       if (v == null) return;

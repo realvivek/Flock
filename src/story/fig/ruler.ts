@@ -1,6 +1,6 @@
 /** How long a read lasts: a vertical logarithmic time scale, from the read to deletion. The four retention periods
  *  sit too close on a log scale to label at their own heights, so a list keyed by days stacks down from the first. */
-import { circle, g, line, path, rect, svg, text, textWidth } from "../../viz/svg.ts";
+import { circle, g, line, path, rect, svg, text, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 
@@ -53,7 +53,7 @@ function draw(W: number, narrow: boolean): string {
   const dayW = Math.max(...KEEP.map((k) => textWidth(`${k.days} days`, fs, 700))) + 8;
   const items = KEEP.map((k) => ({ k, lines: wrap(`${k.title}${k.sub ? ` ${k.sub}` : ""}`, maxW - dayW, fs) }));
   const gap = narrow ? 6 : 5;
-  out += text(LX, y0 - lh * 1.05, "Deleted after", { "font-size": fs - 1, "font-weight": 700, fill: "var(--ink-3)", "letter-spacing": 0.4 });
+  out += text(LX, y0 - lh * 1.05, "Deleted after", { "font-size": fs, "font-weight": 700, fill: "var(--ink-3)", "letter-spacing": 0.3 });
   let cy = y0 + fs * 0.36;
   for (const it of items) {
     const dy = y(it.k.days * DAY), my = cy - fs * 0.36;
@@ -80,5 +80,5 @@ function draw(W: number, narrow: boolean): string {
 export function rulerFigure(cfg: FigureCfg, ctx: Ctx): string {
   const rows: [string, string][] = [[ALERT.title, ALERT.sub], ...KEEP.map((k): [string, string] => [`${k.title.replace(/[,;]$/, "")}${k.sub ? ` (${k.sub})` : ""}`, `${k.days} days`]), [EVIDENCE.title, EVIDENCE.sub]];
   const table = dataTable(["Step", "Time after the read"], rows, { text: [1] });
-  return frame("ruler", cfg, ctx, draw(600, false) + draw(360, true), { table });
+  return frame("ruler", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }

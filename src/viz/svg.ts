@@ -4,8 +4,10 @@
 import { escape } from "../lib/escape.ts";
 import { smart } from "./format.ts";
 
-/** Every static chart is drawn twice: for the reading column on desktop, and for the narrowest phone column. */
-export const WIDE = 600, NARROW = 360;
+/** Every static chart is drawn twice: for the reading column on desktop, and for the reading column of a 360-pixel
+ *  phone (328 pixels inside its gutters), the smallest common screen. Wider phones scale the narrow drawing up, so its
+ *  text is never shown smaller than drawn. */
+export const WIDE = 600, NARROW = 328;
 
 export type Attrs = Record<string, string | number | undefined | null | false>;
 const attrs = (a: Attrs = {}): string => Object.entries(a).filter(([, v]) => v !== undefined && v !== null && v !== false).map(([k, v]) => ` ${k}="${escape(String(v))}"`).join("");

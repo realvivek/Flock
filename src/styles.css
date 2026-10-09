@@ -191,6 +191,8 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 /* art direction: each static chart is drawn for a wide and a narrow frame */
 .v-narrow { display: none !important; }
 @media (max-width: 639px) { .v-wide { display: none !important; } .v-narrow { display: block !important; } }
+/* the phone drawing is made for a 328-pixel column and scales with it, up to the width of a large phone */
+.fig-body svg.v-narrow { max-width: 440px; }
 /* Chart text and marks */
 /* default text colour comes from the svg, so a mark or label can still set its own fill */
 .viz { fill: var(--ink-2); }
@@ -210,7 +212,7 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: none; }
 .sw.c-hi2 { background: var(--amber); } .sw.sw-none { background: none; } .sw.c-ctx { background: #c4c4c1; } .sw.c-ctx3 { background: #dededa; }
 .viz [data-tip]:hover .mark { filter: brightness(.92); }
-.viz .axis-title { font-size: 11px; }
+.viz .axis-title { font-size: 12px; }
 
 /* Tooltip shared by every chart: value first, label second; follows focus as well as the pointer */
 .tip { position: fixed; z-index: 40; pointer-events: none; max-width: 17rem; padding: .5rem .65rem; background: #fff; border: 1px solid var(--rule-2); border-radius: 3px; box-shadow: 0 2px 10px rgba(0, 0, 0, .1); font: 400 .8125rem/1.35 var(--sans); color: var(--ink-2); opacity: 0; transform: translateY(2px); transition: opacity .12s, transform .12s; }

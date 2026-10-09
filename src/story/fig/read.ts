@@ -42,8 +42,9 @@ function car(): string {
   s += `<ellipse cx="160" cy="110" rx="11" ry="5" fill="#fff" stroke="${edge}"/>`;
   // plate
   s += rect(124, 122, 72, 30, { rx: 3, fill: "#fff", stroke: "#121212", "stroke-width": 1.5 });
-  s += text(160, 131, "STATE", { "text-anchor": "middle", "font-size": 6.5, "font-weight": 700, "letter-spacing": 1, fill: "#555" });
-  s += text(160, 146, "ABC 1234", { "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, "letter-spacing": 0.4, fill: "#121212", "font-family": "var(--mono)" });
+  // the plate's lettering is part of the drawing, not a label
+  s += text(160, 131, "STATE", { "text-anchor": "middle", "font-size": 6.5, "font-weight": 700, "letter-spacing": 1, fill: "#555", "data-decor": 1, "aria-hidden": "true" });
+  s += text(160, 146, "ABC 1234", { "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, "letter-spacing": 0.4, fill: "#121212", "font-family": "var(--mono)", "data-decor": 1, "aria-hidden": "true" });
   // bumper with stickers and a dent
   s += rect(26, 160, 268, 30, { rx: 8, fill: "#d4d4d0", stroke: edge, "stroke-width": 1.5 });
   s += rect(62, 167, 30, 12, { rx: 1.5, fill: "#fff", stroke: edge }) + rect(96, 167, 18, 12, { rx: 1.5, fill: "#fff", stroke: edge });
@@ -55,7 +56,7 @@ function car(): string {
 }
 
 export function readFigure(cfg: FigureCfg, ctx: Ctx): string {
-  const markers = GROUPS.flatMap((gr) => gr.fields).map((f) => g(circle(f.x, f.y, 9.5, { fill: "var(--ink)", stroke: "#fff", "stroke-width": 2 }) + text(f.x, f.y + 4, String(f.n), { "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#fff" }), { class: "read-mk", "data-n": f.n }));
+  const markers = GROUPS.flatMap((gr) => gr.fields).map((f) => g(circle(f.x, f.y, 10.5, { fill: "var(--ink)", stroke: "#fff", "stroke-width": 2 }) + text(f.x, f.y + 4.3, String(f.n), { "text-anchor": "middle", "font-size": 12.5, "font-weight": 700, fill: "#fff" }), { class: "read-mk", "data-n": f.n }));
   const drawing = svg(320, 236, car() + markers.join(""), { cls: "read-car", label: "Illustration of a car seen from behind, with numbered markers on the plate, the emblem, the body, the roof rack, bumper stickers, a window decal, a rack on the trailer hitch, the wheels and a dent in the bumper." });
   const list = GROUPS.map((gr) => `<li class="read-grp"><span class="read-gname">${escape(gr.name)}</span><ol>${gr.fields.map((f) => `<li data-n="${f.n}"><span class="read-n" aria-hidden="true">${f.n}</span><span><b>${escape(f.label)}</b>${f.detail ? ` ${escape(f.detail)}` : ""}</span></li>`).join("")}</ol></li>`).join("");
   const meta = `<div class="read-meta"><span class="read-meta-k">The camera adds</span><span>Time</span><span>GPS position</span><span>Camera ID</span></div>`;

@@ -1,7 +1,7 @@
 /** What the reads produce: Oakland's reads and alerts as areas, its logged successes, and three departments' counts
  *  on a logarithmic scale. */
 import { apPeriod, big, int, tickWords } from "../../viz/format.ts";
-import { circle, g, line, path, rect, svg, text, label, tip, logScale, textWidth } from "../../viz/svg.ts";
+import { circle, g, line, path, rect, svg, text, label, tip, logScale, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 import type { Ladder } from "../types.ts";
@@ -39,7 +39,7 @@ export function oaklandFigure(cfg: FigureCfg, ctx: Ctx): string {
   const rowsOut: [string, number, number][] = [["Arrests", OAK.arrests, OAK.byOffense.arrests], ["Vehicles recovered", OAK.vehicles, OAK.byOffense.vehicles], ["Guns recovered", OAK.guns, OAK.byOffense.guns]];
   const tiles = `<div class="tiles"><p class="tiles-k">Officers also logged <b>${OAK.success}</b> “success stories” in 2025. The report totals what came of them twice, and the totals differ:</p><table class="oak-t"><thead><tr><th scope="col"><span class="visually-hidden">Outcome</span></th><th scope="col">In the report’s summary</th><th scope="col">In its table by offense</th></tr></thead><tbody>${rowsOut.map(([k, a, b]) => `<tr><th scope="row">${k}</th><td>${a}</td><td${a !== b ? ' class="differs"' : ""}>${b}</td></tr>`).join("")}</tbody></table></div>`;
   const table = dataTable(["Measure, Oakland 2025", "Count"], [["Plate reads", OAK.reads], ["Alerts", OAK.alerts], ["  Stolen plates and stolen vehicles (switched off)", OAK.off], ["  Other alert types", OAK.alerts - OAK.off], ["Success stories logged", OAK.success], ["Arrests, report summary", OAK.arrests], ["Arrests, table by offense", OAK.byOffense.arrests], ["Vehicles recovered, report summary", OAK.vehicles], ["Vehicles recovered, table by offense", OAK.byOffense.vehicles], ["Guns recovered, report summary", OAK.guns], ["Guns recovered, table by offense", OAK.byOffense.guns]]);
-  return frame("oakland", cfg, ctx, draw(600, false) + draw(360, true) + tiles, { table });
+  return frame("oakland", cfg, ctx, draw(WIDE, false) + draw(NARROW, true) + tiles, { table });
 }
 
 const RUNGS: { k: keyof Ladder["values"]; label: string }[] = [
@@ -64,7 +64,7 @@ export function ladderFigure(cfg: FigureCfg, ctx: Ctx, ladders: Ladder[]): strin
     const panelH = headH + RUNGS.length * rowH;
     const H = top + rows.length * (panelH + gap) + 4;
     // every other power of 10 is labeled; the grid has them all
-    let out = g((narrow ? [1, 1e3, 1e6, 1e9] : [1, 100, 1e4, 1e6, 1e8]).map((d) => text(x(d), 14, tickWords(d), { "text-anchor": "middle" })).join(""), { class: "axis" });
+    let out = g((narrow ? [1, 1e3, 1e6] : [1, 100, 1e4, 1e6, 1e8]).map((d) => text(x(d), 14, tickWords(d), { "text-anchor": "middle" })).join(""), { class: "axis" });
     rows.forEach(({ p, L }, i) => {
       const y0 = top + i * (panelH + gap);
       out += line(0, y0 + 0.5, W, y0 + 0.5, { stroke: "var(--ink)", "stroke-width": 1 });
@@ -83,5 +83,5 @@ export function ladderFigure(cfg: FigureCfg, ctx: Ctx, ladders: Ladder[]): strin
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Dot plot on a logarithmic scale of plate reads, alerts, stops, vehicles recovered and arrests for Los Angeles, Columbia, Mo., and Nashville, each from its own report or audit: alerts in the hundreds or thousands, arrests in the dozens." });
   };
   const table = dataTable(["Department", "Period", "Plate reads", "Alerts", "Stops", "Vehicles recovered", "Arrests"], rows.map(({ p, L }) => [p.name, apPeriod(L.period), L.values.reads, L.values.alerts, L.values.stops, L.values.recoveries, L.values.arrests]), { text: [1] });
-  return frame("ladder", cfg, ctx, draw(600, false) + draw(360, true), { table });
+  return frame("ladder", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }

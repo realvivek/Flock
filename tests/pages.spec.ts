@@ -39,3 +39,15 @@ test("every page keeps one h1 and never skips a heading level", async ({ page })
     expect(skips, id || "home").toEqual([]);
   }
 });
+
+test.describe("on a 360-pixel phone", () => {
+  test.use({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
+  test("chart text is shown at 11 px or larger", async ({ page }) => {
+    for (const id of ["", "deployments", "economics", "claims", "outcomes", "data"]) {
+      await page.goto(`/${id ? `${id}/` : ""}${id === "outcomes" ? "?map=off" : ""}`, { waitUntil: "commit" });
+      await ready(page);
+      const small = await page.evaluate(() => [...document.querySelectorAll("main svg text")].filter((t) => !t.closest("[data-decor]") && (t as SVGTextElement).ownerSVGElement!.getBoundingClientRect().width > 0).map((t) => { const m = (t as SVGTextElement).getScreenCTM(); return m ? { px: parseFloat(getComputedStyle(t).fontSize) * m.a, s: t.textContent!.slice(0, 24) } : null; }).filter((r) => r !== null && r.px < 11).map((r) => `${r!.s} ${r!.px.toFixed(1)}`));
+      expect(small, id || "home").toEqual([]);
+    }
+  });
+});

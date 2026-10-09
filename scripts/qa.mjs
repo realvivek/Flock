@@ -2,7 +2,7 @@ import { chromium } from "@playwright/test";
 import fs from "node:fs";
 // Viewport sweep of every page at six desktop sizes and four phones (one held sideways), measuring what a reader would notice:
 // horizontal overflow, elements wider than the viewport, figures wider than their column, images that failed, clipped
-// text, the header links with the current page marked, the pager, the Top button; on the home page the map pinned
+// text, chart text shown under 11 px on a phone, the header links with the current page marked, the pager, the Top button; on the home page the map pinned
 // under the header at every step with its card on screen; and on the components page the record and the locator.
 // Usage: node scripts/qa.mjs <outDir> [url]
 const Q = process.argv[2] || "test-results/qa";
@@ -36,6 +36,8 @@ const pageChecks = () => {
   out.height = document.documentElement.scrollHeight;
   out.mode = window.__flock.state.mode;
   out.totopAtTop = !document.getElementById("totop").hidden;
+  // chart text as shown: its font size times the chart's scale on screen (drawings scale with their column)
+  out.small = [...document.querySelectorAll("main svg text")].filter((t) => !t.closest("[data-decor]") && t.ownerSVGElement && t.ownerSVGElement.getBoundingClientRect().width > 0).map((t) => { const m = t.getScreenCTM(); return m ? { px: parseFloat(getComputedStyle(t).fontSize) * m.a, s: t.textContent.slice(0, 24), fig: t.closest("figure[id], [id]")?.id } : null; }).filter((r) => r && r.px < 11).slice(0, 5).map((r) => `${r.fig} "${r.s}" ${r.px.toFixed(1)} px`);
   return out;
 };
 for (const [w, h, phone] of sizes) {
@@ -64,6 +66,7 @@ for (const [w, h, phone] of sizes) {
     if (id && g.pager < 2) F(vp, name, `pager has ${g.pager} links`);
     if (g.figWide.length) F(vp, name, "figure wider than the screen: " + g.figWide.join(", "));
     if (g.totopAtTop) F(vp, name, "Top button shown at the top");
+    if (phone && g.small.length) F(vp, name, "chart text under 11 px: " + g.small.join(" | "));
     if (!phone && id === "components" && g.mode !== "3d") F(vp, name, "no 3D on desktop");
     await page.screenshot({ path: `${Q}/${vp}-${name}.png` });
     if (!id) {

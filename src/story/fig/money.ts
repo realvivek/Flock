@@ -1,7 +1,7 @@
 /** What it costs: documented prices per camera over time with the one documented list-price change, and the largest
  *  documented contracts per year. */
 import { ap, apDate, int } from "../../viz/format.ts";
-import { circle, g, line, path, rect, svg, text, label, hbar, tip, linScale, textWidth } from "../../viz/svg.ts";
+import { circle, g, line, path, rect, svg, text, label, hbar, tip, linScale, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 
@@ -47,7 +47,7 @@ export function priceFigure(cfg: FigureCfg, ctx: Ctx): string {
     return svg(W, lg + 8, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Chart of the annual price per Flock camera from 2022 to 2026: $2,500 in contracts and quotes from 2022 and 2023, and a list price of $3,000 since Jan. 1, 2024." });
   };
   const table = dataTable(["Date", "Price per camera per year", "Record"], [GREENVILLE, ...POINTS].map((p) => [apDate(p.date), p.price, p.what]).concat([["Jan. 1, 2024", "$3,000", "List price, up $500 (Grafton, Wis., village memo)"]]) as (string | number)[][], { text: [2] });
-  return frame("price", cfg, ctx, draw(600, false) + draw(360, true), { table });
+  return frame("price", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }
 
 interface Contract { who: string; total: number; years: number; approved: string; note: string; upTo?: boolean }
@@ -94,5 +94,5 @@ export function contractsFigure(cfg: FigureCfg, ctx: Ctx): string {
     ["Oklahoma City", "about $270,000", "not stated", "Aug. 18, 2026", "approved 5 to 3"],
     ["Greenville, S.C.", "$2,000 a year", "pilot", "December 2019", "11 cameras"],
   ], { text: [1, 2, 3, 4] });
-  return frame("contracts", cfg, ctx, draw(600, false) + draw(360, true), { table });
+  return frame("contracts", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }

@@ -1,7 +1,7 @@
 /** Where the cameras are: states ranked by rate, and the county lookup with the distribution of county rates. */
 import { escape } from "../../lib/escape.ts";
 import { apState, dec1, int } from "../../viz/format.ts";
-import { g, line, rect, svg, text, label, hbar, tip, linScale } from "../../viz/svg.ts";
+import { g, line, rect, svg, text, label, hbar, tip, linScale, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 import type { StatesFile, CountyRow } from "../types.ts";
@@ -13,13 +13,14 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
   const top = rows.slice(0, 10), bottom = rows.slice(-5), mid = rows.slice(10, -5);
   const max = 90, ticks = [0, 20, 40, 60, 80];
   const draw = (W: number, narrow: boolean) => {
-    const L = narrow ? 112 : 140, R = narrow ? 36 : 44, T = 56, rowH = narrow ? 24 : 22, barH = 10, fs = narrow ? 13 : 12.5, gapH = narrow ? 46 : 40;
+    const L = narrow ? 112 : 140, R = narrow ? 36 : 44, T = 56, rowH = narrow ? 24 : 22, barH = 10, fs = narrow ? 13 : 12.5, gapH = narrow ? 56 : 40;
     const H = T + (top.length + bottom.length) * rowH + gapH + 6;
     const x = linScale(0, max, L, W - R);
     const yOf = (i: number) => T + i * rowH + (i >= top.length ? gapH : 0);
     let out = "";
     const brk = yOf(top.length) - gapH / 2;
-    out += g(ticks.map((t) => line(x(t), T - 6, x(t), brk - 10) + line(x(t), brk + 10, x(t), H - 4)).join(""), { class: "grid" });
+    const gg = narrow ? 18 : 10;
+    out += g(ticks.map((t) => line(x(t), T - 6, x(t), brk - gg) + line(x(t), brk + gg, x(t), H - 4)).join(""), { class: "grid" });
     out += g(ticks.map((t, i) => text(x(t), T - 12, String(t), { "text-anchor": i === 0 ? "start" : "middle" })).join(""), { class: "axis" });
     [...top, ...bottom].forEach((r, i) => {
       const y = yOf(i), hi = r.usps === "GA";
@@ -32,17 +33,22 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
     });
     // the break between the highest and the lowest
     const by = yOf(top.length) - gapH / 2;
-    out += line(0, by - 10, W, by - 10, { stroke: "var(--rule-2)", "stroke-dasharray": "2 3" }) + line(0, by + 10, W, by + 10, { stroke: "var(--rule-2)", "stroke-dasharray": "2 3" });
-    out += label(narrow ? 0 : L, by + 4, `${mid.length} more, from ${mid[0]!.name} (${dec1(mid[0]!.per100k!)}) to ${mid[mid.length - 1]!.name} (${dec1(mid[mid.length - 1]!.per100k!)}), in the table`, { "font-size": fs - 1, "font-style": "italic", fill: "var(--ink-3)", "font-family": "var(--serif)" });
+    const gap = narrow ? 18 : 10;
+    out += line(0, by - gap, W, by - gap, { stroke: "var(--rule-2)", "stroke-dasharray": "2 3" }) + line(0, by + gap, W, by + gap, { stroke: "var(--rule-2)", "stroke-dasharray": "2 3" });
+    const note = `${mid.length} more, from ${mid[0]!.name} (${dec1(mid[0]!.per100k!)}) to ${mid[mid.length - 1]!.name} (${dec1(mid[mid.length - 1]!.per100k!)}), in the table`;
+    const noteAttrs = { "font-size": 12, "font-style": "italic", fill: "var(--ink-3)", "font-family": "var(--serif)" };
+    // on a phone the note takes two lines between the dotted rules
+    if (narrow) { const [a, b] = note.split(" to "); out += label(0, by - 1, `${a} to`, noteAttrs) + label(0, by + 7 + 5, b!, noteAttrs); }
+    else out += label(L, by + 4, note, noteAttrs);
     // U.S. reference: a hairline from the top label down through the bars
     const ux = x(states.usRate);
     // it stops at the dotted rules, so the note between them reads clean
-    out += line(ux, T - 40, ux, by - 10, { stroke: "var(--ink)", "stroke-width": 1 }) + line(ux, by + 10, ux, H - 4, { stroke: "var(--ink)", "stroke-width": 1 });
+    out += line(ux, T - 40, ux, by - gap, { stroke: "var(--ink)", "stroke-width": 1 }) + line(ux, by + gap, ux, H - 4, { stroke: "var(--ink)", "stroke-width": 1 });
     out += text(ux + 5, T - 32, `U.S. rate, ${dec1(states.usRate)}`, { "font-size": fs, "font-weight": 600, fill: "var(--ink)" });
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of mapped Flock cameras per 100,000 residents in the 10 highest and five lowest states. Georgia is highest at ${dec1(rows[0]!.per100k!)}; New Hampshire lowest at ${dec1(rows[rows.length - 1]!.per100k!)}; the U.S. rate is ${dec1(states.usRate)}.` });
   };
   const table = dataTable(["State", "Mapped Flock cameras", "Per 100,000 residents", "All mapped readers", "Population, 2024"], rows.map((r) => [r.name, r.flock, r.per100k, r.all, r.pop]), { caption: cfg.title });
-  return frame("states", cfg, ctx, draw(600, false) + draw(360, true), { table });
+  return frame("states", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }
 
 /** Bins of county rates for the lookup's distribution: none mapped, then steps of 10 per 100,000 up to 300 and more. */
@@ -91,8 +97,8 @@ export function histogram(bins: { lo: number; hi: number; n: number }[], W: numb
   // axis: none, 0, 100, 200, 300+
   const xRate = (v: number) => xOf(1) + (v / 10) * bw;
   out += g([text(xOf(0), H - B + 15, "None", { "text-anchor": "start" }), ...[100, 200].map((v) => text(xRate(v), H - B + 15, String(v), { "text-anchor": "middle" })), text(xRate(300) + bw, H - B + 15, "300+", { "text-anchor": "end" })].join(""), { class: "axis" });
-  out += text(W - R, H - 3, "Mapped Flock cameras per 100,000 residents", { "text-anchor": "end", class: "axis-title", "font-size": 11, fill: "var(--ink-3)" });
-  out += text(L, 12, "Number of counties", { "font-size": 11, fill: "var(--ink-3)" });
+  out += text(W - R, H - 3, "Mapped Flock cameras per 100,000 residents", { "text-anchor": "end", class: "axis-title", "font-size": 12, fill: "var(--ink-3)" });
+  out += text(L, 12, "Number of counties", { "font-size": 12, fill: "var(--ink-3)" });
   // the marker
   const mx = mark == null ? -100 : mark < 0 ? xOf(0) + bw / 2 : mark >= 300 ? xRate(300) + bw / 2 : xRate(mark);
   const right = mx > W * 0.62;
@@ -107,7 +113,7 @@ export function lookupFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile, count
   const body = `<div class="lookup" data-default="${def[0]}">
 <form class="lk-form" role="search" onsubmit="return false"><label for="county-q" class="visually-hidden">Find a county</label><div class="lk-box"><input id="county-q" type="search" autocomplete="off" spellcheck="false" placeholder="Type a county or state" value="${escape(countyName(def))}" role="combobox" aria-expanded="false" aria-controls="county-list" aria-autocomplete="list" disabled><ul id="county-list" class="lk-list" role="listbox" hidden></ul></div></form>
 <div class="lk-card" aria-live="polite">${lookupCard(def, states, counties)}</div>
-<div class="lk-dist">${histogram(bins, 600, false, mark, def[1])}${histogram(bins, 360, true, mark, def[1])}</div>
+<div class="lk-dist">${histogram(bins, WIDE, false, mark, def[1])}${histogram(bins, NARROW, true, mark, def[1])}</div>
 <noscript><p class="fig-note">Searching needs JavaScript; the full table is in the file of <a href="data/story/cameras-by-county.csv">cameras by county</a>.</p></noscript>
 </div>`;
   return frame("lookup", cfg, ctx, body);
