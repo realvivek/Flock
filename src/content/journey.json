@@ -38,7 +38,7 @@
       "id": "sorting", "status": "Sorting", "where": "Cloud and camera", "when": "time not published", "icon": "list",
       "title": "Compared against the hot lists",
       "line": "The plate is checked against stolen-car and wanted lists, some written by agencies themselves.",
-      "body": "The plate is compared with the lists of the F.B.I.'s National Crime Information Center and the National Center for Missing and Exploited Children, Flock's policy says, and with Amber Alerts and lists that agencies write themselves. The ACLU found that the cameras download the F.B.I.'s list only twice a day, so a plate taken off it can keep producing alerts for up to 12 hours.",
+      "body": "The plate is compared with the lists of the F.B.I.'s National Crime Information Center and the National Center for Missing and Exploited Children, Flock's policy says, and with Amber Alerts and lists that agencies write themselves. The A.C.L.U. found that the cameras download the F.B.I.'s list only twice a day, so a plate taken off it can keep producing alerts for up to 12 hours.",
       "packed": ["A match flag and which list it came from"],
       "opens": "Only the matching software, until a plate matches a list.",
       "hops": ["hop-8"],

@@ -214,6 +214,9 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .dp-stages > .fig { margin: .6rem 0 0; padding-top: 1.6rem; border-top: 2px solid var(--ink); }
 /* in this column the record and the three accounts read one after the other */
 .dp-stages .audit { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+.dp-search { display: grid; gap: .8rem; max-width: var(--col); margin-top: 2.4rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--topbar-h) + 1.5rem); }
+.dp-search .lede-p { margin: 0; font: 400 1.0625rem/1.6 var(--serif); color: var(--ink-2); }
+.dp-search .audit { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
 .dp-about { display: grid; gap: .6rem; margin-top: 2.4rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--topbar-h) + 1.5rem); }
 .dp-about p { margin: 0; max-width: 40rem; font: 400 1.0625rem/1.6 var(--serif); color: var(--ink-2); }
 @media (max-width: 1000px) {

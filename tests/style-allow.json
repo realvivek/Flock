@@ -3,10 +3,5 @@
     "rule": "postal code after a place",
     "text": "Open-Q 624A",
     "why": "part number"
-  },
-  {
-    "rule": "US or Inc without points",
-    "text": "US-East",
-    "why": "the name of Amazon's GovCloud region"
   }
 ]

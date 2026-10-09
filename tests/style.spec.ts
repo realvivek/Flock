@@ -19,6 +19,7 @@ const RULES: { rule: string; re: RegExp; prose?: boolean }[] = [
   { rule: "British spelling", re: /\b(summaris|authoris|organis|recognis|realis|colour|behaviour|centre|offence|travell|cancell(?!ation)|labell|programme|licence|totall(?:ed|ing))\w*/i },
   { rule: "number 10 or more in words", re: /(?<![.!?:]\s|^)\b(ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)\b/ },
   { rule: "US or Inc without points", re: /\bUS\b|\bInc\b(?!\.)/ },
+  { rule: "Times abbreviation (A.C.L.U., F.B.I., A.I.)", re: /\b(ACLU|FBI)\b|\bAI\b/ },
 ];
 
 async function textOf(page: Page): Promise<{ text: string; where: string; prose: boolean }[]> {

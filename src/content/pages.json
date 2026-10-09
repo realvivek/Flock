@@ -35,7 +35,7 @@
     },
     "data": {
       "kicker": "Data path",
-      "title": "What Happens to a Plate Read, From the Camera to Deletion",
+      "title": "A Hot-List Match Reaches Officers in Seconds; Reads Are Kept for Days or Weeks",
       "deck": "When a plate matches a list, an alert reaches officers in [10 to 15 seconds](src:flock-flex-datasheet) on average, Flock says. The read is kept for [seven days](src:flock-guardrails-2026) by default for new customers; existing customers keep the periods they set, and Evidence Mode has no published limit.",
       "lead": "ruler",
       "about": true

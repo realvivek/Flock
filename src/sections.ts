@@ -45,7 +45,7 @@ const NODES: { id: string; label: string; sub: string; stages: number[]; icon: s
   { id: "lte", label: "Cellular network", sub: "carrier SIM, encrypted", stages: [4], icon: "tower" },
   { id: "cloud", label: "Flock’s cloud", sub: "Amazon Web Services, U.S.", stages: [5, 6, 7], icon: "cloud" },
   { id: "lists", label: "Hot lists", sub: "NCIC, NCMEC, Amber Alert and agency lists", stages: [8], icon: "list" },
-  { id: "phone", label: "Alert to officers", sub: "10 to 15 seconds on average, per Flock", stages: [9], icon: "phone" },
+  { id: "phone", label: "Alert to officers", sub: "10 to 15 seconds on average, Flock says", stages: [9], icon: "phone" },
   { id: "search", label: "Network search", sub: "own, shared and national", stages: [10], icon: "search" },
   { id: "audit", label: "Audit log", sub: "a row for every search", stages: [11], icon: "list" },
   { id: "bin", label: "Deletion", sub: "seven days by default for new customers", stages: [12], icon: "bin" },
@@ -80,14 +80,16 @@ export function buildData(host: HTMLElement): void {
     body.appendChild(cite(h.sources));
     list.appendChild(row);
   }
-  // One documented search: the audit-log record of two searches and three accounts of them, as in the story
-  list.insertAdjacentHTML("beforeend", auditFigure(figureCfg("audit"), figCtx(), dataflow.deputy as Deputy));
-  // the page's notes on its records
+  host.append(bar, diagram, list);
+  // After the path, past the end of the sticky diagram: one documented search (stages 10 and 11 in practice), then the
+  // page's notes on its records
+  const search = el("section", "dp-search");
+  search.id = "search-example";
+  search.innerHTML = `<h2 class="sec-title">One documented search</h2><p class="lede-p">What stages 10 and 11 look like in practice: the audit log of two searches by one sheriff’s office, and how the people involved described them.</p>${auditFigure(figureCfg("audit"), figCtx(), dataflow.deputy as Deputy)}`;
   const about = el("section", "dp-about");
   about.id = "about";
   about.innerHTML = `<h2 class="sec-title">About the data</h2><p>Each stage cites the documents behind it: Flock’s own architecture, policy and product documents, and independent teardowns, audits and public records. The tag beside each stage says whether it rests on Flock’s word, on independent documentation or on both; statements neither confirms are marked as not verified. The time scale at the top uses the averages and limits Flock and state laws publish; Flock publishes no time for the upload.</p>`;
-  list.appendChild(about);
-  host.append(bar, diagram, list);
+  host.after(search, about);
 
   // Light the node of the stage that has crossed a line under the header.
   const rows = [...list.querySelectorAll<HTMLElement>(".stage")];
