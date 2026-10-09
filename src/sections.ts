@@ -3,8 +3,11 @@ import { install, dataflow } from "./content";
 import { cite, escape, tag } from "./ui/cite";
 import { still, nn, el, p, kv, facts, topbarHeight } from "./ui/common";
 import { icon } from "./ui/icons";
-import { set } from "./store";
 import { ap } from "./viz/format";
+import { figCtx } from "./ui/figs";
+import { auditFigure, type Deputy } from "./story/fig/searches";
+import storyRaw from "./content/story.json";
+import type { FigureCfg } from "./story/schema";
 
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
 
@@ -78,27 +81,14 @@ export function buildData(host: HTMLElement): void {
     body.appendChild(cite(h.sources));
     list.appendChild(row);
   }
-  // Retention presets
-  const ret = el("article", "stage tool");
-  ret.dataset.node = "bin";
-  ret.innerHTML = `<div class="stage-body"><p class="mono">Retention</p><h2>How long the reads are kept</h2><p>Flock’s default and the limits some states set. Choose one to see what it applies to.</p><div class="toggle-row" id="retention-chips"></div><p class="aim-readout" id="retention-readout"></p></div>`;
-  const chips = ret.querySelector<HTMLElement>("#retention-chips")!;
-  const out = ret.querySelector<HTMLElement>("#retention-readout")!;
-  const setRet = (i: number) => { const r = dataflow.retentionPresets[i]!; out.textContent = `${r.label}: ${r.note}`; chips.querySelectorAll("button").forEach((b, j) => { b.classList.toggle("is-active", j === i); b.setAttribute("aria-pressed", String(j === i)); }); set({ retentionIndex: i }); };
-  dataflow.retentionPresets.forEach((r, i) => { const b = el("button", "chip", escape(r.label)); b.type = "button"; b.addEventListener("click", () => setRet(i)); chips.appendChild(b); });
-  ret.querySelector(".stage-body")!.appendChild(cite(dataflow.retentionPresets.flatMap((r) => r.sources), 3));
-  list.appendChild(ret);
-  setRet(0);
-  // Network search example
-  const d = dataflow.deputy;
-  const dep = el("article", "stage tool");
-  dep.dataset.node = "search";
-  dep.innerHTML = `<div class="stage-body"><p class="mono">Network search</p><h2>One documented search</h2><p>Enter a reason and run the search. The counts are those recorded in the audit log of one documented search, on May 9, 2025, which carried the case number of a sheriff’s office death investigation.</p><form id="deputy-form"><input id="deputy-reason" type="text" maxlength="60" placeholder="Reason for search" aria-label="Reason for search" /><button type="submit" class="chip">Search network</button></form><p class="aim-readout" id="deputy-readout" aria-live="polite"></p></div>`;
-  const form = dep.querySelector<HTMLFormElement>("#deputy-form")!;
-  const readout = dep.querySelector<HTMLElement>("#deputy-readout")!;
-  form.addEventListener("submit", (e) => { e.preventDefault(); const r = (form.querySelector("input") as HTMLInputElement).value.trim() || d.reasonAsLogged; set({ deputyReason: r }); readout.textContent = `Reason as logged: “${r}” · ${d.networks.toLocaleString()} networks · ${d.cameras.toLocaleString()} cameras · ${d.lookbackDays}-day lookback · ${d.date}`; });
-  dep.querySelector(".stage-body")!.appendChild(cite(d.sources));
-  list.appendChild(dep);
+  // One documented search: the audit-log record of two searches and three accounts of them, as in the story
+  const story = storyRaw as unknown as { figures: Record<string, FigureCfg> };
+  list.insertAdjacentHTML("beforeend", auditFigure(story.figures.audit!, figCtx(), dataflow.deputy as Deputy));
+  // the page's notes on its records
+  const about = el("section", "dp-about");
+  about.id = "about";
+  about.innerHTML = `<h2 class="sec-title">About the data</h2><p>Each stage cites the documents behind it: Flock’s own architecture, policy and product documents, and independent teardowns, audits and public records. The tag beside each stage says whether it rests on Flock’s word, on independent documentation or on both; statements neither confirms are marked as not verified. The time scale at the top uses the averages and limits Flock and state laws publish; Flock publishes no time for the upload.</p>`;
+  list.appendChild(about);
   host.append(bar, diagram, list);
 
   // Light the node of the stage that has crossed a line under the header.
@@ -118,7 +108,7 @@ export function buildData(host: HTMLElement): void {
     rows.forEach((r, k) => r.classList.toggle("is-active", k === i));
     const n = Number(row.dataset.n);
     const hop = hops.find((h) => h.n === n);
-    packet.textContent = hop ? hop.payload.join(" · ") : row.classList.contains("tool") ? "—" : "";
+    packet.textContent = hop ? hop.payload.join(" · ") : "";
     barK.textContent = hop ? `Stage ${nn(n)} of ${hops.length} · ${nodeOf(n).label}` : (row.querySelector("h2")?.textContent ?? "");
     barFill.style.width = `${((i + 1) / rows.length) * 100}%`;
   };

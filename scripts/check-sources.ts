@@ -31,7 +31,6 @@ for (const [m, path] of Object.entries(install.paths)) path.facts.forEach((f, i)
 
 const dataflow = DataflowFile.parse(read("dataflow.json"));
 for (const h of dataflow.hops) need(`hop ${h.id}`, h.sources);
-dataflow.retentionPresets.forEach((r) => need(`retention ${r.label}`, r.sources));
 need("deputy", dataflow.deputy.sources);
 
 const myths = MythsFile.parse(read("myths.json")).myths;

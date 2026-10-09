@@ -109,10 +109,10 @@ export function renderProducts(host: HTMLElement): void {
   host.lastElementChild?.classList.add("products");
 }
 
-/** Twenty-one claims as a running list: claim, documented position, related component or stage, sources. */
+/** The claims as a running list (claim, what the record shows, related component or stage, sources), then the product
+ *  line and the page's notes. The index of claims by verdict opens the page (rendered at build time). */
 export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
   host.appendChild(sectionHead("The claims", "claim-list"));
-  host.appendChild(el("p", undefined, "Each entry states a claim, what the documented record shows, the product or setting it applies to, and the sources. Entries link to the related component or data stage. Several depend on which Flock product is on the pole; the product line follows the claims."));
   const list = el("div", "claims");
   myths.forEach((m, i) => {
     const art = el("article", "claim");
@@ -139,32 +139,67 @@ export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
   host.appendChild(list);
   host.appendChild(sectionHead("Product line", "products"));
   renderProducts(host);
+  host.appendChild(sectionHead("About the claims", "about"));
+  host.appendChild(el("p", "lede-p", "Each entry states a common claim about the cameras, what the documented record shows, the product or setting it applies to, and the sources, with links to the related component or data stage. The verdicts describe the record, not the people who make the claims."));
+  const dl = el("dl", "verdict-defs");
+  for (const [v, d] of [["false", "The documents and records cited contradict the claim, or nothing in them supports it."], ["nuanced", "The answer differs by product (plate reader, video camera or audio sensor) or by how a customer has set it up."], ["true", "The documents and records cited support the claim as stated."]] as const) dl.insertAdjacentHTML("beforeend", `<dt><span class="verdict ${v}">${verdictLabel[v]}</span></dt><dd>${escape(d)}</dd>`);
+  host.appendChild(dl);
 }
 
-/** Pricing, fee schedules, workflow, workforce, permitting, contract terms and scale, in order. */
+interface Block { id: string; title: string; fine?: string; render(h: HTMLElement): void }
+/** An article page's sections in order, each an h2 under the page's h1, with a quiet row of links to them first. */
+function sections(host: HTMLElement, list: Block[]): void {
+  host.appendChild(jumpList(list.map((s) => ({ id: s.id, label: s.title }))));
+  for (const s of list) {
+    const sec = el("section", "econ-block");
+    sec.id = s.id;
+    sec.appendChild(sectionHead(s.title));
+    if (s.fine) sec.appendChild(el("p", "fine", s.fine));
+    s.render(sec);
+    host.appendChild(sec);
+  }
+}
+const unknownList = (h: HTMLElement, list: { v: string; sources: string[] }[]) => {
+  const ul = el("ul", "unknown-list");
+  for (const u of list) { const li = el("li", undefined, u.v); li.appendChild(cite(u.sources, 1)); ul.appendChild(li); }
+  h.appendChild(ul);
+};
+/** The page's notes on its records: the text that opened the page before, now last, with its sources. */
+const about = (h: HTMLElement, text: string, srcs: string[]) => { const p = el("p", "lede-p", text); p.appendChild(cite(srcs, 4)); h.appendChild(p); };
+
+/** What the fee covers, the fees after installation, prices, contract terms, installation and the company. The price
+ *  chart opens the page (rendered at build time). */
 export function renderEconomics(host: HTMLElement): void {
   const e = economics;
-  const sum = el("p", "lede-p", e.intro.summary);
-  sum.appendChild(cite(e.intro.sources));
-  host.appendChild(sum);
-
-  // The priced pole as a figure: the still with the fee attached to each element.
-  const fig = el("figure", "inset");
-  const img = document.createElement("img");
-  img.src = `${BASE}${stillById.get("pole-flock") ?? ""}`;
-  img.alt = "Flock pole with camera, solar panel and battery box";
-  img.loading = "lazy";
-  img.decoding = "async";
-  fig.appendChild(img);
-  const cap = el("figcaption");
-  cap.appendChild(el("h3", undefined, "Fees by element"));
-  rows(cap, e.pricedPole.map((p) => ({ k: p.k, v: p.v, sources: p.sources })));
-  fig.appendChild(cap);
-  host.appendChild(fig);
-
-  const sections: { id: string; title: string; fine?: string; render(h: HTMLElement): void }[] = [
-    { id: "econ-included", title: "Included in the annual fee", render: (h) => rows(h, e.included) },
-    { id: "econ-extra", title: "Billed separately", render: (h) => rows(h, e.extra) },
+  sections(host, [
+    { id: "econ-covers", title: "What the fee covers", render: (h) => {
+      // the two lists side by side: what the yearly fee includes, and what the customer pays for on top
+      const two = el("div", "covers");
+      for (const [k, list, label] of [["in", e.included, "Included in the annual fee"], ["out", e.extra, "Billed separately"]] as const) {
+        const col = el("div", `covers-col covers-${k}`);
+        col.appendChild(el("h3", undefined, label));
+        const ul = el("ul");
+        for (const r of list) { const li = el("li"); li.innerHTML = `<b>${escape(r.k)}</b> ${escape(r.v)}`; li.appendChild(cite(r.sources, 1)); ul.appendChild(li); }
+        col.appendChild(ul);
+        two.appendChild(col);
+      }
+      h.appendChild(two);
+      // the priced pole: the still with the fee attached to each element
+      const fig = el("figure", "inset");
+      const img = document.createElement("img");
+      img.src = `${BASE}${stillById.get("pole-flock") ?? ""}`;
+      img.alt = "Flock pole with camera, solar panel and battery box";
+      img.loading = "lazy";
+      img.decoding = "async";
+      fig.appendChild(img);
+      const cap = el("figcaption");
+      cap.appendChild(el("h3", undefined, "What each part of a camera costs"));
+      rows(cap, e.pricedPole.map((p) => ({ k: p.k, v: p.v, sources: p.sources })));
+      fig.appendChild(cap);
+      h.appendChild(fig);
+    } },
+    { id: "econ-fees", title: "Fees after installation", fine: "Flock’s Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure.",
+      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, figCtx())); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
     { id: "econ-prices", title: "List prices", fine: "Virginia Sheriffs’ Association catalog, May 2024, matching 2025 invoices. Per unit per year.",
       render: (h) => table(h, ["Item", "Price", "Term"], e.priceList.map((p) => ({ cells: [p.item + (p.sku ? ` (${p.sku})` : ""), p.price, p.term], num: [1], sources: p.sources }))) },
     { id: "econ-history", title: "Price history", render: (h) => {
@@ -177,30 +212,20 @@ export function renderEconomics(host: HTMLElement): void {
       }
       h.appendChild(tl);
     } },
-    { id: "econ-fees", title: "Fees for changes after installation, 2026 schedule", fine: "Flock’s Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure.",
-      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, figCtx())); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
-    { id: "econ-workflow", title: "Installation workflow and responsibilities",
-      render: (h) => table(h, ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources }))) },
-    { id: "econ-workforce", title: "Installation workforce", render: (h) => rows(h, e.workforce) },
-    { id: "econ-permitting", title: "Permitting by location type",
-      render: (h) => table(h, ["Location", "Permit", "Responsibility", "Documented cases"], e.permitting.map((p) => ({ cells: [p.scenario, p.permit, p.who, p.note || "—"], sources: p.sources }))) },
     { id: "econ-contract", title: "Ownership and contract terms", render: (h) => rows(h, e.contract) },
-    { id: "econ-scale", title: "Scale and finances", render: (h) => rows(h, e.scale) },
-    { id: "econ-unknowns", title: "Not publicly documented", render: (h) => {
-      const ul = el("ul", "unknown-list");
-      for (const u of e.unknowns) { const li = el("li", undefined, u.v); li.appendChild(cite(u.sources, 1)); ul.appendChild(li); }
-      h.appendChild(ul);
+    { id: "econ-install", title: "Installation and permits", render: (h) => {
+      h.appendChild(el("h3", "sub-title", "Who does what"));
+      table(h, ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources })));
+      h.appendChild(el("h3", "sub-title", "Who installs the cameras"));
+      rows(h, e.workforce);
+      h.appendChild(el("h3", "sub-title", "Permits by location"));
+      table(h, ["Location", "Permit", "Responsibility", "Documented cases"], e.permitting.map((p) => ({ cells: [p.scenario, p.permit, p.who, p.note || "—"], sources: p.sources })));
     } },
-  ];
-  host.appendChild(jumpList(sections.map((s) => ({ id: s.id, label: s.title }))));
-  for (const s of sections) {
-    const sec = el("section", "econ-block");
-    sec.id = s.id;
-    sec.appendChild(sectionHead(s.title));
-    if (s.fine) sec.appendChild(el("p", "fine", s.fine));
-    s.render(sec);
-    host.appendChild(sec);
-  }
+    // public money for the cameras is on the Deployments page, with Texas's grants
+    { id: "econ-company", title: "The company", render: (h) => rows(h, e.scale.filter((r) => r.k !== "Public money")) },
+    { id: "econ-unknowns", title: "What is not public", render: (h) => unknownList(h, e.unknowns) },
+    { id: "about", title: "About the data", render: (h) => about(h, e.intro.summary, e.intro.sources) },
+  ]);
   initTooltips(host);
 }
 
@@ -215,35 +240,20 @@ export function revealSource(id: string, behavior: ScrollBehavior = "smooth"): b
   return true;
 }
 
-/** Where Flock's contracts are public, the largest documented contracts, funding sources and documented camera counts by city. */
+/** Who pays for the cameras, the largest documented contracts and what is not public. The chart of mapped cameras by
+ *  city opens the page (rendered at build time). */
 export async function renderDeployments(host: HTMLElement): Promise<void> {
   const d = deployments;
-  const intro = el("p", "lede-p", d.intro.summary);
-  intro.appendChild(cite(d.intro.sources));
-  host.appendChild(intro);
-  const sections: { id: string; title: string; render(h: HTMLElement): void }[] = [
-    { id: "dep-contracts", title: "Largest documented contracts", render: (h) => {
+  sections(host, [
+    { id: "dep-pays", title: "Who pays for the cameras", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(figCtx())); rows(h, d.funding); } },
+    { id: "dep-contracts", title: "The largest documented contracts", render: (h) => {
       h.insertAdjacentHTML("beforeend", contractsFigure(story.figures.contracts!, figCtx()));
       table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [`${c.agency} · ${c.level}${c.level === "Federal" ? "" : `, ${apState(c.state)}`}`, c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
       h.lastElementChild?.classList.add("contracts");
     } },
-    { id: "dep-texas", title: "Texas: paid for by an insurance fee, then paused", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(figCtx())); } },
-    { id: "dep-funding", title: "Public funding behind state and local contracts", render: (h) => rows(h, d.funding) },
-    { id: "dep-records", title: "Where the records are", render: (h) => rows(h, d.records) },
-    { id: "dep-unknowns", title: "Not publicly documented", render: (h) => {
-      const ul = el("ul", "unknown-list");
-      for (const u of d.unknowns) { const li = el("li", undefined, u.v); li.appendChild(cite(u.sources, 1)); ul.appendChild(li); }
-      h.appendChild(ul);
-    } },
-  ];
-  host.appendChild(jumpList(sections.map((s) => ({ id: s.id, label: s.title }))));
-  for (const s of sections) {
-    const sec = el("section", "econ-block");
-    sec.id = s.id;
-    sec.appendChild(sectionHead(s.title));
-    s.render(sec);
-    host.appendChild(sec);
-  }
+    { id: "dep-unknowns", title: "What is not public", render: (h) => unknownList(h, d.unknowns) },
+    { id: "about", title: "About the data", render: (h) => { about(h, d.intro.summary, d.intro.sources); h.appendChild(el("h3", "sub-title", "Where the records are")); rows(h, d.records); } },
+  ]);
   initTooltips(host);
 }
 
@@ -259,12 +269,11 @@ const order = ["flock", "independent", "government", "court"];
 
 /** The bibliography, grouped by origin, each entry with its date and the date it was last checked. */
 export function renderSources(host: HTMLElement): void {
-  const legend = el("p");
+  const legend = el("p", "lede-p");
   legend.innerHTML = `Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> is a teardown, research paper or news report. <span class="tag tag-gov">Government</span> is a legislature, agency, council or public-records release, and <span class="tag tag-gov">Court</span> a filing or opinion. Elsewhere on the site, <span class="tag tag-unknown">Not verified</span> marks a statement that neither Flock nor an independent source confirms. Each source carries the date it was last checked.`;
-  host.appendChild(legend);
   const jump = el("nav", "jump");
   jump.setAttribute("aria-label", "Source groups");
-  jump.innerHTML = order.filter((k) => sources.some((s) => s.kind === k)).map((k) => `<a href="#group-${k}">${escape(kindTitle[k]!)}</a>`).join("");
+  jump.innerHTML = order.filter((k) => sources.some((s) => s.kind === k)).map((k) => `<a href="#group-${k}">${escape(kindTitle[k]!)}</a>`).join("") + `<a href="#about">About the sources</a>`;
   host.appendChild(jump);
   const list = el("div", "sources");
   const sorted = sources.slice().sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind) || a.date.localeCompare(b.date));
@@ -287,6 +296,8 @@ export function renderSources(host: HTMLElement): void {
     list.appendChild(row);
   }
   host.appendChild(list);
+  host.appendChild(sectionHead("About the sources", "about"));
+  host.appendChild(legend);
   const fine = el("p", "fine");
   fine.innerHTML = `Camera positions on the Outcomes page come from OpenStreetMap contributors via <a href="https://deflock.org" rel="noopener">DeFlock</a>. This site does not describe ways to avoid or disable the cameras. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
   host.appendChild(fine);

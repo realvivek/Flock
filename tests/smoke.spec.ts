@@ -48,7 +48,7 @@ test("home: the story, a card for every page, the previews, older links redirect
   await page.waitForURL(/\/data\/$/, { waitUntil: "commit" });
   await ready(page);
   await nav(page, "Data");
-  await expect(page.locator("#page-body .stage")).toHaveCount(14);
+  await expect(page.locator("#page-body .stage")).toHaveCount(12);
   // the preview opens the components page
   await go(page, "/");
   await ready(page);
@@ -81,7 +81,7 @@ test("every content page loads with its content, the pager and citations that re
   page.on("pageerror", (e) => errors.push(e.message));
   const counts: Record<string, [string, number]> = {
     deployments: ["#fig-cities [data-tip]", 10],
-    data: ["#page-body .stage", 14],
+    data: ["#page-body .stage", 12],
     journey: ["#page-body .stop", 7],
     outcomes: ["#page-body .site", 30],
     claims: ["#page-body .claim", 21],
@@ -121,14 +121,13 @@ test("every content page loads with its content, the pager and citations that re
   await ready(page);
   await expect(page.locator("#pager a.prev")).toHaveAttribute("href", "../economics/");
   await expect(page.locator("#pager .end")).toHaveCount(1);
-  // data: deputy form and a stage deep link
+  // data: the documented search's record and a stage deep link
   await go(page, "/data/#stage-10");
   await ready(page);
   await instant(page);
   await expect.poll(() => inView(page, "#stage-10")).toBe(true);
-  await page.fill("#deputy-reason", "investigation");
-  await page.locator("#deputy-form button").click();
-  await expect(page.locator("#deputy-readout")).toContainText("6,809");
+  await expect(page.locator("#fig-audit")).toContainText("6,809");
+  await expect(page.locator("#fig-ruler")).toHaveCount(1);
   // claims: product table, a component link and a data-stage link cross pages
   await go(page, "/claims/");
   await ready(page);

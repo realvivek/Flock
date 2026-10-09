@@ -96,3 +96,34 @@ export function verdictIndex(myths: Myth[], ctx: Ctx, o: { level?: 2 | 3 } = {})
   const sub = `Each square is one claim, numbered as in the list below. Select a square to read the entry.`;
   return frame("verdicts", { title, sub, notes: [], sources: [] }, ctx, `<div class="vi">${squares}</div><div class="vi-key">${key}</div>`, { level: o.level, srcText: "Sources: listed with each claim.", cls: "verdicts" });
 }
+
+export interface SourceKind { kind: string }
+const KINDS: { kind: string; label: string }[] = [{ kind: "independent", label: "Teardowns, studies and news reports" }, { kind: "flock", label: "Flock Safety’s own documents" }, { kind: "government", label: "Government records" }, { kind: "court", label: "Court filings and opinions" }];
+const IN_TEN = ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "all"];
+/** A share as a reader says it: "one in five", "a third", "six in 10". */
+function shareWords(p: number): string {
+  const named: [number, string][] = [[1 / 2, "half"], [1 / 3, "a third"], [1 / 4, "one in four"], [1 / 5, "one in five"], [2 / 3, "two-thirds"], [3 / 4, "three in four"]];
+  const tens = Math.round(p * 10), best = named.reduce((a, b) => (Math.abs(b[0] - p) < Math.abs(a[0] - p) ? b : a));
+  return Math.abs(best[0] - p) <= Math.abs(tens / 10 - p) + 1e-9 ? best[1] : `${IN_TEN[tens]} in 10`;
+}
+/** The sources by origin: one bar each, Flock's own documents marked. */
+export function originsFigure(sources: SourceKind[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
+  const rows = KINDS.map((k) => ({ ...k, n: sources.filter((s) => s.kind === k.kind).length })).filter((r) => r.n > 0);
+  const total = sources.length, max = Math.max(...rows.map((r) => r.n));
+  const draw = (W: number, narrow: boolean) => {
+    const T = 6, rowH = narrow ? 44 : 30, barH = 12, L = narrow ? 0 : 236, R = narrow ? 40 : 48;
+    const x = linScale(0, max, L, W - R);
+    let out = "";
+    rows.forEach((r, i) => {
+      const y = T + i * rowH, hi = r.kind === "flock", by = narrow ? y + 20 : y + (rowH - barH) / 2;
+      const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, r.label, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
+      out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(r.n) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(r.n) + 6, by + barH - 1, int(r.n), { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `${int(r.n)} of ${int(total)} sources`, r.label);
+    });
+    out += line(x(0), T - 2, x(0), T + rows.length * rowH, { class: "baseline" });
+    return svg(W, T + rows.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of the ${total} sources by origin: ${rows.map((r) => `${r.label.toLowerCase()}, ${r.n}`).join("; ")}.` });
+  };
+  const share = (k: string) => (rows.find((r) => r.kind === k)?.n ?? 0) / total;
+  const title = `${shareWords(share("independent")).replace(/^./, (c) => c.toUpperCase())} of the sources are independent reports; about ${shareWords(share("flock"))} is Flock’s own`;
+  const table = dataTable(["Origin", "Sources"], rows.map((r) => [r.label, r.n]), { caption: "Sources by origin" });
+  return frame("origins", { title, sub: `The ${total} documents this site cites, by who published them`, notes: ["A news report that quotes Flock or a government record counts as a news report; each entry below is tagged by its publisher."], sources: [] }, ctx, draw(WIDE, false) + draw(NARROW, true), { level: o.level, table, srcText: "Source: the list below." });
+}

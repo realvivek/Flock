@@ -10,6 +10,10 @@ import { BASE } from "./lib/base";
 import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
 import { tickWords, apState, apDate, apPeriod, placeName, ap, typeset } from "./viz/format";
 import { figCtx } from "./ui/figs";
+import { frame, dataTable } from "./story/frame";
+import { errorsFigure } from "./story/fig/errors";
+import storyRaw from "./content/story.json";
+import type { FigureCfg } from "./story/schema";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
 
@@ -116,14 +120,43 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   const raw = await fetch(`${BASE}data/outcomes.json`).then((r) => r.json());
   const d = typeset(File.parse(raw));
   const mapOff = new URLSearchParams(location.search).get("map") === "off";
-  // Summary line
-  const top = el("div", "coverage-strip sheet");
-  top.innerHTML = `<div><span class="big">${d.cameras.flock.toLocaleString("en-US")}</span><span class="mono">Flock cameras mapped by OpenStreetMap contributors on ${apDate(d.cameras.asOf.slice(0, 10))}, the snapshot the records were matched against (${d.cameras.total.toLocaleString("en-US")} readers of all makes)</span></div><div><span class="big">${d.coverage.sites}</span><span class="mono">locations with a published outcome record</span></div><div><span class="big">${d.coverage.matched}</span><span class="mono">of ${d.coverage.located} located sites within 150 m of a mapped camera</span></div>`;
-  host.appendChild(top);
-  // National map
+  const ctx = figCtx();
+  const snapshot = String(ctx.stats.snapshot?.value ?? "");
+  const mappedNow = Number(ctx.stats.mappedFlock?.value ?? 0), onMap = Number(ctx.stats.usFlock?.value ?? 0);
+  // The page opens with the national map: every mapped Flock camera, and the places a published record ties a result to.
+  const bySrc = Object.entries(d.coverage.bySource);
+  const natTable = dataTable(["Source", "Locations", "Located", "Within 150 meters of a mapped camera"], bySrc.map(([k, v]) => [SOURCE_META[k]?.title.split(":")[0] ?? k, v.sites, v.located, v.matched]), { caption: "Outcome locations by source" });
+  const natCfg: FigureCfg = { title: `Only ${d.coverage.sites} camera locations have a published outcome record`, sub: `Each gray dot is one of the ${onMap ? `${onMap.toLocaleString("en-US")} ` : ""}Flock cameras mapped in the 50 states and D.C.${snapshot ? ` as of ${apDate(snapshot)}` : ""}. Rings mark the ${d.coverage.located} of those locations that could be placed and the ${d.coverage.inCar} places where Story County’s patrol-car readers made hits; a ring’s area follows the count there.`, notes: ["The records are listed, with their sources, in the tables below."], sources: ["deflock-tiles-2026"] };
+  host.insertAdjacentHTML("beforeend", frame("national", natCfg, ctx, mapOff ? "" : `<div class="panel national" data-panel="national"><canvas aria-label="Every mapped Flock camera in the United States, with the outcome locations marked as rings"></canvas><p class="panel-cap"></p></div>${mapKey()}`, { level: 2, table: natTable, cls: "outcomes-lead" }));
+  // Agency ladders
+  const ag = el("section", "source-block"); ag.id = "agencies";
+  ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some steps of the ladder, from plate reads to arrests, for a whole program. Rates are computed only where both steps come from the same report and the same readers. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be “directly related” or “assisted”; the note says which.</p><div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div></div>`;
+  const ladderSrcs = [...new Set(d.ladders.flatMap((L) => L.sources))];
+  ag.insertAdjacentHTML("beforeend", frame("ladders", { title: "Reads run to the millions; arrests, to the dozens or hundreds", sub: "Counts each department reported, on a logarithmic scale. Hollow marks: reads and alerts from different periods, or from readers of several makes.", notes: ["The figures are not a ranking: departments count different steps, over different periods and with different definitions."], sources: ladderSrcs }, ctx, `<div class="ladder-draw"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`, { cls: "ladder-ov" }));
+  const ov = ag.querySelector<HTMLElement>("#fig-ladders")!;
+  // drawn at the width it is shown at (once the section is in the page), so its labels keep their size on a phone
+  const drawOv = () => { ov.querySelector(".ladder-draw")!.innerHTML = ladderOverview(d.ladders, Math.max(300, Math.min(ov.clientWidth || 600, 600))); };
+  let ovW = innerWidth; addEventListener("resize", () => { if (innerWidth !== ovW) { ovW = innerWidth; drawOv(); } });
+  initTooltips(ov);
+  const lw = el("div", "tablewrap"); const lt = el("table", "rung-table ladders");
+  lt.innerHTML = `<thead><tr><th>Agency</th><th>Period</th><th>Reads</th><th>Alerts</th><th>Wrong alerts</th><th>Stops</th><th>Recoveries</th><th>Arrests</th></tr></thead>`;
+  const ltb = el("tbody");
+  for (const L of d.ladders) {
+    const tr = el("tr", "ladder"); tr.id = `ladder-${L.id}`;
+    tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="small">${escape(apPeriod(L.period))}</td>${rungCells(L.values, { bars: true })}`;
+    ltb.appendChild(tr);
+    const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows || L.noRates ? "" : rates(L.values, L)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
+  }
+  lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
+  drawOv();
+  // When an alert is wrong: the story's figure of three kinds of error
+  const story = storyRaw as unknown as { figures: Record<string, FigureCfg> };
+  const er = el("section", "source-block"); er.id = "errors";
+  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a camera’s reading of a plate matched a list entry. Three records show three ways that match can be wrong, each measured against the total its own report gives.</p></div>${errorsFigure(story.figures.errors!, ctx)}`;
+  host.appendChild(er);
+  // By camera site
   const nat = el("section", "source-block"); nat.id = "sites";
-  nat.innerHTML = `<div class="sec-head"><h2>By camera site</h2><p class="lede small">Six sources publish outcomes that can be placed at a camera. Rings mark them on the map of every mapped Flock camera; a ring’s area follows the count of hits or calls, and its shade the deepest rung the record reaches.</p></div>`;
-  if (!mapOff) { const fig = el("figure", "panel national"); fig.dataset.panel = "national"; fig.innerHTML = `<canvas aria-label="Every mapped Flock camera in the United States with the outcome sites marked"></canvas><figcaption class="mono"></figcaption>`; nat.appendChild(fig); nat.insertAdjacentHTML("beforeend", mapKey()); }
+  nat.innerHTML = `<div class="sec-head"><h2>By camera site</h2><p class="lede small">Six sources publish outcomes that can be placed at a camera or a street corner. Each is mapped below with the cameras around it, and its table gives every location.</p></div>`;
   host.appendChild(nat);
   for (const key of ["nashville", "story", "tucson", "windsor", "court", "news"]) {
     let sites = d.sites.filter((s) => s.source === key);
@@ -152,39 +185,17 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
     card.appendChild(cite(g.sources, 2)); ds.appendChild(card);
   }
   host.appendChild(ds);
-  // Agency ladders
-  const ag = el("section", "source-block"); ag.id = "agencies";
-  ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some rungs of the ladder for a whole program. Rates are computed only where both rungs come from the same report. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be “directly related” or “assisted”; the note says which. Amber bars show each figure on a log scale against the largest figure in its row.</p><div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div></div>`;
-  const ov = el("figure", "fig ladder-ov");
-  ov.innerHTML = `<figcaption class="fig-head"><h3 class="fig-title">Every rung each audit reports, on one scale</h3><p class="fig-sub">Counts per department, on a logarithmic scale. Hollow marks: reads and alerts from different windows, or readers of several makes.</p></figcaption><div class="fig-body"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`;
-  ag.appendChild(ov);
-  // drawn at the width it is shown at (once the section is in the page), so its labels keep their size on a phone
-  const drawOv = () => { ov.querySelector(".fig-body")!.innerHTML = ladderOverview(d.ladders, Math.max(300, Math.min(ov.clientWidth || 640, 760))); };
-  let ovW = innerWidth; addEventListener("resize", () => { if (innerWidth !== ovW) { ovW = innerWidth; drawOv(); } });
-  initTooltips(ov);
-  const lw = el("div", "tablewrap"); const lt = el("table", "rung-table ladders");
-  lt.innerHTML = `<thead><tr><th>Agency</th><th>Period</th><th>Reads</th><th>Alerts</th><th>Wrong alerts</th><th>Stops</th><th>Recoveries</th><th>Arrests</th></tr></thead>`;
-  const ltb = el("tbody");
-  for (const L of d.ladders) {
-    const tr = el("tr", "ladder"); tr.id = `ladder-${L.id}`;
-    tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="small">${escape(apPeriod(L.period))}</td>${rungCells(L.values, { bars: true })}`;
-    ltb.appendChild(tr);
-    const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows || L.noRates ? "" : rates(L.values, L)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
-  }
-  lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
-  drawOv();
   // National
   const ns = el("section", "source-block"); ns.id = "national";
   ns.innerHTML = `<div class="sec-head"><h2>National statements</h2><p class="lede small">Figures that describe the whole network rather than a place, tagged by who states them.</p></div>`;
   for (const s of d.national.statements) { const p = el("div", "stmt sheet"); p.innerHTML = `<span class="tag ${s.tag === "flock" ? "tag-flock" : "tag-indep"}">${s.tag === "flock" ? "Flock" : "Independent"}</span> <b>${escape(s.who)}.</b> ${escape(s.text)}`; p.appendChild(cite(s.sources, 2)); ns.appendChild(p); }
   const ex = el("div", "excluded"); ex.innerHTML = `<h3>Records found but not placed</h3><ul>${d.national.excluded.map((e) => `<li><b>${escape(e.what)}.</b> ${escape(e.why)}.</li>`).join("")}</ul>`; ns.appendChild(ex);
   host.appendChild(ns);
-  // Coverage
-  const cv = el("section", "source-block"); cv.id = "coverage";
-  const by = Object.entries(d.coverage.bySource).map(([k, v]) => `<tr><td>${escape(SOURCE_META[k]?.title.split(":")[0] ?? k)}</td><td class="mono">${v.sites}</td><td class="mono">${v.located}</td><td class="mono">${v.matched}</td></tr>`).join("");
-  cv.innerHTML = `<div class="sec-head"><h2>Coverage</h2><p class="lede small">What this page can and cannot say. When the records were matched, ${d.cameras.flock.toLocaleString("en-US")} Flock cameras were on the map; ${d.coverage.sites} locations have a published outcome record, ${d.coverage.matched} of them within 150 meters of a mapped camera. Every other camera on the map has no public outcome record at all.</p></div><div class="tablewrap"><table class="rung-table"><thead><tr><th>Source</th><th>Locations</th><th>Located</th><th>Matched to a mapped camera</th></tr></thead><tbody>${by}</tbody></table></div><p class="small">What would extend it: Flock’s software exports a hot-list alert report with the camera name, timestamp, plate and list, and since September 2022 an outcome field (“Apprehended” or “Not Apprehended”) officers can set on alerts and searches. Agencies release these under public-records law; Story County’s export above is one. A request for the alert report and the outcome field, plus the agency’s camera inventory, gives the per-camera ladder for any agency.</p><p class="fine">Camera positions: OpenStreetMap contributors via the deflock-data export, ODbL. Updated ${escape(apDate(d.generated))}.</p>`;
-  cv.appendChild(cite(["deflock-data"], 2));
-  host.appendChild(cv);
+  // About the data: what the page can and cannot say, and the two camera snapshots
+  const ab = el("section", "source-block"); ab.id = "about";
+  ab.innerHTML = `<div class="sec-head"><h2>About the data</h2></div><p class="lede small">What this page can and cannot say. ${d.coverage.sites} locations have a published outcome record; ${d.coverage.located} of them could be placed on a map, and ${d.coverage.matched} lie within 150 meters of a mapped camera. Every other camera on the map has no public outcome record at all.</p><p class="lede small">The records were matched to the ${d.cameras.flock.toLocaleString("en-US")} Flock cameras on the map on ${apDate(d.cameras.asOf.slice(0, 10))}, when most of them were compiled, so the distances in the tables are to the cameras that were there then; the city maps show the same snapshot. The national map at the top shows the ${mappedNow ? mappedNow.toLocaleString("en-US") : "Flock cameras"} mapped as of ${snapshot ? apDate(snapshot) : "the latest snapshot"}.</p><p class="small">What would extend it: Flock’s software exports a hot-list alert report with the camera name, timestamp, plate and list, and since September 2022 an outcome field (“Apprehended” or “Not Apprehended”) officers can set on alerts and searches. Agencies release these under public-records law; Story County’s export above is one. A request for the alert report and the outcome field, plus the agency’s camera inventory, gives the per-camera ladder for any agency.</p><p class="fine">Camera positions: OpenStreetMap contributors via DeFlock, under the Open Database License. Updated ${escape(apDate(d.generated))}.</p>`;
+  ab.appendChild(cite(["deflock-data", "deflock-tiles-2026"], 2));
+  host.appendChild(ab);
   initTableWraps();
   if (!mapOff) void drawPanels(d, host);
 }
@@ -195,13 +206,12 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
   const xy: Record<string, [number, number]> = await fetch(`${BASE}data/basemaps/outcome-sites.json`).then((r) => r.json());
   const sizeOf = (s: SiteT) => s.values.alerts ?? s.values.falseAlerts ?? 1;
   const draw = async (fig: HTMLElement) => {
-    const canvas = fig.querySelector("canvas")!, cap = fig.querySelector("figcaption")!;
+    const canvas = fig.querySelector("canvas")!, cap = fig.querySelector(".panel-cap, figcaption")!;
     const key = fig.dataset.panel!;
     if (key === "national") {
       const rings: Ring[] = d.sites.filter((s) => xy[s.id]).map((s) => ({ x: xy[s.id]![0], y: xy[s.id]![1], size: sizeOf(s), depth: depth(s.values) }));
-      const n = await drawNational(canvas, rings);
-      const snap = String(figCtx().stats.snapshot?.value ?? "");
-      cap.textContent = `Each gray dot is one of the ${n.toLocaleString("en-US")} Flock cameras mapped${snap ? ` as of ${apDate(snap)}` : ""}; the ${rings.length} rings are outcome locations. Alaska and Hawaii are shown at different scales.`;
+      await drawNational(canvas, rings);
+      cap.textContent = "Alaska and Hawaii are shown at different scales.";
       return;
     }
     const sites = d.sites.filter((s) => s.source === key && s.lat != null);

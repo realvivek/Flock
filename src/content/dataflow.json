@@ -45,13 +45,6 @@
       "summary": "An S3 lifecycle policy removes images at the configured interval and logs the deletion to CloudTrail. As of Oct. 8, 2026, Flock's Myths and Facts page still gives 30 days as the default; its Data Privacy page gives seven.",
       "payload": ["deletion receipt"], "sources": ["flock-deletion", "flock-guardrails-2026", "police1-7day-2026", "flock-myths", "flock-data-privacy", "aclu-guardrails"] }
   ],
-  "retentionPresets": [
-    { "label": "7 days", "days": 7, "note": "Flock default for new customers since Aug. 13, 2026", "sources": ["flock-guardrails-2026"] },
-    { "label": "21 days", "days": 21, "note": "Virginia and Washington statutory limits", "sources": ["va-code-2-2-5517", "wa-sb6002-2026"] },
-    { "label": "30 days", "days": 30, "note": "Flock default until August 2026, kept by existing customers that chose it; still given as the default on Flock's Myths and Facts page as of Oct. 8, 2026", "sources": ["flock-arch-2024", "flock-myths"] },
-    { "label": "60 days", "days": 60, "note": "California Highway Patrol limit, as summarized in SB 34", "sources": ["ca-sb34"] },
-    { "label": "Evidence Mode", "days": 365, "note": "Cold storage for an active investigation; no published limit", "sources": ["flock-guardrails-2026", "aclu-guardrails"] }
-  ],
   "deputy": {
     "networks": 6809, "cameras": 83345, "lookbackDays": 30, "date": "May 9, 2025", "reasonAsLogged": "had an abortion, search for female",
     "first": { "networks": 1295, "cameras": 17684, "lookbackDays": 7 },

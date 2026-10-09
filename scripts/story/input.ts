@@ -7,7 +7,8 @@ import type { StoryInput, Stats, SourceRec } from "../../src/story/types.ts";
 import type { Deputy } from "../../src/story/fig/searches.ts";
 import type { Ctx } from "../../src/story/frame.ts";
 import { renderPageMeta, renderPageHead, asLead } from "../../src/story/pagehead.ts";
-import { citiesFigure, verdictIndex, type Myth } from "../../src/story/fig/reference.ts";
+import { citiesFigure, verdictIndex, originsFigure, type Myth } from "../../src/story/fig/reference.ts";
+import { rulerFigure } from "../../src/story/fig/ruler.ts";
 import { priceFigure } from "../../src/story/fig/money.ts";
 import { apDate, typeset } from "../../src/viz/format.ts";
 
@@ -76,6 +77,8 @@ export function renderPage(root: string, id: string): RenderedPage {
       case "cities": return citiesFigure(cities.rows, apDate(cities.snapshot), ctx, { level: 2 });
       case "price": return asLead(priceFigure(story.figures.price!, ctx));
       case "verdicts": return verdictIndex(myths, ctx, { level: 2 });
+      case "origins": return originsFigure(sources, ctx, { level: 2 });
+      case "ruler": return asLead(rulerFigure(story.figures.ruler!, ctx));
       default: throw new Error(`pages.json: unknown lead figure ${cfg.lead} on ${id}`);
     }
   })();

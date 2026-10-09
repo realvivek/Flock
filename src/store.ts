@@ -9,8 +9,6 @@ export interface State {
   explodeStage: number;
   /** A camera or stage tween is in flight in the locator */
   tweening: boolean;
-  retentionIndex: number;
-  deputyReason: string | null;
   tier: Tier;
   reducedMotion: boolean;
   /** "3d" when the locator renders, "stills" otherwise */
@@ -31,8 +29,6 @@ export const state: State = {
   focusedPart: null,
   explodeStage: 0,
   tweening: false,
-  retentionIndex: 0,
-  deputyReason: null,
   tier: "mid",
   reducedMotion: false,
   mode: "stills",
