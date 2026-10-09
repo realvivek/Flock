@@ -190,7 +190,10 @@ export async function initLocator(canvas: HTMLCanvasElement, status: HTMLElement
   ro.observe(canvas);
   // ready once every material has compiled and a frame is on screen, so the panel never shows an empty stage
   await scene.whenReadyAsync();
-  await new Promise<void>((res) => scene.onAfterRenderObservable.addOnce(() => res()));
+  // the first frame is drawn even when the panel starts below the fold, so the page is ready wherever it opens
+  const first = new Promise<void>((res) => scene.onAfterRenderObservable.addOnce(() => res()));
+  if (!visible) scene.render();
+  await first;
   set({ ready: true, mode: "3d" });
   return api;
 }

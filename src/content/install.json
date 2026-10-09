@@ -125,7 +125,7 @@
         },
         {
           "k": "On state roads",
-          "v": "Where a transportation department controls the right of way, it requires a breakaway pole approved under national crash-test standards (NCHRP 350 or MASH)",
+          "v": "Where a transportation department controls the right of way, it may require a breakaway pole approved under national crash-test standards (NCHRP 350 or MASH)",
           "sources": [
             "flock-impl-guide"
           ]

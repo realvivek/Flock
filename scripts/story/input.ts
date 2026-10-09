@@ -84,7 +84,7 @@ export function renderPage(root: string, id: string): RenderedPage {
       case "verdicts": return verdictIndex(myths, ctx, { level: 2 });
       case "origins": return originsFigure(sources, ctx, { level: 2 });
       case "ruler": return asLead(rulerFigure(story.figures.ruler!, ctx));
-      case "parts": { const c = j("src/content/components.json"); return partsFigure(c.parts.length, [...new Set([...c.envelope.sources, "cehrp-dissection", "ryanohoro-2024", "flockcamre", "fccid-2bkg8"])], ctx, { level: 2 }); }
+      case "parts": { const c = j("src/content/components.json"); return partsFigure(c.parts, [...new Set([...c.envelope.sources, "cehrp-dissection", "ryanohoro-2024", "flockcamre", "fccid-2bkg8"])], ctx, { level: 2 }); }
       default: throw new Error(`pages.json: unknown lead figure ${cfg.lead} on ${id}`);
     }
   })();

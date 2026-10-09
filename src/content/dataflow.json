@@ -34,7 +34,7 @@
       "summary": "When a plate matches, an alert with the time, the camera's location, the plate and the vehicle image reaches officers in 10 to 15 seconds on average, according to Flock's datasheet; Flock's mobile app sends alerts to officers within a set radius. Multi-factor login became mandatory in August 2026. In Roseville, Calif., 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 (71 percent) involved a misread plate; the department says none led to a contact or an arrest, and Flock calls the figure a mischaracterization of overall accuracy.",
       "payload": ["plate", "vehicle image", "time", "camera location"], "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "sacbee-roseville-2026"] },
     { "id": "hop-10", "n": 10, "title": "Network search", "where": "FlockOS", "tag": "both",
-      "summary": "A user in a customer agency can search by plate, description, natural language or co-traveling vehicles, across the agency's cameras, its sharing partners, and the national lookup that about 75 percent of law-enforcement customers joined, according to Flock's statement to Congress. The audit log of a Johnson County, Tex., search on May 9, 2025, lists 83,345 cameras in 6,809 networks.",
+      "summary": "A user in a customer agency can search by plate, description, natural language or co-traveling vehicles, across the agency's cameras, its sharing partners, and the national lookup that about 75 percent of law enforcement customers joined, according to Flock's statement to Congress. The audit log of a Johnson County, Tex., search on May 9, 2025, lists 83,345 cameras in 6,809 networks.",
       "payload": ["query", "reason (free text)", "case number (free text)"], "unknowns": ["Whether derived metadata is deleted on the same clock as images"],
       "sources": ["flock-platform", "wyden-ftc-2025", "404-texas-2025", "eff-texas-2025", "404-states-2025", "techtimes-casecodes-2026"] },
     { "id": "hop-11", "n": 11, "title": "Audit log", "where": "FlockOS Insights", "tag": "independent",
@@ -42,7 +42,7 @@
       "payload": ["ID", "Name", "Org Name", "Camera Count", "Time Frame", "License Plate", "Reason", "Case #", "Filters", "Search Time", "Search Type", "Text Prompt", "Moderation"],
       "sources": ["haveibeenflocked-audit", "alprwatch-foia-2025", "eff-protesters-2025", "aclu-audit-logs"] },
     { "id": "hop-12", "n": 12, "title": "Delete", "where": "AWS S3 lifecycle", "tag": "flock", "retention": "Seven days by default for new customers since Aug. 13, 2026, down from 30; existing customers keep the periods they set; longer where an elected body approved it; Evidence Mode keeps data tied to an investigation, with no published limit",
-      "summary": "An S3 lifecycle policy removes images at the configured interval and logs the deletion to CloudTrail. As of Oct. 8, 2026, Flock's Myths and Facts page still gives 30 days as the default; its Data Privacy page gives seven.",
+      "summary": "According to Flock, an automated Amazon Web Services S3 lifecycle policy deletes images once they pass the agency’s retention period, and AWS CloudTrail logs each deletion. As of Oct. 8, 2026, Flock's Myths and Facts page still gives 30 days as the default; its Data Privacy page gives seven.",
       "payload": ["deletion receipt"], "sources": ["flock-deletion", "flock-guardrails-2026", "police1-7day-2026", "flock-myths", "flock-data-privacy", "aclu-guardrails"] }
   ],
   "deputy": {

@@ -38,7 +38,7 @@ export function citiesFigure(rows: City[], snapshot: string, ctx: Ctx, o: { leve
   // the takeaway the headline does not already give: how far ahead the first city is
   const ratio = list[0]!.flock / list[1]!.flock;
   const title = ratio >= 2 ? `${list[0]!.name} has more than twice as many mapped Flock cameras as any other city` : `${list[0]!.name} has the most mapped Flock cameras of any city`;
-  const per = denser.length ? `Among the ${rows.length} cities in the table, ${denser.map((c) => c.name).slice(0, -1).join(", ")}${denser.length > 1 ? " and " : ""}${denser[denser.length - 1]!.name} have more mapped Flock cameras per resident than ${list[0]!.name}. ` : "";
+  const per = denser.length ? `Among the ${rows.length} cities in the full table, under “Show the data,” ${denser.map((c) => c.name).slice(0, -1).join(", ")}${denser.length > 1 ? " and " : ""}${denser[denser.length - 1]!.name} have more mapped Flock cameras per resident than ${list[0]!.name}. ` : "";
   return frame("cities", cfg(title, `Flock cameras mapped inside city limits as of ${snapshot}: the 15 largest counts, and the number per 100,000 residents`, ["deflock-tiles-2026", "census-boundaries-2024", "census-places-pop-2024"], [`${per}Counts are inside each city’s 2024 Census boundary, and population is the Census Bureau’s estimate for 2024. Mapped counts include cameras run by businesses, homeowner groups and state police inside city limits, and miss any camera no volunteer has tagged.`]), ctx, draw(WIDE, false) + draw(NARROW, true), { table, level: o.level });
 }
 
@@ -49,7 +49,7 @@ export function texasFigure(ctx: Ctx): string {
 <li><span class="n">$30 million</span><span class="t">or more in the authority’s grants and contracts for Flock cameras</span></li>
 <li><span class="n">3,200</span><span class="t">Flock cameras or more installed with its help by state and local agencies since 2023</span></li>
 <li class="is-stop"><span class="n">Aug. 27, 2026</span><span class="t">The governor orders state agencies to pause funding for Flock cameras</span></li>
-<li class="is-stop"><span class="n">900</span><span class="t">cameras or more switched off by at least 14 cities and counties by late September, The Texas Tribune counted</span></li>
+<li class="is-stop"><span class="n">More than 900</span><span class="t">cameras switched off by at least 14 cities and counties by late September, The Texas Tribune counted</span></li>
 </ol>`;
   const f1 = frame("texas", cfg("Texas paid for cameras with a $1 insurance fee, then paused the money", "How state money reached state and local Flock networks, as The Texas Tribune reported it", ["texastribune-abbott-2026", "texastribune-dps-2026", "texastribune-unplugged-2026"]), ctx, flow);
   // Dallas: 684 cameras, 321 of them paid for by state grants
@@ -62,7 +62,7 @@ export function texasFigure(ctx: Ctx): string {
     return svg(W, H, sq, { cls: `unit ${narrow ? "v-narrow" : "v-wide"}`, label: "684 squares, one per Dallas camera; 321 of them, nearly half, are marked as the cameras paid for by the state grant." });
   };
   const key = `<div class="unit-key"><span><i class="c-hi-bg"></i>321 paid for by the state grant</span><span><i class="c-ctx2-bg"></i>363 others</span></div>`;
-  const f2 = frame("dallas", cfg("Nearly half of Dallas’s 684 cameras were paid for by the state grant Texas paused", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2025", "govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. On Sept. 1, the department said it would switch off the 321 grant-funded cameras; on Sept. 30 it said they would stay on for at least 90 days, and The Texas Tribune reported that Flock had paused the city’s payments for them."]), ctx, unit(false) + unit(true) + key);
+  const f2 = frame("dallas", cfg("Nearly half of Dallas’s 684 cameras were paid for by the state grant Texas paused", "Each square is one camera on the department’s transparency portal", ["govtech-dallas-2025", "govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"], ["Nearly $1.7 million of the city’s three-year, $5.7 million contract came from the state authority’s grant. On Sept. 1, the department said it would switch off the 321 grant-funded cameras; on Sept. 30 it said they would stay on for 90 days, and The Texas Tribune reported that Flock had paused the city’s payments for them."]), ctx, unit(false) + unit(true) + key);
   return f1 + f2;
 }
 
@@ -99,8 +99,15 @@ export function feesFigure(fees: Fee[], ctx: Ctx): string {
 
 /** The Components page's parts explorer, framed like the story's figures: the 3D locator (or the assembled still) beside
  *  the parts grid, which the page script fills. */
-export function partsFigure(n: number, sources: string[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
-  const body = `<div class="components">
+export function partsFigure(parts: { order: number; group: string }[], sources: string[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
+  const n = parts.length;
+  // runs of one group, front to back, named as the title names them
+  const NAME: Record<string, string> = { optics: "Optics", compute: "Computer", radio: "Radios", mount: "Mount" };
+  const sorted = parts.slice().sort((a, b) => a.order - b.order), runs: { from: number; to: number; group: string }[] = [];
+  for (const p of sorted) { const last = runs[runs.length - 1]; if (last && last.group === p.group) last.to = p.order; else runs.push({ from: p.order, to: p.order, group: p.group }); }
+  const nn2 = (v: number) => String(v).padStart(2, "0");
+  const strip = `<ol class="part-order" aria-label="The parts from the front of the case to the back">${runs.map((r, i) => `<li><span class="n">${nn2(r.from)}${r.to > r.from ? `–${nn2(r.to)}` : ""}</span> ${r.group === "shell" ? (i === 0 ? "Front bezel" : "Rear shell") : NAME[r.group] ?? r.group}</li>`).join("")}</ol>`;
+  const body = `${strip}<div class="components">
 <aside class="locator sheet" id="locator">
 <div class="locator-fig"><canvas id="locator-canvas" aria-label="The assembled camera, see-through" hidden></canvas><img id="locator-img" alt="The assembled Falcon camera" hidden /></div>
 <div class="locator-ui" id="locator-ui" hidden><div class="stage-row"><button type="button" class="chip" id="explode-prev" aria-label="Previous stage">‹</button><input id="explode-stage" type="range" min="0" max="5" value="0" step="1" aria-label="Explode stage" /><button type="button" class="chip" id="explode-next" aria-label="Next stage">›</button></div><p class="aim-readout" id="explode-readout"></p></div>
@@ -114,9 +121,9 @@ export function partsFigure(n: number, sources: string[], ctx: Ctx, o: { level?:
 export interface Row { k: string; v: string; sources: string[] }
 /** Flock's 2026 terms for customers: what changed, one line each, framed like a figure. */
 export function termsFigure(rows: Row[], ctx: Ctx): string {
-  const list = `<dl class="terms">${rows.map((r) => `<div class="terms-row"><dt>${escape(r.k)}</dt><dd>${escape(r.v)}.</dd></div>`).join("")}</dl>`;
-  const srcs = [...new Set([...rows.flatMap((r) => r.sources), "flock-tc-update-2026", "flock-myths"])];
-  return frame("terms", cfg("Flock’s 2026 terms no longer say it will not sell customer data", "What changed in Flock’s standard terms for customers in 2026, as Footnote 4a and the A.C.L.U. compared them with the earlier terms, and as contracts from 2023 give the earlier rules", srcs, ["Flock says it has never sold customer data and describes the February changes as a clarification of its definitions."]), ctx, list);
+  const list = `<dl class="terms">${rows.map((r) => `<div class="terms-row"><dt>${escape(r.k)}</dt><dd>${escape(/[”"]$/.test(r.v) ? r.v.replace(/([”"])$/, ".$1") : `${r.v}.`)}</dd></div>`).join("")}</dl>`;
+  const srcs = [...new Set([...rows.flatMap((r) => r.sources), "flock-tc-update-2026", "flock-tc-2026", "flock-myths"])];
+  return frame("terms", cfg("Flock’s 2026 terms make its license to customer data perpetual", "What changed in Flock’s standard terms for customers in 2026, as Footnote 4a and the A.C.L.U. compared them with the earlier terms, as contracts from 2023 give the earlier rules, and as the terms of Aug. 21, 2026, read", srcs, ["Flock says it has never sold customer data and describes the changes of Feb. 16, 2026, as a clarification of its definitions."]), ctx, list);
 }
 
 export interface Myth { id: string; claim: string; verdict: "false" | "true" | "nuanced" }
@@ -143,8 +150,8 @@ export function verdictIndex(myths: Myth[], ctx: Ctx, o: { level?: 2 | 3 } = {})
 
 export interface SourceKind { kind: string }
 /** The names of the four origins, shared by this chart and the Sources page's group heads. */
-export const SOURCE_KINDS: Record<string, string> = { flock: "Flock Safety’s own documents", independent: "News reports, research and advocacy groups", government: "Government records", court: "Court rulings" };
-const KINDS = ["independent", "flock", "government", "court"].map((kind) => ({ kind, label: SOURCE_KINDS[kind]! }));
+export const SOURCE_KINDS: Record<string, string> = { flock: "Flock Safety’s own documents", independent: "Independent: news, research and advocacy groups", government: "Government records", court: "Court rulings" };
+const KINDS = ["flock", "independent", "government", "court"].map((kind) => ({ kind, label: SOURCE_KINDS[kind]! }));
 const IN_TEN = ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "all"];
 /** A share as a reader says it: "one in five", "a third", "six in 10". */
 function shareWords(p: number): string {
@@ -154,7 +161,7 @@ function shareWords(p: number): string {
 }
 /** The sources by origin: one bar each, Flock's own documents marked. */
 export function originsFigure(sources: SourceKind[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
-  const rows = KINDS.map((k) => ({ ...k, n: sources.filter((s) => s.kind === k.kind).length })).filter((r) => r.n > 0);
+  const rows = KINDS.map((k) => ({ ...k, n: sources.filter((s) => s.kind === k.kind).length })).filter((r) => r.n > 0).sort((a, b) => b.n - a.n);
   const total = sources.length, max = Math.max(...rows.map((r) => r.n));
   const draw = (W: number, narrow: boolean) => {
     // the label column is as wide as the longest label, so no name runs out of the drawing
@@ -174,5 +181,5 @@ export function originsFigure(sources: SourceKind[], ctx: Ctx, o: { level?: 2 | 
   // the title names the marked bar: Flock's own share of what the site cites
   const title = `About ${shareWords(share("flock"))} of the sources ${/^(one|a) /.test(shareWords(share("flock"))) ? "is" : "are"} Flock’s own`;
   const table = dataTable(["Origin", "Sources"], rows.map((r) => [r.label, r.n]), { caption: "Sources by origin" });
-  return frame("origins", { title, sub: `The ${total} documents this site cites, by who published them`, notes: ["News reports, research and advocacy groups include groups that campaign on the cameras, such as the A.C.L.U., the Electronic Frontier Foundation and DeFlock, and filings and statements by other companies. Each entry is counted by its publisher: a news report that quotes Flock or a government record counts as a news report."], sources: [] }, ctx, draw(WIDE, false) + draw(NARROW, true), { level: o.level, table, srcText: "Source: the list below." });
+  return frame("origins", { title, sub: `The ${total} documents this site cites, by who published them`, notes: ["Independent means only that Flock did not publish it: the group includes organizations that campaign on the cameras, such as the A.C.L.U., the Electronic Frontier Foundation and DeFlock, and filings and statements by other companies. Each entry is counted by its publisher: a news report that quotes Flock or a government record counts as a news report."], sources: [] }, ctx, draw(WIDE, false) + draw(NARROW, true), { level: o.level, table, srcText: "Source: the list below." });
 }

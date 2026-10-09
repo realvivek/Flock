@@ -8,7 +8,7 @@ import { still, nn, el, scrollToEl, topbarHeight } from "./ui/common";
 import { BASE, ROOT } from "./lib/base";
 import { parseRoute, chapterFor } from "./router";
 import { state, set, subscribe } from "./store";
-import { smart } from "./viz/format";
+import { smart, ap } from "./viz/format";
 
 const confidenceLabel = { measured: "Measured or documented", estimated: "Estimated from the envelope", disputed: "Sources disagree" } as const;
 const parts = components.parts.slice().sort((a, b) => a.order - b.order);
@@ -23,7 +23,7 @@ function buildKnolling(host: HTMLElement): void {
     group.dataset.group = g.id;
     const nums = members.map((m) => m.order), runs = nums.every((v, i) => i === 0 || v === nums[i - 1]! + 1);
     const span = members.length === 1 ? nn(nums[0]!) : runs ? `${nn(nums[0]!)}–${nn(nums[nums.length - 1]!)}` : nums.map(nn).join(", ");
-    group.innerHTML = `<div class="group-head"><span class="mono">${span}</span><h3>${escape(g.label)}</h3><span class="count">${members.length} part${members.length === 1 ? "" : "s"}</span></div>`;
+    group.innerHTML = `<div class="group-head"><span class="mono">${span}</span><h3>${escape(g.label)}</h3><span class="count">${ap(members.length)} part${members.length === 1 ? "" : "s"}</span></div>`;
     const grid = el("div", "cells");
     grid.setAttribute("role", "list");
     for (const pt of members) {

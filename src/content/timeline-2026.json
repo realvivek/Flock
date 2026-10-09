@@ -13,6 +13,6 @@
     { "date": "2026-08-31", "precision": "day", "kind": "restricted", "where": "Florida", "text": "The transportation department revokes permits for cameras on state road rights of way.", "sources": ["wusf-fdot-2026"] },
     { "date": "2026-09-01", "precision": "day", "kind": "ended", "where": "Dallas", "text": "Police say they will switch off 321 of the department’s 684 cameras, those paid for with state grants.", "sources": ["texastribune-dps-2026", "govtech-dallas-2026"] },
     { "date": "2026-09-04", "precision": "day", "kind": "restricted", "where": "Texas", "text": "The Department of Public Safety says it will pause installing more cameras but keep using its own, at least 940 according to an email a lawmaker shared.", "sources": ["texastribune-dps-2026"] },
-    { "date": "2026-09-30", "precision": "day", "kind": "added", "where": "Dallas", "text": "After a meeting with Flock’s chief executive, police say the grant-funded cameras will stay on for at least 90 days; The Texas Tribune reports that Flock paused the city’s payments for them.", "sources": ["fox4-dallas-2026", "texastribune-reprieve-2026"] }
+    { "date": "2026-09-30", "precision": "day", "kind": "added", "where": "Dallas", "text": "After a meeting with Flock’s chief executive, police say the grant-funded cameras will stay on for 90 days; The Texas Tribune reports that Flock paused the city’s payments for them.", "sources": ["fox4-dallas-2026", "texastribune-reprieve-2026"] }
   ]
 }

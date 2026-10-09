@@ -6,6 +6,7 @@ import { icon } from "./ui/icons";
 import { ap } from "./viz/format";
 import { figCtx, figureCfg } from "./ui/figs";
 import { auditFigure, type Deputy } from "./story/fig/searches";
+import { sourceLine } from "./story/frame";
 import { mountDiagram, powerDiagram, fovDiagram } from "./story/fig/install";
 
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
@@ -15,16 +16,16 @@ export function buildPole(host: HTMLElement): void {
   for (const m of ["flock", "existing", "ac"] as const) {
     const mode = install.modes[m]!;
     const card = el("article", "card sheet");
-    card.innerHTML = `<figure class="card-fig">${mountDiagram(m, install.pole)}</figure><h3>${escape(mode.label)}</h3>`;
+    card.innerHTML = `<h3>${escape(mode.label)}</h3><figure class="card-fig">${mountDiagram(m, install.pole)}${sourceLine(install.pole.sources, figCtx())}</figure>`;
     facts(card, mode.facts);
     host.appendChild(card);
   }
   const c = install.coverage;
   const fov = el("article", "card sheet wide fov");
   fov.innerHTML = `<h3>What the camera sees</h3><figure class="card-fig">${fovDiagram(c)}</figure>`;
-  kv(fov, [["Field of view", `${c.widthFt} feet wide at ${c.distFt} feet`], ["Range", `Up to ${c.maxFt} feet across ${ap(c.lanes)} lanes, at speeds up to ${c.mph} miles an hour`], ["Photos", `${c.framesPerVehicle.charAt(0).toUpperCase()}${c.framesPerVehicle.slice(1)} of each passing vehicle`], ["Aimed at", c.aims]]);
+  kv(fov, [["Field of view", `${c.widthFt} feet wide at ${c.distFt} feet`], ["Range", `Up to ${c.maxFt} feet across ${ap(c.lanes)} lanes, and speeds up to ${c.mph} miles an hour at up to 90 feet`], ["Photos", `${c.framesPerVehicle.charAt(0).toUpperCase()}${c.framesPerVehicle.slice(1)} of each passing vehicle`], ["Aimed at", c.aims]]);
   fov.appendChild(cite(c.sources));
-  p(fov, "The field of view is from Flock’s 2020 specification sheet; the range, lanes and speed are from the data sheet for the Falcon Flex, which elsewhere gives a maximum distance of 90 feet. Drawn to scale; lanes are 12 feet wide.", "fine");
+  p(fov, "The field of view is from Flock’s 2020 specification sheet; the range, lanes and speed are from the data sheet for the Falcon Flex. Drawn to scale; lanes are 12 feet wide.", "fine");
   host.appendChild(fov);
 }
 
@@ -32,7 +33,7 @@ export function buildPower(host: HTMLElement): void {
   for (const m of ["solar", "ac", "wing"] as const) {
     const path = install.paths[m]!;
     const card = el("article", "card sheet");
-    card.innerHTML = `<figure class="card-fig flow-fig">${powerDiagram(m)}</figure><h3>${escape(path.label)}</h3>`;
+    card.innerHTML = `<h3>${escape(path.label)}</h3><figure class="card-fig flow-fig">${powerDiagram(m)}${sourceLine([...new Set(path.facts.flatMap((f) => f.sources))], figCtx())}</figure>`;
     p(card, path.summary);
     facts(card, path.facts);
     host.appendChild(card);
@@ -73,7 +74,7 @@ export function buildData(host: HTMLElement): void {
     if (h.storage) meta.push(["Storage", h.storage]);
     if (h.retention) meta.push(["Retention", h.retention]);
     meta.push(["In the packet", h.payload.join(", ")]);
-    row.innerHTML = `<div class="stage-body"><p class="mono">Stage ${nn(h.n)} of ${hops.length} · ${escape(nd.label)}</p><h2>${escape(h.title)} ${tag(h.tag)}</h2><p>${escape(h.summary)}</p></div>`;
+    row.innerHTML = `<div class="stage-body"><p class="mono">Stage ${nn(h.n)} of ${hops.length} · ${escape(nd.label)}</p><h2>${escape(h.title)}</h2><p class="stage-tag">${tag(h.tag)}</p><p>${escape(h.summary)}</p></div>`;
     const body = row.querySelector(".stage-body")! as HTMLElement;
     kv(body, meta);
     if (h.unknowns?.length) body.insertAdjacentHTML("beforeend", `<p class="fine">${tag("unknown")} ${h.unknowns.map(escape).join(" · ")}</p>`);

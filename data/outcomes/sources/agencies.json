@@ -7,7 +7,7 @@
       "city": "Los Angeles",
       "state": "CA",
       "period": "2025-08-01 to 2025-09-30",
-      "cameras": "Readers in patrol cars (Axon) and 298 pole cameras: 160 Motorola and 138 Flock, 50 of the Flock cameras loaned at no cost after the January 2025 Palisades Fire",
+      "cameras": "Readers in patrol cars (Axon), 140 Motorola readers on patrol-car roofs, seven trailer cameras and 298 pole cameras: 160 Motorola and 138 Flock, 50 of the Flock cameras loaned at no cost after the January 2025 Palisades Fire",
       "vendorMix": true,
       "values": {
         "reads": 210568103,

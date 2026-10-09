@@ -168,6 +168,34 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | In Windsor, Conn., a mapper deleted 14 of the cameras on Oct. 8, noting each had been removed, "presumably" because the town had canceled its contract; the council voted in July to keep them off | 14 | `osm-windsor-2026`; `patch-windsor-2026` | 12 changesets, 190181808 to 190182106, each noting the camera "has been removed. This is presumably due to the city's cancellation of their contract"; Patch counts 16 cameras |
 | Timeline entries | | each entry's own source | `src/content/timeline-2026.json`; the Texas Department of Public Safety's "at least 940" cameras are attributed to the email a lawmaker shared, as `texastribune-dps-2026` reports it |
 
+## Corrections, sixth review (9 October 2026)
+
+A second pair of fact-checks of the reference pages, after the fifth review's corrections had been applied. Each row
+was fixed where it appears; the Outcomes data was rebuilt offline.
+
+| What the pages said | What the record shows | Source |
+|---|---|---|
+| Flock's 2026 terms "no longer say it will not sell customer data" (Economics, Claims) | The February 2026 terms dropped "Flock does not own and shall not sell Customer Data," the A.C.L.U. and Footnote 4a found; the terms updated Aug. 21, 2026, say "Flock shall not sell Customer Data" and keep the perpetual license. | `flock-tc-2026`; `aclu-terms` |
+| Disputes "go to arbitration in Georgia" | Georgia law governs; disputes go to mediation, then arbitration, both administered by the American Arbitration Association; no place is named. | `flock-tc-2026` |
+| Fourteen bibliography dates, such as Flock's Privacy and Access post (2023) and 404 Media on Customs and Border Protection (October 2025) | Each document's own date: Jan. 4, 2019; Aug. 25, 2025; and so on for flock-mobile-app, flock-video-webinar, flock-statement-2025, flock-hacked, flock-deletion, flock-audio, flock-terms-update, aclu-terms, footnote4a-trust, police1-condor, footnote4a-dunwoody and 404-narrative-2025. | `src/content/sources.json` |
+| The annual fee's coverage cited to the implementation guide; "site surveys and 811 locate scheduling" listed as covered | The guide does not itemize the fee; Indio's staff report and Richland's agreement do. The guide lists site surveys and locates as part of the standard implementation service, which the one-time installation fee pays for. | `indio-2023`; `richland-agreement-2023`; `flock-impl-guide` |
+| "Flock states it has no contract with ICE" | 404 Media reported it in its own voice; no cited Flock statement says it. The 4,000 lookups were by local and state police, for federal agencies, as an informal favor or with a potential immigration focus. | `404-ice-2025` |
+| The case-number requirement, cited to Tech Times alone | Flock's own announcement gives "by the end of the year" and the emergency bypass; now cited. | `flock-guardrails-2026` |
+| Claim 18: "more than 60 of Flock's Condor video cameras … some plate readers were among them"; Flock "attributed the exposure to carrier testing" | Dozens of devices, most of them Condor cameras; Flock publicly called it "a limited, isolated configuration issue" and told police departments the units were in testing with cellular carriers. | `404-exposed-2026`; `gainsec-2026`; `wflx-condor-2026` |
+| Plate covers: a verdict without its basis | The verdict rests on Flock's description of what it records; no independent test is published. | `flock-flex-datasheet` |
+| Placement: Flock's product page "describes cameras for high-speed, multi-lane roadways" | The phrase describes one plate-reader model. | `flock-lpr-products` |
+| The InvestigateTV report "in June 2026"; "a Flock representative said the camera was not built to track people" | The report ran June 15, 2026; asked whether the cameras are designed to track a person, Flock's chief communications officer said, "Not to track a person, no." | `investigatetv-condor-2026` |
+| Deletion by an S3 lifecycle policy logged to CloudTrail, stated as fact | Flock's description, now attributed to Flock. | `flock-deletion` |
+| Dallas's cameras would "stay on for at least 90 days" | For 90 days. | `fox4-dallas-2026`; `texastribune-reprieve-2026` |
+| Texas: "900 cameras or more" switched off | More than 900. | `texastribune-unplugged-2026` |
+| Institute for Justice: "well over 100 incidents of misuse or error" | More than 100 incidents of plate-reader abuse and misuse. | `ij-abuse-2026` |
+| Cincinnati: "28 arrests" | 28 calls closed with an arrest; they count calls, not people. | `cincinnati-cfs` |
+| Los Angeles: Axon readers and 298 pole cameras | The inspector general also lists 140 Motorola readers on patrol-car roofs and seven trailer cameras. | `lapd-oig-2026` |
+| Fee schedule: "technician visit without reinstall" | A technician visit for any reason not listed, $350. | `flock-fee-schedule` |
+| Raven: "only clips of events are uploaded"; distress detection "tried with a small number of customers" | Flock's statements, now attributed to Flock. | `flock-audio`; `therecord-distress-2026` |
+| Components: "The 14 Parts Inside a Flock Camera"; a state "requires" crash-tested poles; 100 mph at 100 feet | The band clamps are outside the case; the guide says "as may be required"; the data sheet gives 100 mph at up to 90 feet. | `flock-impl-guide`; `flock-flex-datasheet` |
+| Outcomes: "21 of 74 published outcome records can be tied to a mapped camera" | Within 150 meters does not tie a result to a camera: of the 21, five report a stop, a recovery or an arrest, nine report hits or calls only, and seven are Windsor camera sites with no case named. | `data/outcomes/sources/*` |
+
 ## Corrections, fifth review (9 October 2026)
 
 Two independent fact-checks of the eight reference pages, after the fourth review's corrections. Every number, name
@@ -181,11 +209,11 @@ Lafayette.
 | A case number "became a mandatory field in August 2026" | Flock said in August 2026 that it would require a case number for every law enforcement search by the end of the year, with an exception for emergencies; the number is typed in, not checked. | `techtimes-casecodes-2026` |
 | Cambridge, Mass., had its cameras removed when the city ended its contract (Claims, Economics) | Flock installed two cameras after the city ordered its cameras taken down; the city's discovery of them led it to end the contract. | `cambridgeday-2025` |
 | Reads are stored in AWS GovCloud "US-East" with "AES-256" encryption | Flock's policy says reads are transferred to the AWS government cloud, and a company post says all its CJIS data is stored there. No independent source confirms either; the region and cipher are not published. | `flock-lpr-policy`; `flock-privacy-access` |
-| Data is sent over "TLS 1.2 or higher" | HTTPS and TLS, according to Flock; the version is not published. | `flock-privacy-access` |
+| Data is sent over "TLS 1.2 or higher" | HTTPS and TLS, according to Flock's architecture summary; the version is not published. | `flock-arch-2024` |
 | Researchers found exposed Flock plate readers | In December 2025 and January 2026, researchers found dozens of Flock devices, most of them Condor video cameras, reachable on public addresses with an administration page that needed no password. One researcher said some plate readers were among them. Flock said only Condor cameras were affected. | `404-exposed-2026`; `gainsec-2026`; `wflx-condor-2026` |
 | Flock's facial-recognition statement and a Condor test, cited to an Aug. 13, 2026, story | Flock says its system does not use facial recognition. The InvestigateTV report in which a Condor camera followed a reporter ran on June 15, 2026. | `flock-data-privacy`; `investigatetv-condor-2026` |
 | Covered plates and paper plates, as the policy's attributes | The Falcon Flex data sheet lists missing, covered and paper plates, as does a 2023 sales presentation; the policy names only color and make. The verdicts rest on Flock's descriptions. | `flock-flex-datasheet`; `flock-deck-2023` |
-| Jalopnik confirmed in a teardown that the cameras do not measure speed | Jalopnik reported that the cameras "do not currently" measure speed. Flock also sells trailers that pair a reader with a speed sign. | `jalopnik-speed` |
+| Jalopnik confirmed in a teardown that the cameras do not measure speed | Jalopnik noted Flock's own statement that its cameras "do not currently measure vehicle speed." Flock also sells trailers that pair a reader with a speed sign. | `jalopnik-speed` |
 | Federal agencies searched the data "for immigration enforcement" | Logs obtained by 404 Media in 2025 show more than 4,000 lookups that local agencies ran for federal agencies or at their request, some listing ICE or immigration as the reason. | `404-ice-2025` |
 | Canceled cities "switched to other vendors"; private cameras kept running "in several cities" | Axon took over in a few cities; Denver is the documented case of privately contracted Flock cameras that kept running. | `404-axon-2026`; `denverite-2026` |
 | Cameras are placed mid-block, at highway ramps and at city limits, per the implementation guide | Flock's product page describes cameras for "high-speed, multi-lane, and off-shoulder roadways," and the company sells portable units and trailers. | `flock-lpr-products` |

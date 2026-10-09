@@ -60,7 +60,10 @@ const CONTRACTS: Contract[] = [
   { who: "Smyrna, Ga.", total: 5_700_000, years: 10, approved: "December 2025", note: "plate readers, live video cameras, a trailer and two drones" },
   { who: "Huntington, W.Va.", total: 2_100_000, years: 5, approved: "July 2026", note: "with video cameras, drones, gunshot detection" },
   { who: "Rhode Island State Police", total: 597_000, years: 3, approved: "reported July 2026", note: "39 cameras" },
+  { who: "Oklahoma City", total: 270_000, years: 1, approved: "August 2026", note: "90 cameras; a renewal through June 30, 2027" },
 ];
+/** Sources only the full table cites, left off the source line where a page shows the chart without it. */
+const TABLE_ONLY = new Set(["deflocksc-greenville", "elpasomatters-2026"]);
 const money = (n: number) => (n >= 1e6 ? `$${(Math.round(n / 1e5) / 10).toString()} million` : `$${int(Math.round(n / 1000) * 1000)}`);
 
 /** `table: false` leaves out the data table where the page lists the same contracts in full below the chart. */
@@ -71,7 +74,7 @@ export function contractsFigure(cfg: FigureCfg, ctx: Ctx, o: { table?: boolean }
     const L = narrow ? 0 : 262, R = narrow ? 8 : 12, T = 6, barH = 12, fs = narrow ? 12 : 11.5;
     const x = linScale(0, max * (narrow ? 1.6 : 1.45), L, W - R);
     // the term line breaks before the date when the label column is too narrow for it
-    const termOf = (r: (typeof rows)[number]) => `${r.upTo ? "Up to " : ""}${money(r.total)} over ${ap(r.years)} years`;
+    const termOf = (r: (typeof rows)[number]) => `${r.upTo ? "Up to " : ""}${money(r.total)} over ${ap(r.years)} year${r.years === 1 ? "" : "s"}`;
     const lines = rows.map((r) => (narrow || textWidth(`${termOf(r)}, ${r.approved}`, fs) <= L - 16 ? [`${termOf(r)}, ${r.approved}`] : [`${termOf(r)},`, r.approved]));
     const heights = lines.map((ls) => (narrow ? 52 : 28 + ls.length * 14));
     let out = "", y = T;
@@ -91,11 +94,10 @@ export function contractsFigure(cfg: FigureCfg, ctx: Ctx, o: { table?: boolean }
     return svg(W, y, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Bar chart of the largest documented Flock contracts with a known term, per year: Dallas about $1.9 million a year, then Houston (a ceiling), Johnson City, Smyrna, Huntington and the Rhode Island State Police." });
   };
   const table = dataTable(["Agency", "Contract value", "Term", "Date", "Notes"], [
-    ...CONTRACTS.map((c) => [c.who, `${c.upTo ? "Up to " : ""}${money(c.total)}`, `${ap(c.years)} years`, c.approved, c.note]),
+    ...CONTRACTS.map((c) => [c.who, `${c.upTo ? "Up to " : ""}${money(c.total)}`, `${ap(c.years)} year${c.years === 1 ? "" : "s"}`, c.approved, c.note]),
     ["Texas Department of Public Safety", "$26 million", "not stated", "2025", "state roads; not charted because its term was not reported"],
     ["El Paso", "$702,500 state grant", "from May 2025", "2025", "about 150 cameras; use halted after Aug. 27, 2026, and the council later voted to remove them"],
-    ["Oklahoma City", "about $270,000", "through June 30, 2027", "Aug. 18, 2026", "approved 5 to 3"],
     ["Greenville, S.C.", "$2,000 a year", "pilot", "December 2019", "11 cameras"],
   ], { text: [1, 2, 3, 4] });
-  return frame("contracts", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), o.table === false ? {} : { table });
+  return o.table === false ? frame("contracts", { ...cfg, sources: cfg.sources.filter((id) => !TABLE_ONLY.has(id)) }, ctx, draw(WIDE, false) + draw(NARROW, true)) : frame("contracts", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }

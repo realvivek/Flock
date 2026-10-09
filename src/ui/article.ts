@@ -145,7 +145,7 @@ export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
     list.appendChild(art);
   });
   host.appendChild(list);
-  host.appendChild(sectionHead("Product line", "products"));
+  host.appendChild(sectionHead("Flock sells video cameras, audio sensors and drones as well as plate readers", "products"));
   renderProducts(host);
   host.appendChild(sectionHead("About the claims", "about"));
   host.appendChild(el("p", "lede-p", "The claims include statements by the company and by its critics. Each is put the way it is usually made, followed by what the documented record shows, the product or setting it applies to and the sources, with links to the related component or data stage. The verdicts describe the record, not the people who make the claims."));
@@ -246,8 +246,6 @@ export async function renderDeployments(host: HTMLElement): Promise<void> {
   initTooltips(host);
 }
 
-const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
-const kindLabel: Record<string, string> = { flock: "Flock", independent: "Independent", government: "Government", court: "Court" };
 const kindTitle = SOURCE_KINDS;
 const order = ["flock", "independent", "government", "court"];
 
@@ -275,7 +273,7 @@ export function renderSources(host: HTMLElement): void {
       lastKind = s.kind;
       const h = el("h2", "src-group");
       h.id = `group-${s.kind}`;
-      h.innerHTML = `<span class="tag ${kindClass[s.kind]}">${kindLabel[s.kind]}</span> ${escape(kindTitle[s.kind]!)} <span class="src-n">${sources.filter((x) => x.kind === s.kind).length}</span>`;
+      h.innerHTML = `${escape(kindTitle[s.kind]!)} <span class="src-n">${sources.filter((x) => x.kind === s.kind).length}</span>`;
       list.appendChild(h);
     }
     const [title, note] = splitTitle(s.title);
@@ -293,7 +291,7 @@ export function renderSources(host: HTMLElement): void {
   host.appendChild(list);
   host.appendChild(sectionHead("About the sources", "about"));
   const legend = el("p", "lede-p");
-  legend.innerHTML = `Every document cited anywhere on this site is listed here, by who published it. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> is a news report, a study, a teardown, or a report or dataset from an advocacy group, a researcher or another company. <span class="tag tag-gov">Government</span> is a legislature, agency, council or public-records release, and <span class="tag tag-gov">Court</span> a ruling. Elsewhere on the site, <span class="tag tag-unknown">Not verified</span> marks a statement that neither Flock nor an independent source confirms.`;
+  legend.innerHTML = `Every document cited anywhere on this site is listed here, by who published it. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> means independent of Flock: a news report, a study, a teardown, or a report or dataset from an advocacy group, a researcher or another company. <span class="tag tag-gov">Government</span> is a legislature, agency, council or public-records release, and <span class="tag tag-gov">Court</span> a ruling. Elsewhere on the site, <span class="tag tag-unknown">Not verified</span> marks a statement that neither Flock nor an independent source confirms.`;
   host.appendChild(legend);
   host.appendChild(el("p", "lede-p", `Each entry gives the document’s title where it has one, or a short description where it does not; a note under an entry is this site’s. The links were last checked on ${apDate(usual)}, unless an entry says otherwise.`));
   const fine = el("p", "fine");

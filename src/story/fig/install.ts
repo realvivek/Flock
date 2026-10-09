@@ -139,7 +139,7 @@ export function powerDiagram(kind: "solar" | "ac" | "wing"): string {
   if (kind === "ac") return flow(
     [{ t: "The pole’s power supply", s: "120 volts AC" }, { t: "Flock junction box", s: "Converts the power to direct current" }, CAMERA, CLOUD],
     [{ t: "Connected by an electrician the customer hires" }, { t: "Direct-current cable to the camera’s rear connector" }, RADIO],
-    "Only the power source changes; the reads still go out by cellular network.",
+    "Only the power source changes; the reads still go out over the cellular network.",
     "Flow diagram: the pole's 120-volt supply feeds a Flock junction box, which converts it to direct current for the camera; the camera sends its reads over the cellular network to Flock's cloud.");
   return flow(
     [{ t: "An agency’s existing camera", s: "Any network camera that streams video (RTSP)" }, { t: "Network switch" }, { t: "Wing gateway", s: "In the network closet; reads plates and describes vehicles" }, CLOUD],

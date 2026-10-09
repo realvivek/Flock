@@ -13,7 +13,7 @@
     {
       "id": "flock-flex-datasheet",
       "kind": "flock",
-      "title": "Falcon Flex datasheet (passive infrared motion detection, 850 nm infrared array, notifications in an average of 10 to 15 seconds)",
+      "title": "Falcon Flex datasheet (passive infrared motion detection, 850-nanometer infrared array, notifications in an average of 10 to 15 seconds)",
       "publisher": "Flock Safety via a state vendor portal",
       "url": "https://www.myvendorlink.com/external/vfile?d=vrf&s=137266&v=76605&sv=0&i=4&ft=b",
       "date": "2022",
@@ -97,8 +97,8 @@
       "title": "Privacy and Access (GovCloud, encryption, CJIS)",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/privacy-and-access",
-      "date": "2023",
-      "lastVerified": "2026-09-04"
+      "date": "2019-01-04",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-deletion",
@@ -106,8 +106,8 @@
       "title": "How does Flock handle license plate data deletion?",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/how-does-flock-handle-license-plate-data-deletion",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2026-06-02",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-guardrails-2026",
@@ -124,8 +124,8 @@
       "title": "Statement in response to recent reports (federal access, keyword filters)",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/statement-in-response-to-recent-reports",
-      "date": "2025-08",
-      "lastVerified": "2026-09-04"
+      "date": "2025-10-22",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-audio",
@@ -133,8 +133,8 @@
       "title": "How Flock's audio detection works",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/how-flocks-audio-detection-works",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2026-07-10",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-faq",
@@ -169,8 +169,8 @@
       "title": "Has Flock been hacked?",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/has-flock-been-hacked",
-      "date": "2025-11",
-      "lastVerified": "2026-09-04"
+      "date": "2026-01-06",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-terms-update",
@@ -178,8 +178,8 @@
       "title": "Building on trust: updates to Flock's terms and conditions",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/building-on-trust-updates-to-flocks-terms-and-conditions",
-      "date": "2026-02",
-      "lastVerified": "2026-09-04"
+      "date": "2026-08-21",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-wing-2020",
@@ -196,8 +196,8 @@
       "title": "Flock Safety launches mobile app (radius-based alerts)",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/flock-safety-launches-mobile-app-to-revolutionize-patrol-efficiency-and-law-enforcement-fieldwork",
-      "date": "2024",
-      "lastVerified": "2026-09-04"
+      "date": "2023-10-18",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "flock-platform",
@@ -214,8 +214,8 @@
       "title": "Video without limitations: Wing Gateway and Condor",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/video-without-limitations-flock-safetys-newest-solutions-for-law-enforcement",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2024-10-20",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "cehrp-dissection",
@@ -256,7 +256,7 @@
     {
       "id": "noflock-ir",
       "kind": "independent",
-      "title": "Flock-IR-Detection: measured 850 nm illuminator pulsed at 10 Hz",
+      "title": "Flock-IR-Detection (measured an 850-nanometer illuminator pulsed 10 times a second)",
       "publisher": "Noflock on GitHub",
       "url": "https://github.com/Noflock/Flock-IR-Detection",
       "date": "2025",
@@ -292,11 +292,11 @@
     {
       "id": "footnote4a-trust",
       "kind": "independent",
-      "title": "Trust me bro: Flock's chipset support, diagnostic interface, and FIPS claims",
+      "title": "Trust Me, Bro: Flock's Latest Security Blog, Reviewed (chipset support, diagnostic interface and FIPS claims)",
       "publisher": "Footnote 4a",
       "url": "https://footnote4a.org/news/trust-me-bro",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2026-03-28",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "footnote4a-neverhacked",
@@ -340,8 +340,8 @@
       "title": "Flock's terms and conditions: what changed on Feb. 16, 2026",
       "publisher": "A.C.L.U.",
       "url": "https://www.aclu.org/news/privacy-technology/tracking-alpr-cameras/flocks-terms-and-conditions",
-      "date": "2026-02",
-      "lastVerified": "2026-09-04"
+      "date": "2026-04-16",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "aclu-guardrails",
@@ -355,7 +355,7 @@
     {
       "id": "eff-protesters-2025",
       "kind": "independent",
-      "title": "How cops are using Flock Safety's ALPR network to surveil protesters and activists (12M+ searches, vague reasons)",
+      "title": "How cops are using Flock Safety's ALPR network to surveil protesters and activists (more than 12 million searches and the reasons logged for them)",
       "publisher": "Electronic Frontier Foundation",
       "url": "https://www.eff.org/deeplinks/2025/11/how-cops-are-using-flock-safetys-alpr-network-surveil-protesters-and-activists",
       "date": "2025-11",
@@ -403,8 +403,8 @@
       "title": "CBP had access to more than 80,000 Flock AI cameras nationwide",
       "publisher": "404 Media",
       "url": "https://www.404media.co/cbp-had-access-to-more-than-80-000-flock-ai-cameras-nationwide/",
-      "date": "2025-10",
-      "lastVerified": "2026-09-04"
+      "date": "2025-08-25",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "404-states-2025",
@@ -490,11 +490,11 @@
     {
       "id": "therecord-norfolk-2026",
       "kind": "independent",
-      "title": "Judge dismisses Flock case: Norfolk network not extensive enough to be a search 'yet'",
+      "title": "Judge dismisses case alleging use of Flock cameras in Virginia city is unconstitutional (the Norfolk network was not extensive enough to be a search \"yet\")",
       "publisher": "The Record",
       "url": "https://therecord.media/judge-dismisses-flock-case",
       "date": "2026-01-27",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "therecord-distress-2026",
@@ -526,11 +526,11 @@
     {
       "id": "jalopnik-speed",
       "kind": "independent",
-      "title": "Do Flock cameras have speed sensors? (6 to 12 pictures of each passing vehicle)",
+      "title": "Can Flock Cameras Tell How Fast You're Driving? (six to 12 photos of each passing vehicle)",
       "publisher": "Jalopnik",
       "url": "https://www.jalopnik.com/2208478/do-flock-cameras-have-speed-sensors/",
       "date": "2026-07-06",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "police1-7day-2026",
@@ -547,8 +547,8 @@
       "title": "Up close: Flock Safety unveils solar Condor PTZ (dual lens, 90-degree context view)",
       "publisher": "Police1",
       "url": "https://www.police1.com/police-products/investigation/video-surveillance/up-close-flock-safety-unveils-solar-condor-ptz-and-mobile-security-trailer",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2024-11-18",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "techtimes-casecodes-2026",
@@ -751,7 +751,7 @@
     {
       "id": "flock-smyrna-2025",
       "kind": "flock",
-      "title": "Flock expands Georgia footprint with new manufacturing facility (Smyrna, 97,000 sq ft)",
+      "title": "Flock expands Georgia footprint with new manufacturing facility (Smyrna, Ga., 97,000 square feet)",
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/flock-expands-georgia-footprint-with-new-manufacturing-facility",
       "date": "2025-04",
@@ -814,7 +814,7 @@
     {
       "id": "parkridge-2025",
       "kind": "government",
-      "title": "Park Ridge, Ill., memo and Flock invoice: 8 LPR at $3,000; platform billed at $0; IDOT permits",
+      "title": "Park Ridge, Ill., memo and Flock invoice: eight plate readers at $3,000; platform billed at $0; Illinois Department of Transportation permits",
       "publisher": "City of Park Ridge",
       "url": "https://parkridge.granicus.com/MetaViewer.php?view_id=1&clip_id=3365&meta_id=165844",
       "date": "2025-08-18",
@@ -952,8 +952,8 @@
       "title": "Dunwoody drone deal: $300,000 over two years",
       "publisher": "Footnote 4a",
       "url": "https://footnote4a.org/news/dunwoody-deal",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2026-04-14",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "sacra-flock",
@@ -1006,8 +1006,8 @@
       "title": "'Own the narrative': leaked Flock guide teaches police how to promote its tech to councils",
       "publisher": "404 Media",
       "url": "https://www.404media.co/own-the-narrative-leaked-flock-guide-shows-how-it-teaches-cops-to-promote-its-tech/",
-      "date": "2025",
-      "lastVerified": "2026-09-04"
+      "date": "2026-08-03",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "homedepot-8k-2026",
@@ -1291,7 +1291,7 @@
     {
       "id": "nashville-lpr-2023",
       "kind": "government",
-      "title": "LPR Council Report 2: ALPR pilot activity March 21 to May 17 2023, summary by quadrant and by ALPR site",
+      "title": "LPR Council Report 2: ALPR pilot activity March 21 to May 17, 2023, summary by quadrant and by ALPR site",
       "publisher": "Metro Nashville Police Department",
       "url": "https://www.nashville.gov/sites/default/files/2023-06/LPR-Council-Report-2.pdf",
       "date": "2023-05-23",
@@ -1381,7 +1381,7 @@
     {
       "id": "oakland-pac-2025",
       "kind": "government",
-      "title": "Privacy Advisory Commission agenda packet, September 4 2025: OPD ALPR report with cameras by police area",
+      "title": "Privacy Advisory Commission agenda packet, Sept. 4, 2025: the Oakland Police Department’s plate-reader report, with cameras by police area",
       "publisher": "City of Oakland",
       "url": "https://www.oaklandca.gov/files/assets/city/v/1/public-meetings/privacy-advisory-commission/2025/09-04-25-privacy-advisory-commission-agenda-packet.pdf",
       "date": "2025-09-04",
@@ -1418,7 +1418,7 @@
       "id": "lafayette-co-alpr",
       "kind": "government",
       "title": "Flock Safety ALPR program: cases, arrests and recoveries 2024 to 2025",
-      "publisher": "City of Lafayette, Colorado",
+      "publisher": "City of Lafayette, Colo.",
       "url": "https://lafayetteco.gov/4282/Flock-Safety-ALPR-Program",
       "date": "2026-01-01",
       "lastVerified": "2026-09-18"

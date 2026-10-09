@@ -101,9 +101,9 @@ test("every content page loads with its content, the pager and citations that re
   await go(page, "/journey/");
   await ready(page);
   await instant(page);
-  await expect(page.locator("#slip-status")).toHaveText("Picked up");
+  await expect(page.locator("#slip-status")).toHaveText("Captured");
   await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
-  await expect(page.locator("#slip-status")).toHaveText("Disposed");
+  await expect(page.locator("#slip-status")).toHaveText("Deleted");
   await expect(page.locator(".stop.is-reached")).toHaveCount(7);
   // each card shows one sentence, who can open the package and its sources; the paragraph and contents fold under Details
   await expect(page.locator(".stop details[open]")).toHaveCount(0);
@@ -112,7 +112,7 @@ test("every content page loads with its content, the pager and citations that re
   await page.locator("#search summary").click();
   await expect(page.locator("#search details")).toHaveAttribute("open", "");
   await expect(page.locator("#search .kv dt").first()).toHaveText("In the package");
-  await expect(page.locator("#slip-status")).toHaveText("Disposed");
+  await expect(page.locator("#slip-status")).toHaveText("Deleted");
   // pager order
   await go(page, "/deployments/");
   await ready(page);

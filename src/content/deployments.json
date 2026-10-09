@@ -57,7 +57,7 @@
       "level": "State",
       "state": "TX",
       "cameras": "1,183 proposed; at least 940 installed as of Sept. 2, 2026, according to an email a lawmaker shared",
-      "value": "$26 million contract (2025); $15.9 million plus $3 million in MVCPA funding",
+      "value": "$26 million contract (2025); $15.9 million plus $3 million in Motor Vehicle Crime Prevention Authority funding",
       "term": "Operation Lone Star and state roads; 206 partner agencies",
       "note": "The governor's order of Aug. 27, 2026, paused state funding; on Sept. 4, the department said it would pause installing more cameras but keep using its own",
       "sources": [
@@ -99,7 +99,7 @@
       "cameras": "684",
       "value": "$5.7 million, of which nearly $1.7 million came from a state grant and $125,000 from a federal homeland security grant",
       "term": "Three years, approved May 2025",
-      "note": "On Sept. 1, 2026, the department said it would switch off the 321 cameras paid for by state grants. On Sept. 30, after a meeting with Flock's chief executive, it said they would stay on for at least 90 days; The Texas Tribune reported that Flock paused the city's payments for them",
+      "note": "On Sept. 1, 2026, the department said it would switch off the 321 cameras paid for by state grants. On Sept. 30, after a meeting with Flock's chief executive, it said they would stay on for 90 days; The Texas Tribune reported that Flock paused the city's payments for them",
       "sources": [
         "govtech-dallas-2025",
         "govtech-dallas-2026",
@@ -181,7 +181,7 @@
       "cameras": "Not stated",
       "value": "$433,600",
       "term": "Sept. 25, 2025, to Sept. 25, 2027; a $202,000 option year was exercised on Sept. 18, 2026",
-      "note": "ALPR system in the greater Washington area",
+      "note": "An automated license plate reader system in the greater Washington area",
       "sources": [
         "usaspending-uspp-2025"
       ]
@@ -191,7 +191,7 @@
       "level": "State",
       "state": "IL",
       "cameras": "None; data access only",
-      "value": "About $50,000 per year",
+      "value": "About $50,000 a year",
       "term": "Ongoing",
       "note": "The state police operate their own readers and do not share their data with Flock",
       "sources": [

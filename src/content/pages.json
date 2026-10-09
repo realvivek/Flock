@@ -10,14 +10,14 @@
     },
     "components": {
       "kicker": "Components",
-      "title": "The 14 Parts Inside a Flock Camera",
+      "title": "The 14 Parts of a Flock Camera",
       "deck": "The Falcon’s case is [8.75 inches long](src:flock-techspecs) and weighs about 3 pounds. It reads plates with its own processor and sends each read over a cellular connection; it has no network cable.",
       "lead": "parts",
       "about": true,
       "jump": [
         {
           "href": "#components",
-          "label": "The parts"
+          "label": "Parts, front to back"
         },
         {
           "href": "#pole",
@@ -88,7 +88,7 @@
     "economics": {
       "kicker": "Economics",
       "title": "A Flock Camera Lists at $3,000 a Year, and Flock Keeps the Hardware",
-      "deck": "The [annual fee covers](src:flock-impl-guide) the camera, pole, solar panel, cellular data and software. Installation, permits, moves and replacements are billed separately.",
+      "deck": "The [annual fee covers](src:indio-2023) the camera, pole, solar panel, cellular data and software. Installation, permits, moves and replacements are billed separately.",
       "lead": "price",
       "about": true
     },

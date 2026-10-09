@@ -5,18 +5,18 @@
   },
   "stops": [
     {
-      "id": "pole", "status": "Picked up", "where": "On the pole", "when": "at the moment of the read", "icon": "pole",
+      "id": "pole", "status": "Captured", "where": "On the pole", "when": "at the moment of the read", "icon": "pole",
       "title": "The camera takes six to 12 photos and reads the plate",
       "line": "Before anything leaves the pole, the camera has read the plate and described the car.",
-      "body": "A passive infrared sensor fires on a warm moving object. The camera captures six to 12 still frames of the back of the vehicle, lit at night by an 850 nm infrared array. Before anything leaves the pole, the plate and its state are read and the vehicle is described in what Flock calls a Vehicle Fingerprint: make, type and color, and features such as roof racks, back racks, bumper stickers and decals, and missing or covered plates. The Texas Tribune reports that the cameras also record dents.",
+      "body": "A passive infrared sensor fires on a warm moving object. The camera captures six to 12 still frames of the back of the vehicle, lit at night by an 850-nanometer infrared array. Before anything leaves the pole, the plate and its state are read and the vehicle is described in what Flock calls a Vehicle Fingerprint: make, type and color, and features such as roof racks, back racks, bumper stickers and decals, and missing or covered plates. The Texas Tribune reports that the cameras also record dents.",
       "packed": ["Plate and vehicle images", "Plate text and state", "Vehicle description", "Time, position from the GPS antenna, camera ID"],
       "opens": "Only the camera's own software. People and cyclists who trigger the sensor appear in frame; Flock states they are not indexed.",
       "hops": ["hop-1", "hop-2", "hop-3"],
       "sources": ["cehrp-dissection", "flock-lpr-policy", "flockcamre", "aclu-2022", "jalopnik-speed", "flock-flex-datasheet", "flock-deck-2023", "texastribune-unplugged-2026"]
     },
     {
-      "id": "carrier", "status": "In transit", "where": "Carrier network", "when": "time not published", "icon": "tower",
-      "title": "Sent over LTE on a carrier SIM",
+      "id": "carrier", "status": "Uploaded", "where": "Carrier network", "when": "time not published", "icon": "tower",
+      "title": "Sent over a cellular network",
       "line": "The read travels over the phone network, encrypted, on a SIM inside the camera.",
       "body": "The unit has no wired network. Each read goes out over the cellular module on a SIM included in the subscription, encrypted with HTTPS and TLS, according to Flock. The number of bytes per read is not published.",
       "packed": ["The same images and record, encrypted in transit"],
@@ -25,7 +25,7 @@
       "sources": ["flock-arch-2024", "404-exposed-2026", "gainsec-2026", "wflx-condor-2026"]
     },
     {
-      "id": "cloud", "status": "Arrived at facility", "where": "Amazon Web Services, United States", "when": "time not published", "icon": "cloud",
+      "id": "cloud", "status": "Stored", "where": "Amazon Web Services, United States", "when": "time not published", "icon": "cloud",
       "title": "Checked in, encrypted, filed",
       "line": "It lands in Amazon's cloud, where it is checked, stored and indexed so it can be searched.",
       "body": "Flock's architecture summary describes encryption with Amazon's Key Management Service before the data is sent, and validation when it arrives. Software services index the read for search; images go to object storage and records to databases. Flock's policy says plate reads are transferred to Amazon's government cloud.",
@@ -35,7 +35,7 @@
       "sources": ["flock-arch-2024", "flock-lpr-policy", "flock-privacy-access", "footnote4a-trust"]
     },
     {
-      "id": "sorting", "status": "Sorting", "where": "Cloud and camera", "when": "time not published", "icon": "list",
+      "id": "sorting", "status": "Checked", "where": "Cloud and camera", "when": "time not published", "icon": "list",
       "title": "Compared against the hot lists",
       "line": "The plate is checked against stolen-car and wanted lists, some written by agencies themselves.",
       "body": "The plate is compared with the lists of the F.B.I.'s National Crime Information Center and the National Center for Missing and Exploited Children, Flock's policy says, and with Amber Alerts and lists that agencies write themselves. The A.C.L.U. found that the cameras download the F.B.I.'s list only twice a day, so a plate taken off it can keep producing alerts for up to 12 hours.",
@@ -45,7 +45,7 @@
       "sources": ["flock-lpr-policy", "flock-flex-datasheet", "aclu-2022"]
     },
     {
-      "id": "alert", "status": "Out for delivery", "where": "Officers, in Flock's app", "when": "10 to 15 seconds on average", "icon": "phone",
+      "id": "alert", "status": "Alert, if it matches", "where": "Officers, in Flock's app", "when": "10 to 15 seconds on average", "icon": "phone",
       "title": "If it matches, an alert",
       "line": "A match reaches officers with the plate, the photo, the time and the place in 10 to 15 seconds on average, according to Flock. In Roseville, Calif., 71 percent of stolen-car and felony alerts involved a misread plate, a figure Flock calls a mischaracterization.",
       "body": "When a plate matches, an alert with the time, the camera's location, the plate and the vehicle image reaches officers in 10 to 15 seconds on average, according to Flock's datasheet. In Roseville, Calif., 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate; the department says none led to a contact or an arrest, and Flock calls the figure a mischaracterization. In Los Angeles, where the readers are Axon units in patrol cars, an inspector general's review counted 161 alerts in two months that were correct reads of cars that, it turned out, were not stolen, from list entries that were not updated in time.",
@@ -55,17 +55,17 @@
       "sources": ["flock-flex-datasheet", "flock-mobile-app", "flock-guardrails-2026", "sacbee-roseville-2026", "lapd-oig-2026"]
     },
     {
-      "id": "search", "status": "Available for pickup", "where": "FlockOS, any partner agency", "when": "any time before deletion", "icon": "search",
+      "id": "search", "status": "Searchable", "where": "FlockOS, any partner agency", "when": "any time before deletion", "icon": "search",
       "title": "Searchable by the agencies the owner shares with",
       "line": "Agencies the owner shares with can search it, giving a reason typed by hand.",
-      "body": "A user in a customer agency can search by plate, description, natural language or co-traveling vehicles, across the agency's cameras, its sharing partners, and a national lookup that about 75 percent of law-enforcement customers joined, according to Flock's statement to Congress. The audit log of a Johnson County, Tex., search on May 9, 2025, lists 83,345 cameras in 6,809 networks.",
+      "body": "A user in a customer agency can search by plate, description, natural language or co-traveling vehicles, across the agency's cameras, its sharing partners, and a national lookup that about 75 percent of law enforcement customers joined, according to Flock's statement to Congress. The audit log of a Johnson County, Tex., search on May 9, 2025, lists 83,345 cameras in 6,809 networks.",
       "packed": ["A row in the audit log: who, when, how many cameras, and the reason typed in"],
       "opens": "Any user at any agency that shares with the camera's owner, with a free-text reason. In a review of 12 million searches, the Electronic Frontier Foundation found about one in five gave a generic reason such as “investigation.”",
       "hops": ["hop-10", "hop-11"],
       "sources": ["flock-platform", "wyden-ftc-2025", "404-texas-2025", "eff-texas-2025", "eff-protesters-2025"]
     },
     {
-      "id": "delete", "status": "Disposed", "where": "Object storage lifecycle", "when": "after seven days for new customers", "icon": "bin",
+      "id": "delete", "status": "Deleted", "where": "Object storage lifecycle", "when": "after seven days for new customers", "icon": "bin",
       "title": "Deleted when the retention period ends",
       "line": "It is deleted when the agency’s retention period ends: seven days by default for new customers, 30 under the earlier default, longer if a council approved it or an investigation keeps it.",
       "body": "A storage lifecycle rule removes the images at the configured interval and logs the deletion. Since Aug. 13, 2026, the default for new customers is seven days, down from 30; existing customers keep the periods they set. An elected body can approve a longer period, and Evidence Mode keeps selected data with no published limit.",

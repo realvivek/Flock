@@ -136,38 +136,28 @@
       "k": "Hardware",
       "v": "Cameras, mounting poles, solar panels, AC power kit; all stay Flock's property",
       "sources": [
-        "flock-impl-guide",
-        "richland-agreement-2023"
+        "richland-agreement-2023",
+        "flock-impl-guide"
       ]
     },
     {
       "k": "Connectivity",
       "v": "Cellular data for each camera",
       "sources": [
-        "indio-2023",
-        "flock-impl-guide"
+        "indio-2023"
       ]
     },
     {
       "k": "Cloud and software",
       "v": "Storage for the retention window, the search platform, unlimited users, updates",
       "sources": [
-        "flock-impl-guide",
         "indio-2023"
-      ]
-    },
-    {
-      "k": "Site work",
-      "v": "Site surveys and 811 locate scheduling",
-      "sources": [
-        "flock-impl-guide"
       ]
     },
     {
       "k": "Support",
       "v": "Training, customer support, repair or replacement of defective hardware",
       "sources": [
-        "flock-impl-guide",
         "richland-agreement-2023"
       ]
     }
@@ -175,12 +165,13 @@
   "extra": [
     {
       "k": "Installation fee",
-      "v": "One-time per camera: $350 to $650 in contracts and quotes from 2022 and 2023, or $150 on existing infrastructure. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan",
+      "v": "One-time per camera, covering the site survey and 811 locate scheduling: $350 to $650 in contracts and quotes from 2022 and 2023, or $150 on existing infrastructure. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan",
       "sources": [
         "richland-agreement-2023",
         "indio-2023",
         "flock-deck-2023",
-        "flock-fee-schedule"
+        "flock-fee-schedule",
+        "flock-impl-guide"
       ]
     },
     {
@@ -208,7 +199,7 @@
     },
     {
       "k": "Loss, theft, damage",
-      "v": "Replacement camera $800, Flock pole $500, advanced pole $5,000, solar panel $350; all but the advanced pole $0 with a Camera Protection Plan, whose price is not published",
+      "v": "Replacement fees from the 2026 schedule, charted above, from $350 for a solar panel to $5,000 for an advanced pole; all but the advanced pole $0 with a Camera Protection Plan, whose price is not published",
       "sources": [
         "flock-fee-schedule",
         "richland-agreement-2023"
@@ -216,7 +207,7 @@
     },
     {
       "k": "Moves",
-      "v": "Relocation $350 on an existing pole, $750 on a Flock pole, $5,000 on an advanced pole; technician visit $350",
+      "v": "Relocation and technician fees from the same schedule, $350 to $5,000",
       "sources": [
         "flock-fee-schedule"
       ]
@@ -296,7 +287,7 @@
       ]
     },
     {
-      "item": "Technician visit without reinstall",
+      "item": "Technician visit for another reason",
       "now": "$350",
       "sources": [
         "flock-fee-schedule"
@@ -624,7 +615,7 @@
   "scale": [
     {
       "k": "Cameras",
-      "v": "115,437 Flock cameras mapped by OpenStreetMap contributors as of Oct. 8, 2026; Flock says it operates in more than 6,000 communities in 49 states (July 2026)",
+      "v": "115,437 Flock cameras mapped by OpenStreetMap contributors as of Oct. 8, 2026, 115,249 of them in the 50 states and D.C.; Flock says it operates in more than 6,000 communities in 49 states (July 2026)",
       "sources": [
         "wikipedia-flock",
         "deflock-tiles-2026"
@@ -815,15 +806,16 @@
   "termsChanges": [
     {
       "k": "Selling customer data",
-      "v": "The sentence “Flock does not own and shall not sell Customer Data” was deleted",
+      "v": "The February terms deleted “Flock does not own and shall not sell Customer Data”; the terms of Aug. 21, 2026, say “Flock shall not sell Customer Data”",
       "sources": [
+        "flock-tc-2026",
         "footnote4a-terms-2026",
         "aclu-terms"
       ]
     },
     {
       "k": "Using customer data",
-      "v": "Flock’s license to use customer data became perpetual, scoped to improving its products",
+      "v": "Flock’s license to use customer data became perpetual, scoped to improving its products; the August terms keep it",
       "sources": [
         "footnote4a-terms-2026",
         "aclu-terms"
@@ -831,7 +823,7 @@
     },
     {
       "k": "Disputes",
-      "v": "Disputes go to arbitration in Georgia",
+      "v": "Georgia law governs; disputes go to mediation, then arbitration, both run by the American Arbitration Association",
       "sources": [
         "footnote4a-terms-2026"
       ]
