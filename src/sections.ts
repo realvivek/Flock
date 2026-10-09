@@ -41,11 +41,11 @@ const NODES: { id: string; label: string; sub: string; stages: number[]; icon: s
   { id: "pole", label: "Camera", sub: "on the pole", stages: [1, 2, 3], icon: "pole" },
   { id: "lte", label: "Cellular network", sub: "carrier SIM, encrypted", stages: [4], icon: "tower" },
   { id: "cloud", label: "Flock’s cloud", sub: "Amazon Web Services, U.S.", stages: [5, 6, 7], icon: "cloud" },
-  { id: "lists", label: "Hot lists", sub: "NCIC, state and custom lists", stages: [8], icon: "list" },
-  { id: "phone", label: "Officers’ phones", sub: "alert in 10 to 15 seconds on average", stages: [9], icon: "phone" },
+  { id: "lists", label: "Hot lists", sub: "NCIC, NCMEC, Amber Alert and agency lists", stages: [8], icon: "list" },
+  { id: "phone", label: "Alert to officers", sub: "10 to 15 seconds on average, per Flock", stages: [9], icon: "phone" },
   { id: "search", label: "Network search", sub: "own, shared and national", stages: [10], icon: "search" },
   { id: "audit", label: "Audit log", sub: "a row for every search", stages: [11], icon: "list" },
-  { id: "bin", label: "Deletion", sub: "after seven days by default", stages: [12], icon: "bin" },
+  { id: "bin", label: "Deletion", sub: "seven days by default for new customers", stages: [12], icon: "bin" },
 ];
 const nodeOf = (n: number) => NODES.find((x) => x.stages.includes(n))!;
 

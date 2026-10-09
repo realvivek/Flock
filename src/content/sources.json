@@ -1361,6 +1361,15 @@
       "lastVerified": "2026-09-06"
     },
     {
+      "id": "okgazette-okc-2026",
+      "kind": "independent",
+      "title": "Despite overwhelming public opposition, Oklahoma City Council passes Flock extension ($270,000 through June 30, 2027, for 90 cameras)",
+      "publisher": "Oklahoma Gazette",
+      "url": "https://www.okgazette.com/news/okc-council-passes-flock-extension/",
+      "date": "2026-08-18",
+      "lastVerified": "2026-10-09"
+    },
+    {
       "id": "kfor-okc-2026",
       "kind": "independent",
       "title": "Oklahoma City Council votes to renew $270k Flock camera contract",
@@ -1532,13 +1541,13 @@
       "lastVerified": "2026-10-08"
     },
     {
-      "id": "techtimes-lapd-2026",
+      "id": "foxla-lapd-2026",
       "kind": "independent",
-      "title": "LAPD cuts off Flock Safety after audit finds one in three hot-list alerts were false",
-      "publisher": "Tech Times",
-      "url": "https://www.techtimes.com/articles/320800/20260717/lapd-cuts-off-flock-safety-after-audit-finds-one-three-hot-list-alerts-were-false.htm",
-      "date": "2026-07-17",
-      "lastVerified": "2026-09-18"
+      "title": "LAPD suspends Flock Safety surveillance contract over data privacy disagreements (the contract expired July 11, 2026)",
+      "publisher": "FOX 11 Los Angeles",
+      "url": "https://www.foxla.com/news/lapd-suspends-flock-safety-surveillance-contract-privacy",
+      "date": "2026-07-11",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "greenbay-audit-2026",
@@ -1624,7 +1633,7 @@
     {
       "id": "mourtgos-adams-2026",
       "kind": "independent",
-      "title": "Working paper: Automated License Plate Readers, Vehicle Theft, and Clearance (Scott M. Mourtgos and Ian T. Adams, University of South Carolina; 216 adopting agencies, 2017 to 2023; Table 2 and Table S7)",
+      "title": "Working paper: Automated License Plate Readers, Vehicle Theft, and Clearance (Scott M. Mourtgos and Ian T. Adams, University of South Carolina; 216 adopting agencies; crime data from 2017 to 2023; Table 2 and Table S7)",
       "publisher": "CrimRxiv",
       "url": "https://www.crimrxiv.com/pub/zleg04q3/release/1",
       "date": "2026-08-16",

@@ -168,6 +168,37 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | In Windsor, Conn., a mapper deleted 14 of the cameras on Oct. 8, noting each had been removed, "presumably" because the town had canceled its contract; the council voted in July to keep them off | 14 | `osm-windsor-2026`; `patch-windsor-2026` | 12 changesets, 190181808 to 190182106, each noting the camera "has been removed. This is presumably due to the city's cancellation of their contract"; Patch counts 16 cameras |
 | Timeline entries | | each entry's own source | `src/content/timeline-2026.json`; the Texas Department of Public Safety's "at least 940" cameras are attributed to the email a lawmaker shared, as `texastribune-dps-2026` reports it |
 
+## Corrections, fourth review (9 October 2026)
+
+An audit of the eight reference pages against the corrected story. Each row was fixed where it appears (Data,
+Journey, Claims, Deployments, Economics, Components and Outcomes) and the Outcomes data rebuilt offline; camera
+positions and matches did not change.
+
+| What the reference pages said | What the record shows | Source |
+|---|---|---|
+| Plates are compared against "NCIC, NCMEC, AMBER, state and custom lists" | Flock's policy names the F.B.I.'s National Crime Information Center and the National Center for Missing and Exploited Children; its datasheet names Amber Alerts and custom lists. No state lists are documented. | `flock-lpr-policy`; `flock-flex-datasheet` |
+| A hit goes "to officers' phones" in 10 to 15 seconds, per the datasheet | The datasheet gives notifications in 10 to 15 seconds on average; it does not say phones. Alerts reach officers; the app delivers them within a set radius. | `flock-flex-datasheet`; `flock-mobile-app` |
+| Reads are deleted "after seven days by default" | Seven days is the default for new customers since Aug. 13, 2026; existing customers keep the periods they set. The 21-day and 60-day limits apply unless the data is needed for an investigation, and California's 60 days applies to its Highway Patrol. | `flock-guardrails-2026`; `va-code-2-2-5517`; `wa-sb6002-2026`; `ca-sb34` |
+| Evidence Mode keeps data "indefinitely" | No published limit. | `flock-guardrails-2026`; `aclu-guardrails` |
+| Each upload is "a set of image crops and text"; the payload is "crops, metadata" | Flock's policy says the plate and vehicle images are transferred to its cloud; no statement mentions crops. | `flock-lpr-policy` |
+| The cameras download "the national lists" twice a day | The ACLU's finding covers the F.B.I.'s NCIC list. | `aclu-2022` |
+| The upload, cloud and matching stops take "seconds" (Journey) | No time is published for them; only the alert's 10 to 15 seconds is. | `flock-flex-datasheet` |
+| Texas "directed at least $30 million in insurance-fee grants to local Flock networks before the governor halted the program" | Grants and contracts with state and local agencies, the Department of Public Safety among them; the governor paused state funding on Aug. 27, 2026. | `texastribune-abbott-2026`; `texastribune-dps-2026` |
+| The Department of Public Safety had "at least 940 installed" | At least 940 in use, according to an email a lawmaker shared; on Sept. 4 the department said it would pause installing more but keep using its own. | `texastribune-dps-2026` |
+| Florida's DOT "revoked all state right-of-way permits" | It revoked permits for Flock cameras on state land next to roads. | `wusf-fdot-2026` |
+| Annual recurring revenue "about $500 million by March 2026, up from $285 million at the end of 2024" | Sacra's estimates are about $450 million in October 2025 and $500 million in March 2026; the earlier figure is not on its page. | `sacra-flock` |
+| Rhode Island's contract was "announced July 2026" | WJAR reported on July 30, 2026, a contract signed months earlier. | `turnto10-ri-2026` |
+| Oklahoma City: 90 cameras, cited to two sources that do not give the count | The Oklahoma Gazette reports $270,000 through June 30, 2027, "to continue to operate 90 cameras"; now cited. | `okgazette-okc-2026` |
+| Mourtgos and Adams: 216 agencies "from 2017 to 2023" against "about 3,100"; "theft arrests up 15.9%"; "averaged across agencies … no statistically significant change"; thefts "already falling" | Adoption 2019 to 2024 (168 before the crime data end) against 3,108; the clearance share, 7.4 percent before, rose by about 16 percent of that level, a rise that began before the cameras went live; with population or agency-month weighting the change cannot be told apart from zero. The "already falling" claim is not in the story's sources and was dropped. | `mourtgos-adams-2026`; `reason-flock-study-2026` |
+| Los Angeles: "161 were correct plate reads of cars no longer stolen"; "0% of alerts wrong"; an alerts-per-read rate | The inspector general: accurate reads of cars that, it turned out, had not been stolen, from records not updated in time; 161 of 50,183 is 0.3 percent. Reads are from all readers and alerts from in-car readers, so no rate between them is printed. | `lapd-oig-2026` |
+| Los Angeles "suspended its Flock agreement", cited to a Tech Times article whose headline repeats the withdrawn "one in three" reading | The department let its contract expire on July 11, 2026, suspending the agreement; now cited to FOX 11, and the Tech Times source is removed. | `foxla-lapd-2026` |
+| Oakland: a recoveries rate built on 174 | The report gives 174 in its summary and 25 in its table by offense; both are in the note, and no rate is printed. | `oakland-pac-2026` |
+| Story County: 168 wrong alerts, read against the story's 165 | 168 is 165 wrong-state plus three incorrect, all counted as wrong on the Outcomes page; the story's 77 percent is the wrong-state share alone. The note now says so. | `footnote4a-hotlist` |
+| Windsor: "the council paused the cameras in 2026" | The cameras were switched off in February 2026; on July 6 the council voted 5 to 4 to keep them off. | `patch-windsor-2026` |
+| Roseville's 71 percent, without Flock's response (Claims, Journey) | Flock called the figure a mischaracterization; added. | `sacbee-roseville-2026` |
+| A 30-day "Oregon cap" in the retention list | No source cited for it; removed. | — |
+| An unsourced "more than 120,000 cameras" in the overview's unused intro | Removed. | — |
+
 ## Corrections, third review (8 October 2026)
 
 A second independent fact-check of every claim changed after the first two reviews.
@@ -304,6 +335,6 @@ error; the table shows how far "mapped" can sit from a published figure.
 The story's map, counts and rates use the 8 October 2026 snapshot. The Outcomes page keeps the 17 July 2026
 GeoJSON snapshot (116,723 readers; `data/story/raw/cameras-us-hourly-2026-07-17.geojson`, pinned in the manifest),
 because its records were matched to the cameras mapped while they were made. Windsor, Conn., shows why: its 16
-cameras were switched off in February 2026, the town council voted 5–4 on July 6 not to turn them back on, and the
+cameras were switched off in February 2026, the town council voted 5–4 on July 6 not to turn them back on, and
 a mapper deleted 14 of them from OpenStreetMap on 8 October 2026 (12 changesets, 190181808 to 190182106;
 `osm-windsor-2026`, `patch-windsor-2026`).

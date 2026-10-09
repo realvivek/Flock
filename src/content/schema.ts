@@ -81,7 +81,6 @@ export const DeploymentsFile = z.object({
 }).passthrough();
 
 export const OverviewFile = z.object({
-  intro: z.object({ lede: z.string(), sources: z.string() }),
   sections: z.array(z.object({ id: z.string(), label: z.string(), title: z.string(), blurb: z.string() })),
 }).passthrough();
 

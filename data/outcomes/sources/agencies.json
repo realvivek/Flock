@@ -17,10 +17,10 @@
         "recoveries": 337,
         "arrests": 74
       },
-      "note": "Inspector General review of the two months from 1 August to 30 September 2025. Reads are for all of the department's readers; alerts are the 50,183 in-car alerts (5,911 unique plates). Officers recorded no action on 4,575; 161 were correct plate reads of cars no longer stolen, from out-of-date list entries; 337 stolen vehicles were recovered; 68 stops produced 74 arrests. The review says the records do not fully document what officers did. The department suspended its Flock agreement in July 2026.",
+      "note": "The inspector general's review covers Aug. 1 to Sept. 30, 2025. Reads are for all of the department's readers; alerts are the 50,183 from its in-car readers (5,911 unique plates). Officers recorded no action on 4,575; 161 alerts were accurate reads of cars that, it turned out, had not been stolen, from records that were not updated in time; 337 stolen vehicles were recovered; 68 stops produced 74 arrests. The review says the records do not fully document what officers did. The department let its Flock contract expire on July 11, 2026, suspending the agreement.",
       "sources": [
         "lapd-oig-2026",
-        "techtimes-lapd-2026"
+        "foxla-lapd-2026"
       ]
     },
     {
@@ -30,6 +30,7 @@
       "state": "CA",
       "period": "2025",
       "cameras": "290 Flock cameras",
+      "noRates": true,
       "values": {
         "reads": 638747333,
         "alerts": 1099837,
@@ -38,7 +39,7 @@
         "recoveries": 174,
         "arrests": 162
       },
-      "note": "Alerts include 620,331 for stolen plates; the department kept stolen-plate and stolen-vehicle notifications switched off for lack of staff to respond. Officers logged 425 'success stories' in the software's outcome feature, which the report summarizes as 162 arrests, 174 vehicles and 51 guns recovered; its table of the same outcomes by offense totals 162 arrests, 25 vehicles and 50 guns. Outside agencies do not always report their outcomes to Oakland, and the department cannot see their records.",
+      "note": "Alerts include 620,331 for stolen plates; the department kept stolen-plate and stolen-vehicle notifications switched off for lack of staff to respond. Officers logged 425 “success stories” in the software's outcome feature, which the report summarizes as 162 arrests, 174 vehicles and 51 guns recovered; its table of the same outcomes by offense totals 162 arrests, 25 vehicles and 50 guns. Outside agencies do not always report their outcomes to Oakland, and the department cannot see their records.",
       "sources": [
         "oakland-pac-2026"
       ]
@@ -59,7 +60,7 @@
         "recoveries": 31,
         "arrests": null
       },
-      "note": "Alerts are 1,748 on official lists plus 18,638 on agency custom lists. Reads cover the only 38-day window the system still held; purge data for 2025 was unavailable. 49 investigations used reader data. Shares camera access with 299 agencies.",
+      "note": "Alerts are 1,748 on official lists plus 18,638 on agency custom lists. Reads cover the only 38-day window the system still held; purge data for 2025 was unavailable. Reader data was used in 49 investigations. The department shares camera access with 299 agencies.",
       "sources": [
         "greenbay-audit-2026"
       ],
@@ -80,7 +81,7 @@
         "recoveries": null,
         "arrests": null
       },
-      "note": "Stolen-vehicle and felony alerts in 2023 and 2024; 1,011 of 1,427 (71%) involved a misread plate. A department lieutenant said none of the misread alerts led to a contact or an arrest. Flock called the figure a mischaracterization that conflates felony alerts with overall read accuracy, and said Roseville's deployment was unusual (older hardware, cameras mounted higher and farther from vehicles than recommended).",
+      "note": "Of 1,427 stolen-vehicle and felony alerts in 2023 and 2024, 1,011, or 71 percent, involved a misread plate. A department lieutenant said none of the misread alerts led to a contact or an arrest. Flock called the figure a mischaracterization that conflates felony alerts with overall read accuracy, and said Roseville's deployment was unusual (older hardware, cameras mounted higher and farther from vehicles than recommended).",
       "sources": [
         "sacbee-roseville-2026",
         "roseville-71"
@@ -101,7 +102,7 @@
         "recoveries": 22,
         "arrests": 18
       },
-      "note": "Alerts here are verified hits only, confirmed by an employee before a stop was authorised. The report does not name the vendor of the fixed cameras. Its per-site arrests sum to 17 against a stated total of 18.",
+      "note": "Alerts here are verified hits only, confirmed by an employee before a stop was authorized. The report does not name the vendor of the fixed cameras. Its per-site arrests sum to 17 against a stated total of 18.",
       "sources": [
         "nashville-lpr-2023"
       ],
@@ -122,7 +123,7 @@
         "recoveries": 26,
         "arrests": 112
       },
-      "note": "Reads are MNPD's estimate from four ten-day samples (20,479,087 reads, 13,399 hit notifications, 1,346 verified hits in the samples; 511,977 reads a day over 140 days). Alerts here are unverified hit notifications in the 40 sampled days only. Arrests are persons arrested over the whole pilot; recoveries are the 26 vehicles recovered unoccupied, on top of recoveries at arrest.",
+      "note": "Reads are MNPD's estimate from four 10-day samples (20,479,087 reads, 13,399 hit notifications, 1,346 verified hits in the samples; 511,977 reads a day over 140 days). Alerts here are unverified hit notifications in the 40 sampled days only. Arrests are persons arrested over the whole pilot; recoveries are the 26 vehicles recovered unoccupied, on top of recoveries at arrest.",
       "sources": [
         "nashville-lpr-sampling-2023"
       ],
@@ -144,7 +145,7 @@
         "recoveries": null,
         "arrests": 69
       },
-      "note": "Alerts: 2,877 warrant, 1,452 stolen plate, 1,192 stolen vehicle; the system went live in March 2025. Of 217 case outcomes associated with alerts: 69 cleared by arrest (cases, not persons), 52 leads generated, 33 in progress, 31 unable to locate, 20 cleared by other means, 7 no action, 3 warrants issued, 1 added to a hot list; the report's categories sum to 216.",
+      "note": "Alerts: 2,877 warrant, 1,452 stolen plate, 1,192 stolen vehicle; the system went live in March 2025. Of 217 case outcomes associated with alerts: 69 cleared by arrest (cases, not persons), 52 leads generated, 33 in progress, 31 unable to locate, 20 cleared by other means, seven no action, three warrants issued, one added to a hot list; the report's categories sum to 216.",
       "sources": [
         "columbia-mo-2025"
       ]
@@ -164,7 +165,7 @@
         "recoveries": 38,
         "arrests": 24
       },
-      "note": "250 incident responses attributed to the readers; 24 arrests 'directly related'. A 2021 study of the city's earlier vendor found under 0.3% of hits became leads.",
+      "note": "The department attributed 250 incident responses to the readers and 24 arrests “directly related” to them. A 2021 study of the city's earlier vendor found that under 0.3 percent of hits became leads.",
       "sources": [
         "piedmont-2025",
         "hofer-piedmont-2021"
@@ -185,7 +186,7 @@
         "recoveries": 14,
         "arrests": 65
       },
-      "note": "267 cases assisted. Retention 30 days.",
+      "note": "The readers assisted in 267 cases. Reads are kept 30 days.",
       "sources": [
         "lafayette-co-alpr"
       ]
@@ -205,7 +206,7 @@
         "recoveries": 170,
         "arrests": 289
       },
-      "note": "29 firearms recovered. One 30-day portal window showed about 2 million vehicles and 175,916 hits. The city later ended the contract.",
+      "note": "Officers recovered 29 firearms. One 30-day window in the portal showed about 2 million vehicles and 175,916 hits. The city later ended the contract.",
       "sources": [
         "denverite-2025"
       ]
@@ -225,7 +226,7 @@
         "recoveries": 40,
         "arrests": 52
       },
-      "note": "At least 52 arrests 'directly from' reader data plus 29 assists; about 40 vehicles. A January to June 2025 audit found no impermissible use.",
+      "note": "At least 52 arrests “directly from” reader data, plus 29 assists; about 40 vehicles. A January to June 2025 audit found no impermissible use.",
       "sources": [
         "berkeleyside-2025"
       ]
@@ -245,7 +246,7 @@
         "recoveries": 371,
         "arrests": 822
       },
-      "note": "Arrests are 'individuals charged' (1,985 charges). Also 43 stolen plates, 521 warrants served, 32 missing persons located, 166 firearms seized.",
+      "note": "Arrests are “individuals charged” (1,985 charges). Also 43 stolen plates, 521 warrants served, 32 missing persons located, 166 firearms seized.",
       "sources": [
         "lexington-lpr"
       ]
@@ -265,7 +266,7 @@
         "recoveries": 40,
         "arrests": null
       },
-      "note": "72 stops caused by alerts produced 40 stolen vehicles and 9 stolen plates, as reported in a 2026 essay citing the department.",
+      "note": "Alerts led to 72 stops, which produced 40 stolen vehicles and nine stolen plates, as reported in a 2026 essay citing the department.",
       "sources": [
         "wip-cops-case-2026"
       ]
@@ -285,7 +286,7 @@
         "recoveries": null,
         "arrests": null
       },
-      "note": "The sheriff's office's 'Erroneous hotlist hits' report from its in-car readers: 214 rows from NCIC lists. 165 were marked 'wrong state' (the plate matched a list entry from another state), 3 incorrect, 10 correct with no action, 29 no action and 7 dismissed. Accurate hits and total reads were not in the report.",
+      "note": "The sheriff's office's “Erroneous hotlist hits” report from its in-car readers lists 214 rows from NCIC lists. Of those, 165 were marked “wrong state,” meaning the plate matched a list entry from another state, and three “incorrect”; the 168 together are counted here as wrong. The rest were 10 correct with no action, 29 no action and seven dismissed. Accurate hits and total reads were not in the report.",
       "sources": [
         "footnote4a-hotlist"
       ],
@@ -306,9 +307,10 @@
         "recoveries": null,
         "arrests": null
       },
-      "note": "The town publishes camera sites and ten dated cases rather than counts. The council paused the cameras in 2026.",
+      "note": "The town publishes camera sites and 10 dated cases rather than counts. Its cameras were switched off in February 2026, and on July 6 the council voted 5 to 4 to keep them off.",
       "sources": [
-        "windsor-lpr-faq-2025"
+        "windsor-lpr-faq-2025",
+        "patch-windsor-2026"
       ]
     }
   ]

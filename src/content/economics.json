@@ -531,7 +531,7 @@
       "scenario": "State highway right of way",
       "permit": "State DOT permit",
       "who": "Customer under the agreement; Flock works with some DOTs directly",
-      "note": "Cameras were installed without state approval in Florida, Illinois and South Carolina; South Carolina DOT identified 200 or more and paused new installations in 2023. Florida DOT revoked all state right-of-way permits on Aug. 31, 2026, with 30 days for removal.",
+      "note": "Cameras were installed without state approval in Florida, Illinois and South Carolina; South Carolina DOT identified 200 or more and paused new installations in 2023. On Aug. 31, 2026, Florida's transportation department revoked permits for Flock cameras on state land next to roads, with 30 days for removal.",
       "sources": [
         "forbes-statelaw-2024",
         "wusf-fdot-2026",
@@ -657,7 +657,7 @@
     },
     {
       "k": "Revenue",
-      "v": "Annual recurring revenue about $500 million by March 2026, up from $285 million at the end of 2024",
+      "v": "Annual recurring revenue of about $450 million in October 2025 and $500 million in March 2026, by Sacra's estimates",
       "sources": [
         "sacra-flock"
       ]
@@ -679,11 +679,12 @@
     },
     {
       "k": "Public money",
-      "v": "Texas directed at least $30 million in insurance-fee grants to local Flock networks before the governor halted the program in August 2026; Florida approved grant funding for about 440 readers shortly before its DOT revoked state right-of-way permits",
+      "v": "In Texas, at least $30 million in grants and contracts, paid for by a $1 fee on vehicle insurance policies, helped state and local agencies install at least 3,200 Flock cameras before the governor paused state funding on Aug. 27, 2026. Florida approved grant funding for about 440 readers shortly before its transportation department revoked permits for Flock cameras on state land next to roads",
       "sources": [
-        "texastribune-2026",
-        "elpasomatters-2026",
-        "wusf-florida-funding-2026"
+        "texastribune-dps-2026",
+        "texastribune-abbott-2026",
+        "wusf-florida-funding-2026",
+        "wusf-fdot-2026"
       ]
     },
     {

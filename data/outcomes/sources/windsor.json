@@ -12,7 +12,7 @@
   "sites": [
     {
       "id": "broad-sycamore",
-      "label": "Broad Street @ Sycamore Street",
+      "label": "Broad Street at Sycamore Street",
       "roads": [
         "Broad Street",
         "Sycamore Street"
@@ -28,7 +28,7 @@
     },
     {
       "id": "kennedy-i91",
-      "label": "Kennedy Road @ I-91",
+      "label": "Kennedy Road at I-91",
       "roads": [
         "Kennedy Road",
         "Interstate 91"
@@ -37,7 +37,7 @@
     },
     {
       "id": "218-columbia",
-      "label": "Route 218 @ Columbia Road",
+      "label": "Route 218 at Columbia Road",
       "roads": [
         "Route 218",
         "Columbia Road"
@@ -45,7 +45,7 @@
     },
     {
       "id": "218-pine",
-      "label": "Route 218 @ Pine Lane",
+      "label": "Route 218 at Pine Lane",
       "roads": [
         "Route 218",
         "Pine Lane"
@@ -53,7 +53,7 @@
     },
     {
       "id": "park-i91",
-      "label": "Park Avenue @ I-91",
+      "label": "Park Avenue at I-91",
       "roads": [
         "Park Avenue",
         "Interstate 91"
@@ -61,7 +61,7 @@
     },
     {
       "id": "park-ludlow",
-      "label": "Park Avenue @ Ludlow Road",
+      "label": "Park Avenue at Ludlow Road",
       "roads": [
         "Park Avenue",
         "Ludlow Road"
@@ -69,7 +69,7 @@
     },
     {
       "id": "bloomfield-i91",
-      "label": "Bloomfield Avenue @ I-91",
+      "label": "Bloomfield Avenue at I-91",
       "roads": [
         "Bloomfield Avenue",
         "Interstate 91"
@@ -78,7 +78,7 @@
     },
     {
       "id": "159-wolcott",
-      "label": "Route 159 southbound @ East Wolcott Avenue",
+      "label": "Route 159 southbound at East Wolcott Avenue",
       "roads": [
         "Windsor Avenue",
         "East Wolcott Avenue"
@@ -86,7 +86,7 @@
     },
     {
       "id": "159-i91",
-      "label": "Route 159 @ I-91",
+      "label": "Route 159 at I-91",
       "roads": [
         "Windsor Avenue",
         "Interstate 91"
@@ -94,7 +94,7 @@
     },
     {
       "id": "159-putnam",
-      "label": "Route 159 @ Putnam Highway",
+      "label": "Route 159 at Putnam Highway",
       "roads": [
         "Windsor Avenue",
         "re:^Putnam"
@@ -102,7 +102,7 @@
     },
     {
       "id": "poquonock-broad",
-      "label": "Poquonock Avenue @ Broad Street",
+      "label": "Poquonock Avenue at Broad Street",
       "roads": [
         "Route 75",
         "Broad Street"
@@ -110,7 +110,7 @@
     },
     {
       "id": "poquonock-i91",
-      "label": "Poquonock Avenue @ I-91",
+      "label": "Poquonock Avenue at I-91",
       "roads": [
         "Route 75",
         "Interstate 91"
@@ -118,7 +118,7 @@
     },
     {
       "id": "poquonock-hudson",
-      "label": "Poquonock Avenue @ Hudson Lane",
+      "label": "Poquonock Avenue at Hudson Lane",
       "roads": [
         "Route 75",
         "Hudson Lane"

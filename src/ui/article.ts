@@ -231,7 +231,7 @@ export async function renderDeployments(host: HTMLElement): Promise<void> {
       h.lastElementChild?.classList.add("contracts");
     } },
     { id: "dep-texas", title: "Texas: paid for by an insurance fee, then paused", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(Math.min(host.clientWidth || 720, 720))); } },
-    { id: "dep-funding", title: "Public funding behind local contracts", render: (h) => rows(h, d.funding) },
+    { id: "dep-funding", title: "Public funding behind state and local contracts", render: (h) => rows(h, d.funding) },
     { id: "dep-records", title: "Where the records are", render: (h) => rows(h, d.records) },
     { id: "dep-unknowns", title: "Not publicly documented", render: (h) => {
       const ul = el("ul", "unknown-list");

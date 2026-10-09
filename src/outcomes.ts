@@ -24,7 +24,7 @@ const File = z.object({
   windsor: z.object({ cameras: z.number(), cases: z.array(z.object({ date: z.string(), type: z.string(), site: z.string().nullable(), summary: z.string(), outcome: z.string() })), sources: z.array(z.string()) }),
   courts: z.array(z.object({ id: z.string(), case: z.string(), court: z.string(), state: z.string(), city: z.string().optional(), date: z.string(), crime: z.string(), role: z.string(), outcome: z.string(), sources: z.array(z.string()) })),
   districts: z.array(z.object({ agency: z.string(), city: z.string(), state: z.string(), unit: z.string(), asOf: z.string(), cameras: z.number(), sources: z.array(z.string()), rows: z.array(z.tuple([z.string(), z.number()])) })),
-  ladders: z.array(z.object({ id: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), cameras: z.string(), vendorMix: z.boolean().optional(), vendor: z.string().optional(), mixedWindows: z.boolean().optional(), values: Values, note: z.string(), sources: z.array(z.string()) })),
+  ladders: z.array(z.object({ id: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), cameras: z.string(), vendorMix: z.boolean().optional(), vendor: z.string().optional(), mixedWindows: z.boolean().optional(), noRates: z.boolean().optional(), values: Values, note: z.string(), sources: z.array(z.string()) })),
   national: z.object({ statements: z.array(z.object({ tag: z.string(), who: z.string(), text: z.string(), sources: z.array(z.string()) })), excluded: z.array(z.object({ what: z.string(), why: z.string(), sources: z.array(z.string()) })) }),
   coverage: z.object({ sites: z.number(), located: z.number(), matched: z.number(), placedAtCamera: z.number(), inCar: z.number(), bySource: z.record(z.string(), z.object({ sites: z.number(), located: z.number(), matched: z.number(), placedAtCamera: z.number() })) }),
 });
@@ -54,10 +54,11 @@ function rungCells(v: V, opts: { bars?: boolean } = {}): string {
   const max = Math.max(1, ...RUNGS.map((r) => Math.log10((v[r] ?? 0) + 1)));
   return RUNGS.map((r) => { const n = v[r]; const w = n == null ? 0 : (Math.log10(n + 1) / max) * 100; return `<td class="rung ${n == null ? "is-na" : ""}"><span class="v">${fmt(n)}</span>${opts.bars && n != null ? `<span class="bar" style="width:${w.toFixed(0)}%"></span>` : ""}</td>`; }).join("");
 }
-function rates(v: V): string {
+/** Rates between rungs of one record. Reads and alerts from different sets of readers (`vendorMix`) give no alert rate. */
+function rates(v: V, o: { vendorMix?: boolean } = {}): string {
   const out: string[] = [];
-  if (v.reads && v.alerts != null) out.push(`${(v.alerts / v.reads * 1e6).toFixed(1)} alerts per million reads`);
-  if (v.alerts && v.falseAlerts != null) out.push(`${Math.round(v.falseAlerts / v.alerts * 100)}% of alerts wrong`);
+  if (v.reads && v.alerts != null && !o.vendorMix) out.push(`${(v.alerts / v.reads * 1e6).toFixed(1)} alerts per million reads`);
+  if (v.alerts && v.falseAlerts != null) { const p = v.falseAlerts / v.alerts * 100; out.push(`${p < 1 ? p.toFixed(1) : Math.round(p)}% of alerts wrong`); }
   const per = (n: number, what: string) => { const r = n / v.alerts! * 100; return r >= 0.1 ? `${r.toFixed(1)} ${what} per 100 alerts` : `${(n / v.alerts! * 1e5).toFixed(1)} ${what} per 100,000 alerts`; };
   if (v.alerts && v.recoveries != null) out.push(per(v.recoveries, "recoveries"));
   if (v.alerts && v.arrests != null) out.push(per(v.arrests, "arrests"));
@@ -167,7 +168,7 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
     const tr = el("tr", "ladder"); tr.id = `ladder-${L.id}`;
     tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="small">${escape(apPeriod(L.period))}</td>${rungCells(L.values, { bars: true })}`;
     ltb.appendChild(tr);
-    const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows ? "" : rates(L.values)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
+    const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows || L.noRates ? "" : rates(L.values, L)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
   }
   lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
   drawOv();
