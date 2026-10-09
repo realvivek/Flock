@@ -5,7 +5,7 @@
   },
   "stops": [
     {
-      "id": "pole", "status": "Picked up", "where": "On the pole", "when": "0 s", "icon": "pole",
+      "id": "pole", "status": "Picked up", "where": "On the pole", "when": "at the moment of the read", "icon": "pole",
       "title": "The camera takes six to 12 photos and reads the plate",
       "line": "Before anything leaves the pole, the camera has read the plate and described the car.",
       "body": "A passive infrared sensor fires on a warm moving object. The camera captures six to 12 still frames of the back of the vehicle, lit at night by an 850 nm infrared array. Before anything leaves the pole, the plate and its state are read and the vehicle is described in what Flock calls a Vehicle Fingerprint: make, type and color, and features such as roof racks, back racks, bumper stickers and decals, and missing or covered plates. The Texas Tribune reports that the cameras also record dents.",
@@ -45,7 +45,7 @@
       "sources": ["flock-lpr-policy", "flock-flex-datasheet", "aclu-2022"]
     },
     {
-      "id": "alert", "status": "Out for delivery", "where": "Officers, in Flock's app", "when": "10 to 15 s on average", "icon": "phone",
+      "id": "alert", "status": "Out for delivery", "where": "Officers, in Flock's app", "when": "10 to 15 seconds on average", "icon": "phone",
       "title": "If it matches, an alert",
       "line": "A match reaches officers with the plate, photo and location in 10 to 15 seconds on average, according to Flock. In Roseville, Calif., 71 percent of stolen-car and felony alerts involved a misread plate, a figure Flock calls a mischaracterization.",
       "body": "When a plate matches, an alert with the plate, the image, the camera's location and the list it matched reaches officers in 10 to 15 seconds on average, according to Flock's datasheet. In Roseville, Calif., 1,011 of 1,427 stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate; the department says none led to a contact or an arrest, and Flock calls the figure a mischaracterization. In Los Angeles, an inspector general's review counted 161 alerts from in-car readers in two months that were correct reads of cars that, it turned out, were not stolen, from list entries that were not updated in time.",
@@ -65,7 +65,7 @@
       "sources": ["flock-platform", "wyden-ftc-2025", "404-texas-2025", "eff-texas-2025", "eff-protesters-2025"]
     },
     {
-      "id": "delete", "status": "Disposed", "where": "Object storage lifecycle", "when": "day 7 for new customers", "icon": "bin",
+      "id": "delete", "status": "Disposed", "where": "Object storage lifecycle", "when": "after seven days for new customers", "icon": "bin",
       "title": "Deleted, unless",
       "line": "It is deleted when the agency’s retention period ends: seven days by default for new customers, 30 under the earlier default, longer if a council approved it or an investigation keeps it.",
       "body": "A storage lifecycle rule removes the images at the configured interval and logs the deletion. Since Aug. 13, 2026, the default for new customers is seven days, down from 30; existing customers keep the periods they set. An elected body can approve a longer period, and Evidence Mode keeps selected data with no published limit.",

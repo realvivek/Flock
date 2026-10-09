@@ -66,11 +66,11 @@ const dollars = (v: string) => { const m = v.replace(/,/g, "").match(/\$(\d+)/);
 export function feesFigure(fees: Fee[], ctx: Ctx): string {
   const rows = fees.map((f) => ({ f, v: dollars(f.now) })).filter((r) => r.v != null && !r.f.now.includes("/")).sort((a, b) => b.v! - a.v!) as { f: Fee; v: number }[];
   const draw = (W: number, narrow: boolean) => {
-    const L = narrow ? 0 : 250, R = narrow ? 8 : 70, T = 22, rowH = narrow ? 44 : 26, barH = 11;
+    const L = narrow ? 0 : 250, R = narrow ? 8 : 70, T = narrow ? 2 : 22, rowH = narrow ? 44 : 26, barH = 11;
     const x = linScale(0, 5000, L, W - R - (narrow ? 64 : 0));
     const ticks = [0, 1000, 2000, 3000, 4000, 5000];
-    let out = g(ticks.map((t) => line(x(t), T - 4, x(t), T + rows.length * rowH)).join(""), { class: "grid" });
-    out += g(ticks.filter((t) => !narrow || t % 2000 === 0).map((t) => text(x(t), T - 9, `$${int(t)}`, { "text-anchor": t === 0 && narrow ? "start" : "middle" })).join(""), { class: "axis" });
+    // on a phone the labels sit above the bars and every bar carries its value, so the grid would only cross the labels
+    let out = narrow ? "" : g(ticks.map((t) => line(x(t), T - 4, x(t), T + rows.length * rowH)).join(""), { class: "grid" }) + g(ticks.map((t) => text(x(t), T - 9, `$${int(t)}`, { "text-anchor": "middle" })).join(""), { class: "axis" });
     rows.forEach(({ f, v }, i) => {
       const y = T + i * rowH, by = narrow ? y + 20 : y + (rowH - barH) / 2, hi = i === 0;
       const plan = f.now.includes("$0 with") ? ", or $0 with the protection plan" : "";
@@ -78,7 +78,7 @@ export function feesFigure(fees: Fee[], ctx: Ctx): string {
       const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, short, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
       out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(v) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(v) + 6, by + barH - 1, `$${int(v)}${plan ? "*" : ""}`, { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `$${int(v)}${plan}`, f.item);
     });
-    out += line(x(0), T - 4, x(0), T + rows.length * rowH, { class: "baseline" });
+    if (!narrow) out += line(x(0), T - 4, x(0), T + rows.length * rowH, { class: "baseline" });
     return svg(W, T + rows.length * rowH + 6, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of Flock's 2026 fees for changes after installation: moving a camera onto an advanced or DOT pole costs $5,000, the most; installing a camera at the customer's request costs $1,000 to $1,250.` });
   };
   const srcs = [...new Set(rows.flatMap((r) => r.f.sources))];
@@ -98,7 +98,9 @@ export function verdictIndex(myths: Myth[], ctx: Ctx, o: { level?: 2 | 3 } = {})
 }
 
 export interface SourceKind { kind: string }
-const KINDS: { kind: string; label: string }[] = [{ kind: "independent", label: "Teardowns, studies and news reports" }, { kind: "flock", label: "Flock Safety’s own documents" }, { kind: "government", label: "Government records" }, { kind: "court", label: "Court filings and opinions" }];
+/** The names of the four origins, shared by this chart and the Sources page's group heads. */
+export const SOURCE_KINDS: Record<string, string> = { flock: "Flock Safety’s own documents", independent: "Teardowns, studies and news reports", government: "Government records", court: "Court cases" };
+const KINDS = ["independent", "flock", "government", "court"].map((kind) => ({ kind, label: SOURCE_KINDS[kind]! }));
 const IN_TEN = ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "all"];
 /** A share as a reader says it: "one in five", "a third", "six in 10". */
 function shareWords(p: number): string {
@@ -119,7 +121,7 @@ export function originsFigure(sources: SourceKind[], ctx: Ctx, o: { level?: 2 | 
       const name = text(narrow ? 0 : L - 10, narrow ? y + 14 : y + rowH / 2 + 4, r.label, { "text-anchor": narrow ? "start" : "end", "font-size": 12.5, "font-weight": hi ? 700 : 400, fill: hi ? "var(--ink)" : "var(--ink-2)" });
       out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(r.n) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(r.n) + 6, by + barH - 1, int(r.n), { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `${int(r.n)} of ${int(total)} sources`, r.label);
     });
-    out += line(x(0), T - 2, x(0), T + rows.length * rowH, { class: "baseline" });
+    if (!narrow) out += line(x(0), T - 2, x(0), T + rows.length * rowH, { class: "baseline" });
     return svg(W, T + rows.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of the ${total} sources by origin: ${rows.map((r) => `${r.label.toLowerCase()}, ${r.n}`).join("; ")}.` });
   };
   const share = (k: string) => (rows.find((r) => r.kind === k)?.n ?? 0) / total;

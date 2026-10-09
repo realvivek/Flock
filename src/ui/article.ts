@@ -5,6 +5,7 @@ import { apDate, apState } from "../viz/format";
 import { initTooltips } from "../viz/tooltip";
 import { texasFigure, feesFigure, figCtx, figureCfg } from "./figs";
 import { contractsFigure } from "../story/fig/money";
+import { SOURCE_KINDS } from "../story/fig/reference";
 
 /**
  * Article renderers shared by the desktop acts 5 to 7 and the phone stepper.
@@ -257,12 +258,7 @@ export async function renderDeployments(host: HTMLElement): Promise<void> {
 
 const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
 const kindLabel: Record<string, string> = { flock: "Flock", independent: "Independent", government: "Government", court: "Court" };
-const kindTitle: Record<string, string> = {
-  flock: "Flock Safety documents and pages",
-  independent: "Teardowns, research and news reports",
-  government: "Legislatures, agencies and Congress",
-  court: "Courts",
-};
+const kindTitle = SOURCE_KINDS;
 const order = ["flock", "independent", "government", "court"];
 
 /** The bibliography, grouped by origin, each entry with its date and the date it was last checked. */
