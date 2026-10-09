@@ -86,9 +86,9 @@
       "id": "wifi", "node": "falcon.wifi", "order": 11, "group": "radio",
       "name": "Wi-Fi and Bluetooth module", "partNumber": "Lite-On WCBN3510A", "vendor": "Lite-On",
       "function": "Inactive in normal operation. During installation or a fault the camera raises a Wi-Fi access point named flock-XXXXXX for aiming from a technician's phone; the external battery box reports its state over Bluetooth.",
-      "spec": { "Wi-Fi": "802.11 a/b/g/n/ac, 2x2", "Bluetooth": "4.2 LE", "Install AP": "flock-XXXXXX, WPA2 (documented default password)", "Battery telemetry": "BLE names Penguin-… or numeric" },
+      "spec": { "Wi-Fi": "802.11 a/b/g/n/ac, 2x2", "Bluetooth": "4.2 LE", "Install AP": "flock-XXXXXX, WPA2", "Battery telemetry": "BLE names Penguin-… or numeric" },
       "dims": { "w": 0.6, "h": 0.55, "d": 0.08 }, "explode": [0, -0.12, -0.10],
-      "confidence": "measured", "sources": ["ryanohoro-2024", "cehrp-dissection", "flock-you"]
+      "confidence": "measured", "sources": ["ryanohoro-2024", "cehrp-dissection"]
     },
     {
       "id": "gps", "node": "falcon.gps", "order": 12, "group": "radio",

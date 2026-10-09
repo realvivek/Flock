@@ -1,20 +1,29 @@
 import { defineConfig, type Plugin } from "vite";
 import { resolve } from "node:path";
-import { renderHome, STORY_FILES } from "./scripts/story/input.ts";
+import { renderHome, renderPage, STORY_FILES } from "./scripts/story/input.ts";
 
 const pages = ["deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"];
 const ROOT = import.meta.dirname;
 
-/** Writes the home page story into index.html in place of <!--story-->, so it reads without JavaScript. In dev the
- *  page reloads when the story's content or data changes. */
+/** Writes the home page story into index.html in place of <!--story-->, and each reference page's head, share tags and
+ *  opening figure in place of <!--page-meta:id-->, <!--page-head:id--> and <!--page-lead:id-->, so every page reads
+ *  without JavaScript. The story's numbers go in as JSON for text drawn in the browser. In dev the page reloads when
+ *  the content or data changes. */
 function storyPage(): Plugin {
   return {
     name: "flock:story",
     transformIndexHtml: {
       order: "post",
       handler(html) {
-        if (!html.includes("<!--story-->")) return html;
-        return html.replace("<!--story-->", () => renderHome(ROOT).html);
+        if (html.includes("<!--story-->")) return html.replace("<!--story-->", () => renderHome(ROOT).html);
+        const m = html.match(/<!--page-head:([a-z]+)-->/);
+        if (!m) return html;
+        const id = m[1]!, r = renderPage(ROOT, id);
+        return html
+          .replace(`<!--page-meta:${id}-->`, () => r.meta)
+          .replace(m[0], () => r.head)
+          .replace(`<!--page-lead:${id}-->`, () => r.lead)
+          .replace("</body>", () => `  <script type="application/json" id="site-stats">${r.stats}</script>\n  </body>`);
       },
     },
     configureServer(server) {

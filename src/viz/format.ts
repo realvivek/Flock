@@ -58,6 +58,17 @@ export function apPeriod(p: string): string {
 /** Typographic apostrophes and quotes for text that comes from data files. */
 export const smart = (s: string): string => s.replace(/(\w)'(\w)/g, "$1’$2").replace(/'(\d0s)/g, "’$1").replace(/(^|[\s(])"/g, "$1“").replace(/"/g, "”").replace(/(^|[\s(])'/g, "$1‘").replace(/'/g, "’");
 
+/** Keys whose values are identifiers, codes, links or part numbers: left exactly as written. */
+const RAW = new Set(["$comment", "id", "node", "partNumber", "sku", "url", "file", "dir", "icon", "hop", "hops", "part", "sources", "kind", "tag", "verdict", "level", "state", "usps", "date", "lastVerified", "precision", "anchor", "geocode", "source", "href", "still", "glb", "mesh", "material"]);
+/** Every string in a content object through smart(), so text from the data files reads with typographic quotes and
+ *  apostrophes wherever it is shown; arrays take their key's rule. */
+export function typeset<T>(v: T, key = ""): T {
+  if (typeof v === "string") return (RAW.has(key) ? v : smart(v)) as T;
+  if (Array.isArray(v)) return v.map((x) => typeset(x, key)) as T;
+  if (v && typeof v === "object") return Object.fromEntries(Object.entries(v as Record<string, unknown>).map(([k, x]) => [k, typeset(x, k)])) as T;
+  return v;
+}
+
 /** State names to the Times abbreviations used after a place name ("Ga.", "Calif.", "Tex."); D.C. and short names stay. */
 const AP_STATE: Record<string, string> = { AL: "Ala.", AZ: "Ariz.", AR: "Ark.", CA: "Calif.", CO: "Colo.", CT: "Conn.", DE: "Del.", DC: "D.C.", FL: "Fla.", GA: "Ga.", IL: "Ill.", IN: "Ind.", KS: "Kan.", KY: "Ky.", LA: "La.", MD: "Md.", MA: "Mass.", MI: "Mich.", MN: "Minn.", MS: "Miss.", MO: "Mo.", MT: "Mont.", NE: "Neb.", NV: "Nev.", NH: "N.H.", NJ: "N.J.", NM: "N.M.", NY: "N.Y.", NC: "N.C.", ND: "N.D.", OK: "Okla.", OR: "Ore.", PA: "Pa.", RI: "R.I.", SC: "S.C.", SD: "S.D.", TN: "Tenn.", VT: "Vt.", VA: "Va.", WA: "Wash.", WV: "W.Va.", WI: "Wis.", WY: "Wyo.", AK: "Alaska", HI: "Hawaii", ID: "Idaho", IA: "Iowa", ME: "Me.", OH: "Ohio", TX: "Tex.", UT: "Utah", PR: "P.R." };
 export const apState = (usps: string): string => AP_STATE[usps] ?? usps;

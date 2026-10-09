@@ -1,6 +1,7 @@
 import { sourceById } from "../content";
 import { escape } from "../lib/escape";
 import { ROOT, PAGE } from "../lib/base";
+import { apDate } from "../viz/format";
 export { escape };
 
 const kindClass: Record<string, string> = { flock: "tag-flock", independent: "tag-indep", government: "tag-gov", court: "tag-gov" };
@@ -20,7 +21,7 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
     const a = document.createElement("a");
     a.href = sourceHref(s.id);
     a.dataset.src = s.id;
-    a.title = `${s.title} (${s.publisher}, ${s.date})`;
+    a.title = `${s.title} (${s.publisher}, ${/^\d{4}(-\d{2}){0,2}$/.test(s.date) ? apDate(s.date) : s.date})`;
     a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span><span class="p">${escape(short(s.publisher))}, ${escape(s.date.slice(0, 4))}</span>`;
     el.appendChild(a);
   }

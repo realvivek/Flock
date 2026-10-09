@@ -1,7 +1,6 @@
 {
   "$comment": "Pricing, fee schedules, installation workflow, workforce, permitting, contract terms and company scale for a Flock deployment. Every row cites sources.json. Prices are per unit per year unless stated.",
   "intro": {
-    "headline": "Pricing and cost structure",
     "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Per Flock's implementation guide, the annual fee covers the camera, pole, solar panel, cellular data, cloud storage and software. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
     "sources": [
       "flock-catalog-2024",
@@ -13,7 +12,7 @@
   },
   "priceList": [
     {
-      "item": "Falcon license plate reader (renamed 'Flock Safety LPR' in 2025)",
+      "item": "Falcon license plate reader (renamed “Flock Safety LPR” in 2025)",
       "sku": "FLCK-FALCON-2-LE",
       "price": "$3,000",
       "term": "per year",
@@ -363,7 +362,7 @@
     {
       "date": "June 2025",
       "price": "$3,000",
-      "note": "Park Ridge, Ill., invoice; product names changed on Feb. 1, 2025, 'Falcon' to 'Flock Safety LPR'",
+      "note": "Park Ridge, Ill., invoice; product names changed on Feb. 1, 2025, from “Falcon” to “Flock Safety LPR”",
       "sources": [
         "parkridge-2025"
       ]
@@ -399,8 +398,8 @@
     },
     {
       "step": "Permits",
-      "flock": "'Assists in packaging your application'; has working relationships with some DOTs such as IDOT",
-      "customer": "'Solely responsible for any permits or associated costs, and managing the permitting process'",
+      "flock": "“Assists in packaging your application”; has working relationships with some DOTs such as IDOT",
+      "customer": "“Solely responsible for any permits or associated costs, and managing the permitting process”",
       "other": "DOT, public works or pole owner issues the permit",
       "sources": [
         "richland-agreement-2023",
@@ -486,7 +485,7 @@
     },
     {
       "k": "Contractors",
-      "v": "The agreement allows third-party labor and Flock's installer app is restricted to its technicians 'and approved third party technicians'; Gadget Review reported DISH's OnTech unit as one such installer; the split between in-house and contract work is not published",
+      "v": "The agreement allows third-party labor and Flock's installer app is restricted to its technicians “and approved third party technicians”; Gadget Review reported DISH's OnTech unit as one such installer; the split between in-house and contract work is not published",
       "sources": [
         "richland-agreement-2023",
         "flock-installer-app",
@@ -571,7 +570,7 @@
       "scenario": "Approved location list",
       "permit": "Council-approved location list",
       "who": "Customer supplies it",
-      "note": "Roanoke, Va.: 30 of 41 Raven audio sensors were installed at locations not on the approved list after a city data-entry error; the city later cancelled the program",
+      "note": "Roanoke, Va.: 30 of 41 Raven audio sensors were installed at locations not on the approved list after a city data-entry error; the city later canceled the program",
       "sources": [
         "cardinal-roanoke-2026"
       ]
@@ -580,14 +579,14 @@
   "contract": [
     {
       "k": "Ownership",
-      "v": "'All Flock Hardware is owned exclusively by Flock'; the customer may not move, adjust or take possession of it, except self-installed Flex units",
+      "v": "“All Flock Hardware is owned exclusively by Flock”; the customer may not move, adjust or take possession of it, except self-installed Flex units",
       "sources": [
         "richland-agreement-2023"
       ]
     },
     {
       "k": "At the end",
-      "v": "Contracts from 2023 and earlier specify removal within six months of termination; the 2026 terms specify 'a commercially reasonable time'. In Verona, Evanston and Cambridge, cameras were reported still in place or reinstalled after termination",
+      "v": "Contracts from 2023 and earlier specify removal within six months of termination; the 2026 terms specify “a commercially reasonable time.” In Verona, Wis.; Evanston, Ill.; and Cambridge, Mass., cameras were reported still in place or reinstalled after termination",
       "sources": [
         "richland-agreement-2023",
         "flock-tc-2026",
@@ -621,7 +620,7 @@
     },
     {
       "k": "February 2026 changes",
-      "v": "The 'Flock does not own and shall not sell Customer Data' sentence was deleted, the data license became perpetual and product-improvement scoped, disputes moved to Georgia arbitration, the gross-negligence carve-out left the liability cap, and the non-appropriation exit was narrowed",
+      "v": "The sentence “Flock does not own and shall not sell Customer Data” was deleted, the data license became perpetual and product-improvement scoped, disputes moved to Georgia arbitration, the gross-negligence carve-out left the liability cap, and the non-appropriation exit was narrowed",
       "sources": [
         "footnote4a-terms-2026",
         "aclu-terms",
@@ -630,7 +629,7 @@
     },
     {
       "k": "Cooperative purchasing",
-      "v": "OMNIA, Sourcewell, Texas DIR and similar cooperative contracts provide an exemption from competitive bidding under state procurement rules; a Park Ridge sole-source memo states 'all of our neighboring communities are in the Flock system'",
+      "v": "OMNIA, Sourcewell, Texas DIR and similar cooperative contracts provide an exemption from competitive bidding under state procurement rules; a Park Ridge sole-source memo states that “all of our neighboring communities are in the Flock system”",
       "sources": [
         "johnsoncity-2025",
         "flock-dir",

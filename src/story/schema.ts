@@ -34,3 +34,16 @@ export const TimelineFile = z.object({
   rule: z.string(),
   events: z.array(z.object({ date: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/), precision: z.enum(["day", "month"]), kind: z.enum(["added", "ended", "restricted", "flock"]), where: z.string(), text: z.string(), sources: z.array(z.string()).min(1) })),
 }).passthrough();
+
+/** Heads of the reference pages, src/content/pages.json: rendered into each page at build time. */
+const PageHead = z.object({
+  kicker: z.string().min(1),
+  title: z.string().min(1).max(110),
+  deck: z.string().min(1),
+  description: z.string().optional(),
+  lead: z.string().optional(),
+  about: z.boolean().default(false),
+  jump: z.array(z.object({ href: z.string().startsWith("#"), label: z.string() })).default([]),
+});
+export const PagesFile = z.object({ pages: z.record(z.string(), PageHead) }).passthrough();
+export type PageHeadCfg = z.infer<typeof PageHead>;

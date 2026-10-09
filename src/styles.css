@@ -8,6 +8,7 @@
 @import "@fontsource-variable/libre-franklin/wght.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
+@import "./figures.css";
 
 :root {
   color-scheme: light;
@@ -71,10 +72,12 @@ h1 { font: 600 clamp(2.1rem, 4.6vw, 3rem)/1.08 var(--serif); letter-spacing: -.0
 h2 { font: 600 clamp(1.45rem, 2.6vw, 1.75rem)/1.2 var(--serif); letter-spacing: -.006em; margin: 0; }
 h3 { font: 700 1.0625rem/1.3 var(--sans); margin: 0; }
 .eyebrow, .kicker { font: 700 .75rem/1.3 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
-.eyebrow.amber, .kicker.amber { color: var(--amber-ink); }
-.eyebrow.cyan { color: var(--ink-3); }
+.eyebrow.amber, .kicker.amber, .page-head .kicker, .story-head .kicker { color: var(--amber-ink); }
 .lede { font: 400 1.25rem/1.5 var(--serif); color: var(--ink-2); }
 .lede.small { font: 400 .9375rem/1.5 var(--sans); color: var(--ink-3); }
+/* the date a page was last updated, under its deck */
+.dateline { font: 500 .8125rem/1.4 var(--sans); color: var(--ink-3); display: flex; gap: .5rem; flex-wrap: wrap; margin: 0; }
+.dateline a { color: var(--ink-3); }
 .mono { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
 .mono.cyan { color: var(--ink-3); }
 .code, .pn, kbd { font-family: var(--mono); }
@@ -174,6 +177,9 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 .fig-body svg { display: block; width: 100%; height: auto; overflow: visible; }
 .fig-foot { display: grid; gap: .3rem; font: 400 .8125rem/1.45 var(--sans); color: var(--ink-3); }
 .fig-foot .cite { font-size: .8125rem; }
+.fig-note { margin: 0; }
+.fig-src a { color: var(--ink-3); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: .15em; }
+.fig-src a:hover { color: var(--ink); }
 .fig-data { font: 400 .8125rem/1.4 var(--sans); }
 .fig-data > summary { display: inline-flex; align-items: center; gap: .4rem; cursor: pointer; list-style: none; font: 600 .8125rem/1 var(--sans); color: var(--ink-2); padding: .4rem 0; }
 .fig-data > summary::-webkit-details-marker { display: none; }

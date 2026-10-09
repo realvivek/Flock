@@ -12,9 +12,6 @@ import { icon } from "./ui/icons";
 
 export function buildJourney(host: HTMLElement): void {
   const { intro, stops } = journey;
-  document.getElementById("journey-eyebrow")!.textContent = intro.eyebrow;
-  document.getElementById("journey-title")!.textContent = intro.title;
-  document.getElementById("journey-lede")!.textContent = intro.lede;
 
   // The slip: parcel card and the current stop, sticky beside the list on desktop.
   const slip = el("aside", "slip sheet");
@@ -30,7 +27,7 @@ export function buildJourney(host: HTMLElement): void {
       <span id="slip-where">${escape(stops[0]!.where)}</span>
     </div>
     <ol class="slip-route" aria-label="Stops">${stops.map((s, i) => `<li data-i="${i}"><a href="#${s.id}"><span class="dot"></span>${escape(s.status)}</a></li>`).join("")}</ol>
-    <p class="fine">Each stop summarises stages of the <a href="${ROOT}data/">data path</a> and cites the same sources.</p>`;
+    <p class="fine">Each stop summarizes stages of the <a href="${ROOT}data/">data path</a> and cites the same sources.</p>`;
   host.appendChild(slip);
 
   const list = el("ol", "stops");

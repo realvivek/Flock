@@ -58,7 +58,7 @@ export const ProductsFile = z.object({
 
 const Row = z.object({ k: z.string(), v: z.string(), sources: ids });
 export const EconomicsFile = z.object({
-  intro: z.object({ headline: z.string(), summary: z.string(), sources: ids }),
+  intro: z.object({ summary: z.string(), sources: ids }),
   priceList: z.array(z.object({ item: z.string(), sku: z.string(), price: z.string(), term: z.string(), sources: ids })),
   included: z.array(Row),
   extra: z.array(Row),
@@ -85,7 +85,7 @@ export const OverviewFile = z.object({
 }).passthrough();
 
 export const JourneyFile = z.object({
-  intro: z.object({ eyebrow: z.string(), title: z.string(), lede: z.string(), parcel: z.object({ label: z.string(), plate: z.string(), contents: z.string() }) }),
+  intro: z.object({ parcel: z.object({ label: z.string(), plate: z.string(), contents: z.string() }) }),
   stops: z.array(z.object({ id: z.string(), status: z.string(), where: z.string(), when: z.string(), icon: z.enum(["pole", "tower", "cloud", "list", "phone", "search", "bin"]), title: z.string(), line: z.string(), body: z.string(), packed: z.array(z.string()), opens: z.string(), hops: z.array(z.string()), sources: z.array(z.string()).min(1) })),
 }).passthrough();
 

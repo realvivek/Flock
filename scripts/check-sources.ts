@@ -4,7 +4,7 @@
  */
 import { readFileSync } from "node:fs";
 import { existsSync } from "node:fs";
-import { renderHome } from "./story/input.ts";
+import { renderHome, renderPage } from "./story/input.ts";
 import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile } from "../src/content/schema";
 
 const read = (f: string) => JSON.parse(readFileSync(new URL(`../src/content/${f}`, import.meta.url), "utf8"));
@@ -74,13 +74,17 @@ for (const row of pub("story/completeness.json") as { place: string; sources: st
   }
 })(pub("outcomes.json"), "");
 
-// The home page story: rendering it resolves every {{stat}} and (src:id) and throws on an unknown one.
-const story = renderHome(new URL("..", import.meta.url).pathname);
+// The home page story and the head of every reference page: rendering them resolves every {{stat}} and (src:id) and
+// throws on an unknown one.
+const root = new URL("..", import.meta.url).pathname;
+const story = renderHome(root);
 for (const id of story.used) used.add(id);
-// Story text stays descriptive: no loaded adjectives, nothing on defeating the cameras.
-const storyText = readFileSync(new URL("../src/content/story.json", import.meta.url), "utf8") + readFileSync(new URL("../src/content/timeline-2026.json", import.meta.url), "utf8");
-const BANNED = /\b(shocking|alarming|dystopian|orwellian|chilling|egregious|outrageous|creepy|sinister|draconian|evade|evading|spoof|spoofing|jamming|defeat the|trick the)\b/gi;
-for (const m of storyText.matchAll(BANNED)) problems.push(`story: avoid the word "${m[0]}"`);
+for (const page of ["deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"]) for (const id of renderPage(root, page).used) used.add(id);
+// Text stays descriptive: no loaded adjectives, nothing on getting around or defeating the cameras. Crime names in
+// records ("Evading an accident") are not instructions, so the check reads the site's own prose files.
+const prose = ["story.json", "timeline-2026.json", "pages.json", "dataflow.json", "journey.json", "myths.json", "deployments.json", "economics.json", "components.json", "install.json", "products.json", "overview.json"].map((f) => readFileSync(new URL(`../src/content/${f}`, import.meta.url), "utf8")).join("\n");
+const BANNED = /\b(shocking|alarming|dystopian|orwellian|chilling|egregious|outrageous|creepy|sinister|draconian|evade|evading|spoof|spoofing|jamming|defeat the|trick the|avoid(?:ing)? (?:the |a )?(?:camera|reader)s?|get(?:ting)? around (?:the )?(?:camera|reader)s?)\b/gi;
+for (const m of prose.matchAll(BANNED)) problems.push(`content: avoid the words "${m[0]}"`);
 
 const stills = StillsFile.parse(read("stills.json"));
 const missingStills = stills.stills.filter((st) => !existsSync(new URL(`../public/${stills.dir}/${st.file}`, import.meta.url)));

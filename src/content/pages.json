@@ -1,0 +1,50 @@
+{
+  "$comment": "The head of each reference page: kicker, headline (Title Case, a finding where the page has one), deck, and the figure that opens the page. Rendered into each page's HTML at build time (src/story/pagehead.ts); the deck uses the story's markup, so {{stat}} tokens and [text](src:id) links resolve against the built data and sources.json. topCity, outcomes, claims and sources are counted from the data when the page is built.",
+  "pages": {
+    "deployments": {
+      "kicker": "Deployments and contracts",
+      "title": "Houston Has the Most Mapped Flock Cameras, and Texas Helped Pay for Thousands",
+      "deck": "Volunteers have mapped {{topCity.flock}} Flock cameras inside Houston’s city limits, more than in any other U.S. city. In Texas, at least $30 million from [a $1 fee on auto insurance policies](src:texastribune-abbott-2026) helped state and local agencies install at least 3,200 of the company’s cameras before the governor paused state funding on Aug. 27.",
+      "lead": "cities"
+    },
+    "components": {
+      "kicker": "Components",
+      "title": "The 14 Parts Inside a Flock Camera",
+      "deck": "The Falcon is [8.75 inches tall](src:flock-techspecs) and weighs about 3 pounds. It reads plates with its own processor and sends each read over a cellular connection; it has no network cable. Select a part for its specification, part number and sources.",
+      "jump": [{ "href": "#components", "label": "Components" }, { "href": "#pole", "label": "Pole and mount" }, { "href": "#power", "label": "Power and network" }]
+    },
+    "data": {
+      "kicker": "Data path",
+      "title": "Seconds to an Alert, Days to Deletion: The 12 Stages of a Plate Read",
+      "deck": "When a plate matches a list, an alert reaches officers in [10 to 15 seconds](src:flock-flex-datasheet) on average, Flock says. The read is kept for [seven days](src:flock-guardrails-2026) by default for new customers; existing customers keep the periods they set, and Evidence Mode has no published limit."
+    },
+    "journey": {
+      "kicker": "The journey",
+      "title": "Tracking One Photograph From a Flock Camera to Deletion",
+      "deck": "A car passes a Falcon camera. Its picture goes to Flock’s cloud, is checked against hot lists and can be searched by the camera’s owner and the agencies it shares with, until it is deleted: after [seven days](src:flock-guardrails-2026) by default for new customers."
+    },
+    "outcomes": {
+      "kicker": "Outcomes",
+      "title": "Few Agencies Publish What Their Flock Cameras Produce",
+      "deck": "Of {{outcomes.sites}} places with a published result, {{outcomes.matched}} can be tied to a camera on the map within 150 meters. A handful of police departments publish audits of reads, alerts and arrests, and each counts them differently.",
+      "jump": [{ "href": "#sites", "label": "By camera site" }, { "href": "#districts", "label": "By district" }, { "href": "#agencies", "label": "By agency" }, { "href": "#national", "label": "National statements" }, { "href": "#coverage", "label": "Coverage" }]
+    },
+    "claims": {
+      "kicker": "Claims",
+      "title": "{{claims.total}} Common Claims About Flock Cameras, Checked Against the Public Record",
+      "deck": "The record supports {{claims.true|ap}} of them and does not support {{claims.false|ap}}. For the other {{claims.nuanced|ap}}, the answer depends on which Flock product is installed or how it is set up.",
+      "lead": "verdicts"
+    },
+    "economics": {
+      "kicker": "Economics",
+      "title": "A Flock Camera Lists at $3,000 a Year, and Flock Keeps the Hardware",
+      "deck": "The [annual fee covers](src:flock-impl-guide) the camera, pole, solar panel, cellular data and software. Installation, permits, moves and replacements are billed separately.",
+      "lead": "price"
+    },
+    "sources": {
+      "kicker": "Sources",
+      "title": "{{sources.total}} Sources, From Flock’s Own Documents to Court Opinions",
+      "deck": "Every document cited on this site: {{sources.flock}} from Flock Safety, {{sources.independent}} teardowns, studies and news reports, {{sources.government}} government records and {{sources.court|ap}} court filings, each with the date it was last checked."
+    }
+  }
+}

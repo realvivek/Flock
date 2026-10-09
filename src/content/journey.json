@@ -1,9 +1,6 @@
 {
   "$comment": "The journey page: the data path retold as a parcel tracker for one photograph. Every stop cites the sources of the data-path stage it summarizes; figures are quoted from dataflow.json and sources.json.",
   "intro": {
-    "eyebrow": "Where the picture goes",
-    "title": "Tracking one photograph",
-    "lede": "A car passes a Falcon camera. This page follows the picture it takes like a parcel: seven stops from the pole to deletion, with what is in the package at each stop, who can open it there, and how long it takes.",
     "parcel": { "label": "One read", "plate": "ABC 1234", "contents": "Six to 12 photos of the rear of a car, the plate text and state, a vehicle description, the time and the camera's position" }
   },
   "stops": [

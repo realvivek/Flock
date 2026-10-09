@@ -80,7 +80,7 @@ test("every content page loads with its content, the pager and citations that re
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   const counts: Record<string, [string, number]> = {
-    deployments: ["#page-body #fig-cities [data-tip]", 10],
+    deployments: ["#fig-cities [data-tip]", 10],
     data: ["#page-body .stage", 14],
     journey: ["#page-body .stop", 7],
     outcomes: ["#page-body .site", 30],

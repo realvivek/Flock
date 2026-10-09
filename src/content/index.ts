@@ -10,18 +10,21 @@ import deploymentsRaw from "./deployments.json";
 import overviewRaw from "./overview.json";
 import journeyRaw from "./journey.json";
 import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile, OverviewFile, JourneyFile } from "./schema";
+import { typeset } from "../viz/format";
 
-export const sources = SourcesFile.parse(sourcesRaw).sources;
-export const components = ComponentsFile.parse(componentsRaw);
-export const install = InstallFile.parse(installRaw);
-export const dataflow = DataflowFile.parse(dataflowRaw);
-export const myths = MythsFile.parse(mythsRaw).myths;
-export const products = ProductsFile.parse(productsRaw).products;
-export const economics = EconomicsFile.parse(economicsRaw);
+// Text from the content files is set with typographic quotes and apostrophes as it loads (identifiers, links and part
+// numbers stay as written).
+export const sources = typeset(SourcesFile.parse(sourcesRaw).sources);
+export const components = typeset(ComponentsFile.parse(componentsRaw));
+export const install = typeset(InstallFile.parse(installRaw));
+export const dataflow = typeset(DataflowFile.parse(dataflowRaw));
+export const myths = typeset(MythsFile.parse(mythsRaw).myths);
+export const products = typeset(ProductsFile.parse(productsRaw).products);
+export const economics = typeset(EconomicsFile.parse(economicsRaw));
 export const stills = StillsFile.parse(stillsRaw);
-export const deployments = DeploymentsFile.parse(deploymentsRaw);
-export const overview = OverviewFile.parse(overviewRaw);
-export const journey = JourneyFile.parse(journeyRaw);
+export const deployments = typeset(DeploymentsFile.parse(deploymentsRaw));
+export const overview = typeset(OverviewFile.parse(overviewRaw));
+export const journey = typeset(JourneyFile.parse(journeyRaw));
 export const stillById = new Map(stills.stills.map((s) => [s.id, `${stills.dir}/${s.file}`]));
 
 export const sourceById = new Map(sources.map((s) => [s.id, s]));
@@ -35,7 +38,7 @@ export const EXPLODE_STAGES = [
   { label: "Optics", copy: "Lens, mechanical IR-cut filter and image sensor." },
   { label: "Compute", copy: "System on module, storage and LTE module lifted from the mainboard." },
   { label: "Radios", copy: "Wi-Fi and Bluetooth module, GPS patch and rear shell." },
-  { label: "All parts", copy: "All fourteen components, front to back." },
+  { label: "All parts", copy: "All 14 components, front to back." },
 ] as const;
 
 /** Component groups in display order, with the legend heading for each. */

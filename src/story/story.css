@@ -10,8 +10,7 @@
 .story-head .kicker { color: var(--amber-ink); }
 .story-head h1 { font: 650 clamp(2.25rem, 5.4vw, 3.5rem)/1.06 var(--serif); letter-spacing: -.016em; }
 .story-head .deck { font: 400 clamp(1.1875rem, 2.2vw, 1.375rem)/1.45 var(--serif); color: var(--ink-2); max-width: 38rem; }
-.dateline { font: 500 .8125rem/1.4 var(--sans); color: var(--ink-3); display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
-.dateline a { color: var(--ink-3); }
+.story-head .dateline { justify-content: center; }
 
 /* ---- Reading column -------------------------------------------------------------------------------------------- */
 .prose { width: var(--measure); margin: 0 auto; }
@@ -25,7 +24,7 @@
 .chapter > .prose + .fig, .chapter > .fig + .prose, .chapter > .preview + .prose, .chapter > .prose + .preview { margin-top: 2.5rem; }
 @media (max-width: 640px) {
   .story-head { margin-top: 2.25rem; text-align: left; justify-items: start; }
-  .dateline { justify-content: flex-start; }
+  .story-head .dateline { justify-content: flex-start; }
   .prose p { font-size: 1.125rem; line-height: 1.6; }
   .chapter-title { font-size: 1.5rem; }
 }
@@ -34,9 +33,6 @@
 .story .fig { width: var(--measure); margin: 2.5rem auto; }
 .story .fig-wide { width: min(var(--wide), 100% - 2 * var(--gutter)); }
 .story .fig-wide > .fig-head, .story .fig-wide > .fig-foot { max-width: var(--col); }
-.fig-note { margin: 0; }
-.fig-src a { color: var(--ink-3); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: .15em; }
-.fig-src a:hover { color: var(--ink); }
 
 /* ---- The opening map: sticky graphic, step cards scrolling over it ------------------------------------------- */
 /* the pinned graphic's height: the screen under the header on desktop; on phones it ends above the cards */
@@ -146,110 +142,6 @@
 .lk-mark { transition: transform .35s ease; }
 .lk-mark-t { font-family: var(--sans); }
 @media (prefers-reduced-motion: reduce) { .lk-mark { transition: none; } }
-
-/* ---- What one read records --------------------------------------------------------------------------------------- */
-.read { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.5rem; align-items: center; }
-.read-car { width: 100%; height: auto; }
-.read-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
-.read-gname { display: block; font: 700 .6875rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin-bottom: .3rem; padding-bottom: .25rem; border-bottom: 1px solid var(--rule); }
-.read-list ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
-.read-list ol li { display: flex; gap: .5rem; align-items: baseline; font: 400 .9375rem/1.35 var(--sans); color: var(--ink-2); }
-.read-list b { color: var(--ink); font-weight: 650; }
-.read-n { flex: none; display: inline-grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--ink); color: #fff; font: 700 .6875rem/1 var(--sans); transform: translateY(-.1em); }
-.read-meta { display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center; margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--rule); font: 500 .875rem/1.3 var(--sans); color: var(--ink); }
-.read-meta span:not(.read-meta-k) { padding: .3rem .55rem; background: var(--bg-2); border-radius: 2px; }
-.read-meta-k { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin-right: .2rem; }
-@media (max-width: 640px) { .read { grid-template-columns: 1fr; } }
-
-/* ---- The audit log record and three accounts ------------------------------------------------------------------- */
-.audit { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
-.audit-log { background: var(--bg-2); padding: .9rem 1rem 1rem; }
-.audit-log table { width: 100%; border-collapse: collapse; font: 400 .8125rem/1.4 var(--mono); color: var(--ink); }
-.audit-log th, .audit-log td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid #dfdfdb; vertical-align: top; }
-.audit-log thead th { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--ink); }
-.audit-log tbody th { font: 700 .6875rem/1.5 var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
-.audit-log tr.is-key td { font-weight: 500; background: var(--amber-wash); }
-.audit-log td.same { color: var(--ink-3); font: 400 .8125rem/1.4 var(--sans); }
-/* an editor’s description, not text from the log */
-.audit-log td.ed { font: italic 400 .8125rem/1.4 var(--sans); color: var(--ink-2); }
-.accounts { display: grid; gap: 1rem; }
-.accounts-k { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
-.acct { margin: 0; padding: 0 0 0 .9rem; border-left: 2px solid var(--ink); }
-.acct p { font: 400 1.0625rem/1.5 var(--serif); color: var(--ink); margin: 0; }
-.acct.is-summary { border-left-color: var(--rule-2); }
-.acct.is-summary p { font-size: 1rem; color: var(--ink-2); }
-.acct footer { font: 500 .8125rem/1.4 var(--sans); color: var(--ink-3); margin-top: .35rem; }
-@media (max-width: 800px) { .audit { grid-template-columns: 1fr; } .audit-log { padding: .6rem .5rem .7rem; } .audit-log tbody th { white-space: normal; } }
-
-/* ---- Oakland: logged successes as stat tiles --------------------------------------------------------------- */
-.tiles { display: flex; flex-wrap: wrap; gap: .5rem 2rem; align-items: baseline; margin-top: 1.2rem; padding-top: .9rem; border-top: 1px solid var(--rule); }
-.tiles-k { flex: 1 1 100%; margin: 0; font: 400 .9375rem/1.4 var(--sans); color: var(--ink-2); }
-.oak-t { border-collapse: collapse; font-family: var(--sans); }
-.oak-t th, .oak-t td { padding: .35rem 1.5rem .35rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: baseline; }
-.oak-t thead th { font: 700 .6875rem/1.3 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); border-bottom-color: var(--ink); text-align: right; }
-.oak-t tbody th { font: 400 .9375rem/1.3 var(--sans); color: var(--ink-2); }
-.oak-t td { font: 700 1.625rem/1.1 var(--sans); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
-.oak-t td.differs { color: var(--amber-ink); }
-.oak-t th:last-child, .oak-t td:last-child { padding-right: 0; }
-@media (max-width: 480px) { .oak-t th, .oak-t td { padding-right: .9rem; } .oak-t td { font-size: 1.375rem; } .oak-t thead th { letter-spacing: .03em; } }
-
-/* ---- Three ways an alert is wrong -------------------------------------------------------------------------- */
-.errors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.25rem; }
-.err { display: grid; gap: .55rem; align-content: start; padding-top: .8rem; border-top: 2px solid var(--ink); }
-.err-k { margin: 0; font: 700 1rem/1.3 var(--sans); color: var(--ink); }
-.err-m { margin: -.3rem 0 0; font: 400 .8125rem/1.35 var(--sans); color: var(--ink-3); }
-.err-g { display: flex; align-items: flex-end; gap: 1rem; margin: .25rem 0 .1rem; }
-.err-g svg { max-width: 100%; height: auto; flex: none; }
-.errors .err-waffle { width: 128px; }
-.err-n { margin: 0 0 -.2rem; font: 700 2.25rem/1 var(--sans); color: var(--ink); letter-spacing: -.015em; font-variant-numeric: tabular-nums; }
-.err-n span { font-size: 1.25rem; margin-left: .05em; }
-.err-t { margin: 0; font: 400 .9375rem/1.5 var(--sans); color: var(--ink-2); }
-.err-key { display: flex; align-items: center; gap: .45rem; margin: 0 0 1rem; font: 400 .8125rem/1.35 var(--sans); color: var(--ink-2); }
-.err-key i { width: 11px; height: 11px; border-radius: 1.5px; background: var(--amber-mark); flex: none; }
-@media (max-width: 900px) { .errors { grid-template-columns: 1fr; gap: 2rem; } }
-
-/* ---- Operators: the share with an operator recorded, then the types ----------------------------------------- */
-.ops-strip { display: flex; gap: 2px; height: 14px; margin: .2rem 0 .45rem; }
-.ops-strip .has { background: var(--amber-mark); border-radius: 3px 0 0 3px; }
-.ops-strip .none { background: #dededa; border-radius: 0 3px 3px 0; }
-.ops-strip-key { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .2rem 1rem; font: 400 .8125rem/1.35 var(--sans); color: var(--ink-2); }
-.ops-strip-key b { color: var(--ink); font-weight: 700; }
-.ops-strip-lead { margin: 1rem 0 .2rem; font: 600 .875rem/1.3 var(--sans); color: var(--ink); }
-/* ---- Largest named operators ------------------------------------------------------------------------------ */
-.top-ops { margin-top: 1.2rem; }
-.top-ops-k { margin: 0 0 .4rem; font: 700 .6875rem/1.3 var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
-.top-ops ol { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 2rem; counter-reset: op; }
-.top-ops li { display: flex; justify-content: space-between; gap: 1rem; break-inside: avoid; padding: .3rem 0; border-bottom: 1px solid var(--rule); font: 400 .875rem/1.35 var(--sans); color: var(--ink-2); counter-increment: op; }
-.top-ops li .lbl::before { content: counter(op) ". "; color: var(--ink-3); }
-.top-ops li .val { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
-@media (max-width: 640px) { .top-ops ol { columns: 1; } }
-
-/* ---- Whether the cameras reduce crime: estimates with intervals ---------------------------------------------- */
-.ev-key { display: flex; flex-wrap: wrap; gap: .35rem 1.4rem; margin: 0 0 .6rem; font: 400 .8125rem/1.35 var(--sans); color: var(--ink-2); }
-.ev-key span { display: inline-flex; align-items: center; gap: .45rem; }
-.ev-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--ink); display: inline-block; }
-.ev-ci { width: 26px; height: 2px; background: var(--ink); display: inline-block; position: relative; }
-.ev-ci::before, .ev-ci::after { content: ""; position: absolute; top: -4px; width: 1.5px; height: 10px; background: var(--ink); }
-.ev-ci::before { left: 0; } .ev-ci::after { right: 0; }
-
-/* ---- 2026 timeline -------------------------------------------------------------------------------------- */
-.tml-legend { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font: 400 .8125rem/1.3 var(--sans); color: var(--ink-2); }
-.tml-legend li { display: inline-flex; align-items: center; gap: .4rem; }
-.tml { list-style: none; margin: 0; padding: 0; position: relative; }
-.tml::before { content: ""; position: absolute; left: calc(5.5rem + .5rem + 6px); top: .5rem; bottom: .5rem; width: 1px; background: var(--rule-2); }
-.tml-ev { display: grid; grid-template-columns: 5.5rem 13px minmax(0, 1fr); gap: .5rem .5rem; padding: .55rem 0; align-items: start; }
-.tml-when { font: 700 .875rem/1.4 var(--sans); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; padding-top: .05rem; }
-.tml-m { position: relative; width: 13px; height: 13px; margin-top: .2rem; display: inline-block; flex: none; }
-.tml-m.k-added { border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px #fff; }
-.tml-m.k-ended { border-radius: 50%; background: #fff; border: 2px solid var(--ink); }
-.tml-m.k-restricted { background: var(--ink-3); box-shadow: 0 0 0 2px #fff; width: 11px; height: 11px; margin: .3rem 1px 0; }
-.tml-m.k-flock { background: var(--amber-mark); transform: rotate(45deg) scale(.85); box-shadow: 0 0 0 2px #fff; }
-.tml-body { display: grid; gap: .1rem; padding-left: .25rem; }
-.tml-where { margin: 0; font: 700 .9375rem/1.35 var(--sans); color: var(--ink); }
-.tml-text { margin: 0; font: 400 .9375rem/1.45 var(--sans); color: var(--ink-2); }
-.tml-src { margin: .1rem 0 0; font: 400 .75rem/1.4 var(--sans); color: var(--ink-3); }
-.tml-src a { color: var(--ink-3); }
-@media (max-width: 480px) { .tml-ev { grid-template-columns: 4.2rem 13px minmax(0, 1fr); } .tml::before { left: calc(4.2rem + .5rem + 6px); } }
 
 /* ---- Go deeper: one card per page --------------------------------------------------------------------------- */
 .chapter-cards .prose { margin-bottom: 1.5rem; }

@@ -11,10 +11,23 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .sec-head .lede.small { font-size: .9375rem; }
 .sheet { background: var(--bg); }
 
-/* Page head: kicker, serif title, deck, then the in-page contents as a quiet row of links */
-.page-head { display: flex; flex-direction: column; gap: .8rem; max-width: var(--col); }
-.page-head h1 { margin: 0; }
-.page-head .lede { margin: 0; }
+/* Page head, as the story's: kicker, serif headline, deck, the date of the last update, then (on some pages) the
+   in-page contents as a quiet row of links. The opening figure follows directly. */
+.page-head { display: flex; flex-direction: column; gap: .85rem; max-width: 46rem; }
+.page-head h1 { margin: 0; font: 650 clamp(2.125rem, 4.2vw, 3rem)/1.08 var(--serif); letter-spacing: -.014em; }
+.page-head .deck { margin: 0; max-width: 40rem; font: 400 clamp(1.125rem, 1.9vw, 1.3125rem)/1.45 var(--serif); color: var(--ink-2); }
+.page-head .deck a { color: inherit; text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: .18em; }
+.page-head .deck a:hover { text-decoration-color: var(--ink); }
+.page-head .dateline { margin-top: .1rem; }
+.page-head .jump { margin-top: .4rem; }
+@media (max-width: 640px) { .page-head { gap: .7rem; } .page-head h1 { font-size: 1.875rem; line-height: 1.12; } .page-head .deck { font-size: 1.125rem; } }
+/* the figure that opens a page: the reading column's width, its title an h2 */
+.page-lead { max-width: var(--col); margin: -.4rem 0 1.4rem; }
+.page-lead .fig { margin: 0; }
+.page-lead h2.fig-title { font: 700 1.0625rem/1.3 var(--sans); letter-spacing: 0; }
+/* a section of a reference page: the story's section type, a size smaller */
+.sec-title { margin: 0; font: 650 1.625rem/1.2 var(--serif); letter-spacing: -.006em; color: var(--ink); scroll-margin-top: calc(var(--topbar-h) + 1.5rem); }
+@media (max-width: 640px) { .sec-title { font-size: 1.375rem; } }
 .jump { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem; padding: .7rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .jump a { font: 600 .8125rem/1.4 var(--sans); color: var(--ink-2); text-decoration: none; }
 .jump a:hover { color: var(--ink); text-decoration: underline; }
@@ -44,7 +57,7 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .unknown-list { margin: 0; padding-left: 1.1rem; display: grid; gap: .5rem; font: 400 .9375rem/1.5 var(--sans); color: var(--ink-2); }
 .unknown-list .cite { margin-top: .2rem; }
 .econ-block { display: grid; gap: .6rem; scroll-margin-top: calc(var(--topbar-h) + 1.5rem); padding-top: 1.4rem; border-top: 1px solid var(--rule); }
-.econ-block h3 { margin: 0; font: 600 1.375rem/1.25 var(--serif); }
+.econ-block > .sec-title { margin: 0; }
 .econ-block .fine { margin: 0; }
 .inset { display: grid; grid-template-columns: 12rem 1fr; gap: 1.4rem; align-items: start; margin: .4rem 0; padding: 1.1rem 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
 .inset img { width: 100%; display: block; background: var(--bg-2); }
@@ -173,8 +186,8 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 .stage { display: block; padding: 1.8rem 0 2rem; border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--topbar-h) + 1rem); font: 400 .9375rem/1.5 var(--sans); color: var(--ink-2); }
 .stage:first-child { border-top: 0; padding-top: 0; }
 .stage-body { display: flex; flex-direction: column; gap: .6rem; min-width: 0; max-width: 40rem; }
-.stage-body h3 { margin: 0; font: 600 1.5rem/1.25 var(--serif); }
-.stage-body h3 .tag { margin-left: .45rem; }
+.stage-body h2 { margin: 0; font: 600 1.5rem/1.25 var(--serif); }
+.stage-body h2 .tag { margin-left: .45rem; }
 .stage-body > p:not(.mono):not(.fine):not(.aim-readout) { font: 400 1.125rem/1.6 var(--serif); color: var(--ink-2); }
 .stage.tool { border-top: 2px solid var(--ink); }
 .stage.is-active .stage-body .mono { color: var(--amber-ink); }

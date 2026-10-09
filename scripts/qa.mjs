@@ -20,7 +20,7 @@ const pageChecks = () => {
   out.expanded = innerWidth > screen.width + 1 ? innerWidth : 0;
   out.wide = [...document.querySelectorAll("main *")].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.right > Math.min(innerWidth, screen.width) + 1 || r.left < -1) && !e.closest(".tablewrap") && !e.closest(".sections"); }).slice(0, 5).map((e) => `${e.tagName.toLowerCase()}.${String(e.className).split(" ")[0]}`);
   out.imgs = [...document.querySelectorAll("img")].filter((i) => i.complete && i.naturalWidth === 0 && !i.hidden && i.offsetParent !== null).map((i) => i.src.split("/").pop());
-  out.clipped = [...document.querySelectorAll(".cell .t, .group-head h3, .card h3, .stage-body h3, .sections a, .kv dt, .page-head h1, .summary-card .t")].filter((e) => e.offsetParent !== null && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).textOverflow !== "ellipsis").slice(0, 5).map((e) => `${e.className || e.tagName} "${e.textContent.trim().slice(0, 30)}"`);
+  out.clipped = [...document.querySelectorAll(".cell .t, .group-head h3, .card h3, .stage-body h2, .sections a, .kv dt, .page-head h1, .summary-card .t")].filter((e) => e.offsetParent !== null && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).textOverflow !== "ellipsis").slice(0, 5).map((e) => `${e.className || e.tagName} "${e.textContent.trim().slice(0, 30)}"`);
   out.links = document.querySelectorAll(".sections a").length;
   out.first = document.querySelector(".sections a")?.textContent;
   out.active = document.querySelector(".sections a.is-active")?.textContent;

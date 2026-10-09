@@ -5,7 +5,7 @@
       "id": "flock-techspecs",
       "kind": "flock",
       "title": "Flock Safety Tech Specs: dual solar panels, pole, camera",
-      "publisher": "Flock Safety (one-page sheet circulated in municipal packets; mirrored by Long Grove, IL)",
+      "publisher": "Flock Safety (one-page sheet circulated in municipal packets; mirrored by Long Grove, Ill.)",
       "url": "https://cdn.fs.pathlms.com/ZNfvIpMjSSubvIt16JuT",
       "date": "2020",
       "lastVerified": "2026-09-04"
@@ -287,15 +287,6 @@
       "publisher": "Noflock on GitHub",
       "url": "https://github.com/Noflock/Flock-IR-Detection",
       "date": "2025",
-      "lastVerified": "2026-09-04"
-    },
-    {
-      "id": "flock-you",
-      "kind": "independent",
-      "title": "flock-you: passive Wi-Fi detection of Flock devices by OUI and probe behaviour",
-      "publisher": "colonelpanichacks on GitHub",
-      "url": "https://github.com/colonelpanichacks/flock-you",
-      "date": "2026",
       "lastVerified": "2026-09-04"
     },
     {
@@ -589,7 +580,7 @@
     {
       "id": "alprwatch-foia-2025",
       "kind": "independent",
-      "title": "Flock FOIA findings: at least 7,212 networks and 92,502 cameras; 29.3 million network-audit rows against 56,230 organisation-audit rows (521 to 1); mutable audit rows",
+      "title": "Flock FOIA findings: at least 7,212 networks and 92,502 cameras; 29.3 million network-audit rows against 56,230 organization-audit rows (521 to 1); mutable audit rows",
       "publisher": "ALPRWatch",
       "url": "https://alprwatch.org/news/2025-07-28_flock_foia/",
       "date": "2025-07-28",
@@ -653,7 +644,7 @@
       "id": "roseville-71",
       "kind": "independent",
       "title": "Roseville PD analysis: 71% of 1,427 stolen/felony alerts involved misread plates (rate among alerts, not reads)",
-      "publisher": "Red Banyan (summarising the department's report)",
+      "publisher": "Red Banyan (summarizing the department's report)",
       "url": "https://redbanyan.com/blog/flock-license-plate-reader-accuracy-71-percent-explained/",
       "date": "2025",
       "lastVerified": "2026-10-08"
@@ -931,7 +922,7 @@
     {
       "id": "richland-agreement-2023",
       "kind": "government",
-      "title": "Richland, WA: Flock order form and Government Agency Agreement (ownership, removal, warranty, termination, billing)",
+      "title": "Richland, Wash.: Flock order form and Government Agency Agreement (ownership, removal, warranty, termination, billing)",
       "publisher": "City of Richland council packet via Tri-Cities Observer",
       "url": "https://tricitiesobserver.com/wp-content/uploads/2023/11/Flock_Falcon_Cameras_-_Police_Department.pdf",
       "date": "2023-11",
@@ -940,7 +931,7 @@
     {
       "id": "indio-2023",
       "kind": "government",
-      "title": "Indio, CA staff report: $2,500 rising to $3,000 unless a five-year term; sole-source rationale",
+      "title": "Indio, Calif., staff report: $2,500 rising to $3,000 unless a five-year term; sole-source rationale",
       "publisher": "City of Indio",
       "url": "https://indio.civicweb.net/document/73480/Flock%20Agreement.pdf",
       "date": "2023-10-04",
@@ -949,7 +940,7 @@
     {
       "id": "parkridge-2025",
       "kind": "government",
-      "title": "Park Ridge, IL memo and Flock invoice: 8 LPR at $3,000; platform billed at $0; IDOT permits",
+      "title": "Park Ridge, Ill., memo and Flock invoice: 8 LPR at $3,000; platform billed at $0; IDOT permits",
       "publisher": "City of Park Ridge",
       "url": "https://parkridge.granicus.com/MetaViewer.php?view_id=1&clip_id=3365&meta_id=165844",
       "date": "2025-08-18",
@@ -958,7 +949,7 @@
     {
       "id": "johnsoncity-2025",
       "kind": "government",
-      "title": "Johnson City, TN: ten-year, $8,063,000 Flock agreement via OMNIA cooperative contract",
+      "title": "Johnson City, Tenn.: 10-year, $8,063,000 Flock agreement via OMNIA cooperative contract",
       "publisher": "City of Johnson City",
       "url": "https://johnsoncitytn.civicweb.net/document/322557/",
       "date": "2025-07-17",
@@ -967,7 +958,7 @@
     {
       "id": "grafton-2024",
       "kind": "government",
-      "title": "Village of Grafton, WI renewal memo: $500 per camera increase from January 2024",
+      "title": "Village of Grafton, Wis., renewal memo: $500 per camera increase from January 2024",
       "publisher": "Village of Grafton",
       "url": "https://www.villageofgraftonwi.gov/DocumentCenter/View/26078/IFC---Flock-Safety-Renewal",
       "date": "2024",
@@ -976,7 +967,7 @@
     {
       "id": "everett-dfr",
       "kind": "government",
-      "title": "Everett, WA drone-as-first-responder agreement (year-one pricing, ~$307,000 per drone thereafter)",
+      "title": "Everett, Wash., drone-as-first-responder agreement (year-one pricing; about $307,000 per drone thereafter)",
       "publisher": "City of Everett",
       "url": "https://www.everettwa.gov/AgendaCenter/ViewFile/Item/18098?fileID=100786",
       "date": "2025",
@@ -1120,7 +1111,7 @@
     {
       "id": "deflocksc-greenville",
       "kind": "independent",
-      "title": "Greenville, SC Flock contracts 2019 to 2024 ($182 per camera in 2019; $2,500 in 2024; termination fee $200 to $500)",
+      "title": "Greenville, S.C., Flock contracts, 2019 to 2024 ($182 per camera in 2019; $2,500 in 2024; termination fee $200 to $500)",
       "publisher": "DeFlock SC",
       "url": "https://deflocksc.org/blog/greenville-flock-contracts/",
       "date": "2025",
@@ -1201,7 +1192,7 @@
     {
       "id": "usaspending-flock",
       "kind": "government",
-      "title": "Flock Group Inc, federal award recipient profile",
+      "title": "Flock Group Inc., federal award recipient profile",
       "publisher": "USAspending.gov",
       "url": "https://www.usaspending.gov/recipient/4fbcf525-e991-fad8-2aaa-6a02c70053aa-C/latest",
       "date": "2026",
@@ -1444,7 +1435,7 @@
     {
       "id": "footnote4a-hotlist",
       "kind": "independent",
-      "title": "Flock's hot lists are a hot mess (Story County sheriff's Axon in-car 'Erroneous hotlist hits' report; Harris County custom lists)",
+      "title": "Flock's hot lists are a hot mess (Story County sheriff's Axon in-car “Erroneous hotlist hits” report; Harris County custom lists)",
       "publisher": "Footnote 4a",
       "url": "https://footnote4a.org/news/hotlist-mess",
       "date": "2026-03-14",
@@ -1489,7 +1480,7 @@
     {
       "id": "lexington-lpr",
       "kind": "government",
-      "title": "License plate readers: programme statistics, March to November 2022",
+      "title": "License plate readers: program statistics, March to November 2022",
       "publisher": "Lexington-Fayette Urban County Government",
       "url": "https://www.lexingtonky.gov/government/departments-programs/public-safety/police/license-plate-readers",
       "date": "2022-12-01",
@@ -1507,7 +1498,7 @@
     {
       "id": "oakland-pac-2026",
       "kind": "government",
-      "title": "Privacy Advisory Commission agenda packet, June 4 2026: OPD automated license plate reader 2025 annual report",
+      "title": "Privacy Advisory Commission agenda packet, June 4, 2026: OPD automated license plate reader 2025 annual report",
       "publisher": "City of Oakland",
       "url": "https://www.oaklandca.gov/files/assets/city/v/1/public-meetings/privacy-advisory-commission/2026/june-4-pac-agenda-packet.pdf",
       "date": "2026-06-04",
@@ -1561,7 +1552,7 @@
     {
       "id": "lafayette-co-alpr",
       "kind": "government",
-      "title": "Flock Safety ALPR programme: cases, arrests and recoveries 2024 to 2025",
+      "title": "Flock Safety ALPR program: cases, arrests and recoveries 2024 to 2025",
       "publisher": "City of Lafayette, Colorado",
       "url": "https://lafayetteco.gov/4282/Flock-Safety-ALPR-Program",
       "date": "2026-01-01",
@@ -1705,7 +1696,7 @@
     {
       "id": "nashville-lpr-sampling-2023",
       "kind": "government",
-      "title": "ALPR pilot supplemental sampling data: reads, hit notifications and verified hits in four ten-day periods; arrests by quadrant",
+      "title": "ALPR pilot supplemental sampling data: reads, hit notifications and verified hits in four 10-day periods; arrests by quadrant",
       "publisher": "Metro Nashville Police Department",
       "url": "https://www.nashville.gov/sites/default/files/2023-08/LPR-Sampling-Data.pdf",
       "date": "2023-08-03",

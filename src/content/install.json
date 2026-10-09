@@ -40,7 +40,7 @@
     "maxFt": 100,
     "lanes": 2,
     "mph": 100,
-    "framesPerVehicle": "6 to 12",
+    "framesPerVehicle": "six to 12",
     "aims": "Rear plates of departing vehicles",
     "sources": [
       "flock-techspecs",

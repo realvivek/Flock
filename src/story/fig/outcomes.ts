@@ -1,6 +1,6 @@
 /** What the reads produce: Oakland's reads and alerts as areas, its logged successes, and three departments' counts
  *  on a logarithmic scale. */
-import { big, int, tickWords } from "../../viz/format.ts";
+import { apPeriod, big, int, tickWords } from "../../viz/format.ts";
 import { circle, g, line, path, rect, svg, text, label, tip, logScale, textWidth } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
@@ -82,6 +82,6 @@ export function ladderFigure(cfg: FigureCfg, ctx: Ctx, ladders: Ladder[]): strin
     });
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Dot plot on a logarithmic scale of plate reads, alerts, stops, vehicles recovered and arrests for Los Angeles, Columbia, Mo., and Nashville, each from its own report or audit: alerts in the hundreds or thousands, arrests in the dozens." });
   };
-  const table = dataTable(["Department", "Period", "Plate reads", "Alerts", "Stops", "Vehicles recovered", "Arrests"], rows.map(({ p, L }) => [p.name, L.period, L.values.reads, L.values.alerts, L.values.stops, L.values.recoveries, L.values.arrests]), { text: [1] });
+  const table = dataTable(["Department", "Period", "Plate reads", "Alerts", "Stops", "Vehicles recovered", "Arrests"], rows.map(({ p, L }) => [p.name, apPeriod(L.period), L.values.reads, L.values.alerts, L.values.stops, L.values.recoveries, L.values.arrests]), { text: [1] });
   return frame("ladder", cfg, ctx, draw(600, false) + draw(360, true), { table });
 }

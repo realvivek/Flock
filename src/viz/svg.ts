@@ -2,6 +2,10 @@
  *  helper escapes its text. Marks follow the house specs: thin bars with a rounded data end, hairline grids, dots
  *  with a white ring, text never in a series colour. */
 import { escape } from "../lib/escape.ts";
+import { smart } from "./format.ts";
+
+/** Every static chart is drawn twice: for the reading column on desktop, and for the narrowest phone column. */
+export const WIDE = 600, NARROW = 360;
 
 export type Attrs = Record<string, string | number | undefined | null | false>;
 const attrs = (a: Attrs = {}): string => Object.entries(a).filter(([, v]) => v !== undefined && v !== null && v !== false).map(([k, v]) => ` ${k}="${escape(String(v))}"`).join("");
@@ -9,7 +13,7 @@ const r2 = (n: number) => Math.round(n * 100) / 100;
 
 /** The outer element: a viewBox the chart was laid out in, scaled to the column; the label states the takeaway. */
 export function svg(w: number, h: number, body: string, o: { label: string; cls?: string; desc?: string }): string {
-  return `<svg class="viz${o.cls ? ` ${o.cls}` : ""}" viewBox="0 0 ${r2(w)} ${r2(h)}" width="${r2(w)}" height="${r2(h)}" role="img" aria-label="${escape(o.label)}" xmlns="http://www.w3.org/2000/svg">${o.desc ? `<desc>${escape(o.desc)}</desc>` : ""}${body}</svg>`;
+  return `<svg class="viz${o.cls ? ` ${o.cls}` : ""}" viewBox="0 0 ${r2(w)} ${r2(h)}" width="${r2(w)}" height="${r2(h)}" role="img" aria-label="${escape(smart(o.label))}" xmlns="http://www.w3.org/2000/svg">${o.desc ? `<desc>${escape(o.desc)}</desc>` : ""}${body}</svg>`;
 }
 export const g = (body: string, a: Attrs = {}) => `<g${attrs(a)}>${body}</g>`;
 export const text = (x: number, y: number, s: string, a: Attrs = {}) => `<text x="${r2(x)}" y="${r2(y)}"${attrs(a)}>${escape(s)}</text>`;
@@ -36,7 +40,7 @@ export function vbar(x: number, y0: number, w: number, len: number, r = 4, a: At
 export const dot = (cx: number, cy: number, r: number, fill: string, a: Attrs = {}) => circle(cx, cy, r, { fill, stroke: "#fff", "stroke-width": 2, ...a });
 
 /** An element the tooltip and keyboard can reach: the hit area is the group, so it can be larger than the mark. */
-export const tip = (body: string, value: string, labelText: string, a: Attrs = {}) => g(body, { ...a, "data-tip": value, "data-tip-label": labelText, tabindex: 0, role: "img", "aria-label": `${labelText}: ${value}` });
+export const tip = (body: string, value: string, labelText: string, a: Attrs = {}) => g(body, { ...a, "data-tip": smart(value), "data-tip-label": smart(labelText), tabindex: 0, role: "img", "aria-label": smart(`${labelText}: ${value}`) });
 
 /** Logarithmic scale for counts from 1 to `max` mapped onto [x0, x1]. */
 export function logScale(min: number, max: number, x0: number, x1: number): (v: number) => number {

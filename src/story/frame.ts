@@ -1,7 +1,7 @@
 /** Pieces every story figure shares: the frame (title, subtitle, graphic, notes, source line, data table) and the
  *  inline markup of the story's paragraphs. Pure string functions, run at build time. */
 import { escape } from "../lib/escape.ts";
-import { apDate, dec1, int } from "../viz/format.ts";
+import { ap, apDate, dec1, int, smart } from "../viz/format.ts";
 import type { FigureCfg } from "./schema.ts";
 import type { SourceRec, Stats, CompletenessRow } from "./types.ts";
 
@@ -34,18 +34,26 @@ export function sourceLine(ids: string[], ctx: Ctx, label = "Source"): string {
 /** A data table for "Show the data": the first column is a label, the rest numbers unless marked text. */
 export function dataTable(head: string[], rows: (string | number | null)[][], opts: { text?: number[]; caption?: string } = {}): string {
   const isNum = (i: number) => i > 0 && !opts.text?.includes(i);
-  const cell = (v: string | number | null) => (v == null ? "—" : typeof v === "number" ? (Number.isInteger(v) ? int(v) : dec1(v)) : escape(v));
+  const cell = (v: string | number | null) => (v == null ? "—" : typeof v === "number" ? (Number.isInteger(v) ? int(v) : dec1(v)) : escape(smart(v)));
   return `<div class="tablewrap"><table class="data">${opts.caption ? `<caption class="visually-hidden">${escape(opts.caption)}</caption>` : ""}<thead><tr>${head.map((h, i) => `<th${isNum(i) ? ' class="num"' : ""} scope="col">${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => (i === 0 ? `<th scope="row">${cell(v)}</th>` : `<td${isNum(i) ? ' class="num"' : ""}>${cell(v)}</td>`)).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
 
-/** The figure frame. `body` is the graphic; `table` (if any) folds under "Show the data". */
-export function frame(id: string, cfg: FigureCfg, ctx: Ctx, body: string, o: { width?: "body" | "wide"; table?: string; extra?: string } = {}): string {
-  return `<figure class="fig fig-${o.width ?? "body"}" id="fig-${escape(id)}">
-<figcaption class="fig-head"><h3 class="fig-title">${inline(cfg.title, ctx)}</h3>${cfg.sub ? `<p class="fig-sub">${inline(cfg.sub, ctx)}</p>` : ""}</figcaption>
+/** The figure frame. `body` is the graphic; `table` (if any) folds under "Show the data". The title is an h3 unless
+ *  `level` says otherwise (2 for a page's lead figure, which follows the h1); `srcText` replaces the source line
+ *  where each item below the figure carries its own sources. */
+export function frame(id: string, cfg: FigureCfg, ctx: Ctx, body: string, o: { width?: "body" | "wide"; table?: string; extra?: string; level?: 2 | 3; srcText?: string; cls?: string } = {}): string {
+  const h = `h${o.level ?? 3}`;
+  const src = o.srcText ? `<p class="fig-src">${escape(o.srcText)}</p>` : sourceLine(cfg.sources, ctx);
+  return `<figure class="fig fig-${o.width ?? "body"}${o.cls ? ` ${o.cls}` : ""}" id="fig-${escape(id)}">
+<figcaption class="fig-head"><${h} class="fig-title">${inline(cfg.title, ctx)}</${h}>${cfg.sub ? `<p class="fig-sub">${inline(cfg.sub, ctx)}</p>` : ""}</figcaption>
 <div class="fig-body">${body}</div>
-<div class="fig-foot">${o.extra ?? ""}${cfg.notes.map((n) => `<p class="fig-note">${inline(n, ctx)}</p>`).join("")}${sourceLine(cfg.sources, ctx)}${o.table ? `<details class="fig-data"><summary>Show the data</summary>${o.table}</details>` : ""}</div>
+<div class="fig-foot">${o.extra ?? ""}${cfg.notes.map((n) => `<p class="fig-note">${inline(n, ctx)}</p>`).join("")}${src}${o.table ? `<details class="fig-data"><summary>Show the data</summary>${o.table}</details>` : ""}</div>
 </figure>`;
 }
+
+/** A figure whose title sits directly under a page's h1 (a page's opening figure, or one before the first section):
+ *  its title becomes an h2, so headings never skip a level. */
+export const asH2 = (html: string): string => html.replace(/<h3 class="fig-title">([\s\S]*?)<\/h3>/, `<h2 class="fig-title">$1</h2>`);
 
 /** Resolve a {{token}} against stats.json: a dotted path into a stat's value, with an optional format. */
 export function stat(key: string, fmt: string | undefined, ctx: Ctx): string {
@@ -60,6 +68,7 @@ export function stat(key: string, fmt: string | undefined, ctx: Ctx): string {
   switch (fmt) {
     case "k": return int(Math.floor(v / 1000) * 1000);
     case "pct": case "round": return int(Math.round(v));
+    case "ap": return ap(Math.round(v));
     case undefined: return Number.isInteger(v) ? int(v) : dec1(v);
     default: throw new Error(`story: unknown format ${fmt}`);
   }
@@ -75,7 +84,7 @@ export function inline(md: string, ctx: Ctx): string {
       const id = target.slice(4), s = ctx.sources.get(id);
       if (!s) throw new Error(`story: unknown source ${id}`);
       ctx.used.add(id);
-      return `<a class="src" href="${escape(s.url)}" data-src="${escape(id)}" title="${escape(`${s.title} (${s.publisher}, ${s.date})`)}" rel="noopener">${text}</a>`;
+      return `<a class="src" href="${escape(s.url)}" data-src="${escape(id)}" title="${escape(`${s.title} (${s.publisher}, ${/^\d{4}(-\d{2}){0,2}$/.test(s.date) ? apDate(s.date) : s.date})`)}" rel="noopener">${text}</a>`;
     }
     if (target.startsWith("#")) return `<a href="${target}">${text}</a>`;
     if (target.startsWith("page:")) return `<a href="${ctx.root}${target.slice(5)}/">${text}</a>`;

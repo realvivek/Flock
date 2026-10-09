@@ -5,7 +5,7 @@
  */
 import { escape } from "../lib/escape.ts";
 import { apDate, int } from "../viz/format.ts";
-import { inline, type Ctx } from "./frame.ts";
+import { inline, asH2, type Ctx } from "./frame.ts";
 import type { StoryInput } from "./types.ts";
 import { statesFigure, lookupFigure } from "./fig/places.ts";
 import { readFigure } from "./fig/read.ts";
@@ -57,7 +57,7 @@ export function renderStory(inp: StoryInput & { deputy: Deputy; timelineRule: st
   };
   // 4:3 images of whole tiles with no small print; the journey has its own phone image with larger type
   const preview = (k: "components" | "journey") => k === "components"
-    ? `<a class="preview" href="components/" id="preview"><img id="preview-img" src="img/knolling.jpg" alt="Six of the camera’s fourteen components, each rendered on its own tile: the front bezel, the infrared illuminator board, the infrared-cut filter, the camera module, the system on module and the GPS antenna" loading="lazy" decoding="async" width="1120" height="840"><span class="cap"><span class="kicker">Inside the camera</span><span class="t">Fourteen components in five groups, from the bezel to the clamps</span><span class="go">See the components</span></span></a>`
+    ? `<a class="preview" href="components/" id="preview"><img id="preview-img" src="img/knolling.jpg" alt="Six of the camera’s 14 components, each rendered on its own tile: the front bezel, the infrared illuminator board, the infrared-cut filter, the camera module, the system on module and the GPS antenna" loading="lazy" decoding="async" width="1120" height="840"><span class="cap"><span class="kicker">Inside the camera</span><span class="t">Fourteen components in five groups, from the bezel to the clamps</span><span class="go">See the components</span></span></a>`
     : `<a class="preview" href="journey/" id="preview-journey"><picture><source media="(max-width: 640px)" srcset="img/journey-phone.jpg" width="1120" height="840"><img id="preview-journey-img" src="img/journey.jpg" alt="The first stops of one photograph’s journey, tracked like a parcel: picked up on the pole, in transit on the carrier network, arrived at Amazon’s cloud" loading="lazy" decoding="async" width="1120" height="840"></picture><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
   const cards = () => `<div id="summary-cards" class="summary">${PAGES.map((pg, i) => {
     const sec = inp.overview.sections.find((x) => x.id === pg.section);
@@ -75,7 +75,9 @@ export function renderStory(inp: StoryInput & { deputy: Deputy; timelineRule: st
 <div class="prose intro">${s.intro.map((p) => `<p>${inline(p, ctx)}</p>`).join("")}</div>
 ${mapSection(inp, ctx)}
 `;
+  let titled = false; // until the first section heading, a figure's title is an h2 under the page's h1
   for (const sec of s.sections) {
+    titled ||= !!sec.title;
     const title = sec.title ? `<h2 class="chapter-title">${escape(sec.title)}</h2>` : "";
     let body = "";
     let open = false; // paragraphs are grouped into a prose column between figures
@@ -83,7 +85,7 @@ ${mapSection(inp, ctx)}
     for (const b of sec.blocks) {
       if ("p" in b) { if (!open) { body += `<div class="prose">`; open = true; } body += `<p>${inline(b.p, ctx)}</p>`; continue; }
       close();
-      if ("fig" in b) body += figure(b.fig);
+      if ("fig" in b) body += titled ? figure(b.fig) : asH2(figure(b.fig));
       else if ("preview" in b) body += preview(b.preview);
     }
     close();

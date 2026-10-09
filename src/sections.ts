@@ -4,6 +4,7 @@ import { cite, escape, tag } from "./ui/cite";
 import { still, nn, el, p, kv, facts, topbarHeight } from "./ui/common";
 import { icon } from "./ui/icons";
 import { set } from "./store";
+import { ap } from "./viz/format";
 
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
 
@@ -19,9 +20,9 @@ export function buildPole(host: HTMLElement): void {
   const c = install.coverage;
   const fov = el("article", "card sheet wide");
   fov.innerHTML = `<figure><img src="${still("falcon-side")}" alt="Falcon side view" loading="lazy" decoding="async" /></figure><h3>Field of view</h3>`;
-  kv(fov, [["Field of view", `${c.widthFt} ft wide at ${c.distFt} ft`], ["Range", `up to ${c.maxFt} ft, ${c.lanes} lanes, ${c.mph} mph`], ["Frames", `${c.framesPerVehicle} stills per vehicle`], ["Aims at", c.aims]]);
+  kv(fov, [["Field of view", `${c.widthFt} ft wide at ${c.distFt} ft`], ["Range", `up to ${c.maxFt} ft, ${ap(c.lanes)} lanes, ${c.mph} mph`], ["Frames", `${c.framesPerVehicle} stills per vehicle`], ["Aims at", c.aims]]);
   fov.appendChild(cite(c.sources));
-  p(fov, "Flock's specification sheet gives the field of view at 65 ft; Flock's product page gives a range of up to 100 ft.", "fine");
+  p(fov, "Flock’s specification sheet gives the field of view at 65 feet; Flock’s product page gives a range of up to 100 feet.", "fine");
   host.appendChild(fov);
 }
 
@@ -70,7 +71,7 @@ export function buildData(host: HTMLElement): void {
     if (h.storage) meta.push(["Storage", h.storage]);
     if (h.retention) meta.push(["Retention", h.retention]);
     meta.push(["In the packet", h.payload.join(", ")]);
-    row.innerHTML = `<div class="stage-body"><p class="mono">Stage ${nn(h.n)} of ${hops.length} · ${escape(nd.label)}</p><h3>${escape(h.title)} ${tag(h.tag)}</h3><p>${escape(h.summary)}</p></div>`;
+    row.innerHTML = `<div class="stage-body"><p class="mono">Stage ${nn(h.n)} of ${hops.length} · ${escape(nd.label)}</p><h2>${escape(h.title)} ${tag(h.tag)}</h2><p>${escape(h.summary)}</p></div>`;
     const body = row.querySelector(".stage-body")! as HTMLElement;
     kv(body, meta);
     if (h.unknowns?.length) body.insertAdjacentHTML("beforeend", `<p class="fine">${tag("unknown")} ${h.unknowns.map(escape).join(" · ")}</p>`);
@@ -80,7 +81,7 @@ export function buildData(host: HTMLElement): void {
   // Retention presets
   const ret = el("article", "stage tool");
   ret.dataset.node = "bin";
-  ret.innerHTML = `<div class="stage-body"><p class="mono">Retention</p><h3>How long the reads are kept</h3><p>Flock’s default and the limits some states set. Choose one to see what it applies to.</p><div class="toggle-row" id="retention-chips"></div><p class="aim-readout" id="retention-readout"></p></div>`;
+  ret.innerHTML = `<div class="stage-body"><p class="mono">Retention</p><h2>How long the reads are kept</h2><p>Flock’s default and the limits some states set. Choose one to see what it applies to.</p><div class="toggle-row" id="retention-chips"></div><p class="aim-readout" id="retention-readout"></p></div>`;
   const chips = ret.querySelector<HTMLElement>("#retention-chips")!;
   const out = ret.querySelector<HTMLElement>("#retention-readout")!;
   const setRet = (i: number) => { const r = dataflow.retentionPresets[i]!; out.textContent = `${r.label}: ${r.note}`; chips.querySelectorAll("button").forEach((b, j) => { b.classList.toggle("is-active", j === i); b.setAttribute("aria-pressed", String(j === i)); }); set({ retentionIndex: i }); };
@@ -92,7 +93,7 @@ export function buildData(host: HTMLElement): void {
   const d = dataflow.deputy;
   const dep = el("article", "stage tool");
   dep.dataset.node = "search";
-  dep.innerHTML = `<div class="stage-body"><p class="mono">Network search</p><h3>One documented search</h3><p>Enter a reason and run the search. The counts are those recorded in the audit log of one documented search, on May 9, 2025, which carried the case number of a sheriff’s office death investigation.</p><form id="deputy-form"><input id="deputy-reason" type="text" maxlength="60" placeholder="Reason for search" aria-label="Reason for search" /><button type="submit" class="chip">Search network</button></form><p class="aim-readout" id="deputy-readout" aria-live="polite"></p></div>`;
+  dep.innerHTML = `<div class="stage-body"><p class="mono">Network search</p><h2>One documented search</h2><p>Enter a reason and run the search. The counts are those recorded in the audit log of one documented search, on May 9, 2025, which carried the case number of a sheriff’s office death investigation.</p><form id="deputy-form"><input id="deputy-reason" type="text" maxlength="60" placeholder="Reason for search" aria-label="Reason for search" /><button type="submit" class="chip">Search network</button></form><p class="aim-readout" id="deputy-readout" aria-live="polite"></p></div>`;
   const form = dep.querySelector<HTMLFormElement>("#deputy-form")!;
   const readout = dep.querySelector<HTMLElement>("#deputy-readout")!;
   form.addEventListener("submit", (e) => { e.preventDefault(); const r = (form.querySelector("input") as HTMLInputElement).value.trim() || d.reasonAsLogged; set({ deputyReason: r }); readout.textContent = `Reason as logged: “${r}” · ${d.networks.toLocaleString()} networks · ${d.cameras.toLocaleString()} cameras · ${d.lookbackDays}-day lookback · ${d.date}`; });
@@ -118,7 +119,7 @@ export function buildData(host: HTMLElement): void {
     const n = Number(row.dataset.n);
     const hop = hops.find((h) => h.n === n);
     packet.textContent = hop ? hop.payload.join(" · ") : row.classList.contains("tool") ? "—" : "";
-    barK.textContent = hop ? `Stage ${nn(n)} of ${hops.length} · ${nodeOf(n).label}` : (row.querySelector("h3")?.textContent ?? "");
+    barK.textContent = hop ? `Stage ${nn(n)} of ${hops.length} · ${nodeOf(n).label}` : (row.querySelector("h2")?.textContent ?? "");
     barFill.style.width = `${((i + 1) / rows.length) * 100}%`;
   };
   addEventListener("scroll", update, { passive: true });

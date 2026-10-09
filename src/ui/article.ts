@@ -1,10 +1,10 @@
 import { myths, economics, sources, products, deployments, overview, partById, hopById, stillById } from "../content";
 import { cite, escape } from "../ui/cite";
 import { BASE } from "../lib/base";
-import { apDate } from "../viz/format";
+import { apDate, apState } from "../viz/format";
 import { initTooltips } from "../viz/tooltip";
-import { citiesFigure, texasFigure, feesFigure, verdictIndex, figCtx } from "./figs";
-import { priceFigure, contractsFigure } from "../story/fig/money";
+import { texasFigure, feesFigure, figCtx } from "./figs";
+import { contractsFigure } from "../story/fig/money";
 import storyRaw from "../content/story.json";
 
 /**
@@ -22,6 +22,13 @@ const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: 
   if (text !== undefined) e.textContent = text;
   return e;
 };
+
+/** A section of an article page: an h2 under the page's h1, in the story's section type. */
+export function sectionHead(title: string, id?: string): HTMLHeadingElement {
+  const h = el("h2", "sec-title", title);
+  if (id) h.id = id;
+  return h;
+}
 
 /** Jump list of in-page anchors. Clicks scroll without rewriting the location hash (the stepper keeps its own). */
 function jumpList(items: { id: string; label: string }[]): HTMLElement {
@@ -104,11 +111,8 @@ export function renderProducts(host: HTMLElement): void {
 
 /** Twenty-one claims as a running list: claim, documented position, related component or stage, sources. */
 export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
-  const ch = el("h3", undefined, "Claims");
-  ch.id = "claims";
-  host.appendChild(ch);
-  host.appendChild(el("p", undefined, "Each entry states a claim, the documented position, the product or setting it applies to, and the sources. Entries link to the related component or data stage. Several depend on which Flock product is on the pole; the product line follows the claims."));
-  host.insertAdjacentHTML("beforeend", verdictIndex(myths));
+  host.appendChild(sectionHead("The claims", "claim-list"));
+  host.appendChild(el("p", undefined, "Each entry states a claim, what the documented record shows, the product or setting it applies to, and the sources. Entries link to the related component or data stage. Several depend on which Flock product is on the pole; the product line follows the claims."));
   const list = el("div", "claims");
   myths.forEach((m, i) => {
     const art = el("article", "claim");
@@ -133,9 +137,7 @@ export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
     list.appendChild(art);
   });
   host.appendChild(list);
-  const ph = el("h3", undefined, "Product line");
-  ph.id = "products";
-  host.appendChild(ph);
+  host.appendChild(sectionHead("Product line", "products"));
   renderProducts(host);
 }
 
@@ -163,10 +165,9 @@ export function renderEconomics(host: HTMLElement): void {
   const sections: { id: string; title: string; fine?: string; render(h: HTMLElement): void }[] = [
     { id: "econ-included", title: "Included in the annual fee", render: (h) => rows(h, e.included) },
     { id: "econ-extra", title: "Billed separately", render: (h) => rows(h, e.extra) },
-    { id: "econ-prices", title: "List prices", fine: "Virginia Sheriffs' Association catalog, May 2024, matching 2025 invoices. Per unit per year.",
+    { id: "econ-prices", title: "List prices", fine: "Virginia Sheriffs’ Association catalog, May 2024, matching 2025 invoices. Per unit per year.",
       render: (h) => table(h, ["Item", "Price", "Term"], e.priceList.map((p) => ({ cells: [p.item + (p.sku ? ` (${p.sku})` : ""), p.price, p.term], num: [1], sources: p.sources }))) },
-    { id: "econ-history", title: "Price history, 2019 to 2026", render: (h) => {
-      h.insertAdjacentHTML("beforeend", priceFigure(story.figures.price!, figCtx()));
+    { id: "econ-history", title: "Price history", render: (h) => {
       const tl = el("div", "timeline");
       for (const r of e.history) {
         const d = el("div", "tl");
@@ -176,8 +177,8 @@ export function renderEconomics(host: HTMLElement): void {
       }
       h.appendChild(tl);
     } },
-    { id: "econ-fees", title: "Fees for changes after installation, 2026 schedule", fine: "Flock's Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure.",
-      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, Math.min(host.clientWidth || 680, 680))); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
+    { id: "econ-fees", title: "Fees for changes after installation, 2026 schedule", fine: "Flock’s Reinstall and Relocation Fee Schedule 2026 applies when a customer changes the agreed deployment plan, and to replacements after vandalism, theft or damage. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure.",
+      render: (h) => { h.insertAdjacentHTML("beforeend", feesFigure(e.fees, figCtx())); table(h, ["Fee", "2026 schedule"], e.fees.map((f) => ({ cells: [f.item, f.now], num: [1], sources: f.sources }))); } },
     { id: "econ-workflow", title: "Installation workflow and responsibilities",
       render: (h) => table(h, ["Step", "Flock", "Customer", "Utility, DOT or electrician"], e.workflow.map((w) => ({ cells: [w.step, w.flock, w.customer, w.other || "—"], sources: w.sources }))) },
     { id: "econ-workforce", title: "Installation workforce", render: (h) => rows(h, e.workforce) },
@@ -195,7 +196,7 @@ export function renderEconomics(host: HTMLElement): void {
   for (const s of sections) {
     const sec = el("section", "econ-block");
     sec.id = s.id;
-    sec.appendChild(el("h3", undefined, s.title));
+    sec.appendChild(sectionHead(s.title));
     if (s.fine) sec.appendChild(el("p", "fine", s.fine));
     s.render(sec);
     host.appendChild(sec);
@@ -217,20 +218,16 @@ export function revealSource(id: string, behavior: ScrollBehavior = "smooth"): b
 /** Where Flock's contracts are public, the largest documented contracts, funding sources and documented camera counts by city. */
 export async function renderDeployments(host: HTMLElement): Promise<void> {
   const d = deployments;
-  const cities: { snapshot: string; rows: { name: string; usps: string; flock: number }[] } = await fetch(`${BASE}data/story/cities.json`).then((r) => r.json());
   const intro = el("p", "lede-p", d.intro.summary);
   intro.appendChild(cite(d.intro.sources));
   host.appendChild(intro);
   const sections: { id: string; title: string; render(h: HTMLElement): void }[] = [
-    { id: "dep-cities", title: "Mapped cameras by city", render: (h) => {
-      h.insertAdjacentHTML("beforeend", citiesFigure(cities.rows, apDate(cities.snapshot), Math.min(host.clientWidth || 720, 720)));
-    } },
     { id: "dep-contracts", title: "Largest documented contracts", render: (h) => {
       h.insertAdjacentHTML("beforeend", contractsFigure(story.figures.contracts!, figCtx()));
-      table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [`${c.agency} · ${c.level}, ${c.state}`, c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
+      table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [`${c.agency} · ${c.level}${c.level === "Federal" ? "" : `, ${apState(c.state)}`}`, c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
       h.lastElementChild?.classList.add("contracts");
     } },
-    { id: "dep-texas", title: "Texas: paid for by an insurance fee, then paused", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(Math.min(host.clientWidth || 720, 720))); } },
+    { id: "dep-texas", title: "Texas: paid for by an insurance fee, then paused", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(figCtx())); } },
     { id: "dep-funding", title: "Public funding behind state and local contracts", render: (h) => rows(h, d.funding) },
     { id: "dep-records", title: "Where the records are", render: (h) => rows(h, d.records) },
     { id: "dep-unknowns", title: "Not publicly documented", render: (h) => {
@@ -243,7 +240,7 @@ export async function renderDeployments(host: HTMLElement): Promise<void> {
   for (const s of sections) {
     const sec = el("section", "econ-block");
     sec.id = s.id;
-    sec.appendChild(el("h3", undefined, s.title));
+    sec.appendChild(sectionHead(s.title));
     s.render(sec);
     host.appendChild(sec);
   }
@@ -275,7 +272,7 @@ export function renderSources(host: HTMLElement): void {
   for (const s of sorted) {
     if (s.kind !== lastKind) {
       lastKind = s.kind;
-      const h = el("h3", "src-group");
+      const h = el("h2", "src-group");
       h.id = `group-${s.kind}`;
       h.innerHTML = `<span class="tag ${kindClass[s.kind]}">${kindLabel[s.kind]}</span> ${kindTitle[s.kind]}`;
       list.appendChild(h);
@@ -291,6 +288,6 @@ export function renderSources(host: HTMLElement): void {
   }
   host.appendChild(list);
   const fine = el("p", "fine");
-  fine.innerHTML = `Camera positions on the Outcomes page come from OpenStreetMap contributors via <a href="https://deflock.org" rel="noopener">DeFlock</a>. This site does not describe countermeasures. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
+  fine.innerHTML = `Camera positions on the Outcomes page come from OpenStreetMap contributors via <a href="https://deflock.org" rel="noopener">DeFlock</a>. This site does not describe ways to avoid or disable the cameras. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
   host.appendChild(fine);
 }
