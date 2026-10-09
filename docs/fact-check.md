@@ -375,10 +375,11 @@ error; the table shows how far "mapped" can sit from a published figure.
 | Denver | 139 (1 / 7 / 131) | 111 at about 70 sites (2024–25) | `denverite-2025` |
 | Lexington, Ky. | 195 (60 / 16 / 119) | 125 (December 2025) | `lexington-lpr-locations` |
 | Berkeley, Calif. | 81 (41 / 6 / 34) | 52 (2025) | `berkeleyside-2025` |
-| Piedmont, Calif. | 35 (0 / 34 / 1) | 48 (2025) | `piedmont-2025` |
-| Lafayette, Colo. | 33 (1 / 0 / 32) | 30 (2024–25) | `lafayette-co-alpr` |
 | Dallas | 919 (62 / 10 / 847) | 684 (September 2026; 321 paid for by state grants) | `govtech-dallas-2026` |
 | Houston | 2,266 (1 / 167 / 2,098) | 3,800 police and private (2024, per city officials) | `houstonchronicle-flock-2025` |
+
+Piedmont, Calif., and Lafayette, Colo., were in this table until Oct. 9, 2026, with counts of 48 and 30 that
+their cited reports do not give; both were removed.
 
 ### Two camera snapshots
 

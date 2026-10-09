@@ -60,10 +60,10 @@ function rungCells(v: V): string {
 }
 /** Rates between rungs of one record. Reads and alerts from different sets of readers (`vendorMix`) give no alert rate. */
 function rates(v: V, o: { vendorMix?: boolean; words?: Record<string, string> } = {}): string {
-  const out: string[] = [];
-  if (v.reads && v.alerts != null && !o.vendorMix) out.push(`${(v.alerts / v.reads * 1e6).toFixed(1)} alerts per million reads`);
-  if (v.alerts && v.falseAlerts != null) { const p = v.falseAlerts / v.alerts * 100; out.push(`${p < 1 ? p.toFixed(1) : Math.round(p)}% of alerts wrong`); }
-  const per = (n: number, what: string) => { const r = n / v.alerts! * 100; return r >= 0.1 ? `${r.toFixed(1)} ${what} per 100 alerts` : `${(n / v.alerts! * 1e5).toFixed(1)} ${what} per 100,000 alerts`; };
+  const out: string[] = [], A = o.words?.alerts ?? "alerts";
+  if (v.reads && v.alerts != null && !o.vendorMix) out.push(`${(v.alerts / v.reads * 1e6).toFixed(1)} ${A} per million reads`);
+  if (v.alerts && v.falseAlerts != null) { const p = v.falseAlerts / v.alerts * 100; out.push(`${p < 1 ? p.toFixed(1) : Math.round(p)}% of ${A} wrong`); }
+  const per = (n: number, what: string) => { const r = n / v.alerts! * 100; return r >= 0.1 ? `${r.toFixed(1)} ${what} per 100 ${A}` : `${(n / v.alerts! * 1e5).toFixed(1)} ${what} per 100,000 ${A}`; };
   if (v.alerts && v.recoveries != null) out.push(per(v.recoveries, "recoveries"));
   if (v.alerts && v.arrests != null) out.push(per(v.arrests, o.words?.arrests ?? "arrests"));
   return out.length ? `<p class="rates mono">${out.join(" · ")}</p>` : "";

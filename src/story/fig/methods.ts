@@ -1,5 +1,5 @@
 /** How complete the map is: mapped Flock cameras inside city limits against the counts cities or reporting published. */
-import { placeName, int } from "../../viz/format.ts";
+import { placeName, int, ap } from "../../viz/format.ts";
 import { circle, g, line, rect, svg, text, label, tip, logScale, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
@@ -12,7 +12,8 @@ export function completenessFigure(cfg: FigureCfg, ctx: Ctx, rows: CompletenessR
     const x = logScale(20, 5000, L + 8, W - R);
     const ticks = [20, 50, 100, 200, 500, 1000, 2000, 5000];
     let out = g(ticks.map((t) => line(x(t), T - 6, x(t), T + list.length * rowH)).join(""), { class: "grid" });
-    const shown = narrow ? [20, 50, 100, 200, 1000, 5000] : ticks;
+    // on a phone, powers of 10 and the ends, so no two labels crowd each other
+    const shown = narrow ? [20, 100, 1000, 5000] : ticks;
     out += g(shown.map((t, i) => text(x(t), T - 12, int(t), { "text-anchor": narrow && i === shown.length - 1 ? "end" : "middle" })).join(""), { class: "axis" });
     // legend
     const lx = narrow ? 7 : L + 8;
@@ -40,7 +41,7 @@ export function completenessFigure(cfg: FigureCfg, ctx: Ctx, rows: CompletenessR
         })(),
         `${int(r.mapped)} mapped, ${int(r.published)} published`, `${r.place}: published ${r.when}, ${r.what}`);
     });
-    return svg(W, T + list.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Dot chart comparing mapped Flock cameras inside eight cities with the counts the cities or their reporting published." });
+    return svg(W, T + list.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Dot chart comparing mapped Flock cameras inside ${ap(list.length)} cities with the counts the cities or their reporting published.` });
   };
   const table = dataTable(["City", "Mapped", "Tagged to the city’s police", "Tagged to another operator", "No operator tagged", "Published", "Published count"], list.map((r) => [placeName(r.place, r.usps), r.mapped, r.police, r.other, r.untagged, r.published, `${r.what} (${r.when})${r.topOther && r.topOther.count >= 20 ? `; largest other operator mapped: ${r.topOther.name}, ${int(r.topOther.count)}` : ""}`]), { text: [6] });
   return frame("completeness", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
