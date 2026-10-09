@@ -214,12 +214,14 @@ for (const [addr, p] of byPlace) {
 console.log("tucson places", byPlace.size, "calls", calls.size);
 // ---- News records naming the camera's road -------------------------------------------------------------------
 const news = JSON.parse(fs.readFileSync(path.join(SRC, "news-sites.json"), "utf8"));
+// a recovery rung means a vehicle: "stolen tools recovered" or "three guns recovered" is not one
+const VEHICLE_RECOVERED = /\b(vehicle|car|truck|suv|pickup|van|motorcycle)s? (was |were )?recovered|recovered (the |a |an )?(stolen )?(vehicle|car|truck|suv|pickup|van|motorcycle)/i;
 for (const n of news) {
   const place = `${n.city}, ${n.state}`;
   let x = null, along = [];
   if (n.roads?.length === 2) x = await intersection(n.roads, place, n.state);
   else if (n.roads?.length === 1) { const res = await roadGeo(n.roads[0], place, n.state); along = camerasAlongRoad(res); if (along.length) x = { lon: along[0].lon, lat: along[0].lat, method: `road only; placed at a mapped camera on the road (${along.length} on it)`, atCamera: true }; else if (res.length) { const c = coords(res[0].geo); const m = c[Math.floor(c.length / 2)]; if (m) x = { lon: m[0], lat: m[1], method: "a point on the road; no mapped camera on the road" }; } }
-  const rec = { id: `news-${n.id}`, source: "news", level: n.roads?.length === 2 ? "site" : "road", agency: `${n.city} (${n.state}) police, as reported`, city: n.city, state: n.state, period: n.date, label: n.site, values: { reads: null, alerts: 1, falseAlerts: null, stops: null, recoveries: /recover/i.test(n.outcome) ? 1 : null, arrests: /arrest|charged|indicted/i.test(n.outcome) ? 1 : null }, extra: { crime: n.crime, outcome: n.outcome, summary: n.summary, url: n.url }, sources: ["lehman-tracker"] };
+  const rec = { id: `news-${n.id}`, source: "news", level: n.roads?.length === 2 ? "site" : "road", agency: `${n.city} (${n.state}) police, as reported`, city: n.city, state: n.state, period: n.date, label: n.site, values: { reads: null, alerts: 1, falseAlerts: null, stops: null, recoveries: VEHICLE_RECOVERED.test(n.outcome) ? 1 : null, arrests: /arrest|charged|indicted/i.test(n.outcome) ? 1 : null }, extra: { crime: n.crime, outcome: n.outcome, summary: n.summary, url: n.url }, sources: ["lehman-tracker"] };
   sites.push(x ? locate(rec, x.lon, x.lat, x.method, !!x.atCamera) : { ...rec, lon: null, lat: null, geocode: "not resolved", match: null, nearest: null });
   console.log("news", n.city, n.site, x ? "ok" : "unresolved");
 }

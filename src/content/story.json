@@ -150,7 +150,7 @@
       "title": "Mapped counts run above and below the published ones",
       "sub": "Flock cameras mapped inside city limits, and the count each city published or local news reported, on a logarithmic scale",
       "notes": ["Mapped counts include cameras that other operators run inside city limits; published counts can be older than the map."],
-      "sources": ["deflock-tiles-2026", "census-boundaries-2024", "oakland-pac-2026", "denverite-2025", "lexington-lpr-locations", "berkeleyside-2025", "piedmont-2025", "lafayette-co-alpr", "govtech-dallas-2026", "houstonchronicle-flock-2025"]
+      "sources": ["deflock-tiles-2026", "census-boundaries-2024", "oakland-pac-2026", "denverite-2025", "lexington-lpr-locations", "berkeleyside-2025", "govtech-dallas-2026", "houstonchronicle-flock-2025"]
     },
     "states": {
       "title": "Georgia has the most mapped Flock cameras per resident",

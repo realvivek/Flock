@@ -1345,7 +1345,7 @@
     {
       "id": "hagwood-2026",
       "kind": "court",
-      "title": "State v. Hagwood, 2026-Ohio-2564: hot-list alert from the Par Lane Flock camera, conviction affirmed",
+      "title": "State v. Hagwood, 2026-Ohio-2564: hot-list alert from the Par Lane Flock camera (judgment affirmed in part and reversed in part, on the sentence)",
       "publisher": "Ohio Eleventh District Court of Appeals",
       "url": "https://www.supremecourt.ohio.gov/rod/docs/pdf/11/2026/2026-Ohio-2564.pdf",
       "date": "2026-07-06",
@@ -1354,11 +1354,11 @@
     {
       "id": "lexington-lpr",
       "kind": "government",
-      "title": "License plate readers: program statistics, March to November 2022",
+      "title": "License plate readers: program statistics since March 2022",
       "publisher": "Lexington-Fayette Urban County Government",
       "url": "https://www.lexingtonky.gov/government/departments-programs/public-safety/police/license-plate-readers",
-      "date": "2022-12-01",
-      "lastVerified": "2026-09-18"
+      "date": "2026",
+      "lastVerified": "2026-10-09"
     },
     {
       "id": "lexington-lpr-locations",

@@ -7,7 +7,7 @@
       "city": "Los Angeles",
       "state": "CA",
       "period": "2025-08-01 to 2025-09-30",
-      "cameras": "In-car and roof-mounted readers (Axon, Motorola) plus 50 Flock cameras donated after the January 2025 fires",
+      "cameras": "Readers in patrol cars (Axon) and 298 pole cameras: 160 Motorola and 138 Flock, 50 of the Flock cameras loaned at no cost after the January 2025 Palisades Fire",
       "vendorMix": true,
       "values": {
         "reads": 210568103,
@@ -106,7 +106,10 @@
       "sources": [
         "nashville-lpr-2023"
       ],
-      "vendorMix": true
+      "vendorMix": true,
+      "words": {
+        "alerts": "verified hits"
+      }
     },
     {
       "id": "nashville-pilot-140",
@@ -128,7 +131,10 @@
         "nashville-lpr-sampling-2023"
       ],
       "vendorMix": true,
-      "mixedWindows": true
+      "mixedWindows": true,
+      "words": {
+        "alerts": "hit notifications"
+      }
     },
     {
       "id": "columbia-2025",
@@ -148,7 +154,10 @@
       "note": "Alerts: 2,877 warrant, 1,452 stolen plate, 1,192 stolen vehicle; the system went live in March 2025. Of 217 case outcomes associated with alerts: 69 cleared by arrest (cases, not persons), 52 leads generated, 33 in progress, 31 unable to locate, 20 cleared by other means, seven no action, three warrants issued, one added to a hot list; the report's categories sum to 216.",
       "sources": [
         "columbia-mo-2025"
-      ]
+      ],
+      "words": {
+        "arrests": "cases cleared by arrest"
+      }
     },
     {
       "id": "piedmont-2025",
@@ -156,7 +165,7 @@
       "city": "Piedmont",
       "state": "CA",
       "period": "2025",
-      "cameras": "48 cameras",
+      "cameras": "Flock cameras, count not stated",
       "values": {
         "reads": null,
         "alerts": null,
@@ -169,7 +178,10 @@
       "sources": [
         "piedmont-2025",
         "hofer-piedmont-2021"
-      ]
+      ],
+      "words": {
+        "arrests": "arrests directly related"
+      }
     },
     {
       "id": "lafayette-2025",
@@ -177,7 +189,7 @@
       "city": "Lafayette",
       "state": "CO",
       "period": "2024 to 2025",
-      "cameras": "30 Flock cameras",
+      "cameras": "Flock cameras, count not stated",
       "values": {
         "reads": null,
         "alerts": null,
@@ -196,7 +208,7 @@
       "agency": "Denver Police Department",
       "city": "Denver",
       "state": "CO",
-      "period": "12 months from 2024-05",
+      "period": "one-year pilot from 2024-05",
       "cameras": "111 Flock cameras at about 70 sites",
       "values": {
         "reads": null,
@@ -206,9 +218,10 @@
         "recoveries": 170,
         "arrests": 289
       },
-      "note": "Officers recovered 29 firearms. One 30-day window in the portal showed about 2 million vehicles and 175,916 hits. The city later ended the contract.",
+      "note": "Officers recovered 29 firearms. One 30-day window in the portal showed about 2 million vehicles and 175,916 hits. The city later ended the contract; privately contracted Flock cameras kept running.",
       "sources": [
-        "denverite-2025"
+        "denverite-2025",
+        "denverite-2026"
       ]
     },
     {
@@ -236,8 +249,8 @@
       "agency": "Lexington Police Department",
       "city": "Lexington",
       "state": "KY",
-      "period": "2022-03 to 2022-11",
-      "cameras": "125 Flock cameras",
+      "period": "since 2022-03, cumulative; end date not stated",
+      "cameras": "125 readers now",
       "values": {
         "reads": null,
         "alerts": null,
@@ -249,7 +262,10 @@
       "note": "Arrests are “individuals charged” (1,985 charges). Also 43 stolen plates, 521 warrants served, 32 missing persons located, 166 firearms seized.",
       "sources": [
         "lexington-lpr"
-      ]
+      ],
+      "words": {
+        "arrests": "people charged"
+      }
     },
     {
       "id": "atlantic-city",
@@ -257,7 +273,7 @@
       "city": "Atlantic City",
       "state": "NJ",
       "period": "reported 2026",
-      "cameras": "Fixed readers at every island entrance",
+      "cameras": "Fixed readers, count not stated",
       "values": {
         "reads": null,
         "alerts": null,
@@ -266,7 +282,7 @@
         "recoveries": 40,
         "arrests": null
       },
-      "note": "Alerts led to 72 stops, which produced 40 stolen vehicles and nine stolen plates, as reported in a 2026 essay citing the department.",
+      "note": "Alerts led to 72 stops, which produced 40 stolen vehicles and nine stolen plates, according to a 2026 essay that cites a 2025 study.",
       "sources": [
         "wip-cops-case-2026"
       ]
@@ -290,7 +306,12 @@
       "sources": [
         "footnote4a-hotlist"
       ],
-      "vendor": "Axon"
+      "vendor": "Axon",
+      "noRates": true,
+      "words": {
+        "alerts": "hits in the report",
+        "falseAlerts": "reviewed wrong"
+      }
     },
     {
       "id": "windsor-2025",

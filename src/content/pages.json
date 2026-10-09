@@ -49,11 +49,15 @@
     "outcomes": {
       "kicker": "Outcomes",
       "title": "Few Agencies Publish What Their Flock Cameras Produce",
-      "deck": "Of {{outcomes.sites}} places with a published result, {{outcomes.matched}} can be tied to a camera on the map within 150 meters. A handful of police departments publish audits of reads, alerts and arrests, and each counts them differently.",
+      "deck": "Of {{outcomes.sites}} published records of a result, {{outcomes.matched}} lie within 150 meters of a camera on the map. A handful of police departments publish audits of reads, alerts and arrests, and each counts them differently.",
       "jump": [
         {
           "href": "#agencies",
           "label": "By agency"
+        },
+        {
+          "href": "#evidence",
+          "label": "Crime"
         },
         {
           "href": "#errors",
@@ -62,10 +66,6 @@
         {
           "href": "#sites",
           "label": "By camera site"
-        },
-        {
-          "href": "#districts",
-          "label": "By district"
         },
         {
           "href": "#national",

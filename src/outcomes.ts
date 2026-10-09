@@ -7,11 +7,12 @@ import { z } from "zod";
 import { cite, escape } from "./ui/cite";
 import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
-import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
-import { tickWords, apState, apDate, apPeriod, placeName, ap, typeset } from "./viz/format";
+import { svg, g, line, text, circle, tip, logScale, rect, textWidth, WIDE, NARROW } from "./viz/svg";
+import { tickWords, apState, apDate, apPeriod, placeName, ap, big, typeset } from "./viz/format";
 import { figCtx, figureCfg } from "./ui/figs";
 import { frame, dataTable } from "./story/frame";
 import { errorsFigure } from "./story/fig/errors";
+import { evidenceFigure } from "./story/fig/evidence";
 import type { FigureCfg } from "./story/schema";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
@@ -28,7 +29,7 @@ const File = z.object({
   windsor: z.object({ cameras: z.number(), cases: z.array(z.object({ date: z.string(), type: z.string(), site: z.string().nullable(), summary: z.string(), outcome: z.string() })), sources: z.array(z.string()) }),
   courts: z.array(z.object({ id: z.string(), case: z.string(), court: z.string(), state: z.string(), city: z.string().optional(), date: z.string(), crime: z.string(), role: z.string(), outcome: z.string(), sources: z.array(z.string()) })),
   districts: z.array(z.object({ agency: z.string(), city: z.string(), state: z.string(), unit: z.string(), asOf: z.string(), cameras: z.number(), sources: z.array(z.string()), rows: z.array(z.tuple([z.string(), z.number()])) })),
-  ladders: z.array(z.object({ id: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), cameras: z.string(), vendorMix: z.boolean().optional(), vendor: z.string().optional(), mixedWindows: z.boolean().optional(), noRates: z.boolean().optional(), values: Values, note: z.string(), sources: z.array(z.string()) })),
+  ladders: z.array(z.object({ id: z.string(), agency: z.string(), city: z.string(), state: z.string(), period: z.string(), cameras: z.string(), vendorMix: z.boolean().optional(), vendor: z.string().optional(), mixedWindows: z.boolean().optional(), noRates: z.boolean().optional(), words: z.record(z.string(), z.string()).optional(), values: Values, note: z.string(), sources: z.array(z.string()) })),
   national: z.object({ statements: z.array(z.object({ tag: z.string(), who: z.string(), text: z.string(), sources: z.array(z.string()) })), excluded: z.array(z.object({ what: z.string(), why: z.string(), sources: z.array(z.string()) })) }),
   coverage: z.object({ sites: z.number(), located: z.number(), matched: z.number(), placedAtCamera: z.number(), inCar: z.number(), bySource: z.record(z.string(), z.object({ sites: z.number(), located: z.number(), matched: z.number(), placedAtCamera: z.number() })) }),
 });
@@ -42,7 +43,7 @@ const depth = (v: V): Ring["depth"] => (v.arrests || v.recoveries) ? 3 : v.stops
 const SOURCE_META: Record<string, { title: string; how: string; unit: string }> = {
   nashville: { title: "Nashville, Tenn.: 24 fixed sites and four mobile units, eight weeks in 2023", how: "Metro Nashville Police published verified hits, stops, searches, arrests and recoveries for each intersection in its ALPR pilot. A verified hit is a hit notification an employee confirmed before a stop was authorized. The report does not name the vendor of the fixed cameras. Sites were located as the node the two named roads share in OpenStreetMap.", unit: "Verified hits" },
   windsor: { title: "Windsor, Conn.: 16 cameras at 14 sites, cases named to a camera", how: "The town’s fact sheet lists every camera site and 10 dated cases; four name the camera used. Counts here are those cases, not hit totals, which the town does not publish.", unit: "Alerts" },
-  story: { title: "Story County, Iowa: a month of hot-list hits from the sheriff’s in-car readers, by location", how: "The sheriff’s office’s “Erroneous hotlist hits” report from its Axon in-car readers (not Flock cameras), with the coordinates of each hit: 214 rows from NCIC lists, 165 of them marked “wrong state,” meaning the plate matched a list entry from another state. Accurate hits and total reads were not in the report. A hit’s location is where a patrol car was, so these records are mapped but not matched to fixed cameras.", unit: "Hits in the report" },
+  story: { title: "Story County, Iowa: a month of hot-list hits from the sheriff’s in-car readers, by location", how: "The sheriff’s office’s “Erroneous hotlist hits” report from its Axon in-car readers (not Flock cameras), with the coordinates of each hit: 214 rows from NCIC lists, 165 of them marked “wrong state,” meaning the plate matched a list entry from another state. Accurate hits and total reads were not in the report. A hit’s location is where a patrol car was, so these records are not matched to fixed cameras or shown on the maps.", unit: "Hits in the report" },
   tucson: { title: "Tucson, Ariz.: dispatch calls with nature code FLOCK, last 45 days", how: "The city’s calls-for-service layer carries a FLOCK nature code, used by the University of Arizona police, with the intersection and a disposition code. Codes: A arrest, B report, G citation, J no report, O other. The layer is a rolling window; the build keeps every snapshot.", unit: "Calls" },
   news: { title: "News reports that name the camera’s road", how: "From a public dataset of 1,743 news-reported outcomes credited to Flock cameras, the records whose summary names the road or intersection of the camera. These are police statements relayed by local news; successes reach the news far more often than errors. Each row is one incident.", unit: "Incidents" },
   court: { title: "Court opinions that name the camera", how: "An appellate opinion that identifies the camera whose hot-list alert began the case.", unit: "Alerts" },
@@ -50,22 +51,21 @@ const SOURCE_META: Record<string, { title: string; how: string; unit: string }> 
 const CITY_PANELS: { key: string; title: string; filter: (s: SiteT) => boolean }[] = [
   { key: "nashville", title: "Nashville", filter: (s) => s.source === "nashville" },
   { key: "windsor", title: "Windsor", filter: (s) => s.source === "windsor" },
-  { key: "story", title: "Story County", filter: (s) => s.source === "story" },
   { key: "tucson", title: "Tucson", filter: (s) => s.source === "tucson" },
 ];
 
-function rungCells(v: V, opts: { bars?: boolean } = {}): string {
-  const max = Math.max(1, ...RUNGS.map((r) => Math.log10((v[r] ?? 0) + 1)));
-  return RUNGS.map((r) => { const n = v[r]; const w = n == null ? 0 : (Math.log10(n + 1) / max) * 100; return `<td class="rung ${n == null ? "is-na" : ""}"><span class="v">${fmt(n)}</span>${opts.bars && n != null ? `<span class="bar" style="width:${w.toFixed(0)}%"></span>` : ""}</td>`; }).join("");
+const RUNG_HEAD: Record<keyof V, string> = { reads: "Reads", alerts: "Alerts", falseAlerts: "Wrong alerts", stops: "Stops", recoveries: "Recoveries", arrests: "Arrests" };
+function rungCells(v: V): string {
+  return RUNGS.map((r) => { const n = v[r]; return `<td class="rung${n == null ? " is-na" : ""}" data-label="${RUNG_HEAD[r]}">${fmt(n)}</td>`; }).join("");
 }
 /** Rates between rungs of one record. Reads and alerts from different sets of readers (`vendorMix`) give no alert rate. */
-function rates(v: V, o: { vendorMix?: boolean } = {}): string {
+function rates(v: V, o: { vendorMix?: boolean; words?: Record<string, string> } = {}): string {
   const out: string[] = [];
   if (v.reads && v.alerts != null && !o.vendorMix) out.push(`${(v.alerts / v.reads * 1e6).toFixed(1)} alerts per million reads`);
   if (v.alerts && v.falseAlerts != null) { const p = v.falseAlerts / v.alerts * 100; out.push(`${p < 1 ? p.toFixed(1) : Math.round(p)}% of alerts wrong`); }
   const per = (n: number, what: string) => { const r = n / v.alerts! * 100; return r >= 0.1 ? `${r.toFixed(1)} ${what} per 100 alerts` : `${(n / v.alerts! * 1e5).toFixed(1)} ${what} per 100,000 alerts`; };
   if (v.alerts && v.recoveries != null) out.push(per(v.recoveries, "recoveries"));
-  if (v.alerts && v.arrests != null) out.push(per(v.arrests, "arrests"));
+  if (v.alerts && v.arrests != null) out.push(per(v.arrests, o.words?.arrests ?? "arrests"));
   return out.length ? `<p class="rates mono">${out.join(" · ")}</p>` : "";
 }
 const matchText = (s: SiteT) => s.inCar ? `<span class="na">in-car reader, not a fixed camera</span>` : s.placedAtCamera ? `<span class="na">placed at a mapped camera on the named road</span>` : s.mobile ? `<span class="na">mobile unit, no fixed site</span>` : s.lat == null ? `<span class="na">location not resolved</span>` : s.match ? `${s.match.distanceM} m${s.match.brand && s.match.brand !== "Flock Safety" ? ` (${escape(s.match.brand)})` : ""}` : s.nearest ? `<span class="na">${s.nearest.distanceM.toLocaleString("en-US")} m, no match</span>` : `<span class="na">no mapped camera within about 4 km</span>`;
@@ -78,41 +78,103 @@ function siteTable(d: Data, sites: SiteT[], key: string): HTMLElement {
   const head = el("div", "sec-head");
   head.innerHTML = `<h3>${escape(meta.title)}</h3><p class="lede small">${escape(meta.how)}</p>`;
   block.appendChild(head);
-  if (CITY_PANELS.some((p) => p.key === key)) { const fig = el("figure", "panel"); fig.dataset.panel = key; fig.innerHTML = `<canvas aria-label="Map of ${escape(meta.title)}"></canvas><figcaption class="mono"></figcaption>`; block.appendChild(fig); }
-  const wrap = el("div", "tablewrap");
+  if (CITY_PANELS.some((p) => p.key === key)) { const fig = el("figure", "panel"); fig.dataset.panel = key; fig.innerHTML = `<canvas aria-label="Map of ${escape(meta.title)}"></canvas>${cityKey(d.sites.filter((s) => s.source === key && s.lat != null))}<figcaption></figcaption>`; block.appendChild(fig); }
+  // on a phone each row becomes a card: the site as its title, the counts three to a line, the rest under them
+  const wrap = el("div", "tablewrap stack rung-cards");
   const t = el("table", "rung-table");
-  const extraCol = key === "nashville" ? "<th>Searches</th>" : key === "story" ? "<th>Wrong state</th><th>Correct</th><th>Dismissed</th>" : key === "tucson" ? "<th>Dispositions</th>" : key === "news" || key === "court" ? "<th>What happened</th>" : key === "windsor" ? "<th>Cases named here</th>" : "";
-  // Rung columns this source reports on at least one row; a rung it never reports is named once above the table instead.
-  const cols: { k: keyof V; label: string }[] = key === "story" ? [{ k: "alerts", label: meta.unit }, { k: "falseAlerts", label: "Reviewed wrong" }] : [{ k: "alerts", label: meta.unit }, ...(["falseAlerts", "stops", "recoveries", "arrests"] as const).map((k) => ({ k, label: RUNG_COLS[k]! }))];
+  const extraHead = key === "nashville" ? ["Searches"] : key === "story" ? ["Wrong state", "Correct", "Dismissed"] : key === "tucson" ? ["Dispositions"] : key === "news" || key === "court" ? ["What happened"] : key === "windsor" ? ["Cases named here"] : [];
+  // Rung columns this source reports on at least one row; a rung it never reports is named once above the table
+  // instead. News reports give no counts: each row is one incident, described in words.
+  const cols: { k: keyof V; label: string }[] = key === "news" ? [] : key === "story" ? [{ k: "alerts", label: meta.unit }, { k: "falseAlerts", label: "Reviewed wrong" }] : [{ k: "alerts", label: meta.unit }, ...(["falseAlerts", "stops", "recoveries", "arrests"] as const).map((k) => ({ k, label: RUNG_COLS[k]! }))];
   const shown = cols.filter((c) => sites.some((s) => s.values[c.k] != null));
   const unreported = cols.filter((c) => !shown.includes(c)).map((c) => c.label.toLowerCase());
   const note = el("p", "fine table-note");
   note.textContent = `Nearest mapped camera: within 150 meters counts as a match.${unreported.length ? ` Not reported by this source: ${unreported.join(", ")}.` : ""}`;
   block.appendChild(note);
-  t.innerHTML = `<thead><tr><th>#</th><th>Site</th>${shown.map((c) => `<th>${escape(c.label)}</th>`).join("")}${extraCol}<th>Nearest mapped camera</th></tr></thead>`;
+  t.innerHTML = `<thead><tr><th>#</th><th>Site</th>${shown.map((c) => `<th>${escape(c.label)}</th>`).join("")}${extraHead.map((h) => `<th>${h}</th>`).join("")}<th>Nearest mapped camera</th></tr></thead>`;
   const tb = el("tbody");
   sites.forEach((s, i) => {
     const tr = el("tr", "site"); tr.id = s.id;
     const x = (s.extra ?? {}) as Record<string, unknown>;
+    const num = (n: unknown, h: string) => `<td class="rung${n == null ? " is-na" : ""}" data-label="${h}">${fmt(n as number)}</td>`;
+    const wide = (h: string, body: string) => `<td class="small" data-label="${h}">${body}</td>`;
     let extra = "";
-    if (key === "nashville") extra = `<td>${fmt(x.searches as number)}</td>`;
-    else if (key === "story") extra = `<td>${fmt(x.wrongState as number)}</td><td>${fmt(x.correct as number)}</td><td>${fmt(x.dismissed as number)}</td>`;
-    else if (key === "tucson") extra = `<td class="small">${Object.entries((x.dispositions as Record<string, number>) ?? {}).map(([k, n]) => `${escape(k)} ${n}`).join(", ")}</td>`;
-    else if (key === "news") extra = `<td class="small">${escape(String(x.crime ?? ""))}: ${escape(String(x.outcome ?? ""))} <a href="${escape(String(x.url ?? "#"))}" rel="noopener noreferrer" target="_blank">report</a></td>`;
-    else if (key === "court") extra = `<td class="small">${escape(String(x.case ?? ""))}: ${escape(String(x.outcome ?? ""))}</td>`;
-    else if (key === "windsor") extra = `<td class="small">${((x.cases as { date: string; type: string }[]) ?? []).map((c) => `${apDate(c.date)}: ${escape(c.type)}`).join("; ") || "<span class=na>none named to this site</span>"}</td>`;
-    const rungs = shown.map((c) => `<td class="rung">${fmt(s.values[c.k])}</td>`).join("");
+    if (key === "nashville") extra = num(x.searches, "Searches");
+    else if (key === "story") extra = num(x.wrongState, "Wrong state") + num(x.correct, "Correct") + num(x.dismissed, "Dismissed");
+    else if (key === "tucson") extra = wide("Dispositions", Object.entries((x.dispositions as Record<string, number>) ?? {}).map(([k, n]) => `${escape(k)} ${n}`).join(", "));
+    else if (key === "news") extra = wide("What happened", `${escape(String(x.crime ?? "").replace(/^./, (c) => c.toUpperCase()))}: ${escape(String(x.outcome ?? "").replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase()))}. <a href="${escape(String(x.url ?? "#"))}" rel="noopener noreferrer" target="_blank">Report</a>`);
+    else if (key === "court") extra = wide("What happened", `${escape(String(x.case ?? ""))}: ${escape(String(x.outcome ?? ""))}`);
+    else if (key === "windsor") extra = wide("Cases named here", ((x.cases as { date: string; type: string }[]) ?? []).map((c) => `${apDate(c.date)}: ${escape(c.type)}`).join("; ") || "<span class=na>none named to this site</span>");
+    const rungs = shown.map((c) => num(s.values[c.k], c.label)).join("");
     const cats = key === "story" ? Object.entries((x.categories as Record<string, number>) ?? {}).map(([k, n]) => `${n} ${escape(k.toLowerCase())}`).join(", ") : "";
-    const sub = key === "news" || key === "court" ? `<div class="small">${escape(placeName(s.city, s.state))} · ${s.period ? `<span class="nw">${escape(apPeriod(s.period))}</span>` : "date not stated"}</div>` : cats ? `<div class="small">${cats}</div>` : "";
-    tr.innerHTML = `<td class="mono">${i + 1}</td><td class="site-label">${escape(s.label)}${sub}</td>${rungs}${extra}<td class="small">${matchText(s)}</td>`;
+    // a news report's place is where the case was, which is not always where the camera stood
+    const when = s.period ? `<span class="nw">${escape(apPeriod(s.period))}</span>` : "date not stated";
+    const sub = key === "news" ? `<div class="small">${escape(placeName(s.city, s.state))} case · ${when}</div>` : key === "court" ? `<div class="small">${escape(placeName(s.city, s.state))} · ${when}</div>` : cats ? `<div class="small">${cats}</div>` : "";
+    tr.innerHTML = `<td class="mono idx">${i + 1}</td><td class="site-label"><span class="n">${i + 1}. </span>${escape(s.label)}${sub}</td>${rungs}${extra}${wide("Nearest mapped camera", matchText(s))}`;
     tb.appendChild(tr);
   });
   t.appendChild(tb); wrap.appendChild(t); block.appendChild(wrap);
   const ids = [...new Set(sites.flatMap((s) => s.sources))];
   if (key === "story") { const p = el("p", "fine"); p.textContent = "Hits in the report counts every row at the location in the export, which holds only hits the office reviewed; “reviewed wrong” is wrong state plus incorrect. The export has no field for stops or arrests."; block.appendChild(p); }
   if (key === "nashville") { const p = el("p", "fine"); const tt = d.nashville.totals; p.textContent = `Pilot totals in the report: ${tt.alerts} verified hits, ${tt.stops} stops, ${tt.searches} searches, ${tt.arrests} arrests, ${tt.recoveries} recoveries. Mobile units have no fixed site.`; block.appendChild(p); }
+  if (key === "news") { const p = el("p", "fine"); p.textContent = "The place under each road is where the case was reported, which is not always where the camera stood."; block.appendChild(p); }
   block.appendChild(cite(ids, 3));
   return block;
+}
+
+/** The page opens with the records themselves: one square per published record of a result, by source, marked by
+ *  whether it could be placed within 150 meters of a mapped camera. */
+const RECORD_ROWS: { key: string; label: string }[] = [
+  { key: "nashville", label: "Nashville pilot: sites and mobile units" },
+  { key: "windsor", label: "Windsor, Conn.: cases and camera sites" },
+  { key: "tucson", label: "Tucson, Ariz.: dispatch calls by intersection" },
+  { key: "news", label: "News reports that name the camera’s road" },
+  { key: "court", label: "Court opinions that name the camera" },
+];
+function recordsFigure(d: Data, ctx: ReturnType<typeof figCtx>, onMap: number): string {
+  const fixed = d.sites.filter((x) => !x.inCar);
+  const status = (x: SiteT) => (x.match ? 2 : x.lat != null ? 1 : 0);
+  const draw = (W: number, narrow: boolean) => {
+    const sq = narrow ? 9 : 12, gap = narrow ? 2 : 3, rowH = narrow ? 44 : 46;
+    let out = "";
+    // the key, as direct labels at the top
+    const keys: [string, string][] = [["c-hi", "Within 150 meters of a mapped camera"], ["c-ctx", "Placed on the map, farther away"], ["", "Could not be placed"]];
+    let kx = 0, ky = 12;
+    for (const [cls, t] of keys) {
+      const w = sq + 6 + textWidth(t, 12) + 16;
+      if (kx + w > W) { kx = 0; ky += 18; }
+      out += (cls ? rect(kx, ky - sq + 2, sq, sq, { class: cls, rx: 1.5 }) : rect(kx + 0.75, ky - sq + 2.75, sq - 1.5, sq - 1.5, { fill: "#fff", stroke: "var(--ink-3)", "stroke-width": 1.5, rx: 1.5 })) + text(kx + sq + 6, ky, t, { "font-size": 12, fill: "var(--ink-2)" });
+      kx += w;
+    }
+    // the rows start a clear line under the key, however many lines it took
+    const T = ky + 22;
+    RECORD_ROWS.forEach((r, i) => {
+      const list = fixed.filter((x) => x.source === r.key).sort((a, b) => status(b) - status(a));
+      if (!list.length) return;
+      const y0 = T + i * rowH, m = list.filter((x) => status(x) === 2).length;
+      out += text(0, y0 + 12, r.label, { "font-size": 12.5, "font-weight": 600, fill: "var(--ink)" });
+      const count = `${m} of ${list.length}`;
+      out += text(W, y0 + 12, count, { "font-size": 12.5, "font-weight": 600, fill: "var(--ink)", "text-anchor": "end" });
+      list.forEach((x, k) => {
+        const cx = k * (sq + gap), cy = y0 + 20, st = status(x);
+        const body = st === 2 ? rect(cx, cy, sq, sq, { class: "c-hi", rx: 1.5 }) : st === 1 ? rect(cx, cy, sq, sq, { class: "c-ctx", rx: 1.5 }) : rect(cx + 0.75, cy + 0.75, sq - 1.5, sq - 1.5, { fill: "#fff", stroke: "var(--ink-3)", "stroke-width": 1.5, rx: 1.5 });
+        out += tip(body, st === 2 ? `${x.match!.distanceM} m from a mapped camera` : st === 1 ? "placed, no mapped camera within 150 m" : "not placed", x.label);
+      });
+    });
+    const H = T + RECORD_ROWS.length * rowH;
+    return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Unit chart of the ${fixed.length} published outcome records by source: ${RECORD_ROWS.map((r) => { const l = fixed.filter((x) => x.source === r.key); return `${r.label}, ${l.filter((x) => x.match).length} of ${l.length} within 150 meters of a mapped camera`; }).join("; ")}.` });
+  };
+  const bySrc = Object.entries(d.coverage.bySource);
+  const table = dataTable(["Source", "Records", "Placed on the map", "Within 150 meters of a mapped camera"], bySrc.map(([k, v]) => [RECORD_ROWS.find((r) => r.key === k)?.label ?? k, v.sites, v.located, v.matched]), { caption: "Outcome records by source" });
+  const windsor = d.coverage.bySource.windsor?.matched ?? 0, mobile = fixed.filter((x) => x.mobile).length;
+  const srcs = [...new Set(fixed.flatMap((x) => x.sources))].concat("deflock-data");
+  const cfg: FigureCfg = {
+    title: `${d.coverage.matched} of ${d.coverage.sites} published outcome records can be tied to a mapped camera`,
+    sub: `Each square is one published record of a result, by whether it could be placed within 150 meters of a Flock camera on the map of ${apDate(d.cameras.asOf.slice(0, 10))}`,
+    notes: [`${mobile ? `${ap(mobile).replace(/^./, (c) => c.toUpperCase())} of Nashville’s records are mobile units with no fixed site. ` : ""}${ap(windsor).replace(/^./, (c) => c.toUpperCase())} of the ${d.coverage.matched} matches are in Windsor, Conn., where the cameras have been switched off since February 2026. For scale, ${onMap.toLocaleString("en-US")} Flock cameras are mapped in the 50 states and D.C.`],
+    sources: srcs,
+  };
+  return frame("records", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { level: 2, table, cls: "outcomes-lead" });
 }
 
 export async function buildOutcomes(host: HTMLElement): Promise<void> {
@@ -121,46 +183,51 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   const mapOff = new URLSearchParams(location.search).get("map") === "off";
   const ctx = figCtx();
   const snapshot = String(ctx.stats.snapshot?.value ?? "");
-  const mappedNow = Number(ctx.stats.mappedFlock?.value ?? 0), onMap = Number(ctx.stats.usFlock?.value ?? 0);
-  // The page opens with the national map: every mapped Flock camera, and the places a published record ties a result to.
-  const bySrc = Object.entries(d.coverage.bySource);
-  const natTable = dataTable(["Source", "Locations", "Located", "Within 150 meters of a mapped camera"], bySrc.map(([k, v]) => [SOURCE_META[k]?.title.split(":")[0] ?? k, v.sites, v.located, v.matched]), { caption: "Outcome locations by source" });
-  const natCfg: FigureCfg = { title: `Only ${d.coverage.sites} camera locations have a published outcome record`, sub: `Each gray dot is one of the ${onMap ? `${onMap.toLocaleString("en-US")} ` : ""}Flock cameras mapped in the 50 states and D.C.${snapshot ? ` as of ${apDate(snapshot)}` : ""}. Rings mark the ${d.coverage.located} of those locations that could be placed and the ${d.coverage.inCar} places where Story County’s patrol-car readers made hits; a ring’s area follows the count there.`, notes: ["The records are listed, with their sources, in the tables below."], sources: ["deflock-tiles-2026"] };
-  host.insertAdjacentHTML("beforeend", frame("national", natCfg, ctx, mapOff ? "" : `<div class="panel national" data-panel="national"><canvas aria-label="Every mapped Flock camera in the United States, with the outcome locations marked as rings"></canvas><p class="panel-cap"></p></div>${mapKey()}`, { level: 2, table: natTable, cls: "outcomes-lead" }));
-  // Agency ladders
+  const onMap = Number(ctx.stats.usFlock?.value ?? 0);
+  // The records, and how few of them can be tied to a camera
+  host.insertAdjacentHTML("beforeend", recordsFigure(d, ctx, onMap));
+  // Agency audits: each department's counts from the first step it reported to the last, then every count in a table
   const ag = el("section", "source-block"); ag.id = "agencies";
-  ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some steps of the ladder, from plate reads to arrests, for a whole program. Rates are computed only where both steps come from the same report and the same readers. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be “directly related” or “assisted”; the note says which.</p><div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div></div>`;
-  const ladderSrcs = [...new Set(d.ladders.flatMap((L) => L.sources))];
-  ag.insertAdjacentHTML("beforeend", frame("ladders", { title: "Reads run to the millions; arrests, to the dozens or hundreds", sub: "Counts each department reported, on a logarithmic scale. Hollow marks: reads and alerts from different periods, or from readers of several makes.", notes: ["The figures are not a ranking: departments count different steps, over different periods and with different definitions."], sources: ladderSrcs }, ctx, `<div class="ladder-draw"></div><div class="ladder-legend">${LADDER_RUNGS.map((r, i) => `<span><i style="background:${ORD[i]}"></i>${r.label}</span>`).join("")}</div>`, { cls: "ladder-ov" }));
-  const ov = ag.querySelector<HTMLElement>("#fig-ladders")!;
-  // drawn at the width it is shown at (once the section is in the page), so its labels keep their size on a phone
-  const drawOv = () => { ov.querySelector(".ladder-draw")!.innerHTML = ladderOverview(d.ladders, Math.max(300, Math.min(ov.clientWidth || 600, 600))); };
-  let ovW = innerWidth; addEventListener("resize", () => { if (innerWidth !== ovW) { ovW = innerWidth; drawOv(); } });
-  initTooltips(ov);
-  const lw = el("div", "tablewrap"); const lt = el("table", "rung-table ladders");
-  lt.innerHTML = `<thead><tr><th>Agency</th><th>Period</th><th>Reads</th><th>Alerts</th><th>Wrong alerts</th><th>Stops</th><th>Recoveries</th><th>Arrests</th></tr></thead>`;
+  ag.innerHTML = `<div class="sec-head"><h2>By agency</h2><p class="lede small">Audits and annual reports that give some of the steps from plate reads to arrests for a whole program. Rates are computed only where both steps come from the same report and the same readers. Definitions differ: an alert may be an unverified match or a verified hit, and an arrest may be “directly related” or “assisted”; the note under each department says which.</p></div>`;
+  ag.insertAdjacentHTML("beforeend", ladderFigure(d.ladders, ctx));
+  ag.insertAdjacentHTML("beforeend", `<div class="rung-legend">${d.rungs.map((r) => `<span><b>${escape(r.label)}</b> ${escape(r.def)}</span>`).join("")}</div>`);
+  // the table becomes one card per department on a phone, its note under it
+  const lw = el("div", "tablewrap stack rung-cards"); const lt = el("table", "rung-table ladders");
+  lt.innerHTML = `<thead><tr><th>Agency</th><th>Period</th>${RUNGS.map((r) => `<th>${RUNG_HEAD[r]}</th>`).join("")}</tr></thead>`;
   const ltb = el("tbody");
   for (const L of d.ladders) {
     const tr = el("tr", "ladder"); tr.id = `ladder-${L.id}`;
-    tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}${L.vendorMix ? " · mixed vendors" : ""}</div></td><td class="small">${escape(apPeriod(L.period))}</td>${rungCells(L.values, { bars: true })}`;
+    tr.innerHTML = `<td class="site-label">${escape(L.agency)}<div class="small">${escape(L.cameras)}</div></td><td class="small" data-label="Period">${escape(apPeriod(L.period))}</td>${rungCells(L.values)}`;
     ltb.appendChild(tr);
     const tr2 = el("tr", "ladder-note"); const td = el("td"); td.colSpan = 8; td.innerHTML = `${L.mixedWindows || L.noRates ? "" : rates(L.values, L)}<p class="small">${escape(L.note)}</p>`; td.appendChild(cite(L.sources, 3)); tr2.appendChild(td); ltb.appendChild(tr2);
   }
   lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
-  drawOv();
+  // Whether the cameras reduce crime: the one multi-agency study, as the story draws it
+  const ev = el("section", "source-block"); ev.id = "evidence";
+  ev.innerHTML = `<div class="sec-head"><h2>Whether the cameras reduce crime</h2><p class="lede small">One working paper compares agencies that adopted Flock cameras with agencies that did not. Its estimate depends on how the agencies are weighted.</p></div>${evidenceFigure(figureCfg("evidence"), ctx)}`;
+  host.appendChild(ev);
   // When an alert is wrong: the story's figure of three kinds of error
   const er = el("section", "source-block"); er.id = "errors";
-  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a camera’s reading of a plate matched a list entry. Three records show three ways that match can be wrong, each measured against the total its own report gives.</p></div>${errorsFigure(figureCfg("errors"), ctx)}`;
+  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a camera’s reading of a plate matched an entry on a list. In these three records, the match was wrong in three different ways.</p></div>${errorsFigure(figureCfg("errors"), ctx)}`;
   host.appendChild(er);
-  // By camera site
+  // By camera site: an overview of where the placed records are, then each source with its map and table
   const nat = el("section", "source-block"); nat.id = "sites";
-  nat.innerHTML = `<div class="sec-head"><h2>By camera site</h2><p class="lede small">Six sources publish outcomes that can be placed at a camera or a street corner. Each is mapped below with the cameras around it, and its table gives every location.</p></div>`;
+  nat.innerHTML = `<div class="sec-head"><h2>By camera site</h2><p class="lede small">Five sources publish results that can be placed at a fixed camera or a street corner: Nashville’s pilot report, Windsor’s fact sheet, Tucson’s dispatch calls, news reports and a court opinion. A sixth, Story County’s report, places each hit where a patrol car was. Nashville, Tucson and Windsor have their own maps below, and every table lists each location.</p></div>`;
+  const placed = d.sites.filter((s) => !s.inCar && s.lat != null);
+  const three = ["nashville", "windsor", "tucson"].reduce((t, k) => t + (d.coverage.bySource[k]?.located ?? 0), 0);
+  const natCfg: FigureCfg = {
+    title: `${three} of the ${d.coverage.located} records placed on the map come from three cities`,
+    sub: `Each gray dot is one of the ${onMap ? `${onMap.toLocaleString("en-US")} ` : ""}Flock cameras mapped in the 50 states and D.C.${snapshot ? ` as of ${apDate(snapshot)}` : ""}; each ring is a place with a published record of a result`,
+    notes: ["Story County’s hits are left off: they mark where a patrol car was, not a fixed camera. Alaska and Hawaii are shown at different scales."],
+    sources: [...new Set(placed.flatMap((s) => s.sources)), "deflock-tiles-2026"],
+  };
+  nat.insertAdjacentHTML("beforeend", frame("national", natCfg, ctx, mapOff ? "" : `<div class="panel national" data-panel="national"><canvas aria-label="Every mapped Flock camera in the 50 states and D.C., with the places that have a published outcome record marked as rings"></canvas></div>${nationalKey(placed)}`));
   host.appendChild(nat);
   for (const key of ["nashville", "story", "tucson", "windsor", "court", "news"]) {
     let sites = d.sites.filter((s) => s.source === key);
     if (!sites.length) continue;
     let note = "";
-    if (key === "story") { const singles = sites.filter((s) => (s.values.alerts ?? 0) < 2); sites = sites.filter((s) => (s.values.alerts ?? 0) >= 2); const near = singles.filter((s) => s.match).length; note = `Another ${singles.length} locations had one hit each in the month, ${near ? `${ap(near)} of them` : "none"} within 150 meters of a mapped camera; those inside the map frame are drawn as unnumbered rings.`; }
+    if (key === "story") { const singles = sites.filter((s) => (s.values.alerts ?? 0) < 2); sites = sites.filter((s) => (s.values.alerts ?? 0) >= 2); note = `Another ${singles.length} locations had one hit each in the month.`; }
     const block = siteTable(d, sites, key);
     if (note) { const p = el("p", "fine"); p.textContent = note; block.appendChild(p); }
     // Windsor cases not tied to a site belong with the Windsor table
@@ -170,31 +237,27 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   }
   // Courts without a site
   const cc = d.courts.filter((c) => !d.sites.some((s) => s.id === `court-${c.id}`));
-  const cs = el("section", "source-block"); cs.innerHTML = `<div class="sec-head"><h3>Other court records citing a Flock read</h3><p class="lede small">Filings and opinions that rely on a read or alert without naming the camera. The legal outcome is the record’s, not the case’s final result.</p></div>`;
-  const ct = el("div", "tablewrap"); ct.innerHTML = `<table class="rung-table"><thead><tr><th>Case</th><th>Court</th><th>Date</th><th>Offense</th><th>What the read did</th><th>Record</th></tr></thead><tbody>${cc.map((c) => `<tr><td>${escape(c.case)}</td><td class="small">${escape(c.court)}</td><td class="small nw">${escape(apDate(c.date))}</td><td class="small">${escape(c.crime)}</td><td class="small">${escape(c.role)}</td><td class="small">${escape(c.outcome)}</td></tr>`).join("")}</tbody></table>`;
-  cs.appendChild(ct); cs.appendChild(cite([...new Set(cc.flatMap((c) => c.sources))], 2)); host.appendChild(cs);
-  // Districts
-  const ds = el("section", "source-block"); ds.id = "districts";
-  ds.innerHTML = `<div class="sec-head"><h2>By district</h2><p class="lede small">Two agencies publish where their cameras are by district or police area. Neither breaks outcomes down the same way, so the agency totals sit beside the counts.</p></div>`;
-  for (const g of d.districts) {
-    const max = Math.max(...g.rows.map((r) => r[1]));
-    const card = el("article", "district sheet");
-    card.innerHTML = `<h3>${escape(g.agency)}</h3><p class="small">${escape(g.cameras.toLocaleString("en-US"))} cameras by ${escape(g.unit.toLowerCase())}, as of ${escape(/^\d{4}-\d{2}(-\d{2})?$/.test(g.asOf) ? apDate(g.asOf) : g.asOf)}</p><div class="bars">${g.rows.map(([k, n]) => `<div class="row"><span class="k mono">${escape(k)}</span><span class="track"><span class="bar" style="width:${(n / max * 100).toFixed(0)}%"></span></span><span class="n mono">${n}</span></div>`).join("")}</div>`;
-    card.appendChild(cite(g.sources, 2)); ds.appendChild(card);
+  if (cc.length) {
+    const cs = el("section", "source-block"); cs.innerHTML = `<div class="sec-head"><h3>Other court records citing a Flock read</h3><p class="lede small">Filings and opinions that rely on a read or alert without naming the camera. The legal outcome is the record’s, not the case’s final result.</p></div>`;
+    const ct = el("div", "tablewrap stack"); ct.innerHTML = `<table class="rung-table"><thead><tr><th>Case</th><th>Court</th><th>Date</th><th>Offense</th><th>What the read did</th><th>Record</th></tr></thead><tbody>${cc.map((c) => `<tr><td>${escape(c.case)}</td><td class="small" data-label="Court">${escape(c.court)}</td><td class="small nw" data-label="Date">${escape(apDate(c.date))}</td><td class="small" data-label="Offense">${escape(c.crime)}</td><td class="small" data-label="What the read did">${escape(c.role)}</td><td class="small" data-label="Record">${escape(c.outcome)}</td></tr>`).join("")}</tbody></table>`;
+    cs.appendChild(ct); cs.appendChild(cite([...new Set(cc.flatMap((c) => c.sources))], 2)); host.appendChild(cs);
   }
-  host.appendChild(ds);
   // National
   const ns = el("section", "source-block"); ns.id = "national";
   ns.innerHTML = `<div class="sec-head"><h2>National statements</h2><p class="lede small">Figures that describe the whole network rather than a place, tagged by who states them.</p></div>`;
   for (const s of d.national.statements) { const p = el("div", "stmt sheet"); p.innerHTML = `<span class="tag ${s.tag === "flock" ? "tag-flock" : "tag-indep"}">${s.tag === "flock" ? "Flock" : "Independent"}</span> <b>${escape(s.who)}.</b> ${escape(s.text)}`; p.appendChild(cite(s.sources, 2)); ns.appendChild(p); }
-  const ex = el("div", "excluded"); ex.innerHTML = `<h3>Records found but not placed</h3><ul>${d.national.excluded.map((e) => `<li><b>${escape(e.what)}.</b> ${escape(e.why)}.</li>`).join("")}</ul>`; ns.appendChild(ex);
+  const ex = el("div", "excluded"); ex.innerHTML = `<h3>Records found but not placed</h3>`;
+  const ul = el("ul");
+  for (const e of d.national.excluded) { const li = el("li"); li.innerHTML = `<b>${escape(e.what)}.</b> ${escape(e.why)}.`; li.appendChild(cite(e.sources, 1)); ul.appendChild(li); }
+  ex.appendChild(ul); ns.appendChild(ex);
   host.appendChild(ns);
   // About the data: what the page can and cannot say, and the two camera snapshots
   const ab = el("section", "source-block"); ab.id = "about";
-  ab.innerHTML = `<div class="sec-head"><h2>About the data</h2></div><p class="lede small">What this page can and cannot say. ${d.coverage.sites} locations have a published outcome record; ${d.coverage.located} of them could be placed on a map, and ${d.coverage.matched} lie within 150 meters of a mapped camera. Every other camera on the map has no public outcome record at all.</p><p class="lede small">The records were matched to the ${d.cameras.flock.toLocaleString("en-US")} Flock cameras on the map on ${apDate(d.cameras.asOf.slice(0, 10))}, when most of them were compiled, so the distances in the tables are to the cameras that were there then; the city maps show the same snapshot. The national map at the top shows the ${mappedNow ? mappedNow.toLocaleString("en-US") : "Flock cameras"} mapped as of ${snapshot ? apDate(snapshot) : "the latest snapshot"}.</p><p class="small">What would extend it: Flock’s software exports a hot-list alert report with the camera name, timestamp, plate and list, and since September 2022 an outcome field (“Apprehended” or “Not Apprehended”) officers can set on alerts and searches. Agencies release these under public-records law; Story County’s export above is one. A request for the alert report and the outcome field, plus the agency’s camera inventory, gives the per-camera ladder for any agency.</p><p class="fine">Camera positions: OpenStreetMap contributors via DeFlock, under the Open Database License. Updated ${escape(apDate(d.generated))}.</p>`;
+  ab.innerHTML = `<div class="sec-head"><h2>About the data</h2></div><p class="lede small">What this page can and cannot say. ${d.coverage.sites} published records tie a result to a place; ${d.coverage.located} of them could be placed on a map, and ${d.coverage.matched} lie within 150 meters of a mapped camera. The other cameras on the map have no public outcome record tied to their location.</p><p class="lede small">The records were matched to the ${d.cameras.flock.toLocaleString("en-US")} Flock cameras on the map on ${apDate(d.cameras.asOf.slice(0, 10))}, when most of them were compiled, so the distances in the tables are to the cameras that were there then; the city maps show the same snapshot. The national map shows the ${onMap ? onMap.toLocaleString("en-US") : "Flock cameras"} mapped in the 50 states and D.C. as of ${snapshot ? apDate(snapshot) : "the latest snapshot"}.</p><p class="small">What would extend it: an agency’s alerts and their outcomes, camera by camera, with its list of camera locations.</p><p class="fine">Camera positions: OpenStreetMap contributors via DeFlock, under the Open Database License. Updated ${escape(apDate(d.generated))}.</p>`;
   ab.appendChild(cite(["deflock-data", "deflock-tiles-2026"], 2));
   host.appendChild(ab);
   initTableWraps();
+  initTooltips(host);
   if (!mapOff) void drawPanels(d, host);
 }
 
@@ -204,16 +267,15 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
   const xy: Record<string, [number, number]> = await fetch(`${BASE}data/basemaps/outcome-sites.json`).then((r) => r.json());
   const sizeOf = (s: SiteT) => s.values.alerts ?? s.values.falseAlerts ?? 1;
   const draw = async (fig: HTMLElement) => {
-    const canvas = fig.querySelector("canvas")!, cap = fig.querySelector(".panel-cap, figcaption")!;
+    const canvas = fig.querySelector("canvas")!, cap = fig.querySelector(".panel-cap, figcaption");
     const key = fig.dataset.panel!;
     if (key === "national") {
-      const rings: Ring[] = d.sites.filter((s) => xy[s.id]).map((s) => ({ x: xy[s.id]![0], y: xy[s.id]![1], size: sizeOf(s), depth: depth(s.values) }));
+      const rings: Ring[] = d.sites.filter((s) => xy[s.id] && !s.inCar).map((s) => ({ x: xy[s.id]![0], y: xy[s.id]![1], size: sizeOf(s), depth: depth(s.values) }));
       await drawNational(canvas, rings);
-      cap.textContent = "Alaska and Hawaii are shown at different scales.";
       return;
     }
     const sites = d.sites.filter((s) => s.source === key && s.lat != null);
-    if (!sites.length) { cap.textContent = "No located sites"; return; }
+    if (!sites.length) { if (cap) cap.textContent = "No located sites"; return; }
     // Numbers match the table rows; Story County’s one-hit locations are drawn but not numbered.
     const listed = key === "story" ? d.sites.filter((s) => s.source === key && (s.values.alerts ?? 0) >= 2) : d.sites.filter((s) => s.source === key);
     // Frame the numbered sites, padded by 12% of their spread and at least 400 m.
@@ -223,7 +285,7 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
     const padLat = Math.max((Math.max(...lats) - Math.min(...lats)) * 0.12, minPad), padLon = Math.max((Math.max(...lons) - Math.min(...lons)) * 0.12, minPad / k);
     const box = { s: Math.min(...lats) - padLat, n: Math.max(...lats) + padLat, w: Math.min(...lons) - padLon, e: Math.max(...lons) + padLon };
     const n = await drawCity(canvas, key, sites.map((s) => { const i = listed.indexOf(s); return { lon: s.lon!, lat: s.lat!, size: sizeOf(s), depth: depth(s.values), n: i >= 0 ? i + 1 : undefined }; }), box);
-    cap.textContent = `Each wedge is one of the ${n.toLocaleString("en-US")} Flock cameras in view as mapped on July 17, 2026, pointing the way it faces; numbers match the table. Streets: U.S. Census Bureau.`;
+    if (cap) cap.textContent = `${n.toLocaleString("en-US")} Flock cameras in view, as mapped on July 17, 2026, the snapshot the table was matched against. Streets: U.S. Census Bureau.`;
   };
   const drawn = new Set<HTMLElement>();
   const io = new IntersectionObserver((entries) => { for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); drawn.add(e.target as HTMLElement); void draw(e.target as HTMLElement); } }, { rootMargin: "300px" });
@@ -233,35 +295,78 @@ async function drawPanels(d: Data, host: HTMLElement): Promise<void> {
   addEventListener("resize", () => { clearTimeout(timer); timer = window.setTimeout(() => { if (innerWidth === lastW) return; lastW = innerWidth; drawn.forEach((fig) => void draw(fig)); }, 200); });
 }
 
-const ORD = ["#d9a447", "#c4851a", "#a86c10", "#87530b", "#643c07", "#432704"];
-const LADDER_RUNGS: { k: keyof V; label: string }[] = [{ k: "reads", label: "Plate reads" }, { k: "alerts", label: "Alerts" }, { k: "falseAlerts", label: "Wrong alerts" }, { k: "stops", label: "Stops" }, { k: "recoveries", label: "Recoveries" }, { k: "arrests", label: "Arrests" }];
-/** One row per department, a dot per reported rung on a logarithmic scale, coloured light to dark down the ladder. */
-function ladderOverview(ladders: Data["ladders"], W: number): string {
-  const rows = ladders.filter((L) => LADDER_RUNGS.filter((r) => L.values[r.k] != null).length >= 2);
-  const narrow = W < 560, LW = narrow ? 138 : 190, R = 14, T = 30, rowH = 36;
-  const x = logScale(1, 1e9, LW + 8, W - R);
-  const dec = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
-  let out = g(dec.map((v) => line(x(v), T - 6, x(v), T + rows.length * rowH)).join(""), { class: "grid" });
-  // every power of 10 has a grid line; labels skip as many as the width needs
-  const shown = dec.filter((_, i) => i % (narrow ? 3 : 2) === 0);
-  out += g(shown.map((v, i) => text(x(v), T - 12, tickWords(v), { "text-anchor": i === shown.length - 1 && x(v) + 30 > W ? "end" : "middle" })).join(""), { class: "axis" });
-  rows.forEach((L, i) => {
-    const y = T + i * rowH + rowH / 2, hollow = !!(L.mixedWindows || L.vendorMix);
-    out += line(0, y + rowH / 2, W, y + rowH / 2, { stroke: "var(--rule)" });
-    const who = /Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : placeName(L.city, L.state);
-    out += text(LW - 4, y - 2, who, { "text-anchor": "end", "font-size": 12, "font-weight": 600, fill: "var(--ink)" });
-    out += text(LW - 4, y + 11, apPeriod(L.period.replace(/ \(.*\)/, "")), { "text-anchor": "end", "font-size": 11.5, fill: "var(--ink-3)" });
-    LADDER_RUNGS.forEach((r, k) => {
-      const v = L.values[r.k];
-      if (v == null) return;
-      const mark = circle(x(v), y, 5.5, hollow ? { fill: "#fff", stroke: ORD[k], "stroke-width": 2.5 } : { fill: ORD[k], stroke: "#fff", "stroke-width": 1.5 });
-      out += tip(rect(x(v) - 9, y - 9, 18, 18, { fill: "transparent" }) + mark, v.toLocaleString("en-US"), `${L.agency}, ${apPeriod(L.period)}: ${r.label.toLowerCase()}`);
-    });
-  });
-  return svg(W, T + rows.length * rowH + 4, out, { label: "Dot chart of the counts each department’s audit reports, from plate reads to arrests, on a logarithmic scale." });
+/** Words for each rung in a row's label; a record may name its own ("verified hits", "people charged"). */
+const WORD: Record<keyof V, string> = { reads: "reads", alerts: "alerts", falseAlerts: "wrong alerts", stops: "stops", recoveries: "recoveries", arrests: "arrests" };
+const INPUTS: (keyof V)[] = ["reads", "alerts", "falseAlerts"];
+type LadderT = Data["ladders"][number];
+const count = (n: number) => (n >= 1e6 ? big(n) : n.toLocaleString("en-US"));
+/** A department's counts as the row's label: from the first step it reported to the last ("210.6 million reads to 74
+ *  arrests"); counts that are all results are listed, and wrong alerts are given as a share of the alerts. */
+function rangeText(L: LadderT): string {
+  const ks = RUNGS.filter((k) => L.values[k] != null), w = (k: keyof V) => L.words?.[k] ?? WORD[k];
+  const one = (k: keyof V) => `${count(L.values[k]!)} ${w(k)}`, a = ks[0]!, b = ks[ks.length - 1]!;
+  if (b === "falseAlerts") return `${one(a)}, ${count(L.values[b]!)} ${L.words?.falseAlerts ?? "of them wrong"}`;
+  return INPUTS.includes(a) ? `${one(a)} to ${one(b)}` : ks.map(one).join(", ");
+}
+const who = (L: LadderT) => `${/Sheriff/.test(L.agency) ? `${L.agency.replace(/ Sheriff.*$/, "")}, ${apState(L.state)}` : placeName(L.city, L.state)}${L.vendor ? ` (${L.vendor} readers)` : ""}`;
+const shortPeriod = (L: LadderT) => apPeriod(L.period.replace(/ \(.*\)/, "").replace(/, cumulative.*$/, ""));
+
+/** One line per department on a logarithmic scale, from the first count it reported to the last: open circles for
+ *  reads and alerts, solid ones for stops, recoveries and arrests. Rows run from the largest count down. */
+function ladderFigure(ladders: Data["ladders"], ctx: ReturnType<typeof figCtx>): string {
+  const rows = ladders.filter((L) => RUNGS.filter((k) => L.values[k] != null).length >= 2).sort((a, b) => Math.max(...RUNGS.map((k) => b.values[k] ?? 0)) - Math.max(...RUNGS.map((k) => a.values[k] ?? 0)));
+  const mixed = (L: LadderT) => !!(L.mixedWindows || L.vendorMix);
+  const draw = (W: number, narrow: boolean) => {
+    const x = logScale(1, 1e9, 6, W - 6), ticks = narrow ? [1, 1e3, 1e6, 1e9] : [1, 100, 1e4, 1e6, 1e8];
+    const decades = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
+    const axis = (y: number) => g(ticks.map((v, i) => text(i === 0 ? 0 : x(v), y, tickWords(v), { "text-anchor": i === 0 ? "start" : i === ticks.length - 1 && x(v) + textWidth(tickWords(v), 12) / 2 > W ? "end" : "middle" })).join(""), { class: "axis" });
+    // the key: what an open and a solid circle stand for
+    let out = circle(6, 9, 5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 1.75 }) + text(17, 13, "Reads or alerts", { "font-size": 12, fill: "var(--ink-2)" });
+    const k2 = narrow ? { x: 0, y: 30 } : { x: 17 + textWidth("Reads or alerts", 12) + 22, y: 9 };
+    out += circle(k2.x + 6, k2.y, 5, { fill: "var(--ink)", stroke: "#fff", "stroke-width": 1.5 }) + text(k2.x + 17, k2.y + 4, "A result: a stop, a recovery or an arrest", { "font-size": 12, fill: "var(--ink-2)" });
+    const T = (narrow ? 58 : 38);
+    out += axis(T);
+    let y0 = T + 12;
+    for (const L of rows) {
+      const name = `${who(L)}${mixed(L) ? "*" : ""}`, per = shortPeriod(L), range = rangeText(L);
+      const nameW = textWidth(name, 13, 700), perW = textWidth(per, 12), rangeW = textWidth(range, 12);
+      const lines = !narrow && nameW + 8 + perW + 24 + rangeW <= W ? 1 : narrow && nameW + 8 + perW > W ? 3 : 2;
+      out += line(0, y0 + 0.5, W, y0 + 0.5, { stroke: "var(--rule)" });
+      out += text(0, y0 + 17, name, { "font-size": 13, "font-weight": 700, fill: "var(--ink)" });
+      // the period follows the name, or takes its own line when the two do not fit
+      out += lines === 3 ? text(0, y0 + 33, per, { "font-size": 12, fill: "var(--ink-3)" }) : text(nameW + 8, y0 + 17, per, { "font-size": 12, fill: "var(--ink-3)" });
+      const ry = lines === 1 ? y0 + 17 : y0 + 17 + (lines - 1) * 16;
+      out += text(lines === 1 ? W : 0, ry, range, { "font-size": 12, "font-weight": 600, fill: "var(--ink-2)", "text-anchor": lines === 1 ? "end" : "start" });
+      const y = ry + 17, ks = RUNGS.filter((k) => L.values[k] != null), xs = ks.map((k) => x(L.values[k]!));
+      out += g(decades.map((v) => line(x(v), y - 8, x(v), y + 8)).join(""), { class: "grid" });
+      out += line(Math.min(...xs), y, Math.max(...xs), y, { stroke: "var(--ink-3)", "stroke-width": 2 });
+      for (const k of ks) {
+        const v = L.values[k]!, open = INPUTS.includes(k);
+        const mark = circle(x(v), y, 5, open ? { fill: "#fff", stroke: "var(--ink)", "stroke-width": 1.75 } : { fill: "var(--ink)", stroke: "#fff", "stroke-width": 1.5 });
+        out += tip(rect(x(v) - 9, y - 9, 18, 18, { fill: "transparent" }) + mark, `${v.toLocaleString("en-US")} ${L.words?.[k] ?? WORD[k]}`, `${who(L)}, ${apPeriod(L.period)}`);
+      }
+      y0 = y + 14;
+    }
+    out += axis(y0 + 16);
+    return svg(W, y0 + 22, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Dot chart on a logarithmic scale of the counts each department reported, from the first step to the last: ${rows.map((L) => `${who(L)}, ${shortPeriod(L)}: ${rangeText(L)}`).join("; ")}.` });
+  };
+  const cfg: FigureCfg = {
+    title: "Reads run to the millions; arrests, to the dozens or hundreds",
+    sub: "Counts from each department’s own audit or report, on a logarithmic scale, from the first step it reported to the last",
+    notes: ["The rows are not a ranking: departments count different steps, over different periods and with different definitions. * Not every count comes from Flock cameras over one period: the readers include other makes or makes the report does not name, or the reads and alerts cover different windows. The table below gives each department’s details."],
+    sources: [...new Set(rows.flatMap((L) => L.sources))],
+  };
+  return frame("ladders", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { cls: "ladder-ov" });
 }
 
-/** The key under the maps: what a ring’s size and shade mean, and the camera symbols. */
-export function mapKey(): string {
-  return `<div class="map-key"><span class="mk-item"><i class="mk-ring d1"></i>${DEPTH_LABEL[1]}</span><span class="mk-item"><i class="mk-ring d2"></i>${DEPTH_LABEL[2]}</span><span class="mk-item"><i class="mk-ring d3"></i>${DEPTH_LABEL[3]}</span><span class="mk-item"><i class="mk-wedge"></i>Flock camera, facing</span><span class="mk-item"><i class="mk-dot"></i>Other make</span><span class="mk-note">Ring area follows the number of hits, alerts or calls at the site.</span></div>`;
+/** The ring shades a map uses, in the key: only those present on it. */
+const ringKey = (depths: Set<number>) => [0, 1, 2, 3].filter((k) => depths.has(k)).map((k) => `<span class="mk-item"><i class="mk-ring d${k}"></i>${DEPTH_LABEL[k]}</span>`).join("");
+const depthsOf = (sites: SiteT[]) => new Set(sites.map((s) => depth(s.values)));
+/** The key under the national map: the gray dots are Flock cameras, the rings places with a published record. */
+function nationalKey(sites: SiteT[]): string {
+  return `<div class="map-key"><span class="mk-item"><i class="mk-dot"></i>Mapped Flock camera</span>${ringKey(depthsOf(sites))}<span class="mk-note">Each ring is a place with a published record, shaded by the furthest step it reports; its area follows the number of alerts, hits or calls there.</span></div>`;
+}
+/** The key under a city map: Flock cameras point the way they face; other makes are dots; rings are numbered as in the table. */
+function cityKey(sites: SiteT[]): string {
+  return `<div class="map-key"><span class="mk-item"><i class="mk-wedge"></i>Flock camera, pointing the way it faces</span><span class="mk-item"><i class="mk-dot"></i>Camera of another make</span>${ringKey(depthsOf(sites))}<span class="mk-note">Ring numbers match the table; a ring’s area follows the number of alerts, hits or calls at the site.</span></div>`;
 }

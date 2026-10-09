@@ -48,7 +48,7 @@ export function renderHome(root: string): Rendered {
 
 export interface RenderedPage { meta: string; head: string; lead: string; data: string; used: Set<string> }
 /** The story figures a page draws in the browser, whose titles and notes come from story.json. */
-const PAGE_FIGURES: Record<string, string[]> = { deployments: ["contracts"], outcomes: ["errors"], data: ["audit"] };
+const PAGE_FIGURES: Record<string, string[]> = { deployments: ["contracts"], outcomes: ["errors", "evidence"], data: ["audit"] };
 
 /** A reference page's head and opening figure, from src/content/pages.json and the built data. Counts a deck may quote
  *  (the city with the most cameras, the claims by verdict, the sources by origin, the Outcomes coverage) are added to

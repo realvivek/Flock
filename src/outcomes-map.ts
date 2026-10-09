@@ -17,7 +17,7 @@ interface Basemap { bbox: [number, number, number, number]; snapshot: string; to
 const DEPTH_FILL = ["#ffffff", "#ffffff", "#e3b45f", "#7d4f08"];
 const DEPTH_STROKE = ["#727272", "#121212", "#9a5b00", "#432704"];
 /** Legend entries for the rings, shared with the page's text. */
-export const DEPTH_LABEL = ["", "Alerts only", "A stop", "A recovery or an arrest"];
+export const DEPTH_LABEL = ["Camera site, no result named", "Alerts only", "A stop", "A recovery or an arrest"];
 
 let camsP: Promise<Cams> | null = null, statesP: Promise<Path2D> | null = null;
 const basemaps = new Map<string, Promise<Basemap>>();
@@ -63,13 +63,13 @@ function drawRings(ctx: CanvasRenderingContext2D, list: { x: number; y: number; 
   }
   const numbered = circles.filter((c) => c.n != null).sort((a, b) => a.n! - b.n!);
   if (!numbered.length) return;
-  ctx.font = `700 11px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`;
+  ctx.font = `700 12px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`;
   ctx.textBaseline = "middle";
   const placed: Rect[] = [];
   const hitsCircle = (rc: Rect, c: { x: number; y: number; r: number }) => { const nx = clamp(c.x, rc.x, rc.x + rc.w), ny = clamp(c.y, rc.y, rc.y + rc.h); return (nx - c.x) ** 2 + (ny - c.y) ** 2 < (c.r - 0.5) ** 2; };
   const score = (rc: Rect, self: object) => rc.x < 2 || rc.y < 2 || rc.x + rc.w > W - 2 || rc.y + rc.h > H - 2 ? Infinity : placed.filter((p) => overlap(p, rc)).length * 10 + circles.filter((o) => o !== self && hitsCircle(rc, o)).length;
   for (const c of numbered) {
-    const t = String(c.n), tw = ctx.measureText(t).width + 4, th = 13, d = c.r + 2;
+    const t = String(c.n), tw = ctx.measureText(t).width + 4, th = 14, d = c.r + 2;
     const near: [number, number][] = [[d, -th / 2], [-d - tw, -th / 2], [-tw / 2, -d - th], [-tw / 2, d], [d * 0.7, -d * 0.7 - th], [d * 0.7, d * 0.7], [-d * 0.7 - tw, -d * 0.7 - th], [-d * 0.7 - tw, d * 0.7]];
     let best: Rect | null = null, bestScore = Infinity, leader = false;
     for (const [dx, dy] of near) { const rc = { x: c.x + dx, y: c.y + dy, w: tw, h: th }; const s = score(rc, c); if (s < bestScore) { best = rc; bestScore = s; } if (s === 0) break; }
@@ -143,6 +143,6 @@ export async function drawCity(canvas: HTMLCanvasElement, key: string, sites: { 
   const sx = Math.max(18, Math.round(ox) + 8);
   ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.fillRect(sx - 8, h - 34, px + 28, 26);
   ctx.strokeStyle = "#121212"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(sx, h - 13); ctx.lineTo(sx + px, h - 13); ctx.moveTo(sx, h - 17); ctx.lineTo(sx, h - 13); ctx.moveTo(sx + px, h - 17); ctx.lineTo(sx + px, h - 13); ctx.stroke();
-  ctx.fillStyle = "#333"; ctx.font = `500 11px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`; ctx.fillText(len >= 1000 ? `${len / 1000} km` : `${len} m`, sx, h - 20);
+  ctx.fillStyle = "#333"; ctx.font = `500 12px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`; ctx.fillText(len >= 1000 ? `${len / 1000} km` : `${len} m`, sx, h - 20);
   return n;
 }

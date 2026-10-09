@@ -275,6 +275,8 @@ test("phones get every page with stills and never load the 3D engine", async ({ 
   await go(page, "/outcomes/?map=off");
   await ready(page);
   await expect(page.locator("#page-body .site").first()).toBeVisible();
+  // on a phone the Outcomes tables are cards, so none of them needs a sideways scroll
+  expect(await page.evaluate(() => [...document.querySelectorAll(".rung-cards")].filter((w) => w.scrollWidth > w.clientWidth + 1).length)).toBe(0);
   expect(await page.evaluate(() => ({ w: innerWidth, rows: new Set([...document.querySelectorAll(".sections a")].map((a) => Math.round(a.getBoundingClientRect().top))).size }))).toEqual({ w: 390, rows: 2 });
   await go(page, "/components/");
   await ready(page);

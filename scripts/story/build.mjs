@@ -330,8 +330,7 @@ const WANT = [
   { name: "Denver", usps: "CO", published: 111, when: "2024–25", what: "Flock cameras at about 70 sites", sources: ["denverite-2025"] },
   { name: "Lexington-Fayette", usps: "KY", published: 125, when: "December 2025", what: "cameras by council district", sources: ["lexington-lpr-locations"] },
   { name: "Berkeley", usps: "CA", published: 52, when: "2025", what: "Flock cameras", sources: ["berkeleyside-2025"] },
-  { name: "Piedmont", usps: "CA", published: 48, when: "2025", what: "cameras", sources: ["piedmont-2025"] },
-  { name: "Lafayette", usps: "CO", published: 30, when: "2024–25", what: "Flock cameras", sources: ["lafayette-co-alpr"] },
+  // Piedmont's and Lafayette's own reports give results but no camera count, so they are not compared here
   { name: "Dallas", usps: "TX", published: 684, when: "September 2026", what: "cameras on the department's transparency portal, 321 of them paid for by state grants", sources: ["govtech-dallas-2026"] },
   { name: "Houston", usps: "TX", published: 3800, when: "2024", what: "cameras operating citywide, police and private, per city officials", sources: ["houstonchronicle-flock-2025"] },
 ];
