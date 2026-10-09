@@ -69,7 +69,7 @@ export function renderPage(root: string, id: string): RenderedPage {
     topCity: { value: cities.rows[0], sources: ["deflock-tiles-2026", "census-boundaries-2024"] },
     outcomes: { value: coverage, sources: [] },
     claims: { value: { total: myths.length, true: byVerdict("true"), false: byVerdict("false"), nuanced: byVerdict("nuanced") }, sources: [] },
-    sources: { value: { total: sources.length, flock: byKind("flock"), independent: byKind("independent"), government: byKind("government"), court: byKind("court") }, sources: [] },
+    sources: { value: { total: sources.length, flock: byKind("flock"), independent: byKind("independent"), government: byKind("government"), court: byKind("court"), public: byKind("government") + byKind("court") }, sources: [] },
   };
   const ctx: Ctx = { root: "../", sources: new Map(sources.map((s) => [s.id, s])), stats, completeness: j("public/data/story/completeness.json"), used: new Set() };
   const story = StoryFile.parse(j("src/content/story.json"));

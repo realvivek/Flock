@@ -100,20 +100,29 @@ export function partsFigure(n: number, sources: string[], ctx: Ctx, o: { level?:
 }
 
 export interface Myth { id: string; claim: string; verdict: "false" | "true" | "nuanced" }
-export const VERDICT = { false: "Not supported by the record", true: "Supported by the record", nuanced: "Depends on the product or setting" } as const;
+export const VERDICT = { false: "Not supported by the record", true: "Supported by the record", nuanced: "The record is mixed" } as const;
+/** What each verdict means, as the Claims page's notes define it. */
+export const VERDICT_DEF = {
+  false: "The documents and records cited contradict the claim, or nothing in them supports it.",
+  nuanced: "The record supports part of the claim, or the answer depends on the product, its settings or which evidence is weighed.",
+  true: "The documents and records cited support the claim as stated.",
+} as const;
 /** The claims as a row of squares by verdict, each linked to its entry; every claim cites its own sources. */
 export function verdictIndex(myths: Myth[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
+  const order = ["false", "nuanced", "true"] as const;
   const n = (v: Myth["verdict"]) => myths.filter((m) => m.verdict === v).length;
-  const squares = myths.map((m, i) => `<a class="vi-sq v-${m.verdict}" href="#claim-${escape(m.id)}" title="${escape(`${String(i + 1).padStart(2, "0")} ${m.claim}`)}"><span class="visually-hidden">${escape(`Claim ${i + 1}: ${m.claim} — ${VERDICT[m.verdict]}`)}</span>${String(i + 1).padStart(2, "0")}</a>`).join("");
-  const key = (["false", "nuanced", "true"] as const).map((v) => `<span class="vi-k"><i class="vi-sw v-${v}"></i>${VERDICT[v]}: <b>${n(v)}</b></span>`).join("");
-  const title = `The ${myths.length} claims, by what the record shows`;
-  const sub = `Each square is one claim, numbered as in the list below. Select a square to read the entry.`;
-  return frame("verdicts", { title, sub, notes: [], sources: [] }, ctx, `<div class="vi">${squares}</div><div class="vi-key">${key}</div>`, { level: o.level, srcText: "Sources: listed with each claim.", cls: "verdicts" });
+  const sq = (m: Myth, i: number) => `<a class="vi-sq v-${m.verdict}" href="#claim-${escape(m.id)}" title="${escape(`${String(i + 1).padStart(2, "0")} “${m.claim}”`)}"><span class="visually-hidden">${escape(`Claim ${i + 1}: “${m.claim}” ${VERDICT[m.verdict]}.`)}</span>${String(i + 1).padStart(2, "0")}</a>`;
+  const rows = order.filter((v) => n(v) > 0).map((v) => `<div class="vi-row"><p class="vi-label"><b>${escape(VERDICT[v])}</b> <span class="vi-n">${n(v)}</span></p><div class="vi">${myths.map((m, i) => (m.verdict === v ? sq(m, i) : "")).join("")}</div></div>`).join("");
+  // the largest group, stated plainly; the order of the rows does the rest
+  const top = order.slice().sort((a, b) => n(b) - n(a))[0]!;
+  const title = top === "false" ? `The record does not support ${n("false")} of the ${myths.length} claims` : top === "true" ? `The record supports ${n("true")} of the ${myths.length} claims` : `The record is mixed on ${n("nuanced")} of the ${myths.length} claims`;
+  const sub = "Each square is one claim, numbered as in the list below; select one to read the entry.";
+  return frame("verdicts", { title, sub, notes: [`“The record is mixed” means ${VERDICT_DEF.nuanced.charAt(0).toLowerCase()}${VERDICT_DEF.nuanced.slice(1)}`], sources: [] }, ctx, rows, { level: o.level, srcText: "Sources: listed with each claim.", cls: "verdicts" });
 }
 
 export interface SourceKind { kind: string }
 /** The names of the four origins, shared by this chart and the Sources page's group heads. */
-export const SOURCE_KINDS: Record<string, string> = { flock: "Flock Safety’s own documents", independent: "Teardowns, studies and news reports", government: "Government records", court: "Court cases" };
+export const SOURCE_KINDS: Record<string, string> = { flock: "Flock Safety’s own documents", independent: "News reports, research and advocacy groups", government: "Government records", court: "Court rulings" };
 const KINDS = ["independent", "flock", "government", "court"].map((kind) => ({ kind, label: SOURCE_KINDS[kind]! }));
 const IN_TEN = ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "all"];
 /** A share as a reader says it: "one in five", "a third", "six in 10". */
@@ -136,10 +145,11 @@ export function originsFigure(sources: SourceKind[], ctx: Ctx, o: { level?: 2 | 
       out += tip(rect(0, y, W, rowH, { fill: "transparent" }) + name + hbar(x(0), by, x(r.n) - x(0), barH, 3, { class: `mark ${hi ? "c-hi" : "c-ctx"}` }) + label(x(r.n) + 6, by + barH - 1, int(r.n), { "font-size": 12, "font-weight": hi ? 700 : 600, fill: "var(--ink)" }), `${int(r.n)} of ${int(total)} sources`, r.label);
     });
     if (!narrow) out += line(x(0), T - 2, x(0), T + rows.length * rowH, { class: "baseline" });
-    return svg(W, T + rows.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of the ${total} sources by origin: ${rows.map((r) => `${r.label.toLowerCase()}, ${r.n}`).join("; ")}.` });
+    return svg(W, T + rows.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of the ${total} sources by origin: ${rows.map((r) => `${r.label}, ${r.n}`).join("; ")}.` });
   };
   const share = (k: string) => (rows.find((r) => r.kind === k)?.n ?? 0) / total;
-  const title = `${shareWords(share("independent")).replace(/^./, (c) => c.toUpperCase())} of the sources are independent reports; about ${shareWords(share("flock"))} is Flock’s own`;
+  // the title names the marked bar: Flock's own share of what the site cites
+  const title = `About ${shareWords(share("flock"))} of the sources ${/^(one|a) /.test(shareWords(share("flock"))) ? "is" : "are"} Flock’s own`;
   const table = dataTable(["Origin", "Sources"], rows.map((r) => [r.label, r.n]), { caption: "Sources by origin" });
-  return frame("origins", { title, sub: `The ${total} documents this site cites, by who published them`, notes: ["A news report that quotes Flock or a government record counts as a news report; each entry below is tagged by its publisher."], sources: [] }, ctx, draw(WIDE, false) + draw(NARROW, true), { level: o.level, table, srcText: "Source: the list below." });
+  return frame("origins", { title, sub: `The ${total} documents this site cites, by who published them`, notes: ["News reports, research and advocacy groups include groups that campaign on the cameras, such as the A.C.L.U., the Electronic Frontier Foundation and DeFlock, and filings and statements by other companies. Each entry is counted by its publisher: a news report that quotes Flock or a government record counts as a news report."], sources: [] }, ctx, draw(WIDE, false) + draw(NARROW, true), { level: o.level, table, srcText: "Source: the list below." });
 }

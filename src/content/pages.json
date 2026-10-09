@@ -42,8 +42,9 @@
     },
     "journey": {
       "kicker": "The journey",
-      "title": "Tracking One Photograph From a Flock Camera to Deletion",
-      "deck": "A car passes a Falcon camera. Its picture goes to Flock’s cloud, is checked against hot lists and can be searched by the camera’s owner and the agencies it shares with, until it is deleted: after [seven days](src:flock-guardrails-2026) by default for new customers."
+      "title": "Tracking One Plate Read From a Flock Camera to Deletion",
+      "deck": "A car passes a Falcon camera. The photos and the plate it reads go to Flock’s cloud, are checked against hot lists and can be searched by the camera’s owner and the agencies it shares with, until they are deleted: after [seven days](src:flock-guardrails-2026) by default for new customers.",
+      "about": true
     },
     "outcomes": {
       "kicker": "Outcomes",
@@ -80,7 +81,7 @@
     "claims": {
       "kicker": "Claims",
       "title": "{{claims.total}} Common Claims About Flock Cameras, Checked Against the Public Record",
-      "deck": "The record supports {{claims.true|ap}} of them and does not support {{claims.false|ap}}. For the other {{claims.nuanced|ap}}, the answer depends on which Flock product is installed or how it is set up.",
+      "deck": "The record supports {{claims.true|ap}} of them and does not support {{claims.false|ap}}. On the other {{claims.nuanced|ap}}, the record is mixed: the answer depends on the product, its settings or which evidence is weighed.",
       "lead": "verdicts",
       "about": true
     },
@@ -93,8 +94,8 @@
     },
     "sources": {
       "kicker": "Sources",
-      "title": "{{sources.total}} Sources, From Flock’s Own Documents to Court Opinions",
-      "deck": "Every document cited on this site: {{sources.flock}} from Flock Safety, {{sources.independent}} teardowns, studies and news reports, {{sources.government}} government records and {{sources.court|ap}} from court cases, each with the date it was last checked.",
+      "title": "{{sources.total}} Sources, From Flock’s Own Documents to Court Records",
+      "deck": "Every document cited on this site: {{sources.flock}} from Flock Safety, {{sources.independent}} news reports, studies and reports by advocacy groups, and {{sources.public}} government and court records, with the date each was last checked.",
       "lead": "origins",
       "about": true
     }

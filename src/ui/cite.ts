@@ -15,6 +15,9 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
   const el = document.createElement("div");
   el.className = "cite";
   const shown = ids.slice(0, max);
+  // two chips from one publisher in one year would read as a duplicate, so those carry the month (or the day) too
+  const key = (id: string) => { const s = sourceById.get(id); return s ? `${short(s.publisher)}|${s.date.slice(0, 4)}` : id; };
+  const twins = new Set(shown.map(key).filter((k, i, all) => all.indexOf(k) !== i));
   for (const id of shown) {
     const s = sourceById.get(id);
     if (!s) continue;
@@ -22,7 +25,7 @@ export function cite(ids: readonly string[], max = 2): HTMLElement {
     a.href = sourceHref(s.id);
     a.dataset.src = s.id;
     a.title = `${s.title} (${s.publisher}, ${/^\d{4}(-\d{2}){0,2}$/.test(s.date) ? apDate(s.date) : s.date})`;
-    a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span><span class="p">${escape(short(s.publisher))}, ${escape(s.date.slice(0, 4))}</span>`;
+    a.innerHTML = `<span class="tag ${kindClass[s.kind] ?? "tag-unknown"}">${kindLabel[s.kind] ?? s.kind}</span><span class="p">${escape(short(s.publisher))}, ${escape(twins.has(key(id)) && /^\d{4}-\d{2}/.test(s.date) ? apDate(s.date) : s.date.slice(0, 4))}</span>`;
     el.appendChild(a);
   }
   if (ids.length > max) {

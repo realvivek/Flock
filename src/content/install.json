@@ -75,9 +75,10 @@
         },
         {
           "k": "Cameras per pole",
-          "v": "One on solar power: a second panel would shade the first",
+          "v": "One on solar power, according to Flock’s implementation guide: a second panel would shade the first. Its 2024 catalog lists a solar Condor video camera and a Falcon sharing a pole",
           "sources": [
-            "flock-impl-guide"
+            "flock-impl-guide",
+            "flock-catalog-2024"
           ]
         },
         {
@@ -152,15 +153,7 @@
         },
         {
           "k": "Flock supplies",
-          "v": "A power kit and a junction box with indicator lights for diagnosis; a replacement kit costs $150",
-          "sources": [
-            "flock-impl-guide",
-            "flock-fee-schedule"
-          ]
-        },
-        {
-          "k": "Cameras per pole",
-          "v": "Two can share a pole on wired power",
+          "v": "A power kit and a junction box with indicator lights for diagnosis",
           "sources": [
             "flock-impl-guide"
           ]
@@ -374,13 +367,6 @@
           ]
         },
         {
-          "k": "Cables",
-          "v": "One from the panels to the battery and one from the battery to the camera; Flock bills $50 to replace them",
-          "sources": [
-            "flock-fee-schedule"
-          ]
-        },
-        {
           "k": "Data",
           "v": "No cable carries data; the reads go out over the cellular network (LTE)",
           "sources": [
@@ -413,13 +399,6 @@
           "v": "Supplied by Flock, with indicator lights for diagnosis",
           "sources": [
             "flock-impl-guide"
-          ]
-        },
-        {
-          "k": "Kit",
-          "v": "A replacement AC power kit costs $150; a DC kit is also listed",
-          "sources": [
-            "flock-fee-schedule"
           ]
         },
         {

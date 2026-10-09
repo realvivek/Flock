@@ -24,7 +24,7 @@ export function buildPole(host: HTMLElement): void {
   fov.innerHTML = `<h3>What the camera sees</h3><figure class="card-fig">${fovDiagram(c)}</figure>`;
   kv(fov, [["Field of view", `${c.widthFt} feet wide at ${c.distFt} feet`], ["Range", `Up to ${c.maxFt} feet across ${ap(c.lanes)} lanes, at speeds up to ${c.mph} miles an hour`], ["Photos", `${c.framesPerVehicle.charAt(0).toUpperCase()}${c.framesPerVehicle.slice(1)} of each passing vehicle`], ["Aimed at", c.aims]]);
   fov.appendChild(cite(c.sources));
-  p(fov, "The field of view is from Flock’s specification sheet; the range, lanes and speed are from its product page. Drawn to scale; lanes are 12 feet wide.", "fine");
+  p(fov, "The field of view is from Flock’s 2020 specification sheet; the range, lanes and speed are from the data sheet for the Falcon Flex, which elsewhere gives a maximum distance of 90 feet. Drawn to scale; lanes are 12 feet wide.", "fine");
   host.appendChild(fov);
 }
 

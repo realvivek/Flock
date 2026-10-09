@@ -19,7 +19,7 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Volunteers have mapped more than 115,000 Flock cameras | 115,437 | computed | `mappedFlock` |
 | Flock says its cameras make more than 20 billion scans a month | 20 billion | `nbc-flock-2025` | quotes Flock's website ("over 20 billion scans a month") |
 | Flock is an Atlanta company | | `wikipedia-flock` | infobox; The Texas Tribune also writes "Atlanta-based Flock Safety" (`texastribune-2026`) |
-| DeFlock is an anti-surveillance group that tracks the company's cameras | | `texastribune-2026` | "DeFlock, an anti-surveillance group monitoring the company"; EFF calls it an "anti-surveillance mapmaker" (`eff-deflock-2025`) |
+| DeFlock is an anti-surveillance group that tracks the company's cameras | | `texastribune-2026` | "DeFlock, an anti-surveillance group monitoring the company"; EFF calls it an "anti-surveillance mapmaker" ([EFF, February 2025](https://www.eff.org/deeplinks/2025/02/anti-surveillance-mapmaker-refuses-flock-safetys-cease-and-desist-demand)) |
 | Each dot is a mapped reader; 143,929 as of Oct. 8, 2026 | 143,929 | computed | `mappedTotal`; the map draws the 143,575 in the 50 states and D.C., the area its rates cover; the 354 elsewhere, 188 of them Flock's (the `outsideStates` the notes give) and 255 in Puerto Rico, are not drawn, as the map credit says (`meta.json`: `onMap`, `offMap`, `offMapFlock`; `states.json`) |
 | Flock made about four in five | 80 percent | computed | 115,437 / 143,929 |
 | The rest come from companies including Motorola Solutions, Genetec and Axis Communications | 7,509; 3,647; 2,445 | computed | the three largest other makes, `operators.json` |

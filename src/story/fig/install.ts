@@ -59,13 +59,13 @@ export function mountDiagram(mode: "flock" | "existing" | "ac", pole: Pole): str
     out += rect(POLE_X + 2, yFt(5.4) - 9, 11, 18, { fill: "#fff", stroke: INK2, rx: 1 });
     out += camera(POLE_X + 2, cam);
     out += callout(POLE_X + 26, top - 14, top - 14, "Two solar panels");
-    out += callout(POLE_X + 9, yFt(cam), yFt(cam) + 4, `Camera, about ${cam} feet up`, true);
+    out += callout(POLE_X + 9, yFt(cam), yFt(cam) + 4, "Camera, clamped below the panels", true);
     out += callout(POLE_X + 13, yFt(5.4), yFt(5.4) + 4, "Battery box");
     out += callout(POLE_X + 9, GROUND - 5, GROUND - 24, "Breakaway base, set in soil");
     // the pole's height, as a dimension
     out += line(POLE_X - 22, top, POLE_X - 22, GROUND, { stroke: INK3 }) + line(POLE_X - 26, top, POLE_X - 18, top, { stroke: INK3 }) + line(POLE_X - 26, GROUND, POLE_X - 18, GROUND, { stroke: INK3 });
     out += label(POLE_X - 27, (top + GROUND) / 2, `${pole.heightFt} feet`, { "text-anchor": "end", "font-size": FS, fill: INK2 });
-    desc = `Elevation drawing of Flock's own pole, ${pole.heightFt} feet tall on a breakaway base set in soil, with two solar panels on top, a battery box and the camera about ${cam} feet up.`;
+    desc = `Elevation drawing of Flock's own pole, ${pole.heightFt} feet tall on a breakaway base set in soil, with two solar panels on top, the camera clamped below them and a battery box.`;
   } else {
     // an existing pole: drawn lighter, and cut off at the top because it continues
     const cut = yFt(17.2);
@@ -86,13 +86,13 @@ export function mountDiagram(mode: "flock" | "existing" | "ac", pole: Pole): str
     } else {
       // a street light's arm, two cameras and the junction box; power comes up inside the pole
       out += path(`M${POLE_X - 4},${yFt(16.2)} Q${POLE_X - 30},${yFt(16.9)} ${POLE_X - 56},${yFt(16.6)}`, { fill: "none", stroke: INK3, "stroke-width": 3 }) + rect(POLE_X - 70, yFt(16.6) - 2, 18, 6, { fill: INK3, rx: 2 });
-      out += camera(POLE_X + 4, cam) + camera(POLE_X - 4, cam, -1);
+      out += camera(POLE_X + 4, cam);
       out += rect(POLE_X + 4, yFt(7.6) - 8, 13, 16, { fill: "#fff", stroke: INK2, rx: 1 });
       out += path(`M${POLE_X},${GROUND - 2} V${yFt(7.6)} H${POLE_X + 4}`, { fill: "none", stroke: AMBER, "stroke-width": 1.5, "stroke-dasharray": "3 2" });
-      out += callout(POLE_X + 11, yFt(cam), yFt(cam) - 6, "Two cameras can share a pole on wired power", true);
+      out += callout(POLE_X + 11, yFt(cam), yFt(cam) + 4, "Camera, clamped to the pole", true);
       out += callout(POLE_X + 17, yFt(7.6), yFt(7.6) + 8, "Flock junction box");
       out += callout(POLE_X + 2, yFt(2.2), yFt(3.6), "120 volts from the pole’s supply, connected by an electrician");
-      desc = `Elevation drawing of an existing street-light pole with two cameras about ${cam} feet up and a Flock junction box below them, fed with 120-volt power from inside the pole.`;
+      desc = "Elevation drawing of an existing street-light pole with the camera clamped to it and a Flock junction box below, fed with 120-volt power from inside the pole.";
     }
   }
   return svg(MW, MH, out, { cls: "mount", label: desc });
@@ -185,12 +185,12 @@ export function fovDiagram(c: Coverage): string {
     // under the road: the camera and how it reads at the left, the published range at the right
     const lanesWord = c.lanes === 2 ? "two" : String(c.lanes);
     const left = narrow ? ["Camera at the roadside,", "aimed at the rear plates", "of cars moving away"] : ["Camera at the roadside, aimed at the", "rear plates of cars moving away"];
-    const right = narrow ? ["Range up to", `${c.maxFt} feet, Flock says`] : [`Range up to ${c.maxFt} feet across ${lanesWord}`, "lanes, Flock’s product page says"];
+    const right = narrow ? ["Up to", `${c.maxFt} feet, Flock says`] : [`Up to ${c.maxFt} feet across ${lanesWord} lanes,`, "Flock’s Flex data sheet says"];
     const ly = cam.y + 20;
     left.forEach((l, i) => { out += text(0, ly + i * 15, l, { "font-size": FS, fill: INK2 }); });
     right.forEach((l, i) => { out += text(W, ly + i * 15, l, { "font-size": FS, fill: INK2, "text-anchor": "end" }); });
     out += path(`M${(a2x + b2x) / 2},${Math.max(a2y, b2y) + 4} V${ly - 13}`, { stroke: RULE2, fill: "none" });
-    return svg(W, Math.max(H, ly + Math.max(left.length, right.length) * 15), out, { cls: narrow ? "v-narrow" : "v-wide", label: `Plan view drawn to scale: a camera at the roadside aimed along a ${c.lanes}-lane road; its field of view is ${c.widthFt} feet wide at ${c.distFt} feet, and Flock's product page gives a range of up to ${c.maxFt} feet. A car moving away shows its rear plate to the camera.` });
+    return svg(W, Math.max(H, ly + Math.max(left.length, right.length) * 15), out, { cls: narrow ? "v-narrow" : "v-wide", label: `Plan view drawn to scale: a camera at the roadside aimed along a ${c.lanes}-lane road; its field of view is ${c.widthFt} feet wide at ${c.distFt} feet, and Flock's Falcon Flex data sheet gives a range of up to ${c.maxFt} feet. A car moving away shows its rear plate to the camera.` });
   };
   return draw(WIDE, false) + draw(NARROW, true);
 }

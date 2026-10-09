@@ -3,7 +3,7 @@
  * or if any source is missing a URL, date or lastVerified stamp. Also reports unused sources.
  */
 import { readFileSync } from "node:fs";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, statSync } from "node:fs";
 import { renderHome, renderPage } from "./story/input.ts";
 import { SourcesFile, ComponentsFile, InstallFile, DataflowFile, MythsFile, ProductsFile, EconomicsFile, StillsFile, DeploymentsFile } from "../src/content/schema";
 
@@ -89,14 +89,20 @@ const stills = StillsFile.parse(read("stills.json"));
 const missingStills = stills.stills.filter((st) => !existsSync(new URL(`../public/${stills.dir}/${st.file}`, import.meta.url)));
 if (missingStills.length && !process.env.ALLOW_MISSING_STILLS) problems.push(`stills not rendered: ${missingStills.map((s) => s.id).join(", ")} (run npm run stills, or set ALLOW_MISSING_STILLS=1)`);
 
+// Ids cited directly by the page scripts (a fixed citation in a renderer) count as used too.
+const tsFiles = (dir: string): string[] => readdirSync(dir).flatMap((f) => { const p = `${dir}/${f}`; return statSync(p).isDirectory() ? tsFiles(p) : /\.ts$/.test(f) ? [p] : []; });
+const code = tsFiles(new URL("../src", import.meta.url).pathname).map((f) => readFileSync(f, "utf8")).join("\n");
+for (const s of sources) if (code.includes(`"${s.id}"`)) used.add(s.id);
 const unused = sources.filter((s) => !used.has(s.id)).map((s) => s.id);
 const dupUrls = new Map<string, string[]>();
 for (const s of sources) dupUrls.set(s.url, [...(dupUrls.get(s.url) ?? []), s.id]);
 for (const [u, list] of dupUrls) if (list.length > 1) problems.push(`duplicate url ${u}: ${list.join(", ")}`);
 
+// The Sources page lists "every document cited on this site", so the bibliography holds nothing uncited.
+if (unused.length) problems.push(`sources cited nowhere: ${unused.join(", ")}`);
 if (problems.length) {
   console.error(`check:sources FAILED (${problems.length})\n` + problems.map((p) => `  - ${p}`).join("\n"));
   process.exit(1);
 }
 console.log(`check:sources OK: ${sources.length} sources, ${components.parts.length} parts, ${dataflow.hops.length} hops, ${myths.length} myths, ${products.length} products, ${econ.priceList.length + econ.fees.length + econ.workflow.length + econ.permitting.length} economics rows, ${stills.stills.length} stills`);
-if (unused.length) console.log(`  note: ${unused.length} sources not referenced yet: ${unused.join(", ")}`);
+

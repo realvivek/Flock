@@ -27,7 +27,7 @@ export function buildJourney(host: HTMLElement): void {
       <span id="slip-where">${escape(stops[0]!.where)}</span>
     </div>
     <ol class="slip-route" aria-label="Stops">${stops.map((s, i) => `<li data-i="${i}"><a href="#${s.id}"><span class="dot"></span>${escape(s.status)}</a></li>`).join("")}</ol>
-    <p class="fine">Each stop summarizes stages of the <a href="${ROOT}data/">data path</a> and cites the same sources.</p>`;
+    <p class="fine">Each stop summarizes stages of the <a href="${ROOT}data/">data path</a>; its sources are listed with it.</p>`;
   host.appendChild(slip);
 
   const list = el("ol", "stops");
@@ -57,16 +57,22 @@ export function buildJourney(host: HTMLElement): void {
           </div>
         </details>
       </div>`;
-    li.querySelector(".more-body")!.appendChild(cite(s.sources, 3));
+    // the sources stay in view, under who can open the package, rather than folded into the details
+    li.querySelector(".opens")!.after(cite(s.sources, 3));
     list.appendChild(li);
   });
   host.appendChild(list);
+  // notes on the page, after the last stop
+  const about = el("section", "journey-about");
+  about.id = "about";
+  about.innerHTML = `<h2 class="sec-title">About this page</h2><p class="lede-p">The stops follow one read: the photos a Falcon takes as one vehicle passes and the record made from them. Each stop summarizes stages of the <a href="${ROOT}data/">data path</a>, where every stage is documented in full; a time is given only where Flock publishes one. The parcel is this site’s way of telling it.</p>`;
+  host.after(about);
 
   // Mark stops reached as they scroll under the header; the slip follows.
   const items = [...list.querySelectorAll<HTMLElement>(".stop")];
   const routeItems = [...slip.querySelectorAll<HTMLElement>(".slip-route li")];
   const setCurrent = (i: number) => {
-    items.forEach((it, k) => it.classList.toggle("is-reached", k <= i));
+    items.forEach((it, k) => { it.classList.toggle("is-reached", k <= i); it.classList.toggle("is-current", k === i); });
     routeItems.forEach((it, k) => { it.classList.toggle("is-reached", k <= i); it.classList.toggle("is-current", k === i); });
     host.style.setProperty("--progress", String(i / Math.max(1, stops.length - 1)));
     document.getElementById("slip-count")!.textContent = `Stop ${i + 1} of ${stops.length}`;

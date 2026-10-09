@@ -5,7 +5,7 @@ import { apDate, apState } from "../viz/format";
 import { initTooltips } from "../viz/tooltip";
 import { texasFigure, feesFigure, figCtx, figureCfg } from "./figs";
 import { contractsFigure } from "../story/fig/money";
-import { SOURCE_KINDS } from "../story/fig/reference";
+import { SOURCE_KINDS, VERDICT, VERDICT_DEF } from "../story/fig/reference";
 
 /**
  * Article renderers shared by the desktop acts 5 to 7 and the phone stepper.
@@ -90,11 +90,7 @@ export function table(host: HTMLElement, head: string[], body: { cells: string[]
   host.appendChild(wrap);
 }
 
-const verdictLabel: Record<string, string> = {
-  false: "Not supported by the record",
-  true: "Supported by the record",
-  nuanced: "Depends on the product or setting",
-};
+const verdictLabel: Record<string, string> = VERDICT;
 
 export interface ClaimLinks {
   onPart?(partId: string): void;
@@ -103,7 +99,7 @@ export interface ClaimLinks {
 
 /** The product line from products.json as a table: several claims depend on which device is on the pole. */
 export function renderProducts(host: HTMLElement): void {
-  host.appendChild(el("p", undefined, "Flock sells several devices with different capabilities. The plate reader captures still frames; the video camera streams; the acoustic sensor detects gunshots."));
+  host.appendChild(el("p", "lede-p", "Flock sells several devices with different capabilities: the plate reader takes still photos, the video camera streams and the acoustic sensor listens for gunshots. Several of the claims depend on which one is on the pole."));
   table(host, ["Product", "Type", "Captures", "Notes"], products.map((pr) => ({ cells: [pr.name, pr.type, pr.captures, pr.note ? `${pr.not}. ${pr.note}` : pr.not], sources: pr.sources })));
   host.lastElementChild?.classList.add("products");
 }
@@ -117,11 +113,10 @@ export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
     const art = el("article", "claim");
     art.id = `claim-${m.id}`;
     const h = el("h3", "claim-text");
-    h.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span> ${escape(m.claim)}`;
+    h.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span> “${escape(m.claim)}”`;
     art.appendChild(h);
-    const body = el("p", "claim-body");
-    body.innerHTML = `<span class="verdict ${m.verdict}">${verdictLabel[m.verdict]}</span> ${escape(m.nuance)}`;
-    art.appendChild(body);
+    art.insertAdjacentHTML("beforeend", `<p class="claim-verdict"><span class="verdict ${m.verdict}">${verdictLabel[m.verdict]}</span></p>`);
+    art.appendChild(el("p", "claim-body", m.nuance));
     const related = el("div", "links");
     if (m.part && links.onPart) {
       const p = partById.get(m.part);
@@ -139,9 +134,9 @@ export function renderClaims(host: HTMLElement, links: ClaimLinks = {}): void {
   host.appendChild(sectionHead("Product line", "products"));
   renderProducts(host);
   host.appendChild(sectionHead("About the claims", "about"));
-  host.appendChild(el("p", "lede-p", "Each entry states a common claim about the cameras, what the documented record shows, the product or setting it applies to, and the sources, with links to the related component or data stage. The verdicts describe the record, not the people who make the claims."));
+  host.appendChild(el("p", "lede-p", "The claims include statements by the company and by its critics. Each is put the way it is usually made, followed by what the documented record shows, the product or setting it applies to and the sources, with links to the related component or data stage. The verdicts describe the record, not the people who make the claims."));
   const dl = el("dl", "verdict-defs");
-  for (const [v, d] of [["false", "The documents and records cited contradict the claim, or nothing in them supports it."], ["nuanced", "The answer differs by product (plate reader, video camera or audio sensor) or by how a customer has set it up."], ["true", "The documents and records cited support the claim as stated."]] as const) dl.insertAdjacentHTML("beforeend", `<dt><span class="verdict ${v}">${verdictLabel[v]}</span></dt><dd>${escape(d)}</dd>`);
+  for (const v of ["false", "nuanced", "true"] as const) dl.insertAdjacentHTML("beforeend", `<dt><span class="verdict ${v}">${verdictLabel[v]}</span></dt><dd>${escape(VERDICT_DEF[v])}</dd>`);
   host.appendChild(dl);
 }
 
@@ -261,10 +256,18 @@ const kindLabel: Record<string, string> = { flock: "Flock", independent: "Indepe
 const kindTitle = SOURCE_KINDS;
 const order = ["flock", "independent", "government", "court"];
 
-/** The bibliography, grouped by origin, each entry with its date and the date it was last checked. */
+/** A title's trailing note in parentheses is this site's, so it is set apart from the document's own title. */
+function splitTitle(t: string): [string, string] {
+  const m = t.match(/^(.*\S) \(([^()]*(?:\([^()]*\)[^()]*)*)\)$/);
+  return m && !/^\d{4}\)?$/.test(m[2]!) ? [m[1]!, m[2]!] : [t, ""];
+}
+
+/** The bibliography, grouped by origin, each entry with its date; the date it was last checked shows only where it is
+ *  not the date most links were checked, which the notes give once. */
 export function renderSources(host: HTMLElement): void {
-  const legend = el("p", "lede-p");
-  legend.innerHTML = `Sources are tagged by origin. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> is a teardown, research paper or news report. <span class="tag tag-gov">Government</span> is a legislature, agency, council or public-records release, and <span class="tag tag-gov">Court</span> a filing or opinion. Elsewhere on the site, <span class="tag tag-unknown">Not verified</span> marks a statement that neither Flock nor an independent source confirms. Each source carries the date it was last checked.`;
+  const checks = new Map<string, number>();
+  for (const s of sources) checks.set(s.lastVerified, (checks.get(s.lastVerified) ?? 0) + 1);
+  const usual = [...checks].sort((a, b) => b[1] - a[1])[0]![0];
   const jump = el("nav", "jump");
   jump.setAttribute("aria-label", "Source groups");
   jump.innerHTML = order.filter((k) => sources.some((s) => s.kind === k)).map((k) => `<a href="#group-${k}">${escape(kindTitle[k]!)}</a>`).join("") + `<a href="#about">About the sources</a>`;
@@ -277,22 +280,28 @@ export function renderSources(host: HTMLElement): void {
       lastKind = s.kind;
       const h = el("h2", "src-group");
       h.id = `group-${s.kind}`;
-      h.innerHTML = `<span class="tag ${kindClass[s.kind]}">${kindLabel[s.kind]}</span> ${kindTitle[s.kind]}`;
+      h.innerHTML = `<span class="tag ${kindClass[s.kind]}">${kindLabel[s.kind]}</span> ${escape(kindTitle[s.kind]!)} <span class="src-n">${sources.filter((x) => x.kind === s.kind).length}</span>`;
       list.appendChild(h);
     }
+    const [title, note] = splitTitle(s.title);
+    // the last word and the arrow stay together, so the arrow never wraps alone
+    const words = escape(title).split(" "), last = words.pop()!;
     const row = el("div", "source");
     row.id = `src-${s.id}`;
     // The whole title cell is the link, so a tap between wrapped lines still opens the document.
     row.innerHTML = `
-      <span class="id">${escape(s.id)}</span>
-      <a class="src-link" href="${escape(s.url)}" rel="noopener noreferrer" target="_blank"><span class="t">${escape(s.title)}</span><span class="pub">${escape(s.publisher)}</span></a>
-      <span class="date">${escape(/^\d{4}(-\d{2}){0,2}$/.test(s.date) ? apDate(s.date) : s.date)}<br />checked ${escape(apDate(s.lastVerified))}</span>`;
+      <a class="src-link" href="${escape(s.url)}" rel="noopener noreferrer" target="_blank"><span class="t">${words.join(" ")}${words.length ? " " : ""}<span class="nw">${last}<span class="arr" aria-hidden="true"> ↗</span></span></span><span class="pub">${escape(s.publisher)}</span></a>
+      ${note ? `<span class="note">${escape(note)}</span>` : ""}
+      <span class="date">${escape(/^\d{4}(-\d{2}){0,2}$/.test(s.date) ? apDate(s.date) : s.date)}${s.lastVerified !== usual ? `<br />checked ${escape(apDate(s.lastVerified))}` : ""}</span>`;
     list.appendChild(row);
   }
   host.appendChild(list);
   host.appendChild(sectionHead("About the sources", "about"));
+  const legend = el("p", "lede-p");
+  legend.innerHTML = `Every document cited anywhere on this site is listed here, by who published it. <span class="tag tag-flock">Flock</span> is a document or page published by the company. <span class="tag tag-indep">Independent</span> is a news report, a study, a teardown, or a report or dataset from an advocacy group, a researcher or another company. <span class="tag tag-gov">Government</span> is a legislature, agency, council or public-records release, and <span class="tag tag-gov">Court</span> a ruling. Elsewhere on the site, <span class="tag tag-unknown">Not verified</span> marks a statement that neither Flock nor an independent source confirms.`;
   host.appendChild(legend);
+  host.appendChild(el("p", "lede-p", `Each entry gives the document’s title where it has one, or a short description where it does not; a note under an entry is this site’s. The links were last checked on ${apDate(usual)}, unless an entry says otherwise.`));
   const fine = el("p", "fine");
-  fine.innerHTML = `Camera positions on the Outcomes page come from OpenStreetMap contributors via <a href="https://deflock.org" rel="noopener">DeFlock</a>. This site does not describe ways to avoid or disable the cameras. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
+  fine.innerHTML = `Camera positions on the Outcomes page come from OpenStreetMap contributors via <a href="https://deflock.org" rel="noopener">DeFlock</a>. Corrections: open an issue on the repository. Model files are published under CC BY 4.0; code under MIT.`;
   host.appendChild(fine);
 }

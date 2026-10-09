@@ -13,16 +13,16 @@
     {
       "id": "ledboard", "node": "falcon.ledboard", "order": 2, "group": "optics",
       "name": "Infrared illuminator board", "partNumber": "401-00028_B",
-      "function": "Six high-power emitters in a ring around the lens light the plate at night. Independent optical measurement puts them at 850 nm, pulsed at 10 Hz. An orange dome sensor next to the ring meters ambient light to decide when to fire.",
-      "spec": { "Emitters": "6, ring, central lens cutout", "Wavelength": "850 nm (measured); teardown photos read as warm-white", "Pulse": "20 ms on / 80 ms off, up to about 40 strobes per capture", "Connector": "12-pin header J400, 12 V rail" },
+      "function": "Six high-power emitters in a ring around the lens light the plate at night. Flock's data sheet and an independent repository both give 850 nm, the repository adding that they pulse at 10 Hz. An orange dome sensor next to the ring meters ambient light to decide when to fire.",
+      "spec": { "Emitters": "6, ring, central lens cutout", "Wavelength": "850 nm (Flock's data sheet and the Noflock repository); teardown photos read as warm-white", "Pulse": "20 ms on / 80 ms off, up to about 40 strobes per capture", "Connector": "12-pin header J400, 12 V rail" },
       "dims": { "diameter": 2.3, "d": 0.12 }, "explode": [0, 0, 0.25], "hop": "hop-1",
       "confidence": "disputed", "sources": ["flockcamre", "noflock-ir", "flock-flex-datasheet"]
     },
     {
       "id": "lens", "node": "falcon.lens", "order": 3, "group": "optics",
-      "name": "M12 fixed-focus lens, about 16 mm",
-      "function": "Long focal length, narrow field of view: about 15 ft wide at 65 ft per Flock's specification sheet, covering about two lanes at that distance.",
-      "spec": { "Mount": "M12 thread", "Focal length": "About 16 mm (older unit); current lens unpublished", "Field of view": "15 ft wide at 65 ft (Flock sheet)" },
+      "name": "M12 fixed-focus lens",
+      "function": "Long focal length, narrow field of view: about 15 feet wide at 65 feet, according to Flock's specification sheet.",
+      "spec": { "Mount": "M12 thread", "Focal length": "About 16 mm in a 2022 teardown of an older unit; the current lens is unpublished", "Field of view": "15 ft wide at 65 ft (Flock sheet)" },
       "dims": { "diameter": 0.6, "d": 0.8 }, "explode": [0, 0, 0.19], "hop": "hop-1",
       "confidence": "measured", "sources": ["cehrp-dissection", "flock-techspecs"]
     },
@@ -62,9 +62,9 @@
       "id": "som", "node": "falcon.som", "order": 8, "group": "compute",
       "name": "System on module", "partNumber": "Lantronix Open-Q 624A", "vendor": "Lantronix / Qualcomm",
       "function": "Qualcomm APQ8053 (Snapdragon 624/625 family) running Android 8.1. Plate recognition and the Vehicle Fingerprint attributes are computed on this module before transmission.",
-      "spec": { "CPU": "8x ARM cores, 1.4 GHz class", "GPU": "Adreno 506", "RAM": "About 2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "YOLO and OpenCV pipelines on device", "Support": "Chipset vendor security support ended 2021" },
+      "spec": { "CPU": "Eight ARM cores (APQ8053); Flock's Flex data sheet says quad-core, 1.4 GHz", "GPU": "Adreno 506", "RAM": "About 2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "YOLO and OpenCV pipelines on device", "Support": "Qualcomm's last security update for the chipset was in late 2020, and Android 8 support ended in 2021, according to Footnote 4a" },
       "dims": { "w": 1.2, "h": 2.0, "d": 0.15 }, "explode": [0, 0.11, -0.05], "hop": "hop-2",
-      "confidence": "measured", "sources": ["flockcamre", "ryanohoro-2024", "flock-flex-datasheet", "footnote4a-trust"]
+      "confidence": "disputed", "sources": ["flockcamre", "ryanohoro-2024", "flock-flex-datasheet", "footnote4a-trust"]
     },
     {
       "id": "emmc", "node": "falcon.emmc", "order": 9, "group": "compute",
