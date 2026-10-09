@@ -19,11 +19,12 @@ function guessTier(): Tier {
   return "high";
 }
 
-/** Prefer WebGPU, fall back to WebGL2. Query ?gl=1 forces the fallback for testing. */
-export async function bootEngine(canvas: HTMLCanvasElement): Promise<Boot> {
+/** Prefer WebGPU, fall back to WebGL2. Query ?gl=1 forces the fallback for testing; `still` renders one image on a
+ *  transparent WebGL2 canvas whose pixels can be read back (scripts/still-part.mjs). */
+export async function bootEngine(canvas: HTMLCanvasElement, o: { still?: boolean } = {}): Promise<Boot> {
   const tier = guessTier();
   const q = new URLSearchParams(location.search);
-  const forceGL = q.has("gl");
+  const forceGL = q.has("gl") || !!o.still;
   // ?fail3d simulates a device where no engine can start, to exercise the stills fallback.
   if (q.has("fail3d")) throw new Error("3D disabled by ?fail3d");
   const dpr = tier === "low" ? Math.min(devicePixelRatio, 1.25) : Math.min(devicePixelRatio, 2);
@@ -44,7 +45,7 @@ export async function bootEngine(canvas: HTMLCanvasElement): Promise<Boot> {
       console.warn("WebGPU init failed, falling back to WebGL2", e);
     }
   }
-  const engine = new Engine(canvas, true, { adaptToDeviceRatio: false, powerPreference: "high-performance", preserveDrawingBuffer: false, stencil: true, alpha: false }, false);
-  engine.setHardwareScalingLevel(1 / dpr);
+  const engine = new Engine(canvas, true, { adaptToDeviceRatio: false, powerPreference: "high-performance", preserveDrawingBuffer: !!o.still, stencil: true, alpha: !!o.still, premultipliedAlpha: false }, false);
+  engine.setHardwareScalingLevel(o.still ? 1 : 1 / dpr);
   return { engine, backend: "webgl2", tier };
 }

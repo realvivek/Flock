@@ -85,6 +85,7 @@ async function initLocator(): Promise<void> {
   const fallback = (why: unknown) => {
     console.warn("locator: stills", why);
     canvas.hidden = true; ui.hidden = true;
+    img.classList.remove("is-poster");
     img.src = still("explode-0"); img.hidden = false;
     note.textContent = "The assembled camera. Select a part for its record.";
     status.textContent = "stills";
@@ -92,11 +93,14 @@ async function initLocator(): Promise<void> {
   };
   if (wantStills) { fallback("small screen"); return; }
   canvas.hidden = false;
+  // the assembled still stands in until the 3D view has drawn its first frame
+  img.src = still("explode-0"); img.alt = "The assembled Falcon camera"; img.classList.add("is-poster"); img.hidden = false;
   try {
     const { initLocator: boot } = await import("./locator");
     const loc = await boot(canvas, status);
+    img.hidden = true; img.classList.remove("is-poster");
     ui.hidden = false;
-    (window as unknown as { __flock: unknown }).__flock = { state, set, scene: loc.scene, engine: loc.engine, world: loc.world, get frame() { return loc.frame; } };
+    (window as unknown as { __flock: unknown }).__flock = { state, set, scene: loc.scene, engine: loc.engine, world: loc.world, get frame() { return loc.frame; }, locatorFit: () => loc.fit() };
     const input = document.getElementById("explode-stage") as HTMLInputElement;
     const readout = document.getElementById("explode-readout")!;
     const setStage = (n: number) => set({ explodeStage: Math.max(0, Math.min(5, Math.round(n))) });

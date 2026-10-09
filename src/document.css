@@ -125,7 +125,8 @@ main { display: flex; flex-direction: column; gap: 3rem; width: min(var(--wide),
 /* ---- Components: locator beside the parts on desktop, stacked on phones -------------------------------------- */
 .components { display: grid; grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); gap: 2rem; align-items: start; }
 .locator { position: sticky; top: calc(var(--topbar-h) + 1rem); display: flex; flex-direction: column; gap: .6rem; padding: 0; }
-.locator-fig { margin: 0; aspect-ratio: 4 / 5; background: var(--bg-2); overflow: hidden; }
+.locator-fig { position: relative; margin: 0; aspect-ratio: 4 / 5; background: var(--bg-2); overflow: hidden; }
+.locator-fig img.is-poster { position: absolute; inset: 0; }
 .locator-fig canvas, .locator-fig img { width: 100%; height: 100%; display: block; object-fit: contain; touch-action: none; outline: none; }
 .locator-ui { display: grid; gap: .3rem; }
 .locator-note { margin: 0; font: 400 .8125rem/1.45 var(--sans); color: var(--ink-3); }

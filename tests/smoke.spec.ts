@@ -171,6 +171,12 @@ test("components page: knolling grid in five groups with a 3D locator on desktop
   await instant(page);
   await expect(page.locator("#status")).toContainText(/webgl2|webgpu/);
   expect(await page.evaluate(() => window.__flock!.state.mode)).toBe("3d");
+  // ready means a frame is drawn: the poster has stepped aside and the assembled camera fills the panel
+  await expect(page.locator("#locator-img")).toBeHidden();
+  await settled(page);
+  const fit0 = await page.evaluate(() => (window.__flock as unknown as { locatorFit(): { w: number; h: number; inside: boolean } }).locatorFit());
+  expect(fit0.inside).toBe(true);
+  expect(fit0.h).toBeGreaterThanOrEqual(0.55);
   await nav(page, "Components");
   await expect(page.locator(".sections a", { hasText: "Data" })).toHaveAttribute("href", "../data/");
   await expect(page.locator("#knolling .group")).toHaveCount(5);
@@ -195,6 +201,10 @@ test("components page: knolling grid in five groups with a 3D locator on desktop
   await expect.poll(() => page.evaluate(() => window.__flock!.state.explodeStage)).toBe(5);
   await expect(page.locator("#explode-readout")).toContainText("Stage 5 of 5");
   await settled(page);
+  // apart, the stack still fills the frame and stays inside it
+  const fit5 = await page.evaluate(() => (window.__flock as unknown as { locatorFit(): { w: number; h: number; inside: boolean } }).locatorFit());
+  expect(fit5.inside).toBe(true);
+  expect(Math.max(fit5.w, fit5.h)).toBeGreaterThanOrEqual(0.65);
   await page.screenshot({ path: "test-results/components.png" });
   // The Components chip and the skip link stay on this page
   await page.locator(".sections a.is-active").click();
