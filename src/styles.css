@@ -188,7 +188,9 @@ input[type=range] { width: 100%; accent-color: var(--ink); }
 .fig-data[open] > summary::before { transform: rotate(45deg); }
 .fig-data > summary:hover { color: var(--ink); }
 .fig-data .tablewrap { max-height: 26rem; overflow: auto; margin-top: .3rem; border-top: 1px solid var(--rule); }
-.fig-data table th { position: sticky; top: 0; background: var(--bg); }
+.fig-data thead th { position: sticky; top: 0; z-index: 1; background: var(--bg); }
+/* a row's name is read with its values, so it is set as body text, not as a column head */
+.tablewrap tbody th, table.data tbody th { text-align: left; font: 400 .875rem/1.4 var(--sans); letter-spacing: 0; text-transform: none; color: var(--ink); vertical-align: top; border-bottom: 1px solid var(--rule); padding: .55rem .55rem; }
 /* art direction: each static chart is drawn for a wide and a narrow frame */
 .v-narrow { display: none !important; }
 @media (max-width: 639px) { .v-wide { display: none !important; } .v-narrow { display: block !important; } }

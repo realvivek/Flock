@@ -25,10 +25,10 @@ export function errorsFigure(cfg: FigureCfg, ctx: Ctx): string {
   const fmt = (p: number) => (p < 1 ? p.toFixed(1) : String(Math.round(p)));
   const cards = [
     { k: "The camera misreads the plate", m: "Roseville, Calif. · Flock cameras", p: pct(ROSE.wrong, ROSE.total), t: `${int(ROSE.wrong)} of ${int(ROSE.total)} stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate. A police lieutenant said none led to a contact or an arrest. Flock called the figure a mischaracterization and said the city’s older cameras were mounted unusually high.` },
-    { k: "The plate matches; the state does not", m: "Story County, Iowa · Axon readers in patrol cars", p: pct(STORY.wrongState, STORY.total), t: `${STORY.wrongState} of ${STORY.total} hits flagged in a month by the sheriff’s in-car readers matched a list entry from another state.` },
+    { k: "The plate matches; the state does not", m: "Story County, Iowa · Axon readers in patrol cars", p: pct(STORY.wrongState, STORY.total), t: `${STORY.wrongState} of the ${STORY.total} hits in the sheriff’s report of erroneous hits, from a month of its in-car readers, matched a list entry from another state. That is a share of the hits in the report, not of all the office’s alerts.` },
     { k: "The list is out of date", m: "Los Angeles · Axon readers in patrol cars", p: pct(LA.stale, LA.alerts), t: `${LA.stale} of ${int(LA.alerts)} alerts in two months were accurate reads of plates on cars that, it turned out, were not stolen. The inspector general pointed to records that were not updated in time.` },
   ];
-  const key = `<p class="err-key"><i aria-hidden="true"></i>Each square is 1 percent of the alerts that place counted</p>`;
+  const key = `<p class="err-key"><i aria-hidden="true"></i>Each square is 1 percent of what that place’s report counted: its alerts, or in Story County, the hits the report lists</p>`;
   const body = key + `<div class="errors">${cards.map((c) => `<div class="err"><p class="err-k">${c.k}</p><p class="err-m">${c.m}</p><div class="err-g">${waffle(c.p, `${fmt(c.p)} of 100 squares filled`)}<p class="err-n">${fmt(c.p)}<span>%</span></p></div><p class="err-t">${c.t}</p></div>`).join("")}</div>`;
   const table = dataTable(["Kind of error", "Count", "Of", "Percent", "Where and when"], [
     ["Misread plate", ROSE.wrong, ROSE.total, fmt(pct(ROSE.wrong, ROSE.total)), "Roseville, Calif., stolen-vehicle and felony alerts, 2023–24"],

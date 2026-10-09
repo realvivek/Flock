@@ -32,7 +32,7 @@ export function citiesFigure(rows: City[], snapshot: string, ctx: Ctx, o: { leve
     out += line(x(0), T - 4, x(0), T + list.length * rowH, { class: "baseline" });
     return svg(W, T + list.length * rowH + 4, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of mapped Flock cameras inside city limits: ${list[0]!.name} has the most, ${int(max)}.` });
   };
-  const table = dataTable(["City", "Mapped Flock cameras", "Population, 2024", "Per 100,000 residents"], rows.map((c) => [placeName(c.name, c.usps), c.flock, c.pop ?? null, c.per100k ?? null]), { caption: "Mapped Flock cameras inside city limits" });
+  const table = dataTable(["City", "Cameras", "Population", "Per 100,000"], rows.map((c) => [placeName(c.name, c.usps), c.flock, c.pop ?? null, c.per100k == null ? null : Math.round(c.per100k)]), { caption: "Mapped Flock cameras inside city limits, the city’s population in 2024 and cameras per 100,000 residents" });
   // the cities in the table with more cameras per resident than the one with the most cameras
   const denser = rows.filter((c) => c.per100k != null && list[0]!.per100k != null && c.per100k > list[0]!.per100k).sort((a, b) => b.per100k! - a.per100k!);
   // the takeaway the headline does not already give: how far ahead the first city is
@@ -131,12 +131,13 @@ export const VERDICT_DEF = {
 export function verdictIndex(myths: Myth[], ctx: Ctx, o: { level?: 2 | 3 } = {}): string {
   const order = ["false", "nuanced", "true"] as const;
   const n = (v: Myth["verdict"]) => myths.filter((m) => m.verdict === v).length;
-  const sq = (m: Myth, i: number) => `<a class="vi-sq v-${m.verdict}" href="#claim-${escape(m.id)}" title="${escape(`${String(i + 1).padStart(2, "0")} “${m.claim}”`)}"><span class="visually-hidden">${escape(`Claim ${i + 1}: “${m.claim}” ${VERDICT[m.verdict]}.`)}</span>${String(i + 1).padStart(2, "0")}</a>`;
-  const rows = order.filter((v) => n(v) > 0).map((v) => `<div class="vi-row"><p class="vi-label"><b>${escape(VERDICT[v])}</b> <span class="vi-n">${n(v)}</span></p><div class="vi">${myths.map((m, i) => (m.verdict === v ? sq(m, i) : "")).join("")}</div></div>`).join("");
+  // each claim in its own words under its verdict, numbered as in the list below, so the index reads as a contents
+  const item = (m: Myth, i: number) => `<li><a class="vi-item" href="#claim-${escape(m.id)}"><span class="vi-num">${String(i + 1).padStart(2, "0")}</span><span class="vi-claim">“${escape(m.claim)}”</span></a></li>`;
+  const rows = order.filter((v) => n(v) > 0).map((v) => `<div class="vi-row"><p class="vi-label"><span class="verdict ${v}">${escape(VERDICT[v])}</span><span class="vi-n">${n(v)} claim${n(v) === 1 ? "" : "s"}</span></p><ul class="vi-list">${myths.map((m, i) => (m.verdict === v ? item(m, i) : "")).join("")}</ul></div>`).join("");
   // the largest group, stated plainly; the order of the rows does the rest
   const top = order.slice().sort((a, b) => n(b) - n(a))[0]!;
   const title = top === "false" ? `The record does not support ${n("false")} of the ${myths.length} claims` : top === "true" ? `The record supports ${n("true")} of the ${myths.length} claims` : `The record is mixed on ${n("nuanced")} of the ${myths.length} claims`;
-  const sub = "Each square is one claim, numbered as in the list below; select one to read the entry.";
+  const sub = `The ${myths.length} claims by verdict, numbered as in the list below; select one to read its entry`;
   return frame("verdicts", { title, sub, notes: [`“The record is mixed” means ${VERDICT_DEF.nuanced.charAt(0).toLowerCase()}${VERDICT_DEF.nuanced.slice(1)}`], sources: [] }, ctx, rows, { level: o.level, srcText: "Sources: listed with each claim.", cls: "verdicts" });
 }
 

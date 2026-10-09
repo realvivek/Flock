@@ -45,6 +45,6 @@ function draw(W: number, narrow: boolean): string {
 
 export function evidenceFigure(cfg: FigureCfg, ctx: Ctx): string {
   const key = `<div class="ev-key"><span><i class="ev-dot"></i>Estimate</span><span><i class="ev-ci"></i>95 percent confidence interval: the range of effects consistent with the data</span></div>`;
-  const table = dataTable(["Weighting", "Estimated change, %", "95% interval, low", "95% interval, high", "p"], ESTIMATES.map((e) => [e.label, e.est, e.lo, e.hi, e.p]), { text: [4] });
+  const table = dataTable(["Weighting", "Change", "Low", "High", "p"], ESTIMATES.map((e) => [e.label, `${signed(e.est)}%`, `${signed(e.lo)}%`, `${signed(e.hi)}%`, e.p]), { text: [4], caption: "Estimated change in vehicle thefts, with the low and high ends of its 95 percent interval" });
   return frame("evidence", cfg, ctx, key + draw(WIDE, false) + draw(NARROW, true), { table });
 }

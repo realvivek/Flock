@@ -60,7 +60,10 @@ export function renderPage(root: string, id: string): RenderedPage {
   const sources: SourceRec[] = typeset(j("src/content/sources.json").sources);
   const myths: Myth[] = typeset(j("src/content/myths.json").myths);
   const cities: { snapshot: string; rows: { name: string; usps: string; flock: number }[] } = j("public/data/story/cities.json");
-  const coverage = j("public/data/outcomes.json").coverage;
+  const outcomes: { coverage: Record<string, unknown>; sites: { inCar?: boolean; match: unknown; values: Record<string, number | null> }[] } = j("public/data/outcomes.json");
+  // the entries within 150 meters of a mapped camera that report a stop, a recovery or an arrest
+  const matchedResult = outcomes.sites.filter((s) => !s.inCar && s.match && (s.values.stops || s.values.recoveries || s.values.arrests)).length;
+  const coverage = { ...outcomes.coverage, matchedResult };
   const byKind = (k: string) => sources.filter((s) => s.kind === k).length;
   const byVerdict = (v: string) => myths.filter((m) => m.verdict === v).length;
   const base: Stats = j("public/data/story/stats.json");

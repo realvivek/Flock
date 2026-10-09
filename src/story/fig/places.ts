@@ -47,7 +47,7 @@ export function statesFigure(cfg: FigureCfg, ctx: Ctx, states: StatesFile): stri
     out += text(ux + 5, T - 32, `U.S. rate, ${dec1(states.usRate)}`, { "font-size": fs, "font-weight": 600, fill: "var(--ink)" });
     return svg(W, H, out, { cls: narrow ? "v-narrow" : "v-wide", label: `Bar chart of mapped Flock cameras per 100,000 residents in the 10 highest and five lowest states. Georgia is highest at ${dec1(rows[0]!.per100k!)}; New Hampshire lowest at ${dec1(rows[rows.length - 1]!.per100k!)}; the U.S. rate is ${dec1(states.usRate)}.` });
   };
-  const table = dataTable(["State", "Mapped Flock cameras", "Per 100,000 residents", "All mapped readers", "Population, 2024"], rows.map((r) => [r.name, r.flock, r.per100k, r.all, r.pop]), { caption: cfg.title });
+  const table = dataTable(["State", "Flock cameras", "Per 100,000", "All readers", "Population"], rows.map((r) => [r.name, r.flock, r.per100k == null ? null : r.per100k.toFixed(1), r.all, r.pop]), { caption: `${cfg.title}: mapped Flock cameras, per 100,000 residents, all mapped readers and population in 2024` });
   return frame("states", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }
 

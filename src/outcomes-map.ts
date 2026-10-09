@@ -53,9 +53,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 interface Rect { x: number; y: number; w: number; h: number }
 const overlap = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
 
-/** Rings, largest first so small ones stay visible; numbers placed where they collide least with other numbers and rings. */
+/** Rings, those with a result on top and within a shade the largest first, so small ones stay visible; numbers placed
+ *  where they collide least with other numbers and rings. */
 function drawRings(ctx: CanvasRenderingContext2D, list: { x: number; y: number; r: number; depth: number; n?: number }[], W: number, H: number): void {
-  const circles = list.slice().sort((a, b) => b.r - a.r);
+  const circles = list.slice().sort((a, b) => a.depth - b.depth || b.r - a.r);
   for (const c of circles) {
     ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
     ctx.globalAlpha = c.depth >= 2 ? 0.9 : 0.75; ctx.fillStyle = DEPTH_FILL[c.depth]!; ctx.fill();
@@ -89,8 +90,9 @@ function drawRings(ctx: CanvasRenderingContext2D, list: { x: number; y: number; 
   ctx.textBaseline = "alphabetic";
 }
 
-/** The overview: every mapped Flock camera as a grey dot, the outcome sites as rings. */
-export async function drawNational(canvas: HTMLCanvasElement, sites: Ring[]): Promise<number> {
+/** The overview: every mapped Flock camera as a grey dot, the outcome sites as rings, and the places the figure's
+ *  title names labeled beside their rings. */
+export async function drawNational(canvas: HTMLCanvasElement, sites: Ring[], labels: { x: number; y: number; text: string }[] = []): Promise<number> {
   const [cams, states] = await Promise.all([loadNational(), loadStates()]);
   const w = cssWidth(canvas), h = Math.round(w * 0.62), ctx = setup(canvas, w, h);
   const pad = w < 600 ? 6 : 12, k = Math.min((w - 2 * pad) / 1000, (h - 2 * pad) / 620), ox = (w - 1000 * k) / 2, oy = (h - 620 * k) / 2;
@@ -103,6 +105,16 @@ export async function drawNational(canvas: HTMLCanvasElement, sites: Ring[]): Pr
   ctx.restore(); ctx.globalAlpha = 1;
   const scale = clamp(w / 1100, 0.55, 1);
   drawRings(ctx, sites.map((s) => ({ x: ox + s.x * k, y: oy + s.y * k, r: ringRadius(s.size, scale) * 0.8, depth: s.depth })), w, h);
+  ctx.font = `700 12px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`;
+  ctx.textBaseline = "middle"; ctx.lineJoin = "round";
+  for (const l of labels) {
+    const px = ox + l.x * k, py = oy + l.y * k, tw = ctx.measureText(l.text).width;
+    // beside the rings, on whichever side has room
+    const tx = px + 16 + tw > w - 4 ? px - 16 - tw : px + 16;
+    ctx.lineWidth = 4; ctx.strokeStyle = "#fff"; ctx.strokeText(l.text, tx, py);
+    ctx.fillStyle = "#121212"; ctx.fillText(l.text, tx, py);
+  }
+  ctx.textBaseline = "alphabetic";
   return n;
 }
 
@@ -122,27 +134,27 @@ export async function drawCity(canvas: HTMLCanvasElement, key: string, sites: { 
   ctx.fillStyle = "#e3ecf2"; ctx.fill(toPath(byClass(9), true, P));
   ctx.lineCap = "round"; ctx.lineJoin = "round";
   for (const [c, color, width] of [[3, "#ececea", 0.8], [2, "#cacac7", 1.6], [1, "#a5a5a2", 2.6]] as const) { ctx.strokeStyle = color; ctx.lineWidth = width; ctx.stroke(toPath(byClass(c), false, P)); }
-  // cameras: other makes as grey dots, Flock as amber wedges facing the recorded direction
+  // cameras: other makes as light grey dots, Flock as dark grey wedges facing the recorded direction
   const view = { w: box.w - ox / (k * s), e: box.w + (w - ox) / (k * s), n: box.n + oy / s, s: box.n - (h - oy) / s };
   let n = 0;
   const L = w < 600 ? 9 : 11;
   for (const [lon, lat, cls, dirs] of base.cameras) {
     if (lon < view.w || lon > view.e || lat < view.s || lat > view.n) continue;
     const [x, y] = P(lon, lat);
-    if (cls !== 0) { ctx.fillStyle = "#a9a9a6"; ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill(); continue; }
+    if (cls !== 0) { ctx.fillStyle = "#b9b9b6"; ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill(); continue; }
     n++;
-    ctx.fillStyle = "rgba(196,125,14,.55)";
+    ctx.fillStyle = "rgba(70,70,70,.38)";
     for (const dir of dirs) { const a = (dir - 90) * Math.PI / 180, half = 0.3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a - half) * L, y + Math.sin(a - half) * L); ctx.lineTo(x + Math.cos(a + half) * L, y + Math.sin(a + half) * L); ctx.closePath(); ctx.fill(); }
-    ctx.fillStyle = "#c47d0e"; ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#4a4a4a"; ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fill();
   }
   const scale = clamp(w / 1100, 0.6, 1);
   drawRings(ctx, sites.filter((r) => r.lon >= view.w && r.lon <= view.e && r.lat >= view.s && r.lat <= view.n).map((r) => { const [x, y] = P(r.lon, r.lat); return { x, y, r: ringRadius(r.size, scale), depth: r.depth, n: r.n }; }), w, h);
-  // scale bar: the longest round length that fits in a quarter of the width
+  // scale bar: the longest round length in miles that fits in a quarter of the width
   const mPerPx = 111320 / s;
-  const len = [100, 200, 500, 1000, 2000, 5000, 10000, 20000].filter((m) => m / mPerPx <= w * 0.25).pop() ?? 100, px = len / mPerPx;
+  const len = [0.1, 0.25, 0.5, 1, 2, 5, 10].filter((mi) => (mi * 1609.34) / mPerPx <= w * 0.25).pop() ?? 0.1, px = (len * 1609.34) / mPerPx;
   const sx = Math.max(18, Math.round(ox) + 8);
   ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.fillRect(sx - 8, h - 34, px + 28, 26);
   ctx.strokeStyle = "#121212"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(sx, h - 13); ctx.lineTo(sx + px, h - 13); ctx.moveTo(sx, h - 17); ctx.lineTo(sx, h - 13); ctx.moveTo(sx + px, h - 17); ctx.lineTo(sx + px, h - 13); ctx.stroke();
-  ctx.fillStyle = "#333"; ctx.font = `500 12px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`; ctx.fillText(len >= 1000 ? `${len / 1000} km` : `${len} m`, sx, h - 20);
+  ctx.fillStyle = "#333"; ctx.font = `500 12px ${getComputedStyle(document.body).getPropertyValue("--sans") || "sans-serif"}`; ctx.fillText(len === 0.5 ? "Half a mile" : len === 0.25 ? "A quarter mile" : len < 1 ? `${len} mile` : `${len} mile${len === 1 ? "" : "s"}`, sx, h - 20);
   return n;
 }
