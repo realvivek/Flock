@@ -168,6 +168,56 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | In Windsor, Conn., a mapper deleted 14 of the cameras on Oct. 8, noting each had been removed, "presumably" because the town had canceled its contract; the council voted in July to keep them off | 14 | `osm-windsor-2026`; `patch-windsor-2026` | 12 changesets, 190181808 to 190182106, each noting the camera "has been removed. This is presumably due to the city's cancellation of their contract"; Patch counts 16 cameras |
 | Timeline entries | | each entry's own source | `src/content/timeline-2026.json`; the Texas Department of Public Safety's "at least 940" cameras are attributed to the email a lawmaker shared, as `texastribune-dps-2026` reports it |
 
+## Corrections, fifth review (9 October 2026)
+
+Two independent fact-checks of the eight reference pages, after the fourth review's corrections. Every number, name
+and date in the heads, decks, figure titles, notes and table cells was traced to its source. Each row below was
+fixed where it appears. The Outcomes data was rebuilt offline, and its camera positions and matches did not change.
+The home page changed in one place: the chart of mapped against published counts no longer lists Piedmont or
+Lafayette.
+
+| What the reference pages said | What the record shows | Source |
+|---|---|---|
+| A case number "became a mandatory field in August 2026" | Flock said in August 2026 that it would require a case number for every law enforcement search by the end of the year, with an exception for emergencies; the number is typed in, not checked. | `techtimes-casecodes-2026` |
+| Cambridge, Mass., had its cameras removed when the city ended its contract (Claims, Economics) | Flock installed two cameras after the city ordered its cameras taken down; the city's discovery of them led it to end the contract. | `cambridgeday-2025` |
+| Reads are stored in AWS GovCloud "US-East" with "AES-256" encryption | Flock's policy says reads are transferred to the AWS government cloud, and a company post says all its CJIS data is stored there. No independent source confirms either; the region and cipher are not published. | `flock-lpr-policy`; `flock-privacy-access` |
+| Data is sent over "TLS 1.2 or higher" | HTTPS and TLS, according to Flock; the version is not published. | `flock-privacy-access` |
+| Researchers found exposed Flock plate readers | In December 2025 and January 2026, researchers found dozens of Flock devices, most of them Condor video cameras, reachable on public addresses with an administration page that needed no password. One researcher said some plate readers were among them. Flock said only Condor cameras were affected. | `404-exposed-2026`; `gainsec-2026`; `wflx-condor-2026` |
+| Flock's facial-recognition statement and a Condor test, cited to an Aug. 13, 2026, story | Flock says its system does not use facial recognition. The InvestigateTV report in which a Condor camera followed a reporter ran on June 15, 2026. | `flock-data-privacy`; `investigatetv-condor-2026` |
+| Covered plates and paper plates, as the policy's attributes | The Falcon Flex data sheet lists missing, covered and paper plates, as does a 2023 sales presentation; the policy names only color and make. The verdicts rest on Flock's descriptions. | `flock-flex-datasheet`; `flock-deck-2023` |
+| Jalopnik confirmed in a teardown that the cameras do not measure speed | Jalopnik reported that the cameras "do not currently" measure speed. Flock also sells trailers that pair a reader with a speed sign. | `jalopnik-speed` |
+| Federal agencies searched the data "for immigration enforcement" | Logs obtained by 404 Media in 2025 show more than 4,000 lookups that local agencies ran for federal agencies or at their request, some listing ICE or immigration as the reason. | `404-ice-2025` |
+| Canceled cities "switched to other vendors"; private cameras kept running "in several cities" | Axon took over in a few cities; Denver is the documented case of privately contracted Flock cameras that kept running. | `404-axon-2026`; `denverite-2026` |
+| Cameras are placed mid-block, at highway ramps and at city limits, per the implementation guide | Flock's product page describes cameras for "high-speed, multi-lane, and off-shoulder roadways," and the company sells portable units and trailers. | `flock-lpr-products` |
+| The Falcon case is "8.75 inches tall"; it covers "two lanes at 15 feet"; replacement kits from $50 to $150 | 8.75 inches long. The 100 feet, two lanes and 100 miles an hour are from the Falcon Flex data sheet, which also gives a maximum distance of 90 feet. The kits are Flex replacements in the fee schedule, so they were removed from the Falcon's records. | `flock-techspecs`; `flock-flex-datasheet`; `flock-fee-schedule` |
+| Raven's distress-listening feature was "withdrawn in 2026," cited to a 2025 source | It was tried with a small number of customers and removed in July 2026. | `therecord-distress-2026` |
+| 196 sources, 18 of them cited nowhere on the site | The 18 were removed. Counts by origin are computed when the site is built. | `src/content/sources.json` |
+| Source dates: 404 Media on exposed cameras, January 2026; Jalopnik, 2025; The Record on Norfolk, as dated | Dec. 22, 2025; July 6, 2026; Jan. 27, 2026. | `404-exposed-2026`; `jalopnik-speed`; `therecord-norfolk-2026` |
+| The claims' middle verdict, "Nuanced" | Renamed "The record is mixed," and defined on the page: the record supports part of the claim, or the answer depends on the product, its settings or which evidence is weighed. | — |
+| Lexington: 125 Flock cameras, March to November 2022 | Totals since the first reader was installed in March 2022, with no end date given; the department has 125 readers now. | `lexington-lpr` |
+| Los Angeles: readers "plus 50 Flock cameras donated" | The inspector general lists 298 pole cameras, 160 Motorola and 138 Flock, 50 of the Flock cameras loaned at no cost after the Palisades Fire, besides the Axon readers in patrol cars. | `lapd-oig-2026` |
+| Story County: 79 percent of alerts wrong | 168 of 214 hits in the report of erroneous hits, from Axon in-car readers; no rate is printed. | `footnote4a-hotlist` |
+| Piedmont: 48 cameras; Lafayette, Colo.: 30 | Neither city's report gives a camera count; both read "count not stated," and the two are no longer in the home page's chart of published counts. | `piedmont-2025`; `lafayette-co-alpr` |
+| Denver: "12 months from May 2024"; "the city later ended the contract" | A one-year pilot from May 2024. After the city ended its contract, privately contracted Flock cameras kept running. | `denverite-2025`; `denverite-2026` |
+| News outcomes: "Interstate 55, Jefferson City, Mo."; "Interstate 70, Platte City, Mo."; recoveries and arrests counted from the summaries | The I-55 camera was in Illinois; the I-70 pursuit ran across Missouri. The place now given is the case's, and the rows give no counts, since the reports' summaries do not state them consistently. | `lehman-tracker` |
+| State v. Hagwood: conviction affirmed | Evidence admitted and conviction affirmed; the judgment was reversed in part on the sentence. | `hagwood-2026` |
+| National statement, Institute for Justice: "more than 200 incidents, including 27 wrongful stops" | Well over 100 incidents of misuse or error, compiled from news reports; the 27 come from a separate review. | `ij-abuse-2026` |
+| Cincinnati calls of type LPR, 2018 to 2022: 2,532 with coordinates | 2,398. | `cincinnati-cfs` |
+| Outcomes: "every other camera on the map has no public outcome record"; 115,437 cameras on the map | No public outcome record tied to its location; the national map shows 115,249, the Oct. 8 snapshot's count. | `deflock-tiles-2026` |
+| Federal contracts: "one-year purchases" | Three contracts totaling $520,050 as of Oct. 9, 2026: United States Park Police, $433,600, with a $202,000 option exercised Sept. 18, 2026; Veterans Affairs, $42,000, with a $21,000 option exercised Oct. 6, 2026; Veterans Affairs, $44,450, July 2, 2023, to July 2, 2025. | `usaspending-uspp-2025`; `usaspending-va-2025`; `usaspending-va-2023` |
+| Federal access: "Flock states it has no contract with any DHS agency" | Not in the cited statement. 404 Media reported that Flock paused its federal pilots, including Customs and Border Protection's; Senator Wyden's letter covers Homeland Security Investigations. | `404-cbp-2025`; `wyden-flock-2025` |
+| Smyrna, Ga.: 75 cameras | 75 plate readers, 70 live video cameras, a mobile security trailer and two drones, a city spokesperson said. | `mdjonline-smyrna-2025` |
+| Florida "funded Flock readers" | Since September 2025, 18 agencies have asked for money for about 440 plate readers, made by Flock and others, through the State Board of Immigration Enforcement; the governor approved about $4.6 million in requests. | `wusf-florida-funding-2026` |
+| Dallas: "$1.7 million" from the state; $125,000 of "UASI funds" | Nearly $1.7 million ($1,690,500) from a state grant, and $125,000 from a federal homeland security grant. | `govtech-dallas-2025`; `govtech-dallas-2026` |
+| Texas Department of Public Safety: "at least 940 in use" | At least 940 installed as of Sept. 2, 2026, according to an email a lawmaker shared. | `texastribune-dps-2026` |
+| Oklahoma City: term not stated | A one-year renewal through June 30, 2027. | `okgazette-okc-2026` |
+| What the annual fee covers, cited to the implementation guide | The guide does not itemize it; Indio's 2023 staff report and Richland's agreement do. | `indio-2023`; `richland-agreement-2023` |
+| Installation steps: carriers by name, crews, "two days," "about half and half" | Not in the implementation guide, so removed. Bucket trucks are for mounts higher than 14 feet. | `flock-impl-guide` |
+| At the end of a contract, Flock removes the cameras "within six months" | Agreements from 2023 and earlier: within six months of expiration, or within "a commercially reasonable period of time" after a termination for convenience; the 2026 terms say "a commercially reasonable time." | `richland-agreement-2023`; `flock-tc-2026` |
+| Fee schedule: "highway pole" replacement | "Advanced pole," $5,000, the highest replacement fee. | `flock-fee-schedule` |
+| Roanoke canceled "41" cameras, cited to a June 24 article | Cited to Cardinal News, July 6, 2026, which reports it. | `cardinal-roanoke-2026` |
+| Columbia, Mo.: arrests per 100 alerts | Cases cleared by arrest, which counts cases, not people. | `columbia-mo-2025` |
+
 ## Corrections, fourth review (9 October 2026)
 
 An audit of the eight reference pages against the corrected story. Each row was fixed where it appears (Data,

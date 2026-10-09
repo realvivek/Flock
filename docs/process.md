@@ -14,7 +14,7 @@ entry there carries a `sources` array pointing into one bibliography, `src/conte
 is tagged by origin: `flock` (the company's own documents), `independent` (teardowns, research, journalism),
 `government` or `court`. The build refuses to run if a cited source id does not exist (`scripts/check-sources.ts`)
 or if a listed still image is missing. The bibliography grew from about 60 rows at the start to 196 by
-Oct. 9. Statements from Flock and from independent sources are shown with different tags so a reader can tell
+Oct. 8; the review of Oct. 9 removed 18 rows that nothing cited and added a few, leaving 182. Statements from Flock and from independent sources are shown with different tags so a reader can tell
 them apart, and where the two disagree, both are cited.
 
 **Neutral copy.** No adjectives that judge. A camera that reads a plate "reads a plate"; an audit that found
@@ -444,8 +444,8 @@ source check and links to the notes on the data, which moved from the top of eac
 
 The opening figures: Deployments starts on the 15 cities with the most mapped Flock cameras; Economics on the
 story's price chart; Data on the story's scale of seconds to an alert and days to deletion, in place of a row
-of retention chips; Outcomes on its national map, now framed with a title, sources and a table; Claims on an
-index of the verdicts; Sources on a bar of the sources by origin. Components keeps its parts grid and Journey
+of retention chips; Outcomes on a chart of its 74 records by source, one square each, marked by whether it
+lies within 150 meters of a mapped camera; Claims on an index of the verdicts; Sources on a bar of the sources by origin. Components keeps its parts grid and Journey
 its parcel slip.
 
 ### Fewer one-off drawings
@@ -471,8 +471,8 @@ Content now passes through one step at load, `typeset()`, that curls the quotes 
 string except identifiers: ids, URLs and part numbers such as `401-00027-3 "Cassowary CCB"` stay as written.
 Chart labels, tooltips and table cells take the same step. A Playwright test reads every page's visible text,
 title, share tags and labels, and fails on straight quotes, ISO dates, "%" in running text, a postal code after
-a city, British spellings, spelled-out numbers from 10 up, and "US" or "Inc" without points; two exceptions, a
-module's product name and the name of a cloud region, are listed in `tests/style-allow.json`. The source
+a city, British spellings, spelled-out numbers from 10 up, "US" or "Inc" without points, and "ACLU," "FBI" or
+"AI" without them; one exception, a module's product name, is listed in `tests/style-allow.json`. The source
 checker's list of banned words now covers every content file. Section heads are one `h2` style, the story's,
 and a test checks that no page skips a heading level.
 
@@ -486,6 +486,27 @@ margin, and a test checks that the camera fills at least 55 percent of the panel
 exploded stack at least 65 percent of the panel's width or height, without leaving the panel. The lens still was a black
 disc, a dark glass circle seen end on; it is now rendered three-quarters on in the browser from the site's own
 model (`scripts/still-part.mjs`), since Blender was not available to re-render it.
+
+### Reviews
+
+Each page then went through the story's loop: captures at 1,440, 390 and 360 pixels, read by an independent
+graphics critique against the story's captures, and an independent fact-check that traced every number, name
+and date in the heads, decks, figure titles, notes and table cells to a source. The fact-checks found 39 things
+to correct, listed in the fifth table of `docs/fact-check.md`. Some were dates and counts (Lexington's totals
+run from 2022 with no end date; Los Angeles's inventory is 298 pole cameras, 138 of them Flock's). Some were
+claims a source did not make: no camera counts for Piedmont or Lafayette, no cipher or cloud region for
+Flock's storage. Some were a source made to say more than it did: a case-number requirement Flock announced
+for the end of the year, not one in force. Eighteen bibliography entries that nothing on the site cited were
+removed.
+
+The graphics critiques changed most on Outcomes. Its agency chart had used six shades of amber for six steps,
+with no values and with dots on top of each other. It is now one line per department on a logarithmic scale,
+from the first count it reported to the last, labeled in words ("210.6 million reads to 74 arrests"), with
+open circles for reads and alerts and solid ones for results. Its national map had borrowed the city maps'
+key, which called the gray dots "other makes"; each map now has its own key. On phones its eight-column tables
+had to be swiped sideways and cut their notes off mid-sentence; they are now cards. Elsewhere: Claims' middle
+verdict is "The record is mixed," defined on the page; Components got drawings of the mount, the power
+options and the field of view; and the Journey's sources show under each stop instead of in a tooltip.
 
 ### Decisions
 
@@ -507,7 +528,7 @@ model (`scripts/still-part.mjs`), since Blender was not available to re-render i
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
 | Commits | 55, Sept. 4 to Oct. 9, 2026 |
-| Bibliography rows | 196, tagged flock, independent, government or court |
+| Bibliography rows | 182, tagged flock, independent, government or court |
 | Content files | 15 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
@@ -516,5 +537,6 @@ model (`scripts/still-part.mjs`), since Blender was not available to re-render i
 | Mapped cameras, story | 143,929 readers, 115,437 Flock (Oct. 8, 2026) |
 | Mapped cameras, outcomes | 116,723 readers, 96,484 Flock (July 17, 2026, the snapshot the records were matched against) |
 | Outcome locations | 74 tied to fixed cameras, 55 placed, 21 within 150 m of a mapped camera |
-| Claims checked in the October fact-checks | about 250, in two independent passes |
+| Claims checked in the October fact-checks | about 250 on the home page, in two independent passes; every number on the eight reference pages, in two more |
+| Corrections from the reference pages' reviews | 22 in the fourth review, 39 in the fifth |
 | Home page weight before the first scroll | about 480 KB compressed, of which 13 KB JavaScript and 278 KB the map's camera file (`scripts/budget.mjs`) |
