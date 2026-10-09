@@ -46,7 +46,9 @@ export function renderHome(root: string): Rendered {
   return renderStory(input);
 }
 
-export interface RenderedPage { meta: string; head: string; lead: string; stats: string; used: Set<string> }
+export interface RenderedPage { meta: string; head: string; lead: string; data: string; used: Set<string> }
+/** The story figures a page draws in the browser, whose titles and notes come from story.json. */
+const PAGE_FIGURES: Record<string, string[]> = { deployments: ["contracts"], outcomes: ["errors"], data: ["audit"] };
 
 /** A reference page's head and opening figure, from src/content/pages.json and the built data. Counts a deck may quote
  *  (the city with the most cameras, the claims by verdict, the sources by origin, the Outcomes coverage) are added to
@@ -86,8 +88,9 @@ export function renderPage(root: string, id: string): RenderedPage {
     meta: renderPageMeta(cfg, ctx),
     head: renderPageHead(cfg, ctx, updatedDate(base, sources)),
     lead: lead ? `<div class="page-lead">${lead}</div>` : "",
-    // the numbers client-rendered text may quote, for figCtx() in src/ui/figs.ts; "<" escaped so it cannot close the tag
-    stats: JSON.stringify(stats).replace(/</g, "\\u003c"),
+    // the numbers client-rendered text may quote and the story figures it draws, for src/ui/figs.ts; "<" escaped so it
+    // cannot close the tag
+    data: JSON.stringify({ stats, figures: Object.fromEntries((PAGE_FIGURES[id] ?? []).map((f) => [f, story.figures[f]])) }).replace(/</g, "\\u003c"),
     used: ctx.used,
   };
 }

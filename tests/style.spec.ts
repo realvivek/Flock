@@ -4,8 +4,8 @@ import { readFileSync } from "node:fs";
 /**
  * Times style across the visible text of every page, including text drawn in the browser, figure labels, the title,
  * share tags and tooltips: typographic quotes, AP dates, "percent" in prose, the Times's state abbreviations, American
- * spelling, numerals for 10 and up. Exceptions, each with a reason, are in tests/style-allow.json. Reports only, unless
- * STYLE_STRICT=1.
+ * spelling, numerals for 10 and up. Exceptions, each with a reason, are in tests/style-allow.json. STYLE_REPORT=1 lists
+ * the findings without failing.
  */
 const PAGES = ["", "deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"];
 const allow = JSON.parse(readFileSync(new URL("./style-allow.json", import.meta.url), "utf8")) as { rule: string; text: string; why: string }[];
@@ -67,5 +67,5 @@ test("every page follows Times style", async ({ page }) => {
   }
   const unique = [...new Set(found)];
   if (unique.length) console.log(`style: ${unique.length} findings\n` + unique.join("\n"));
-  if (process.env.STYLE_STRICT === "1") expect(unique).toEqual([]);
+  if (process.env.STYLE_REPORT !== "1") expect(unique).toEqual([]);
 });

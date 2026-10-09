@@ -3,9 +3,8 @@ import { cite, escape } from "../ui/cite";
 import { BASE } from "../lib/base";
 import { apDate, apState } from "../viz/format";
 import { initTooltips } from "../viz/tooltip";
-import { texasFigure, feesFigure, figCtx } from "./figs";
+import { texasFigure, feesFigure, figCtx, figureCfg } from "./figs";
 import { contractsFigure } from "../story/fig/money";
-import storyRaw from "../content/story.json";
 
 /**
  * Article renderers shared by the desktop acts 5 to 7 and the phone stepper.
@@ -14,7 +13,6 @@ import storyRaw from "../content/story.json";
  */
 
 
-const story = storyRaw as unknown as { figures: Record<string, { title: string; sub?: string; notes: string[]; sources: string[] }> };
 
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string): HTMLElementTagNameMap[K] => {
   const e = document.createElement(tag);
@@ -247,7 +245,7 @@ export async function renderDeployments(host: HTMLElement): Promise<void> {
   sections(host, [
     { id: "dep-pays", title: "Who pays for the cameras", render: (h) => { h.insertAdjacentHTML("beforeend", texasFigure(figCtx())); rows(h, d.funding); } },
     { id: "dep-contracts", title: "The largest documented contracts", render: (h) => {
-      h.insertAdjacentHTML("beforeend", contractsFigure(story.figures.contracts!, figCtx()));
+      h.insertAdjacentHTML("beforeend", contractsFigure(figureCfg("contracts"), figCtx()));
       table(h, ["Agency", "Cameras", "Contract value", "Term and status"], d.contracts.map((c) => ({ cells: [`${c.agency} · ${c.level}${c.level === "Federal" ? "" : `, ${apState(c.state)}`}`, c.cameras, c.value, c.note ? `${c.term}. ${c.note}` : c.term], sources: c.sources })));
       h.lastElementChild?.classList.add("contracts");
     } },

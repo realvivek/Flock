@@ -1,7 +1,7 @@
 # How this site was built
 
 A working record of the project from the first commit on 4 September 2026 to the data story on the home
-page on 8 October 2026: what each page shows, how it was made, what went wrong, and what was learned.
+page on 8 October 2026 and the reference pages rebuilt to its standard on 9 October: what each page shows, how it was made, what went wrong, and what was learned.
 It is written as reference material for a later article. Figures come from the repository itself
 (commit history, content files, scripts) and from the research notes gathered during the work.
 
@@ -13,17 +13,18 @@ Five rules shaped every decision and held for the whole project.
 entry there carries a `sources` array pointing into one bibliography, `src/content/sources.json`. Each source
 is tagged by origin: `flock` (the company's own documents), `independent` (teardowns, research, journalism),
 `government` or `court`. The build refuses to run if a cited source id does not exist (`scripts/check-sources.ts`)
-or if a listed still image is missing. The bibliography grew from about 60 rows at the start to 176 by the
-end. Statements from Flock and from independent sources are shown with different tags so a reader can tell
+or if a listed still image is missing. The bibliography grew from about 60 rows at the start to 196 by
+Oct. 9. Statements from Flock and from independent sources are shown with different tags so a reader can tell
 them apart, and where the two disagree, both are cited.
 
 **Neutral copy.** No adjectives that judge. A camera that reads a plate "reads a plate"; an audit that found
 71% of alerts wrong is reported with the denominator and the agency's own explanation.
 
 **Nothing ships unverified.** Before each push: TypeScript typecheck, a production build (which first runs
-the source checks), the Playwright suite (18 tests by October: every page, the citation chips, the 3D locator,
+the source checks), the Playwright suite (22 tests by Oct. 9: every page, the citation chips, the 3D locator,
 phones, the story's map steps, the page without JavaScript, reduced motion, no requests to other sites, no
-page wider than a phone, and invariants of the story data), a viewport sweep (`scripts/qa.mjs`) of every page
+page wider than a phone, invariants of the story data, and, from the last round, Times style, heading order,
+the page heads without JavaScript and the size of chart text on a phone), a viewport sweep (`scripts/qa.mjs`) of every page
 at six desktop and four phone sizes that reports horizontal overflow, figures wider than the screen, cut-off
 text, failed images, header and pager problems and, on the home page, whether the map stays pinned at every
 step, and screenshots read by eye at desktop and phone widths. The sweep produced findings at almost every stage; the rule was zero
@@ -63,6 +64,12 @@ without changing the live site.
 | 2026-10-08 | `a0348ba` | The home page becomes a data story; editorial design across the site |
 | 2026-10-08 | `5517ca4` | Reference pages rebuilt to the story's graphics standard |
 | 2026-10-08 | `b9277d8` | Graphics review and second fact-check applied |
+| 2026-10-08 | `4f866ec` | Fourth graphics review of the story; live on GitHub Pages |
+| 2026-10-09 | `717648c` | Reference pages: fourth fact-check, against the corrected story |
+| 2026-10-09 | `c6db6ae` | One head for every reference page from `pages.json`; Times style held by a test |
+| 2026-10-09 | `13e942a` | Phone drawings at 328 pixels; no chart text under 11 pixels |
+| 2026-10-09 | `3b053e7` | Each reference page opens with its chart and closes with its notes |
+| 2026-10-09 | `05c7fa5` | The Components locator fits its panel; the lens still rendered in the browser |
 
 ## 3. The 3D pipeline and the stills
 
@@ -83,6 +90,9 @@ The home page's two preview posters are rendered from the live pages by headless
 pages they advertise.
 
 ## 4. Page by page
+
+How each page came to be, up to the October story. Their heads, opening figures and order changed again on
+Oct. 9 (section 8).
 
 ### Home
 
@@ -406,16 +416,102 @@ A fourth found those resolved and four small points, now fixed: the map draws on
 credit and every note give the same 188 Flock cameras elsewhere; the Fulton label says "Flock cameras"; phone
 labels keep their full wording on two lines; and the legend no longer clips Washington.
 
-## 8. Numbers for the article
+## 8. October 9: the reference pages to the story's standard
+
+### The gap
+
+After four reviews the story set a standard the eight reference pages did not meet. They had taken the
+editorial look in the first October pass but had never been through a review. Captures at 1,440 by 900 pixels
+showed no chart on the first screen of Deployments, Economics or Outcomes. Heads were catalog labels
+("Pricing and cost structure", "Data path in twelve stages"), decks were tables of contents, and method text
+came before any finding; on a phone the head and the method text filled the first screen. Section heads were
+built five different ways, and one page jumped from its `h1` to an `h3`. An audit against the corrected story
+found reference text that still said what the story had corrected: hot lists, how fast an alert arrives, the
+default retention period, Texas's funding, the Los Angeles audit, the crime study (22 corrections, listed in
+the fourth table of `docs/fact-check.md`). A style audit counted 186 departures from Times style, most of them
+straight quotes in content text that the story's renderer would have curled.
+
+### One head for every page
+
+`src/content/pages.json` holds each page's kicker, headline, deck and opening figure. The headline states the
+page's main finding where the page has one ("Houston Has the Most Mapped Flock Cameras, and Texas Helped Pay
+for Thousands") and says plainly what the page holds where it does not ("The 14 Parts Inside a Flock Camera").
+Decks use the story's markup: Houston's count is a `{{stat}}` token that resolves against the built data, and
+a source is a link the build checks. The Vite plugin that prerenders the story writes each page's head, title,
+share tags and opening figure into its HTML, so the first screen reads without JavaScript, and the source
+checker renders all eight heads on every build. A dateline under the deck gives the date of the latest data or
+source check and links to the notes on the data, which moved from the top of each page to the bottom.
+
+The opening figures: Deployments starts on the 15 cities with the most mapped Flock cameras; Economics on the
+story's price chart; Data on the story's scale of seconds to an alert and days to deletion, in place of a row
+of retention chips; Outcomes on its national map, now framed with a title, sources and a table; Claims on an
+index of the verdicts; Sources on a bar of the sources by origin. Components keeps its parts grid and Journey
+its parcel slip.
+
+### Fewer one-off drawings
+
+Where a page had its own version of something the story already drew, it now uses the story's figure: the
+price history, the retention scale, the three ways an alert can be wrong, and the one documented search,
+which replaced a form that asked the reader to type a search reason. Figures that a page draws in the browser
+read the build's numbers from a small JSON block in the page instead of loading the story's data file; that
+took the Outcomes page's JavaScript from 99 KB, against a budget of 100, to 91.
+
+### Phones
+
+The phone drawing of every chart, the story's included, was 360 pixels wide and scaled down to the column, so
+on a 360-pixel phone, whose column is 328 pixels, a 12-pixel label rendered at 10.9. Every phone drawing is now
+made at 328 pixels and scales up on larger phones, the practice of designing for the smallest container first.
+The sweep and a Playwright test measure the size at which every chart label renders on a phone (its font size
+times the drawing's scale) and fail below 11 pixels. Two charts that had been drawn once at load and never at
+the phone width, the cities and the fee schedule, are now drawn at both.
+
+### Times style, by test
+
+Content now passes through one step at load, `typeset()`, that curls the quotes and apostrophes in every
+string except identifiers: ids, URLs and part numbers such as `401-00027-3 "Cassowary CCB"` stay as written.
+Chart labels, tooltips and table cells take the same step. A Playwright test reads every page's visible text,
+title, share tags and labels, and fails on straight quotes, ISO dates, "%" in running text, a postal code after
+a city, British spellings, spelled-out numbers from 10 up, and "US" or "Inc" without points; two exceptions, a
+module's product name and the name of a cloud region, are listed in `tests/style-allow.json`. The source
+checker's list of banned words now covers every content file. Section heads are one `h2` style, the story's,
+and a test checks that no page skips a heading level.
+
+### The Components locator
+
+The 3D locator could open as an empty grey panel: it reported itself ready when the models had loaded, before
+their shaders had compiled, so its first frames drew nothing. It now shows the assembled still until the scene
+has drawn a frame. Its camera poses were tuned by hand and left the exploded stack small; the camera is now
+fitted to the projected boxes of the parts at each stage, keeping the hand-tuned direction with an 8 percent
+margin, and a test checks that the camera fills at least 55 percent of the panel's height at rest and the
+exploded stack at least 65 percent of the panel's width or height, without leaving the panel. The lens still was a black
+disc, a dark glass circle seen end on; it is now rendered three-quarters on in the browser from the site's own
+model (`scripts/still-part.mjs`), since Blender was not available to re-render it.
+
+### Decisions
+
+- **The plate-cover claim stays.** "A plate cover or spray defeats it" is one of the 21 claims. The entry
+  reports what the record shows (Flock records a covered or missing plate as an attribute of the vehicle, and
+  states regulate plate covers) and describes no method; removing it would also have changed the count of
+  claims across the site.
+- **Two snapshots, said once.** The outcome records stay matched to the July 17, 2026, camera map, when most of
+  them were compiled; the national map on the same page shows the Oct. 8 count. The notes on the Outcomes page
+  say so, and Windsor, whose cameras left the map in between, is the example.
+- **The data scripts were not re-run.** Rebuilding the story's data would have re-pinned the camera snapshot that
+  the story and the fact-check ledger rest on.
+- **Old addresses kept.** Anchors that redirects and tests use (`#claim-*`, `#stage-*`, `#src-*`, `#pole`,
+  `#power`) kept their names through the rebuild.
+
+## 9. Numbers for the article
+
 | What | Figure |
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
-| Commits | 40, Sept. 4 to Oct. 8, 2026 |
+| Commits | 55, Sept. 4 to Oct. 9, 2026 |
 | Bibliography rows | 196, tagged flock, independent, government or court |
-| Content files | 14 JSON files validated by schema at build |
+| Content files | 15 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
-| Playwright tests | 18 |
+| Playwright tests | 22 |
 | Sweep | 9 pages at 10 sizes (6 desktop, 4 phone including one held sideways), zero findings at each push |
 | Mapped cameras, story | 143,929 readers, 115,437 Flock (Oct. 8, 2026) |
 | Mapped cameras, outcomes | 116,723 readers, 96,484 Flock (July 17, 2026, the snapshot the records were matched against) |

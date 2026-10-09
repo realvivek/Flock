@@ -7,7 +7,7 @@ const ROOT = import.meta.dirname;
 
 /** Writes the home page story into index.html in place of <!--story-->, and each reference page's head, share tags and
  *  opening figure in place of <!--page-meta:id-->, <!--page-head:id--> and <!--page-lead:id-->, so every page reads
- *  without JavaScript. The story's numbers go in as JSON for text drawn in the browser. In dev the page reloads when
+ *  without JavaScript. The story's numbers, and the story figures a page draws, go in as JSON for the browser. In dev the page reloads when
  *  the content or data changes. */
 function storyPage(): Plugin {
   return {
@@ -23,7 +23,7 @@ function storyPage(): Plugin {
           .replace(`<!--page-meta:${id}-->`, () => r.meta)
           .replace(m[0], () => r.head)
           .replace(`<!--page-lead:${id}-->`, () => r.lead)
-          .replace("</body>", () => `  <script type="application/json" id="site-stats">${r.stats}</script>\n  </body>`);
+          .replace("</body>", () => `  <script type="application/json" id="site-data">${r.data}</script>\n  </body>`);
       },
     },
     configureServer(server) {

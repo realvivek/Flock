@@ -4,10 +4,8 @@ import { cite, escape, tag } from "./ui/cite";
 import { still, nn, el, p, kv, facts, topbarHeight } from "./ui/common";
 import { icon } from "./ui/icons";
 import { ap } from "./viz/format";
-import { figCtx } from "./ui/figs";
+import { figCtx, figureCfg } from "./ui/figs";
 import { auditFigure, type Deputy } from "./story/fig/searches";
-import storyRaw from "./content/story.json";
-import type { FigureCfg } from "./story/schema";
 
 const hops = dataflow.hops.slice().sort((a, b) => a.n - b.n);
 
@@ -82,8 +80,7 @@ export function buildData(host: HTMLElement): void {
     list.appendChild(row);
   }
   // One documented search: the audit-log record of two searches and three accounts of them, as in the story
-  const story = storyRaw as unknown as { figures: Record<string, FigureCfg> };
-  list.insertAdjacentHTML("beforeend", auditFigure(story.figures.audit!, figCtx(), dataflow.deputy as Deputy));
+  list.insertAdjacentHTML("beforeend", auditFigure(figureCfg("audit"), figCtx(), dataflow.deputy as Deputy));
   // the page's notes on its records
   const about = el("section", "dp-about");
   about.id = "about";

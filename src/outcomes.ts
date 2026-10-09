@@ -9,10 +9,9 @@ import { el, initTableWraps } from "./ui/common";
 import { BASE } from "./lib/base";
 import { svg, g, line, text, circle, tip, logScale, rect } from "./viz/svg";
 import { tickWords, apState, apDate, apPeriod, placeName, ap, typeset } from "./viz/format";
-import { figCtx } from "./ui/figs";
+import { figCtx, figureCfg } from "./ui/figs";
 import { frame, dataTable } from "./story/frame";
 import { errorsFigure } from "./story/fig/errors";
-import storyRaw from "./content/story.json";
 import type { FigureCfg } from "./story/schema";
 import { initTooltips } from "./viz/tooltip";
 import { drawNational, drawCity, DEPTH_LABEL, type Ring } from "./outcomes-map";
@@ -150,9 +149,8 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   lt.appendChild(ltb); lw.appendChild(lt); ag.appendChild(lw); host.appendChild(ag);
   drawOv();
   // When an alert is wrong: the story's figure of three kinds of error
-  const story = storyRaw as unknown as { figures: Record<string, FigureCfg> };
   const er = el("section", "source-block"); er.id = "errors";
-  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a camera’s reading of a plate matched a list entry. Three records show three ways that match can be wrong, each measured against the total its own report gives.</p></div>${errorsFigure(story.figures.errors!, ctx)}`;
+  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a camera’s reading of a plate matched a list entry. Three records show three ways that match can be wrong, each measured against the total its own report gives.</p></div>${errorsFigure(figureCfg("errors"), ctx)}`;
   host.appendChild(er);
   // By camera site
   const nat = el("section", "source-block"); nat.id = "sites";
