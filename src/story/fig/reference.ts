@@ -5,7 +5,7 @@
  */
 import { escape } from "../../lib/escape.ts";
 import { int, placeName } from "../../viz/format.ts";
-import { g, line, rect, svg, text, label, hbar, tip, linScale, niceTicks, WIDE, NARROW } from "../../viz/svg.ts";
+import { g, line, rect, svg, text, label, hbar, tip, linScale, niceTicks, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
 import type { FigureCfg } from "../schema.ts";
 
@@ -156,7 +156,9 @@ export function originsFigure(sources: SourceKind[], ctx: Ctx, o: { level?: 2 | 
   const rows = KINDS.map((k) => ({ ...k, n: sources.filter((s) => s.kind === k.kind).length })).filter((r) => r.n > 0);
   const total = sources.length, max = Math.max(...rows.map((r) => r.n));
   const draw = (W: number, narrow: boolean) => {
-    const T = 6, rowH = narrow ? 44 : 30, barH = 12, L = narrow ? 0 : 236, R = narrow ? 40 : 48;
+    // the label column is as wide as the longest label, so no name runs out of the drawing
+    const T = 6, rowH = narrow ? 44 : 30, barH = 12, R = narrow ? 40 : 48;
+    const L = narrow ? 0 : Math.ceil(Math.max(...rows.map((r) => textWidth(r.label, 12.5, r.kind === "flock" ? 700 : 400)))) + 14;
     const x = linScale(0, max, L, W - R);
     let out = "";
     rows.forEach((r, i) => {
