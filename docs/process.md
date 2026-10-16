@@ -536,9 +536,9 @@ documents. Those and 18 smaller corrections are listed in the sixth table of `do
 ## 9. October 16: a review against the news
 
 A review of the site against public coverage as of Oct. 16 found three things to fix. On Sept. 16, files that
-hackers had copied from one Flock camera, taken off its pole, were published, and WIRED and 404 Media reported
-what its software does; the site still called "Flock has never been hacked" a mixed claim. The site dated the
-$500 price rise to Jan. 1, 2024, where a Flock email quoted by WIRED puts it at April 1, 2023, for new cameras.
+hackers had copied from one Flock camera, taken down from above a roadway, were published, and WIRED and 404 Media
+reported what its software does; the site still called "Flock has never been hacked" a mixed claim. The site dated
+the $500 price rise to Jan. 1, 2024, where a Flock email quoted by WIRED puts it at April 1, 2023, for new cameras.
 And four sources were missing: GainSec's white paper on Flock's devices, the University of Washington's report on
 federal access in that state, WIRED's account of what Flock costs cities, and Eyes On Flock's collection of
 transparency-portal settings.
@@ -556,7 +556,7 @@ seventh table of `docs/fact-check.md`.
 ### Decisions
 
 - **The verdict follows the page's rule.** "Not supported" means the documents contradict the claim, and a
-  camera's storage copied and published does. The entry keeps the line between a camera taken off its pole and a
+  camera's storage copied and published does. The entry keeps the line between one camera taken down and a
   breach of Flock's servers, which no source documents.
 - **Two dates, not one.** New cameras went up on April 1, 2023; existing cameras at renewal, which in Grafton,
   Wis., and Derby, Kan., came at the start of 2024. The chart draws both, and the July 2023 proposal that still
