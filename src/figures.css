@@ -100,6 +100,7 @@
 .tml-m.k-ended { border-radius: 50%; background: #fff; border: 2px solid var(--ink); }
 .tml-m.k-restricted { background: var(--ink-3); box-shadow: 0 0 0 2px #fff; width: 11px; height: 11px; margin: .3rem 1px 0; }
 .tml-m.k-flock { background: var(--amber-mark); transform: rotate(45deg) scale(.85); box-shadow: 0 0 0 2px #fff; }
+.tml-m.k-scrutiny { background: #fff; border: 2px solid var(--ink); width: 11px; height: 11px; margin: .3rem 1px 0; }
 .tml-body { display: grid; gap: .1rem; padding-left: .25rem; }
 .tml-where { margin: 0; font: 700 .9375rem/1.35 var(--sans); color: var(--ink); }
 .tml-text { margin: 0; font: 400 .9375rem/1.45 var(--sans); color: var(--ink-2); }

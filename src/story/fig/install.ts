@@ -126,7 +126,7 @@ function flow(steps: Step[], links: Link[], note: string, desc: string): string 
   if (note) { y += 8; wrap(note, W, 12).forEach((l) => { out += text(0, y + 11, l, { "font-size": 12, fill: INK3, "font-style": "italic", "font-family": "var(--serif)" }); y += LH; }); }
   return svg(W, y + 4, out, { cls: "flow-d", label: desc });
 }
-const CAMERA: Step = { t: "Camera", s: "Reads the plate itself", cam: true };
+const CAMERA: Step = { t: "Camera", s: "Finds the plate in its photos", cam: true };
 const CLOUD: Step = { t: "Flock’s cloud", s: "Amazon Web Services", cloud: true };
 const RADIO: Link = { t: "Over the cellular network (LTE)", radio: true };
 
@@ -135,12 +135,12 @@ export function powerDiagram(kind: "solar" | "ac" | "wing"): string {
     [{ t: "Two solar panels", s: "18 to 20 volts" }, { t: "Battery box", s: "10.8-volt lithium-ion pack" }, CAMERA, CLOUD],
     [{ t: "Direct-current cable" }, { t: "Direct-current cable to the camera’s rear connector" }, RADIO],
     "No cable runs to the ground, and none carries data.",
-    "Flow diagram: two solar panels charge a battery box, which powers the camera through a cable to its rear connector; the camera sends its reads over the cellular network to Flock's cloud.");
+    "Flow diagram: two solar panels charge a battery box, which powers the camera through a cable to its rear connector; the camera sends its photos over the cellular network to Flock's cloud.");
   if (kind === "ac") return flow(
     [{ t: "The pole’s power supply", s: "120 volts AC" }, { t: "Flock junction box", s: "Converts the power to direct current" }, CAMERA, CLOUD],
     [{ t: "Connected by an electrician the customer hires" }, { t: "Direct-current cable to the camera’s rear connector" }, RADIO],
-    "Only the power source changes; the reads still go out over the cellular network.",
-    "Flow diagram: the pole's 120-volt supply feeds a Flock junction box, which converts it to direct current for the camera; the camera sends its reads over the cellular network to Flock's cloud.");
+    "Only the power source changes; the photos still go out over the cellular network.",
+    "Flow diagram: the pole's 120-volt supply feeds a Flock junction box, which converts it to direct current for the camera; the camera sends its photos over the cellular network to Flock's cloud.");
   return flow(
     [{ t: "An agency’s existing camera", s: "Any network camera that streams video (RTSP)" }, { t: "Network switch" }, { t: "Wing gateway", s: "In the network closet; reads plates and describes vehicles" }, CLOUD],
     [{ t: "Network cable that also carries power (PoE)" }, { t: "Fiber or copper, through a plug-in module (SFP)" }, { t: "The city’s internet connection" }],

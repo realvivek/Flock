@@ -1,18 +1,18 @@
 {
   "$comment": "The journey page: the data path retold as a parcel tracker for one photograph. Every stop cites the sources of the data-path stage it summarizes; figures are quoted from dataflow.json and sources.json.",
   "intro": {
-    "parcel": { "label": "One read", "plate": "ABC 1234", "contents": "Six to 12 photos of the rear of a car, the plate text and state, a vehicle description, the time and the camera's position" }
+    "parcel": { "label": "One read", "plate": "ABC 1234", "contents": "Photos of the rear of a car, the time and the camera's position, and, once they reach Flock's servers, the plate text and state and a vehicle description" }
   },
   "stops": [
     {
       "id": "pole", "status": "Captured", "where": "On the pole", "when": "at the moment of the read", "icon": "pole",
-      "title": "The camera takes six to 12 photos and reads the plate",
-      "line": "Before anything leaves the pole, the camera has read the plate and described the car.",
-      "body": "A passive infrared sensor fires on a warm moving object. The camera captures six to 12 still frames of the back of the vehicle, lit at night by an 850-nanometer infrared array. Before anything leaves the pole, the plate and its state are read and the vehicle is described in what Flock calls a Vehicle Fingerprint: make, type and color, and features such as roof racks, back racks, bumper stickers and decals, and missing or covered plates. The Texas Tribune reports that the cameras also record dents.",
-      "packed": ["Plate and vehicle images", "Plate text and state", "Vehicle description", "Time, position from the GPS antenna, camera ID"],
-      "opens": "Only the camera's own software. People and cyclists who trigger the sensor appear in frame; Flock states they are not indexed.",
+      "title": "The camera takes a burst of photos and picks out the plate",
+      "line": "Before anything leaves the pole, the camera has found the plate and the car in its photos.",
+      "body": "A passive infrared sensor fires on a warm moving object. The camera takes a rapid series of still photos of the back of the vehicle, lit at night by an 850-nanometer infrared array: six to 12, Jalopnik reported, and about 28 for a typical vehicle in the logs of one camera that WIRED and 404 Media analyzed. Its software finds the vehicle, the plate and any people or bicycles in the frames and crops the useful ones. In that camera, reading the plate and describing the vehicle appeared to happen later, on Flock's servers.",
+      "packed": ["Cropped photos of the plate and vehicle", "What the software detected in them", "Time, position from the GPS antenna, camera ID"],
+      "opens": "Only the camera's own software. People and cyclists who trigger the sensor appear in frame, and the software detects them; Flock states they are not indexed.",
       "hops": ["hop-1", "hop-2", "hop-3"],
-      "sources": ["cehrp-dissection", "flock-lpr-policy", "flockcamre", "aclu-2022", "jalopnik-speed", "flock-flex-datasheet", "flock-deck-2023", "texastribune-unplugged-2026"]
+      "sources": ["cehrp-dissection", "flock-lpr-policy", "flockcamre", "aclu-2022", "jalopnik-speed", "flock-flex-datasheet", "wired-flock-camera-2026"]
     },
     {
       "id": "carrier", "status": "Uploaded", "where": "Carrier network", "when": "time not published", "icon": "tower",
@@ -26,13 +26,13 @@
     },
     {
       "id": "cloud", "status": "Stored", "where": "Amazon Web Services, United States", "when": "time not published", "icon": "cloud",
-      "title": "Checked in, encrypted, filed",
-      "line": "It lands in Amazon's cloud, where it is checked, stored and indexed so it can be searched.",
-      "body": "Flock's architecture summary describes encryption with Amazon's Key Management Service before the data is sent, and validation when it arrives. Software services index the read for search; images go to object storage and records to databases. Flock's policy says plate reads are transferred to Amazon's government cloud.",
-      "packed": ["A searchable detection record", "The image in object storage"],
+      "title": "Checked in, read and filed",
+      "line": "It lands in Amazon's cloud, where it is checked, read, stored and indexed so it can be searched.",
+      "body": "Flock's architecture summary describes encryption with Amazon's Key Management Service before the data is sent, and validation when it arrives. The plate and its state are read, and the vehicle is described in what Flock calls a Vehicle Fingerprint: make, type and color, and features such as roof racks, back racks, bumper stickers and decals, and missing or covered plates. The Texas Tribune reports that the cameras also record dents. In one camera's software, WIRED and 404 Media found that this step appeared to happen on Flock's servers, not on the camera. Software services index the read for search; images go to object storage and records to databases. Flock's policy says plate reads are transferred to Amazon's government cloud.",
+      "packed": ["The plate text and a description of the car", "A searchable detection record", "The image in object storage"],
       "opens": "Flock staff under its access policy, and the users of the agency that owns the camera.",
       "hops": ["hop-5", "hop-6", "hop-7"],
-      "sources": ["flock-arch-2024", "flock-lpr-policy", "flock-privacy-access", "footnote4a-trust"]
+      "sources": ["flock-arch-2024", "flock-lpr-policy", "flock-privacy-access", "footnote4a-trust", "flock-deck-2023", "texastribune-unplugged-2026", "wired-flock-camera-2026"]
     },
     {
       "id": "sorting", "status": "Checked", "where": "Cloud and camera", "when": "time not published", "icon": "list",

@@ -170,7 +170,7 @@
       "publisher": "Flock Safety blog",
       "url": "https://www.flocksafety.com/blog/has-flock-been-hacked",
       "date": "2026-01-06",
-      "lastVerified": "2026-10-09"
+      "lastVerified": "2026-10-16"
     },
     {
       "id": "flock-terms-update",
@@ -809,7 +809,7 @@
       "publisher": "City of Indio",
       "url": "https://indio.civicweb.net/document/73480/Flock%20Agreement.pdf",
       "date": "2023-10-04",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-16"
     },
     {
       "id": "parkridge-2025",
@@ -832,11 +832,11 @@
     {
       "id": "grafton-2024",
       "kind": "government",
-      "title": "Village of Grafton, Wis., renewal memo: $500 per camera increase from January 2024",
+      "title": "Village of Grafton, Wis., renewal memo: a $500 increase per camera from Jan. 1, 2024, or $2,500 kept for five years",
       "publisher": "Village of Grafton",
       "url": "https://www.villageofgraftonwi.gov/DocumentCenter/View/26078/IFC---Flock-Safety-Renewal",
       "date": "2023-11-29",
-      "lastVerified": "2026-09-04"
+      "lastVerified": "2026-10-16"
     },
     {
       "id": "everett-dfr",
@@ -1638,6 +1638,105 @@
       "url": "https://patch.com/connecticut/windsor/windsor-keeps-flock-cameras-ct-first",
       "date": "2026-07-15",
       "lastVerified": "2026-10-08"
+    },
+    {
+      "id": "ddosecrets-flock-2026",
+      "kind": "independent",
+      "title": "Flock ALPR camera (filesystem images of an in-use camera’s partitions, with its Flock apps and recorded media)",
+      "publisher": "Distributed Denial of Secrets",
+      "url": "https://ddosecrets.org/article/flock-alpr-camera",
+      "date": "2026-09-16",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "wired-flock-camera-2026",
+      "kind": "independent",
+      "title": "Hackers Got Inside a Flock Camera. Its Data Shows How the System Really Works",
+      "publisher": "WIRED (Dhruv Mehrotra and Joseph Cox, with 404 Media)",
+      "url": "https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/",
+      "date": "2026-09-16",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "404-flock-firmware-2026",
+      "kind": "independent",
+      "title": "Hackers Stole Flock’s Camera Software, Revealing How the Company Tracks Cars and People",
+      "publisher": "404 Media (with WIRED)",
+      "url": "https://www.404media.co/hackers-stole-flocks-camera-software-revealing-how-the-company-tracks-cars-and-people-2/",
+      "date": "2026-09-16",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "micahlee-flock-2026",
+      "kind": "independent",
+      "title": "Flock cameras are riddled with security vulnerabilities and hard-coded credentials (an analysis of the released firmware)",
+      "publisher": "Micah Lee",
+      "url": "https://micahflee.com/flock-cameras-are-riddled-with-security-vulnerabilities-and-hard-coded-credentials/",
+      "date": "2026-09-16",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "flock-bishopfox-2026",
+      "kind": "flock",
+      "title": "Flock Security Testing 2026: What the Bishop Fox Penetration Test Found",
+      "publisher": "Flock Safety blog (Chris Castaldo)",
+      "url": "https://www.flocksafety.com/blog/flock-security-testing-2026-what-the-bishop-fox-penetration-test-found",
+      "date": "2026-09-22",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "senate-judiciary-flock-2026",
+      "kind": "government",
+      "title": "Always Watching: Flock’s Nationwide AI Surveillance Network (hearing of the Subcommittee on Crime and Counterterrorism)",
+      "publisher": "U.S. Senate Committee on the Judiciary",
+      "url": "https://www.judiciary.senate.gov/committee-activity/hearings/always-watching-flocks-nationwide-ai-surveillance-network",
+      "date": "2026-09-23",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "gainsec-whitepaper-2025",
+      "kind": "independent",
+      "title": "Examining the Security Posture of an Anti-Crime Ecosystem (51 findings in Flock’s plate readers, gunshot sensors, compute boxes and apps)",
+      "publisher": "Jon Gaines (GainSec), GitHub",
+      "url": "https://github.com/GainSec/anti-crime-ecosystem-research",
+      "date": "2025-11-05",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "uwchr-washington-2025",
+      "kind": "independent",
+      "title": "Leaving the Door Wide Open: Flock Surveillance Systems Expose Washington Data to Immigration Enforcement",
+      "publisher": "University of Washington Center for Human Rights",
+      "url": "https://jsis.washington.edu/humanrights/2025/10/21/leaving-the-door-wide-open/",
+      "date": "2025-10-21",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "wired-costs-2026",
+      "kind": "independent",
+      "title": "What Flock Actually Costs Cities Across the Country",
+      "publisher": "WIRED (Caroline Haskins)",
+      "url": "https://www.wired.com/story/how-much-does-flock-actually-cost-cities/",
+      "date": "2026-10-13",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "eyesonflock-2026",
+      "kind": "independent",
+      "title": "Eyes On Flock (settings and counts gathered from agencies’ Flock transparency portals; counts on this site computed from its data)",
+      "publisher": "Eyes On Flock",
+      "url": "https://eyesonflock.com/",
+      "date": "2026-10-14",
+      "lastVerified": "2026-10-16"
+    },
+    {
+      "id": "derby-2023",
+      "kind": "government",
+      "title": "Flock Cameras (council item: $2,500 a camera until the agreement expires at year’s end, then $3,000, or $2,500 for five more years)",
+      "publisher": "City of Derby, Kan.",
+      "url": "https://derby.civicweb.net/document/153060/Flock%20Cameras.pdf?handle=1D8616C7301145EBB1F4A6C930266C9B",
+      "date": "2023-11-14",
+      "lastVerified": "2026-10-16"
     }
   ]
 }

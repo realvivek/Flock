@@ -233,7 +233,7 @@ export async function buildOutcomes(host: HTMLElement): Promise<void> {
   host.appendChild(ev);
   // When an alert is wrong: the story's figure of three kinds of error
   const er = el("section", "source-block"); er.id = "errors";
-  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a camera’s reading of a plate matched an entry on a list. In these three records, the match was wrong in three different ways.</p></div>${errorsFigure(figureCfg("errors"), ctx)}`;
+  er.innerHTML = `<div class="sec-head"><h2>When an alert is wrong</h2><p class="lede small">An alert means a plate read from a camera’s photos matched an entry on a list. In these three records, the match was wrong in three different ways.</p></div>${errorsFigure(figureCfg("errors"), ctx)}`;
   host.appendChild(er);
   // By camera site: where the placed entries are, then each source with its map and table
   const nat = el("section", "source-block"); nat.id = "sites";

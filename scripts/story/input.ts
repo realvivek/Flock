@@ -14,10 +14,6 @@ import { apDate, typeset } from "../../src/viz/format.ts";
 
 export const STORY_FILES = ["src/content/story.json", "src/content/timeline-2026.json", "src/content/sources.json", "src/content/overview.json", "src/content/dataflow.json", "src/content/pages.json", "src/content/myths.json", "public/data/outcomes.json", "public/data/story/stats.json", "public/data/story/meta.json", "public/data/story/states.json", "public/data/story/counties.json", "public/data/story/operators.json", "public/data/story/completeness.json", "public/data/story/cities.json"];
 
-/** The date the site was last updated: the camera snapshot, or the last time a source was checked if that is later. */
-export function updatedDate(stats: Stats, sources: SourceRec[]): string {
-  return [String(stats.snapshot!.value), ...sources.map((s) => s.lastVerified)].sort().at(-1)!;
-}
 /** The poster that stands in for the map until the camera file loads (or without JavaScript), if it has been made. */
 export const POSTER = "data/story/map-poster.jpg";
 
@@ -90,7 +86,8 @@ export function renderPage(root: string, id: string): RenderedPage {
   })();
   return {
     meta: renderPageMeta(cfg, ctx),
-    head: renderPageHead(cfg, ctx, updatedDate(base, sources)),
+    // each page carries the date it last changed, so a new source elsewhere does not redate it
+    head: renderPageHead(cfg, ctx, cfg.updated),
     // the parts explorer spans the page; the other opening figures keep the reading column
     lead: lead ? `<div class="page-lead${cfg.lead === "parts" ? " is-wide" : ""}">${lead}</div>` : "",
     // the numbers client-rendered text may quote and the story figures it draws, for src/ui/figs.ts; "<" escaped so it

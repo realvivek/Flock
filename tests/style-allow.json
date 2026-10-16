@@ -3,5 +3,10 @@
     "rule": "postal code after a place",
     "text": "Open-Q 624A",
     "why": "part number"
+  },
+  {
+    "rule": "Times abbreviation (A.C.L.U., F.B.I., A.I.)",
+    "text": "Nationwide AI Surveillance Network",
+    "why": "the title of a Senate hearing, quoted as the committee published it"
   }
 ]

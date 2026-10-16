@@ -1,6 +1,7 @@
 {
   "$comment": "The home page story. Paragraph markup: [text](src:id) links to a source document; [text](#id) to a section; [text](page:id) to a site page; {{stat}} or {{stat.field}} inserts a figure from public/data/story/stats.json, with |k (rounded down to the thousand), |pct (no decimals), |round or |date. Every figure block names its sources. Every source is introduced with what it is. Rendered into index.html at build time by src/story/render.ts.",
   "kicker": "License plate readers",
+  "updated": "2026-10-16",
   "headline": "Inside the Network of Cameras Reading America’s License Plates",
   "deck": "Volunteers have mapped more than {{mappedFlock|k}} cameras made by one company, Flock Safety. Public records show who can search what they capture, how long it is kept and what comes of it.",
   "intro": [
@@ -49,8 +50,8 @@
       "id": "what-a-camera-records",
       "title": "What a camera records",
       "blocks": [
-        { "p": "The cameras are set off by [motion](src:flock-flex-datasheet). When a vehicle passes, one takes [six to 12 still photographs](src:jalopnik-speed) of its rear, lit at night by an infrared array." },
-        { "p": "Software reads the plate and its state. It also describes the vehicle — its make, type and color, and features such as roof racks, bumper stickers and decals — in what Flock calls a [Vehicle Fingerprint](src:flock-deck-2023). The camera adds the time, its GPS position and its own identifier, and [Flock’s policy](src:flock-lpr-policy) says the plate and vehicle images are then transferred to the company’s servers." },
+        { "p": "The cameras are set off by [motion](src:flock-flex-datasheet). When a vehicle passes, one takes a rapid series of still photographs of its rear, lit at night by an infrared array: [six to 12](src:jalopnik-speed), Jalopnik reported, and [about 28 for a typical vehicle](src:wired-flock-camera-2026) in the logs of one camera whose files hackers released in September." },
+        { "p": "Software on the camera finds the vehicle, its plate and any people or bicycles in those frames, and crops the useful ones. The camera adds the time, its GPS position and its own identifier, and [Flock’s policy](src:flock-lpr-policy) says the plate and vehicle images are then transferred to the company’s servers. That is where the plate and its state appear to be read and the vehicle described, [WIRED and 404 Media found](src:wired-flock-camera-2026): its make, type and color, and features such as roof racks, bumper stickers and decals, in what Flock calls a [Vehicle Fingerprint](src:flock-deck-2023)." },
         { "fig": "read" }
       ]
     },
@@ -90,7 +91,7 @@
       "title": "Whether the cameras reduce crime",
       "blocks": [
         { "p": "Flock says its technology [supported about a million investigations](src:flock-impact-2026) in 2025. The figure comes from a survey of about 700 agencies, and the company calls its results “directional estimates rather than audited totals.”" },
-        { "p": "The most detailed independent test so far is a working paper by two University of South Carolina criminologists, Scott M. Mourtgos and Ian T. Adams, who used deployment records that [Flock supplied](src:flock-study-2026); the company says it did not fund the work. Comparing 216 agencies that adopted the cameras with 3,108 that did not, they estimated that reported vehicle thefts [fell 11 percent](src:mourtgos-adams-2026) in the year after an agency’s first camera went live. They also estimated that the share of thefts cleared by an arrest, 7.4 percent in the year before, rose by about 16 percent of that level — roughly one more cleared theft in every 100 — though the rise began in the three months before the cameras went live, which the authors say weakens the link to the cameras." },
+        { "p": "The most detailed independent test so far is a working paper by two University of South Carolina criminologists, Scott M. Mourtgos and Ian T. Adams, who used deployment records that [Flock supplied](src:flock-study-2026); the company says it did not fund the work. Comparing 216 agencies that adopted the cameras with 3,108 that did not, they estimated that reported vehicle thefts [fell 11 percent](src:mourtgos-adams-2026) in the year after an agency’s first camera went live. They also estimated that the share of thefts cleared by an arrest, 7.4 percent in the year before, rose by about 16 percent of that level, or roughly one more cleared theft in every 100. But the rise began in the three months before the cameras went live, which the authors say weakens the link to the cameras." },
         { "fig": "evidence" },
         { "p": "The 11 percent estimate gives more weight to agencies that had more thefts before the cameras arrived. Weighted by population, or with every agency-month counted equally, the paper’s appendix shows no change that can be told apart from zero, a point the Institute for Justice, a libertarian law firm that [sued Norfolk, Va., over its Flock cameras](src:ij-norfolk), [made in September](src:reason-flock-study-2026). The authors say their main estimate describes the places that carry most of the thefts rather than a uniform effect. The paper has not been published in a peer-reviewed journal." }
       ]
@@ -107,7 +108,7 @@
       "id": "what-it-costs",
       "title": "What it costs",
       "blocks": [
-        { "p": "Customers pay a yearly fee that covers the camera, pole, solar panel, cellular data and software, and Flock [keeps ownership of the hardware](src:richland-agreement-2023). The list price is [$3,000 per camera per year](src:flock-catalog-2024), up from $2,500 before Jan. 1, 2024." },
+        { "p": "Customers pay a yearly fee that covers the camera, pole, solar panel, cellular data and software, and Flock [keeps ownership of the hardware](src:richland-agreement-2023). The list price is [$3,000 per camera per year](src:flock-catalog-2024). Flock raised it from $2,500 for new cameras on April 1, 2023, according to a [company email quoted by WIRED](src:wired-costs-2026); existing customers paid the new rate when they renewed, from [Jan. 1, 2024](src:grafton-2024), in Grafton, Wis., unless they signed five-year terms that kept $2,500." },
         { "fig": "price" },
         { "p": "Contracts and quotes from [2022](src:richland-agreement-2023) and [2023](src:indio-2023) list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. When a customer changes its plan after it is agreed, Flock’s 2026 schedule charges [$1,000 to $1,250](src:flock-fee-schedule) to install a camera and $350 to $5,000 to move one." },
         { "p": "The largest public contracts run to millions of dollars. The Texas Department of Public Safety approved a [$26 million contract](src:texastribune-2026) in 2025; Johnson City, Tenn., approved [$8.1 million over 10 years](src:johnsoncity-2025)." },
@@ -172,9 +173,9 @@
     },
     "read": {
       "title": "Each read records more than the plate",
-      "sub": "The fields a Flock camera records for a passing vehicle",
-      "notes": ["Illustration. The vehicle details are those Flock lists in a 2020 announcement and a 2023 sales presentation; The Texas Tribune reported that the cameras also record dents."],
-      "sources": ["flock-wing-2020", "flock-deck-2023", "aclu-2022", "flock-lpr-policy", "texastribune-unplugged-2026"]
+      "sub": "The fields Flock records for a passing vehicle",
+      "notes": ["Illustration. The vehicle details are those Flock lists in a 2020 announcement and a 2023 sales presentation; The Texas Tribune reported that the cameras also record dents.", "In the software of one camera, WIRED and 404 Media found that the plate and vehicle details appeared to be produced on Flock’s servers, not on the camera."],
+      "sources": ["flock-wing-2020", "flock-deck-2023", "aclu-2022", "flock-lpr-policy", "texastribune-unplugged-2026", "wired-flock-camera-2026"]
     },
     "ruler": {
       "title": "Seconds to an alert, days to deletion",
@@ -213,10 +214,10 @@
       "sources": ["sacbee-roseville-2026", "footnote4a-hotlist", "haveibeenflocked-about", "lapd-oig-2026"]
     },
     "price": {
-      "title": "The list price of a camera rose $500 in 2024",
-      "sub": "Annual price per standard camera in contracts and price lists",
-      "notes": ["In 2019, a pilot in Greenville, S.C., paid $2,000 a year in all for 11 cameras, according to city contracts published by DeFlock SC, a group that opposes the cameras."],
-      "sources": ["richland-agreement-2023", "indio-2023", "grafton-2024", "flock-catalog-2024", "parkridge-2025", "deflocksc-greenville"]
+      "title": "The price of a new camera rose $500 in 2023; renewals followed",
+      "sub": "Annual price per standard camera in contracts, quotes and price lists",
+      "notes": ["Flock raised the price of new cameras on April 1, 2023, according to a company email quoted by WIRED. Existing customers paid the new rate at renewal, which in Grafton, Wis., and Derby, Kan., came at the start of 2024; Flock offered both $2,500 if they signed five-year terms. A July 2023 Flock proposal to a business district in Orlando, Fla., still listed $2,500.", "In 2019, a pilot in Greenville, S.C., paid $2,000 a year in all for 11 cameras, according to city contracts published by DeFlock SC, a group that opposes the cameras."],
+      "sources": ["richland-agreement-2023", "wired-costs-2026", "flock-deck-2023", "indio-2023", "derby-2023", "grafton-2024", "flock-catalog-2024", "parkridge-2025", "deflocksc-greenville"]
     },
     "contracts": {
       "title": "Of contracts with a known term, Dallas’s costs the most per year",
@@ -226,9 +227,9 @@
     },
     "timeline": {
       "title": "In 2026, some places added or kept the cameras while others switched them off",
-      "sub": "Decisions this year that changed where Flock cameras operate, who pays for them or how their data is kept",
+      "sub": "Decisions this year that changed where Flock cameras operate, who pays for them or how their data is kept, and the scrutiny the company faced",
       "notes": [],
-      "sources": ["patch-windsor-2026", "wa-sb6002-2026", "cleveland-2026", "wvwatch-huntington-2026", "turnto10-ri-2026", "flock-guardrails-2026", "okcfox-okc-2026", "texastribune-abbott-2026", "wusf-fdot-2026", "texastribune-dps-2026", "govtech-dallas-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"]
+      "sources": ["patch-windsor-2026", "wa-sb6002-2026", "cleveland-2026", "wvwatch-huntington-2026", "turnto10-ri-2026", "flock-guardrails-2026", "okcfox-okc-2026", "texastribune-abbott-2026", "wusf-fdot-2026", "texastribune-dps-2026", "govtech-dallas-2026", "ddosecrets-flock-2026", "wired-flock-camera-2026", "senate-judiciary-flock-2026", "fox4-dallas-2026", "texastribune-reprieve-2026"]
     }
   }
 }

@@ -2,7 +2,7 @@
   "$comment": "The splash: what the page covers and the ordered list of sections with one-line descriptions. Prose only; the figures it mentions are cited where they appear in the sections.",
   "sections": [
     { "id": "deployments", "label": "Deployments", "title": "Deployments and contracts", "blurb": "Houston has the most mapped Flock cameras of any city. In Texas, a $1 insurance fee helped pay for at least 3,200 before the governor paused state funding." },
-    { "id": "inside", "label": "Inside", "title": "Inside the enclosure", "blurb": "Fourteen parts in a case 8.75 inches long. The camera reads plates with its own processor and sends each read over a cellular connection." },
+    { "id": "inside", "label": "Inside", "title": "Inside the enclosure", "blurb": "Fourteen parts in a case 8.75 inches long. The camera finds plates in its photos with its own processor and sends the photos over a cellular connection." },
     { "id": "data", "label": "Data", "title": "Data path", "blurb": "An alert reaches officers in 10 to 15 seconds on average, Flock says. Reads are kept seven days by default for new customers." },
     { "id": "journey", "label": "Journey", "title": "Where the picture goes", "blurb": "One read followed like a parcel through seven stops, from the pole to deletion: what is in the package, who can open it and how long it takes." },
     { "id": "outcomes", "label": "Outcomes", "title": "What the reads produce", "blurb": "Few agencies publish what their cameras produce, and those that do count reads, alerts and arrests differently." },

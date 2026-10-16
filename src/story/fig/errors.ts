@@ -24,7 +24,7 @@ export function errorsFigure(cfg: FigureCfg, ctx: Ctx): string {
   const pct = (a: number, b: number) => (a / b) * 100;
   const fmt = (p: number) => (p < 1 ? p.toFixed(1) : String(Math.round(p)));
   const cards = [
-    { k: "The camera misreads the plate", m: "Roseville, Calif. · Flock cameras", p: pct(ROSE.wrong, ROSE.total), t: `${int(ROSE.wrong)} of ${int(ROSE.total)} stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate. A police lieutenant said none led to a contact or an arrest. Flock called the figure a mischaracterization and said the city’s older cameras were mounted unusually high.` },
+    { k: "The plate is misread", m: "Roseville, Calif. · Flock cameras", p: pct(ROSE.wrong, ROSE.total), t: `${int(ROSE.wrong)} of ${int(ROSE.total)} stolen-vehicle and felony alerts in 2023 and 2024 involved a misread plate. A police lieutenant said none led to a contact or an arrest. Flock called the figure a mischaracterization and said the city’s older cameras were mounted unusually high.` },
     { k: "The plate matches; the state does not", m: "Story County, Iowa · Axon readers in patrol cars", p: pct(STORY.wrongState, STORY.total), t: `${STORY.wrongState} of the ${STORY.total} hits in the sheriff’s report of erroneous hits, from a month of its in-car readers, matched a list entry from another state. That is a share of the hits in the report, not of all the office’s alerts.` },
     { k: "The list is out of date", m: "Los Angeles · Axon readers in patrol cars", p: pct(LA.stale, LA.alerts), t: `${LA.stale} of ${int(LA.alerts)} alerts in two months were accurate reads of plates on cars that, it turned out, were not stolen. The inspector general pointed to records that were not updated in time.` },
   ];

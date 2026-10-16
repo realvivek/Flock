@@ -65,7 +65,9 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | Claim | Figure | Source | Where |
 |---|---|---|---|
 | The cameras are set off by motion | | `flock-flex-datasheet` | "Motion: Passive Infrared Motion Detection"; the CEHRP teardown: "triggered by a motion detection sensor" (`cehrp-dissection`) |
-| One takes six to 12 still photographs of the rear | 6 to 12 | `jalopnik-speed` | "shoot 6 to 12 or so pictures of a vehicle as it passes by" |
+| One takes a rapid series of still photographs of the rear: six to 12, Jalopnik reported, and about 28 for a typical vehicle in the logs of one camera whose files hackers released in September | 6 to 12; about 28 | `jalopnik-speed`; `wired-flock-camera-2026` | Jalopnik: "shoot 6 to 12 or so pictures of a vehicle as it passes by"; WIRED and 404 Media: "A typical passing vehicle generated about 28 images, though some produced more than 100" (checked 16 October 2026) |
+| Software on the camera finds the vehicle, its plate and any people or bicycles, and crops the useful frames | | `wired-flock-camera-2026` | "software running on the device explicitly detects people as well as vehicles, license plates, and bicycles"; the camera "scans the images, selects and crops useful frames, and sends them with other data to Flock over the cellular network" |
+| The plate and its state appear to be read, and the vehicle described, on Flock's servers | | `wired-flock-camera-2026` | "The camera itself does not appear to read the plate or identify the vehicle's make, model, and color. That appears to happen on Flock's servers." The read figure's note says the same |
 | Lit at night by an infrared array | 850 nm | `flock-flex-datasheet` | "Night vision: 850nm Custom IR Array" |
 | Vehicle Fingerprint: make, type and color; roof racks, bumper stickers, decals; rear racks; missing or covered plates | | `flock-deck-2023` | slide "Vehicle Fingerprint Technology: Capture More Than License Plates"; the ACLU quotes the same list without decals and rear racks (`aclu-2022`, "Vehicle Fingerprint" passage) |
 | The diagram's trailer hitch and aftermarket wheels | | `flock-wing-2020` | "unique features like aftermarket wheels, roof rack, a trailer hitch, and more" |
@@ -144,10 +146,12 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 |---|---|---|---|
 | The yearly fee covers camera, pole, solar panel, data and software; Flock keeps ownership | | `richland-agreement-2023` | agreement terms |
 | List price $3,000 per camera per year | $3,000 | `flock-catalog-2024` | Virginia Sheriffs' Association catalog, May 2024 |
-| Up from $2,500 before Jan. 1, 2024 | +$500 | `indio-2023`; `grafton-2024` | Indio staff report; Village of Grafton, Wis., renewal memo |
+| Flock raised it from $2,500 for new cameras on April 1, 2023, according to a company email quoted by WIRED | +$500 | `wired-costs-2026` | a November 2023 email to the Albany County, N.Y., sheriff's office: "on April 1st, the cost of new Falcons went from $2,500 to $3,000, which will apply for future renewal terms on existing cameras as well"; the year follows from the email's date and its past tense (checked 16 October 2026) |
+| Existing customers paid the new rate when they renewed, from Jan. 1, 2024, in Grafton, Wis., unless they signed five-year terms that kept $2,500 | Jan. 1, 2024 | `grafton-2024`; `derby-2023` | Grafton memo, Nov. 29, 2023: a "price hike of $500 per camera per year, which is set to take effect on January 1, 2024," and "current customers" may keep "$2,500 per camera per year for the next five years"; Derby, Kan., council item, Nov. 14, 2023: an agreement "expiring at the end of the year" that "will increase in cost to $21,000 per year for 7 cameras ($3,000 per camera)," or $2,500 a camera on a new five-year agreement. Indio's staff report of October 2023 gives no date (`indio-2023`) |
+| A July 2023 Flock proposal to a business district in Orlando, Fla., still listed $2,500 | $2,500 | `flock-deck-2023` | slide: "Subscription $2,500 per camera, per year*"; the asterisk notes that electrical work is not included |
 | Contracts and quotes from 2022 and 2023: one-time installation fee of $350 to $650 a camera, or $150 on existing infrastructure | $350; $650; $150 | `richland-agreement-2023`; `indio-2023`; `flock-deck-2023` | Richland order form, signed Sept. 22–23, 2022: "Standard Implementation $350.00"; Indio order form, October 2023: "Standard Implementation Fee $650.00", "Existing Infrastructure Implementation Fee $150.00"; Flock's July 2023 Orlando proposal: "One time implementation fee per camera =$650" |
 | 2026 schedule: $1,000 to $1,250 to install and $350 to $5,000 to move a camera, when a customer changes the agreed plan | | `flock-fee-schedule` | the page's introduction says the fees apply to changes "driven by a Customer's request" |
-| Price chart points: Richland $2,500 (September 2022); Indio $2,500 (October 2023); Greenville renewal $2,500 (April 2024); catalog $3,000 (May 2024); Park Ridge $3,000 (June 2025) | | `richland-agreement-2023`; `indio-2023`; `deflocksc-greenville`; `flock-catalog-2024`; `parkridge-2025` | |
+| Price chart points: Richland $2,500 (September 2022); Flock's Orlando proposal $2,500 (July 2023); Indio $2,500 (October 2023); Greenville renewal $2,500 (April 2024); catalog $3,000 (May 2024); Park Ridge $3,000 (June 2025). The new-camera step is drawn at April 1, 2023, and the renewal step at Jan. 1, 2024 | | `richland-agreement-2023`; `flock-deck-2023`; `indio-2023`; `deflocksc-greenville`; `flock-catalog-2024`; `parkridge-2025`; `wired-costs-2026`; `grafton-2024` | |
 | Greenville's 2019 pilot: 11 cameras for $2,000 a year in all | | `deflocksc-greenville` | city contracts published by DeFlock SC |
 | Texas Department of Public Safety approved a $26 million contract in 2025 | $26 million | `texastribune-2026` | "approved a $26 million contract with Flock last year"; separately, the state vehicle authority's $15.9 million contract with DPS funded almost 1,200 cameras (`texastribune-dps-2026`) |
 | Johnson City, Tenn.: $8.1 million over 10 years | $8,063,000 | `johnsoncity-2025` | agenda summary p. 1 |
@@ -167,6 +171,47 @@ In reading order. "Computed" means produced by `scripts/story/build.mjs` from th
 | In the week before Oct. 8, volunteers added at least 706 Flock cameras to the map | 706 | computed | `addedLastWeek`: nodes first mapped since Oct. 1 and not yet edited, a floor |
 | In Windsor, Conn., a mapper deleted 14 of the cameras on Oct. 8, noting each had been removed, "presumably" because the town had canceled its contract; the council voted in July to keep them off | 14 | `osm-windsor-2026`; `patch-windsor-2026` | 12 changesets, 190181808 to 190182106, each noting the camera "has been removed. This is presumably due to the city's cancellation of their contract"; Patch counts 16 cameras |
 | Timeline entries | | each entry's own source | `src/content/timeline-2026.json`; the Texas Department of Public Safety's "at least 940" cameras are attributed to the email a lawmaker shared, as `texastribune-dps-2026` reports it |
+| Sept. 16: files hackers copied from an in-use camera, "ripped down ... above a roadway," published by Distributed Denial of Secrets; WIRED and 404 Media report that its software detects people | | `ddosecrets-flock-2026`; `wired-flock-camera-2026` | DDoSecrets, "Published on 2026-09-16": "Filesystem images of the partitions on an in-use Flock ALPR camera," with its apps and "recorded media" (checked 16 October 2026) |
+| Sept. 23: a Senate Judiciary subcommittee hearing, "Always Watching: Flock's Nationwide AI Surveillance Network" | | `senate-judiciary-flock-2026` | the committee's hearing page, Wednesday, Sept. 23, 2026, with five witnesses; Gray Television stations reported the hearing that day |
+
+## Corrections, seventh review (16 October 2026)
+
+A review of the site against public coverage as of Oct. 16, 2026, on three things: the release in September of
+files from one Flock camera, the date of the 2023 price rise, and four sources the site did not cite. Each fact
+was checked against its original on Oct. 16 before it was used; where the review's wording differed from the
+original, the original was used (second table). Security details stay at a high level: no exploit steps,
+credentials, keys or camera locations. An order form from Florence, Ore., found during the research, was not
+used: it is unsigned, and its terms are dated Dec. 19, 2025.
+
+| What the pages said | What the record shows | Source |
+|---|---|---|
+| Claim 18, "Flock has never been hacked": the record is mixed | Not supported by the record. Hackers took an in-use camera off its pole and copied its storage, recovering an encryption key kept on the device; on Sept. 16, 2026, Distributed Denial of Secrets published the camera's partitions, Flock apps and recorded media, and WIRED, 404 Media and Micah Lee analyzed them. Flock says its 2026 penetration test found two critical and seven high-severity flaws, since fixed. No breach of Flock's servers or of customer data in its cloud is documented, and the entry says so. | `ddosecrets-flock-2026`; `wired-flock-camera-2026`; `404-flock-firmware-2026`; `micahlee-flock-2026`; `flock-bishopfox-2026`; `flock-hacked` |
+| The camera reads the plate and describes the vehicle "before anything leaves the pole" (the home story, the Components deck and system-on-module record, Data stage 2, Journey stop 1, the overview and the power diagrams) | In the one camera whose software has been analyzed publicly, the camera detects vehicles, plates, people and bicycles and crops the useful frames; "The camera itself does not appear to read the plate or identify the vehicle's make, model, and color. That appears to happen on Flock's servers." No cited source supported reading on the camera. Data stage 2 is now "Detection"; reading moved to stage 6, "Reading and indexing," with the question of other models marked not verified. | `wired-flock-camera-2026` |
+| System on module: "YOLO and OpenCV pipelines on device" | None of the record's sources names the models. The row now says what the models detect. | `wired-flock-camera-2026` |
+| "Six to 12 still frames" per vehicle; the camera "does not record continuous video" (Components, Data stage 1, Journey, claim 2, the home story, the field-of-view card) | Six to 12, Jalopnik reported; about 28 for a typical vehicle, and sometimes more than 100, in the released camera's logs, which also held 27,321 clips of one to two seconds, "without audio." | `jalopnik-speed`; `wired-flock-camera-2026` |
+| Claims 1, 9 and 13 (facial recognition; recording and uploading everything; plates and nothing else): nothing from the released camera | Added: WIRED and 404 Media "found no evidence of any face-recognition capabilities in the camera's software beyond ones included by default in the Android operating system," which "did not appear to be enabled"; the logs recorded "about 1.6 million images" of "roughly 50,200 vehicles" over "about 21 days of activity across several periods"; the software records where a person appears "and how confident it is." Verdicts unchanged. | `wired-flock-camera-2026` |
+| Components: nothing on the operating system's patch level, secure boot or storage encryption | Added: the released camera's "Android patch level is 2018-06-05"; GainSec in 2025: "LPR units have Secure Boot disabled" and "unencrypted EMMC," and "LPR devices run Android Things 8.1 (EOL 2022)"; the released camera's media in an encrypted container, "though the key to it is stored on the same partition"; Flock: Secure Boot added to "legacy ALPR cameras," and Android 8.1 on "first-generation Falcon hardware" its one finding not remediated. | `micahlee-flock-2026`; `gainsec-whitepaper-2025`; `flock-bishopfox-2026` |
+| Data stage 4: nothing on keys in the camera's apps | Added, without values or names: "20 separate Flock apps, 19 of which all share a library" with "an API key, hard-coded straight into the app," and credentials for a cloud service stored "in plaintext"; GainSec found keys embedded in apps in 2025. | `micahlee-flock-2026`; `gainsec-whitepaper-2025` |
+| The list price "changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024" (the home story, the price chart, Economics) | Two dates, each with what it applies to: new cameras on April 1, 2023, in a Flock email quoted by WIRED; existing cameras at renewal, which in Grafton, Wis., and Derby, Kan., came at the start of 2024, unless the customer signed a five-year term at $2,500. Rows corrected in place under "What it costs." | `wired-costs-2026`; `grafton-2024`; `derby-2023` |
+| Price chart: one step, on Jan. 1, 2024; a key reading "Contract or invoice" | The amber step is at April 1, 2023, for new cameras; a dashed line holds existing cameras at $2,500 to the Jan. 1, 2024, renewal in Grafton; Flock's July 2023 Orlando proposal at $2,500 is added; the key reads "Contract, quote or invoice." | `wired-costs-2026`; `grafton-2024`; `flock-deck-2023` |
+| Economics: installation fees and contract terms without the WIRED documents | Added: Flock's July 2022 price sheet for the Fort Lauderdale police put installation at "between $150 and $2,750"; five-year terms were "sometimes marketed as a 'price-lock promotion'"; Alpharetta, Ga.'s 2024 contract "was $232,500 less than five one-year agreements." WIRED is also cited for the $800 camera replacement and the $3,000 price. | `wired-costs-2026` |
+| Claim 16, federal access: nothing from Washington | Added: the University of Washington Center for Human Rights found that "the Border Patrol searched the ALPR data of at least 17 Washington agencies"; "at least eight appear to have enabled 1:1 sharing" with it, and "at least ten" were reached without "explicit authorization by the network owner." Also in Data stage 10. | `uwchr-washington-2025` |
+| Claims 5, 6 and 16 and Data stage 12: no counts across agencies | Added counts computed from Eyes On Flock's data (see "Eyes On Flock counts" below), with its caveat that the portals are "only a fraction" of agencies. | `eyesonflock-2026` |
+| The 2026 timeline: decisions only | Added Sept. 16 (the release) and Sept. 23 (the Senate hearing, held that day), with a new kind, "Hearing or security finding." A Flock notice of unauthorized access reported around Sept. 24 is not included: Flock's advisories page lists no advisory, the only copy found is a screenshot posted by a third party, and it concerns device locations taken from a third-party map service, not the camera. | `ddosecrets-flock-2026`; `wired-flock-camera-2026`; `senate-judiciary-flock-2026` |
+| The errors chart, on the home page and Outcomes: "The camera misreads the plate" | "The plate is misread": where the plate is read is not established for every camera. | `sacbee-roseville-2026` |
+| The home page's picture of the Journey: older stop names and titles | Recaptured from the current page (`scripts/journey.mjs`, which now hides the source chips). | |
+| Every page's "Updated" date was the latest date any source had been checked | Each page carries the date it last changed (`updated` in `src/content/pages.json` and `src/content/story.json`). | |
+
+Where the review's details differed from the originals:
+
+| The review said | The original says | Source |
+|---|---|---|
+| A hacker group called stegan0gram took the camera off its pole and copied its firmware; DDoSecrets published it | DDoSecrets names no group and does not say how the camera was obtained; it published "Filesystem images of the partitions on an in-use Flock ALPR camera," its apps and "its recorded media." Micah Lee names "a collective called stegan0gram"; 404 Media and WIRED say the hackers "ripped down a Flock camera above a roadway." | `ddosecrets-flock-2026`; `micahlee-flock-2026`; `wired-flock-camera-2026` |
+| "More than 1.6 million images of about 50,000 vehicles in 21 days" (SAN's summary) | "about 21 days of activity across several periods," "roughly 50,200 vehicles," "about 1.6 million images," counted from the camera's logs | `wired-flock-camera-2026` |
+| GainSec: "51 findings and 22 CVEs across the Falcon, Sparrow, Raven and the compute box" | "51 findings, 22 with assigned CVEs and an additional 8 pending"; the 22 findings carry 15 distinct CVE numbers, and some findings concern apps rather than devices. The site says "51 security findings." | `gainsec-whitepaper-2025` |
+| The University of Washington's three routes: direct sharing, the national lookup, and local agencies searching on federal agencies' behalf | "front door" (direct sharing), "back door" (access "without explicit authorization by the network owner") and "side door" (searches by authorized users "on behalf of other agencies"); the report offers the national lookup only as a possible cause of the back door, since "the records released to UWCHR did not reveal whether that box had been checked." | `uwchr-washington-2025` |
+| WIRED says Flock raised the price for new cameras "in April 2023" | WIRED quotes an email of November 2023 that says "on April 1st"; the year follows from the email's date and its past tense | `wired-costs-2026` |
+| Micah Lee's figures | Confirmed as given: Android 8.1, patch level 2018-06-05, Linux 3.18.71; 19 of 20 apps sharing a library; plaintext credentials; the media key on the same partition; Flock's statement to 404 Media and WIRED | `micahlee-flock-2026` |
 
 ## Corrections, sixth review (9 October 2026)
 
@@ -408,6 +453,22 @@ error; the table shows how far "mapped" can sit from a published figure.
 
 Piedmont, Calif., and Lafayette, Colo., were in this table until Oct. 9, 2026, with counts of 48 and 30 that
 their cited reports do not give; both were removed.
+
+### Eyes On Flock counts
+
+Eyes On Flock (`eyesonflock-2026`), an independent project that does not name its operators, collects the settings
+agencies publish on their Flock transparency portals. It publishes them agency by agency, not as totals, so the
+counts on the Claims and Data pages were computed here from its data feed (`https://eyesonflock.com/api/v1/data`,
+downloaded 16 October 2026): 1,603 portals, most of them last updated Oct. 13 or 14, 2026. Only agencies that
+publish a portal are counted; the project calls them "only a fraction."
+
+| Figure | Value | How |
+|---|---|---|
+| Portals that state a retention period | 1,525 of 1,603 | `data_retention` is a number of days |
+| 30 days / less / more | 1,192 / 288 / 45 | the longest, 1,095 days, in three New Jersey towns |
+| Portals that say how many outside organizations can search their cameras | 1,049 | `organization_count` is a number |
+| Of those, at least one | 961, with a median of 273 | `organization_count` of 1 or more |
+| Portals that list a federal organization | 280; most often the U.S. Postal Inspection Service, listed by 234 | an entry in `organizations_shared_with` marked "[Federal]" |
 
 ### Two camera snapshots
 

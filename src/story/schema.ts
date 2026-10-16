@@ -18,8 +18,11 @@ const Figure = z.object({
   notes: z.array(z.string()).default([]),
   sources: z.array(z.string().min(1)).min(1),
 });
+/** An ISO date, as the date a page last changed. */
+const IsoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const StoryFile = z.object({
   kicker: z.string(),
+  updated: IsoDate,
   headline: z.string(),
   deck: z.string(),
   intro: z.array(z.string()),
@@ -32,12 +35,14 @@ export type FigureCfg = z.infer<typeof Figure>;
 
 export const TimelineFile = z.object({
   rule: z.string(),
-  events: z.array(z.object({ date: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/), precision: z.enum(["day", "month"]), kind: z.enum(["added", "ended", "restricted", "flock"]), where: z.string(), text: z.string(), sources: z.array(z.string()).min(1) })),
+  events: z.array(z.object({ date: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/), precision: z.enum(["day", "month"]), kind: z.enum(["added", "ended", "restricted", "flock", "scrutiny"]), where: z.string(), text: z.string(), sources: z.array(z.string()).min(1) })),
 }).passthrough();
 
 /** Heads of the reference pages, src/content/pages.json: rendered into each page at build time. */
 const PageHead = z.object({
   kicker: z.string().min(1),
+  /** the date the page last changed, shown in its dateline */
+  updated: IsoDate,
   title: z.string().min(1).max(110),
   deck: z.string().min(1),
   description: z.string().optional(),

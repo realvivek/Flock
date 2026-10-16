@@ -1,5 +1,5 @@
-/** What it costs: documented prices per camera over time with the one documented list-price change, and the largest
- *  documented contracts per year. */
+/** What it costs: documented prices per camera over time with the two dates of the 2023 price rise (new cameras, then
+ *  renewals), and the largest documented contracts per year. */
 import { ap, apDate, int } from "../../viz/format.ts";
 import { circle, g, line, path, rect, svg, text, label, hbar, tip, linScale, textWidth, WIDE, NARROW } from "../../viz/svg.ts";
 import { frame, dataTable, type Ctx } from "../frame.ts";
@@ -13,6 +13,7 @@ interface PricePoint { date: string; price: number; what: string; kind: "list" |
 const GREENVILLE = { date: "2019-12", price: 182, what: "Greenville, S.C., pilot: 11 cameras for $2,000 a year in all", kind: "contract" as const };
 const POINTS: PricePoint[] = [
   { date: "2022-09", price: 2500, what: "Richland, Wash., order form: 10 cameras", kind: "contract" },
+  { date: "2023-07", price: 2500, what: "Flock proposal to Orlando’s International Drive business district", kind: "contract" },
   { date: "2023-10", price: 2500, what: "Indio, Calif.: $2,500 offered for a five-year term", kind: "contract" },
   { date: "2024-04", price: 2500, what: "Greenville, S.C., third year, 50 cameras", kind: "contract" },
   { date: "2024-05", price: 3000, what: "Virginia Sheriffs’ Association catalog list price", kind: "list" },
@@ -29,12 +30,15 @@ export function priceFigure(cfg: FigureCfg, ctx: Ctx): string {
     out += g([0, 1000, 2000, 3000].map((v) => text(L - 6, y(v) + 4, v === 0 ? "$0" : `$${int(v)}`, { "text-anchor": "end" })).join(""), { class: "axis" });
     out += g([2022, 2023, 2024, 2025, 2026].map((v) => text(x(v + 0.5), T + PH + 16, narrow ? `’${String(v).slice(2)}` : String(v), { "text-anchor": "middle" })).join(""), { class: "axis" });
     out += line(L, y(0) + 0.5, W - R, y(0) + 0.5, { class: "baseline" });
-    // a tick at each new year, so the Jan. 1, 2024, step lines up with the start of 2024
+    // a tick at each new year, so the Jan. 1, 2024, renewal step lines up with the start of 2024
     out += g([2022, 2023, 2024, 2025, 2026, 2027].map((v) => line(x(v), y(0) + 0.5, x(v), y(0) + 8, { stroke: "var(--ink-2)", "stroke-width": 1 })).join(""));
-    // the documented change on Jan. 1, 2024: a step in the list price
-    const s0 = x(yr("2022-09")), s1 = x(2024), s2 = x(2027);
+    // the price of a new camera: $500 more from April 1, 2023, in a company email quoted by WIRED
+    const s0 = x(yr("2022-09")), s1 = x(yr("2023-04-01")), s2 = x(2027), sr = x(2024);
     out += path(`M${s0} ${y(2500)} H${s1} V${y(3000)} H${s2}`, { fill: "none", stroke: "var(--amber-mark)", "stroke-width": 2.5, "stroke-linejoin": "round" });
-    out += label(narrow ? W - R : s1 + 6, y(3000) - 9, narrow ? "$3,000 list price since Jan. 1, 2024" : "List price $3,000 since Jan. 1, 2024", { "font-size": 12, "font-weight": 700, fill: "var(--ink)", "text-anchor": narrow ? "end" : "start" });
+    out += label(narrow ? W - R : s1 + 6, y(3000) - 9, narrow ? "New cameras: $3,000 from April 2023" : "New cameras: $3,000 from April 1, 2023", { "font-size": 12, "font-weight": 700, fill: "var(--ink)", "text-anchor": narrow ? "end" : "start" });
+    // existing cameras kept $2,500 until renewal: Jan. 1, 2024, in Grafton, Wis., and Derby, Kan.
+    out += path(`M${s1} ${y(2500)} H${sr} V${y(3000)}`, { fill: "none", stroke: "var(--ink)", "stroke-width": 1.5, "stroke-dasharray": "4 3" });
+    out += label(s1, y(2500) + 19, narrow ? "Renewals: Jan. 2024" : "Renewals: from Jan. 1, 2024, in Grafton, Wis.", { "font-size": 12, fill: "var(--ink)" });
     // documented prices
     for (const p of POINTS) {
       const cx = x(yr(p.date)), cy = y(p.price);
@@ -42,12 +46,17 @@ export function priceFigure(cfg: FigureCfg, ctx: Ctx): string {
     }
     // legend
     const lg = narrow ? T + PH + 34 : T + PH + 36;
-    out += circle(L + 4, lg - 4, 4.5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 2 }) + text(L + 14, lg, "Contract or invoice", { "font-size": 12 });
-    out += circle(L + (narrow ? 140 : 160), lg - 4, 4.5, { fill: "var(--ink)" }) + text(L + (narrow ? 150 : 170), lg, "Price list", { "font-size": 12 });
-    return svg(W, lg + 8, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Chart of the annual price per Flock camera from 2022 to 2026: $2,500 in contracts and quotes from 2022 and 2023, and a list price of $3,000 since Jan. 1, 2024." });
+    const k1 = "Contract, quote or invoice", k2x = L + 14 + Math.ceil(textWidth(k1, 12)) + 30;
+    out += circle(L + 4, lg - 4, 4.5, { fill: "#fff", stroke: "var(--ink)", "stroke-width": 2 }) + text(L + 14, lg, k1, { "font-size": 12 });
+    out += circle(k2x, lg - 4, 4.5, { fill: "var(--ink)" }) + text(k2x + 10, lg, "Price list", { "font-size": 12 });
+    return svg(W, lg + 8, out, { cls: narrow ? "v-narrow" : "v-wide", label: "Chart of the annual price per Flock camera from 2022 to 2026: $2,500 in contracts and quotes from 2022 and 2023; $3,000 for new cameras from April 1, 2023, and for existing cameras at renewal, from Jan. 1, 2024, in Grafton, Wis.; and a $3,000 list price in 2024 and 2025." });
   };
-  // every price in dollars, in date order, the list-price change among them
-  const rows = [GREENVILLE, ...POINTS, { date: "2024-01-01", price: 3000, what: "List price, up $500 (Grafton, Wis., village memo)", kind: "list" as const }].sort((a, b) => a.date.localeCompare(b.date));
+  // every price in dollars, in date order, the two steps of the 2023 rise among them
+  const STEPS = [
+    { date: "2023-04-01", price: 3000, what: "New cameras, up $500 (a Flock email quoted by WIRED)", kind: "list" as const },
+    { date: "2024-01-01", price: 3000, what: "Existing cameras at renewal, up $500 unless the customer signed a five-year term (Grafton, Wis.; Derby, Kan., whose agreement expired at the end of 2023)", kind: "list" as const },
+  ];
+  const rows = [GREENVILLE, ...POINTS, ...STEPS].sort((a, b) => a.date.localeCompare(b.date));
   const table = dataTable(["Date", "Price per camera per year", "Record"], rows.map((p) => [apDate(p.date), `$${int(p.price)}`, p.what]), { text: [2] });
   return frame("price", cfg, ctx, draw(WIDE, false) + draw(NARROW, true), { table });
 }

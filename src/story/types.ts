@@ -11,7 +11,7 @@ export interface SourceRec { id: string; kind: string; title: string; publisher:
 export interface Ladder { id: string; agency: string; city: string; state: string; period: string; cameras: string; vendorMix?: boolean; vendor?: string; mixedWindows?: boolean; values: Record<"reads" | "alerts" | "falseAlerts" | "stops" | "recoveries" | "arrests", number | null>; note: string; sources: string[] }
 export interface Meta { snapshot: string; built: string; frame: [number, number]; cameras: { total: number; flock: number; onMap: number; offMap: number; offMapFlock: number } }
 export interface Overview { sections: { id: string; label: string; title: string; blurb: string }[] }
-export interface TimelineEvent { date: string; precision: "day" | "month"; kind: "added" | "ended" | "restricted" | "flock"; where: string; text: string; sources: string[] }
+export interface TimelineEvent { date: string; precision: "day" | "month"; kind: "added" | "ended" | "restricted" | "flock" | "scrutiny"; where: string; text: string; sources: string[] }
 
 export interface StoryInput {
   story: import("./schema.ts").Story;

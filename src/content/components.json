@@ -37,10 +37,10 @@
     {
       "id": "sensor", "node": "falcon.sensor", "order": 5, "group": "optics",
       "name": "Camera module", "partNumber": "ISB-IMX477C-C02",
-      "function": "About five megapixels, half-inch format, infrared-optimized. It captures six to 12 still frames per passing vehicle; it does not record continuous video.",
+      "function": "About five megapixels, half-inch format, infrared-optimized. When something moves into view, the camera takes a rapid series of still photos at different exposures, for the plate and the wider scene: six to 12 of each passing vehicle, Jalopnik reported. In the logs of a camera whose files hackers released in September 2026, a typical vehicle produced about 28 and some more than 100, WIRED and 404 Media found; that camera also stored short video clips of one to two seconds.",
       "spec": { "Resolution": "About 5 MP", "Format": "1/2 in", "Interface": "Fine-pitch flex cable to the mainboard, CAM_3V3 rail", "Note": "The IMX477 marking may not be a genuine Sony part; resolution does not match a real IMX477" },
       "dims": { "w": 1.0, "h": 1.0, "d": 0.2 }, "explode": [0, 0, 0.09], "hop": "hop-1",
-      "confidence": "disputed", "sources": ["flockcamre", "cehrp-dissection", "jalopnik-speed"]
+      "confidence": "disputed", "sources": ["flockcamre", "cehrp-dissection", "jalopnik-speed", "wired-flock-camera-2026"]
     },
     {
       "id": "pir", "node": "falcon.pir", "order": 6, "group": "optics",
@@ -54,25 +54,25 @@
       "id": "mainboard", "node": "falcon.mainboard", "order": 7, "group": "compute",
       "name": "Mainboard", "partNumber": "401-00027-3 \"Cassowary CCB\"",
       "function": "Carrier board: power stage, SIM socket, micro-USB debug port, and the headers the other boards connect to. Silkscreened Flock Safety Inc. 2022.",
-      "spec": { "Rails": "3.3 V, 1.8 V, 1.2 V; 12 V to the LED board", "Debug": "Micro-USB, test points; shipped as a debug build with an unlocked bootloader", "SIM": "Carrier SIM socket" },
+      "spec": { "Rails": "3.3 V, 1.8 V, 1.2 V; 12 V to the LED board", "Debug": "Micro-USB, test points; shipped as a debug build with an unlocked bootloader", "Secure boot": "Off on the plate readers GainSec tested in 2025; Flock says it has since added Secure Boot to its older cameras", "SIM": "Carrier SIM socket" },
       "dims": { "w": 2.3, "h": 6.8, "d": 0.08 }, "explode": [0, 0, 0.0], "hop": "hop-2",
-      "confidence": "measured", "sources": ["flockcamre", "privacyguides-2025"]
+      "confidence": "measured", "sources": ["flockcamre", "privacyguides-2025", "gainsec-whitepaper-2025", "flock-bishopfox-2026"]
     },
     {
       "id": "som", "node": "falcon.som", "order": 8, "group": "compute",
       "name": "System on module", "partNumber": "Lantronix Open-Q 624A", "vendor": "Lantronix / Qualcomm",
-      "function": "Qualcomm APQ8053 (Snapdragon 624/625 family) running Android 8.1. Plate recognition and the Vehicle Fingerprint attributes are computed on this module before transmission.",
-      "spec": { "CPU": "Eight ARM cores (APQ8053); Flock's Flex data sheet says quad-core, 1.4 GHz", "GPU": "Adreno 506", "RAM": "About 2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "YOLO and OpenCV pipelines on device", "Support": "Qualcomm's last security update for the chipset was in late 2020, and Android 8 support ended in 2021, according to Footnote 4a" },
+      "function": "Qualcomm APQ8053 (Snapdragon 624/625 family) running Android 8.1. Software on this module detects vehicles, plates, people and bicycles, then selects and crops the useful frames and sends them to Flock. On a camera whose files hackers released in September 2026, reading the plate and identifying the make, model and color appeared to happen on Flock’s servers, not on the camera, WIRED and 404 Media found.",
+      "spec": { "CPU": "Eight ARM cores (APQ8053); Flock's Flex data sheet says quad-core, 1.4 GHz", "GPU": "Adreno 506", "RAM": "About 2 GB", "OS": "Android 8.1, Linux kernel 3.18", "Models": "Detection of vehicles, plates, people and bicycles on the camera; plate reading on Flock’s servers (WIRED and 404 Media)", "Support": "Qualcomm's last security update for the chipset was in late 2020, and Android 8 support ended in 2021, according to Footnote 4a; GainSec calls the software Android Things 8.1, end of life in 2022", "Patch level": "June 5, 2018, on the camera whose files were released in September 2026 (Micah Lee). Flock lists Android 8.1 on first-generation Falcons as the one finding of its 2026 penetration test it has not remediated, and says it builds its own patches" },
       "dims": { "w": 1.2, "h": 2.0, "d": 0.15 }, "explode": [0, 0.11, -0.05], "hop": "hop-2",
-      "confidence": "disputed", "sources": ["flockcamre", "ryanohoro-2024", "flock-flex-datasheet", "footnote4a-trust"]
+      "confidence": "disputed", "sources": ["flockcamre", "ryanohoro-2024", "flock-flex-datasheet", "footnote4a-trust", "wired-flock-camera-2026", "gainsec-whitepaper-2025", "micahlee-flock-2026", "flock-bishopfox-2026"]
     },
     {
       "id": "emmc", "node": "falcon.emmc", "order": 9, "group": "compute",
       "name": "Storage", "partNumber": "Kingston eMMC32G", "vendor": "Kingston",
-      "function": "32 GB of flash for the operating system and the image upload queue. Flock states images are removed from the device once the cloud acknowledges the upload; the Flex data sheet describes about two weeks of local buffer.",
-      "spec": { "Capacity": "32 GB (29.1 GiB usable)", "Mode": "HS400ES", "Buffer": "About 2 weeks offline (Flex sheet); standard Falcon unspecified" },
+      "function": "32 GB of flash for the operating system and the image upload queue. Flock states images are removed from the device once the cloud acknowledges the upload; the Flex data sheet describes about two weeks of local buffer. The camera whose files were released in September 2026 still held 27,321 short video clips, WIRED found, and Flock says the limited images stored on older cameras could be obtained from a stolen one, a flaw it says Secure Boot now closes.",
+      "spec": { "Capacity": "32 GB (29.1 GiB usable)", "Mode": "HS400ES", "Buffer": "About 2 weeks offline (Flex sheet); standard Falcon unspecified", "Encryption": "None on the plate readers GainSec tested in 2025; on the camera released in 2026, recorded media sat in an encrypted area whose key was kept on the same device (Micah Lee)" },
       "dims": { "w": 0.5, "h": 0.45, "d": 0.06 }, "explode": [0, 0.18, -0.05], "hop": "hop-2",
-      "confidence": "measured", "sources": ["flockcamre", "flock-flex-datasheet", "flock-privacy-access"]
+      "confidence": "measured", "sources": ["flockcamre", "flock-flex-datasheet", "flock-privacy-access", "wired-flock-camera-2026", "flock-bishopfox-2026", "gainsec-whitepaper-2025", "micahlee-flock-2026"]
     },
     {
       "id": "lte", "node": "falcon.lte", "order": 10, "group": "radio",

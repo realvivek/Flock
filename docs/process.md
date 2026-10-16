@@ -14,7 +14,8 @@ entry there carries a `sources` array pointing into one bibliography, `src/conte
 is tagged by origin: `flock` (the company's own documents), `independent` (teardowns, research, journalism),
 `government` or `court`. The build refuses to run if a cited source id does not exist (`scripts/check-sources.ts`)
 or if a listed still image is missing. The bibliography grew from about 60 rows at the start to 196 by
-Oct. 8; the review of Oct. 9 removed 18 rows that nothing cited and added a few, leaving 182. Statements from Flock and from independent sources are shown with different tags so a reader can tell
+Oct. 8; the review of Oct. 9 removed 18 rows that nothing cited and added a few, leaving 182, and the review of
+Oct. 16 added 11, for 193. Statements from Flock and from independent sources are shown with different tags so a reader can tell
 them apart, and where the two disagree, both are cited.
 
 **Neutral copy.** No adjectives that judge. A camera that reads a plate "reads a plate"; an audit that found
@@ -532,13 +533,49 @@ documents. Those and 18 smaller corrections are listed in the sixth table of `do
 - **Old addresses kept.** Anchors that redirects and tests use (`#claim-*`, `#stage-*`, `#src-*`, `#pole`,
   `#power`) kept their names through the rebuild.
 
-## 9. Numbers for the article
+## 9. October 16: a review against the news
+
+A review of the site against public coverage as of Oct. 16 found three things to fix. On Sept. 16, files that
+hackers had copied from one Flock camera, taken off its pole, were published, and WIRED and 404 Media reported
+what its software does; the site still called "Flock has never been hacked" a mixed claim. The site dated the
+$500 price rise to Jan. 1, 2024, where a Flock email quoted by WIRED puts it at April 1, 2023, for new cameras.
+And four sources were missing: GainSec's white paper on Flock's devices, the University of Washington's report on
+federal access in that state, WIRED's account of what Flock costs cities, and Eyes On Flock's collection of
+transparency-portal settings.
+
+Each detail was checked against its original before it was used, and several differed from the review's summary:
+the logs showed "about 1.6 million images," not more; GainSec's 22 findings with CVE identifiers carry 15 distinct
+numbers; the University of Washington's second route is a "back door," with the national lookup offered only as
+a possible cause. The originals also changed more than the review asked. WIRED and 404 Media found that the
+camera itself "does not appear to read the plate"; the site had said in several places that it did, and no cited
+source said so. Those statements now say what the camera does (it finds the vehicle, the plate, people and
+bicycles, and crops the frames) and attribute the reading on Flock's servers to the outlets' analysis of one
+camera. The 16 corrections, and the six places where the review's details differed from the originals, are the
+seventh table of `docs/fact-check.md`.
+
+### Decisions
+
+- **The verdict follows the page's rule.** "Not supported" means the documents contradict the claim, and a
+  camera's storage copied and published does. The entry keeps the line between a camera taken off its pole and a
+  breach of Flock's servers, which no source documents.
+- **Two dates, not one.** New cameras went up on April 1, 2023; existing cameras at renewal, which in Grafton,
+  Wis., and Derby, Kan., came at the start of 2024. The chart draws both, and the July 2023 proposal that still
+  listed $2,500 is on it.
+- **A notice left out.** A Flock notice of unauthorized access reported around Sept. 24 exists only as a
+  screenshot posted by a third party, so the timeline does not include it.
+- **Counts computed here, and said so.** Eyes On Flock publishes each agency's settings, not totals; the counts
+  and how they were made are in the ledger.
+- **A date for each page.** Pages had shown the latest date any source was checked, so a new source redated pages
+  that had not changed. Each page now carries the date it last changed.
+- **No em dashes.** The style test now fails on an em dash between words.
+
+## 10. Numbers for the article
 
 | What | Figure |
 |---|---|
 | Pages | 9 (home, deployments, components, data, journey, outcomes, claims, economics, sources) |
-| Commits | 67, Sept. 4 to Oct. 9, 2026 |
-| Bibliography rows | 182, tagged flock, independent, government or court |
+| Commits | 68, Sept. 4 to Oct. 16, 2026 |
+| Bibliography rows | 193, tagged flock, independent, government or court |
 | Content files | 15 JSON files validated by schema at build |
 | 3D models | 4 GLB files from parametric Blender scripts |
 | Stills | 26 rendered images |
@@ -548,5 +585,5 @@ documents. Those and 18 smaller corrections are listed in the sixth table of `do
 | Mapped cameras, outcomes | 116,723 readers, 96,484 Flock (July 17, 2026, the snapshot the records were matched against) |
 | Outcome locations | 74 tied to fixed cameras, 55 placed, 21 within 150 m of a mapped camera |
 | Claims checked in the October fact-checks | about 250 on the home page, in two independent passes; every number on the eight reference pages, in four more |
-| Corrections from the reference pages' reviews | 22 in the fourth review, 39 in the fifth, 20 in the sixth |
+| Corrections from the reference pages' reviews | 22 in the fourth review, 39 in the fifth, 20 in the sixth; 16 in the seventh, against the news of Oct. 16 |
 | Home page weight before the first scroll | about 480 KB compressed, of which 13 KB JavaScript and 278 KB the map's camera file (`scripts/budget.mjs`) |

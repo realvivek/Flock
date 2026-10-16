@@ -1,13 +1,16 @@
 {
   "$comment": "Pricing, fee schedules, installation workflow, workforce, permitting, contract terms and company scale for a Flock deployment. Every row cites sources.json. Prices are per unit per year unless stated.",
   "intro": {
-    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Contracts and city staff reports itemize what the annual fee covers: the camera, pole, solar panel, cellular data, cloud storage and software. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The list price changed from $2,500 to $3,000 per camera per year on Jan. 1, 2024. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
+    "summary": "Flock sells the Falcon as an annual subscription and retains ownership of the hardware. Contracts and city staff reports itemize what the annual fee covers: the camera, pole, solar panel, cellular data, cloud storage and software. A one-time installation fee, permit costs, electrician work for AC sites, and replacement of lost, stolen or damaged equipment are billed separately. The price rose from $2,500 to $3,000 per camera per year in two steps: for new cameras on April 1, 2023, according to a company email quoted by WIRED, and for existing cameras at renewal, which in Grafton, Wis., and Derby, Kan., came at the start of 2024, unless the customer signed a five-year term that kept $2,500. Contracts and quotes from 2022 and 2023 list a one-time installation fee of $350 to $650 a camera, or $150 to mount one on existing infrastructure. Flock's 2026 fee schedule charges $1,000 to $1,250 to install a camera, and $350 to $5,000 to move one, when a customer changes the agreed deployment plan.",
     "sources": [
       "flock-catalog-2024",
       "flock-fee-schedule",
       "indio-2023",
       "parkridge-2025",
-      "richland-agreement-2023"
+      "richland-agreement-2023",
+      "wired-costs-2026",
+      "grafton-2024",
+      "derby-2023"
     ]
   },
   "priceList": [
@@ -18,7 +21,8 @@
       "term": "per year",
       "sources": [
         "flock-catalog-2024",
-        "parkridge-2025"
+        "parkridge-2025",
+        "wired-costs-2026"
       ]
     },
     {
@@ -165,13 +169,14 @@
   "extra": [
     {
       "k": "Installation fee",
-      "v": "One-time per camera, covering the site survey and 811 locate scheduling: $350 to $650 in contracts and quotes from 2022 and 2023, or $150 on existing infrastructure. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan",
+      "v": "One-time per camera, covering the site survey and 811 locate scheduling: $350 to $650 in contracts and quotes from 2022 and 2023, or $150 on existing infrastructure. Flock's 2026 schedule charges $1,000, or $1,250 for an advanced install, when the customer changes the agreed deployment plan. A July 2022 Flock price sheet for the Fort Lauderdale police, reviewed by WIRED, put installation at $150 to $2,750",
       "sources": [
         "richland-agreement-2023",
         "indio-2023",
         "flock-deck-2023",
         "flock-fee-schedule",
-        "flock-impl-guide"
+        "flock-impl-guide",
+        "wired-costs-2026"
       ]
     },
     {
@@ -262,7 +267,8 @@
       "item": "Camera replacement after vandalism, theft or damage",
       "now": "$800, or $0 with Camera Protection Plan",
       "sources": [
-        "flock-fee-schedule"
+        "flock-fee-schedule",
+        "wired-costs-2026"
       ]
     },
     {
@@ -319,6 +325,14 @@
       ]
     },
     {
+      "date": "April 1, 2023",
+      "price": "$3,000 for new cameras",
+      "note": "A November 2023 Flock email to the Albany County, N.Y., sheriff's office, quoted by WIRED: the cost of new Falcons rose from $2,500 to $3,000 on April 1 and would apply to future renewal terms on existing cameras",
+      "sources": [
+        "wired-costs-2026"
+      ]
+    },
+    {
       "date": "July 2023",
       "price": "$2,500 plus $650 install",
       "note": "Flock's proposal to Orlando's International Drive district",
@@ -336,10 +350,11 @@
     },
     {
       "date": "Jan. 1, 2024",
-      "price": "+$500 per camera per year",
-      "note": "Grafton, Wis., staff report: existing customers could retain $2,500 by signing a five-year term",
+      "price": "+$500 per camera per year at renewal",
+      "note": "Existing customers renewing at the start of 2024, in a Grafton, Wis., staff memo and a Derby, Kan., council item; each could keep $2,500 by signing a five-year term",
       "sources": [
-        "grafton-2024"
+        "grafton-2024",
+        "derby-2023"
       ]
     },
     {
@@ -581,11 +596,12 @@
     },
     {
       "k": "Term and renewal",
-      "v": "One, two, five and 10-year terms exist; renewals roll automatically unless notice is given 30 days before the end",
+      "v": "One, two, five and 10-year terms exist; renewals roll automatically unless notice is given 30 days before the end. Flock has offered five-year terms that hold the price, sometimes marketed as a “price-lock promotion,” WIRED reported; Alpharetta, Ga.'s five-year contract of 2024 cost $232,500 less than five one-year agreements",
       "sources": [
         "richland-agreement-2023",
         "johnsoncity-2025",
-        "indio-2023"
+        "indio-2023",
+        "wired-costs-2026"
       ]
     },
     {

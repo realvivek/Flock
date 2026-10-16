@@ -4,8 +4,8 @@ import { readFileSync } from "node:fs";
 /**
  * Times style across the visible text of every page, including text drawn in the browser, figure labels, the title,
  * share tags and tooltips: typographic quotes, AP dates, "percent" in prose, the Times's state abbreviations, American
- * spelling, numerals for 10 and up. Exceptions, each with a reason, are in tests/style-allow.json. STYLE_REPORT=1 lists
- * the findings without failing.
+ * spelling, numerals for 10 and up, no em dashes in sentences. Exceptions, each with a reason, are in
+ * tests/style-allow.json. STYLE_REPORT=1 lists the findings without failing.
  */
 const PAGES = ["", "deployments", "components", "data", "journey", "outcomes", "claims", "economics", "sources"];
 const allow = JSON.parse(readFileSync(new URL("./style-allow.json", import.meta.url), "utf8")) as { rule: string; text: string; why: string }[];
@@ -20,6 +20,8 @@ const RULES: { rule: string; re: RegExp; prose?: boolean }[] = [
   { rule: "number 10 or more in words", re: /(?<![.!?:]\s|^)\b(ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)\b/ },
   { rule: "US or Inc without points", re: /\bUS\b|\bInc\b(?!\.)/ },
   { rule: "Times abbreviation (A.C.L.U., F.B.I., A.I.)", re: /\b(ACLU|FBI)\b|\bAI\b/ },
+  // a dash between words; a table cell holding only "—" marks a missing value and is not matched
+  { rule: "em dash in a sentence", re: /\S ?— ?\S/ },
 ];
 
 async function textOf(page: Page): Promise<{ text: string; where: string; prose: boolean }[]> {

@@ -58,19 +58,18 @@ export function renderStory(inp: StoryInput & { deputy: Deputy; timelineRule: st
   // 4:3 images of whole tiles with no small print; the journey has its own phone image with larger type
   const preview = (k: "components" | "journey") => k === "components"
     ? `<a class="preview" href="components/" id="preview"><img id="preview-img" src="img/knolling.jpg" alt="Six of the camera’s 14 components, each rendered on its own tile: the front bezel, the infrared illuminator board, the infrared-cut filter, the camera module, the system on module and the GPS antenna" loading="lazy" decoding="async" width="1120" height="840"><span class="cap"><span class="kicker">Inside the camera</span><span class="t">Fourteen components in five groups, from the bezel to the clamps</span><span class="go">See the components</span></span></a>`
-    : `<a class="preview" href="journey/" id="preview-journey"><picture><source media="(max-width: 640px)" srcset="img/journey-phone.jpg" width="1120" height="840"><img id="preview-journey-img" src="img/journey.jpg" alt="The first stops of one photograph’s journey, tracked like a parcel: picked up on the pole, in transit on the carrier network, arrived at Amazon’s cloud" loading="lazy" decoding="async" width="1120" height="840"></picture><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
+    : `<a class="preview" href="journey/" id="preview-journey"><picture><source media="(max-width: 640px)" srcset="img/journey-phone.jpg" width="1120" height="840"><img id="preview-journey-img" src="img/journey.jpg" alt="The first stops of one photograph’s journey, tracked like a parcel: captured on the pole, uploaded over a cellular network, stored and read in Amazon’s cloud" loading="lazy" decoding="async" width="1120" height="840"></picture><span class="cap"><span class="kicker">The journey</span><span class="t">One photograph followed through seven stops, from the pole to deletion</span><span class="go">Follow the picture</span></span></a>`;
   const cards = () => `<div id="summary-cards" class="summary">${PAGES.map((pg, i) => {
     const sec = inp.overview.sections.find((x) => x.id === pg.section);
     return `<a class="summary-card" href="${pg.id}/"><span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${escape(sec?.title ?? pg.label)}</span><span class="b">${escape(sec?.blurb ?? "")}</span><span class="go">${escape(pg.label)} →</span></a>`;
   }).join("")}</div>`;
 
-  const snapshot = String(inp.stats.snapshot!.value);
   let html = `<article class="story">
 <header class="story-head" id="top">
 <p class="kicker">${escape(s.kicker)}</p>
 <h1>${escape(s.headline)}</h1>
 <p class="deck">${inline(s.deck, ctx)}</p>
-<p class="dateline"><time datetime="${escape(snapshot)}">Updated ${escape(apDate(snapshot))}</time><span class="sep" aria-hidden="true">·</span><a href="#how-this-was-made">How this was made</a></p>
+<p class="dateline"><time datetime="${escape(s.updated)}">Updated ${escape(apDate(s.updated))}</time><span class="sep" aria-hidden="true">·</span><a href="#how-this-was-made">How this was made</a></p>
 </header>
 <div class="prose intro">${s.intro.map((p) => `<p>${inline(p, ctx)}</p>`).join("")}</div>
 ${mapSection(inp, ctx)}

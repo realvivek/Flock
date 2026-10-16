@@ -40,12 +40,13 @@
     "maxFt": 100,
     "lanes": 2,
     "mph": 100,
-    "framesPerVehicle": "six to 12",
+    "framesPerVehicle": "six to 12 of each passing vehicle, Jalopnik reported; about 28 for a typical vehicle in the logs of one camera, WIRED and 404 Media found",
     "aims": "Rear plates of departing vehicles",
     "sources": [
       "flock-techspecs",
       "flock-flex-datasheet",
-      "jalopnik-speed"
+      "jalopnik-speed",
+      "wired-flock-camera-2026"
     ]
   },
   "modes": {
@@ -368,7 +369,7 @@
         },
         {
           "k": "Data",
-          "v": "No cable carries data; the reads go out over the cellular network (LTE)",
+          "v": "No cable carries data; the photos go out over the cellular network (LTE)",
           "sources": [
             "flock-techspecs",
             "cehrp-dissection"
@@ -403,7 +404,7 @@
         },
         {
           "k": "Data",
-          "v": "Only the power source changes; the reads still go out over the cellular network",
+          "v": "Only the power source changes; the photos still go out over the cellular network",
           "sources": [
             "flock-techspecs"
           ]
