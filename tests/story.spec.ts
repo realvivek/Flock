@@ -77,7 +77,7 @@ test("the story reads without JavaScript", async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
   const page = await ctx.newPage();
   await page.goto("/");
-  await expect(page.locator(".story-head h1")).toHaveText("Inside the Network of Cameras Reading America’s License Plates");
+  await expect(page.locator(".story-head h1")).toHaveText("Anatomy of a Flock Camera");
   await expect(page.locator(".story .chapter-title")).toHaveCount(12);
   await expect(page.locator(".story figure.fig")).toHaveCount(14);
   await expect(page.locator(".story .fig-src").first()).toContainText("Source");

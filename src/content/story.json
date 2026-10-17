@@ -1,8 +1,8 @@
 {
   "$comment": "The home page story. Paragraph markup: [text](src:id) links to a source document; [text](#id) to a section; [text](page:id) to a site page; {{stat}} or {{stat.field}} inserts a figure from public/data/story/stats.json, with |k (rounded down to the thousand), |pct (no decimals), |round or |date. Every figure block names its sources. Every source is introduced with what it is. Rendered into index.html at build time by src/story/render.ts.",
   "kicker": "License plate readers",
-  "updated": "2026-10-16",
-  "headline": "Inside the Network of Cameras Reading America’s License Plates",
+  "updated": "2026-10-17",
+  "headline": "Anatomy of a Flock Camera",
   "deck": "Volunteers have mapped more than {{mappedFlock|k}} cameras made by one company, Flock Safety. Public records show who can search what they capture, how long it is kept and what comes of it.",
   "intro": [
     "On poles at intersections, in store parking lots and along state highways, small cameras photograph the rear of passing cars. Most are made by Flock Safety, an Atlanta company that provides them for an annual fee to police departments, homeowner associations and businesses, and that says its cameras make [more than 20 billion scans a month](src:nbc-flock-2025).",
